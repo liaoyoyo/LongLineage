@@ -190,7 +190,7 @@
       "origin_id": "topology-ranker",
       "source_path": "InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/build_m2_patterns_and_rank.py",
       "source_sha256": "b28d494563bea70cbfea7b13853d99c0b3aeafed7ed4f0c0a6fff3b92c84f0a9",
-      "target": "src/solver/parent_mapping.cpp",
+      "target": "src/solver/vertex_set_ranker.cpp",
       "target_kind": "FILE",
       "target_presence": "ABSENT",
       "target_digest_kind": null,
@@ -198,7 +198,7 @@
       "implementation_status": "PLANNED",
       "verification_status": "NOT_VERIFIED",
       "verified_evidence_id": null,
-      "transformation": "contract_only_pending_full_authority",
+      "transformation": "vertex_set_ranking_contract_pending_full_authority",
       "reuse": "hash_and_synthetic_vectors_only"
     }
   ]

@@ -1,0 +1,162 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-ci-toolchain-hotfix",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": "20260719-foundation",
+  "allowed_paths": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "kind": "FILE"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "containers/Dockerfile",
+      "kind": "FILE"
+    },
+    {
+      "path": "containers/versions.lock.tsv",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/CURRENT_FOCUS.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260719_ci_toolchain_hotfix_audit.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/development/implementation-notes.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/ci/check_dependency_lock.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/testing/test_dependency_lock_negative.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/testing/test_agent_task_negative.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/active/20260719-ci-toolchain-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260719-ci-toolchain-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/CMakeLists.txt",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T01:50:08+08:00",
+  "heartbeat_at": "2026-07-19T22:22:25+08:00",
+  "task_type": "E",
+  "goals": [
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Hotfix every GitHub Actions job in PR #1: install CMake explicitly, give source-history tests a complete hosted checkout, separate repository-context tests from the production Docker build context, repair the archived-parent negative-test fixture, replace unavailable Ubuntu patch-version pins with a truthful base-digest-plus-resolved-package policy, record installed package manifests, and add dependency-lock regressions. Scientific kernels and release phase states are excluded."
+  },
+  "assumptions": [
+    "The six compiler/sanitizer matrix jobs share the same missing-CMake configure root cause observed in run 29674244956; the separate pinned-container job failed on retired apt patch versions.",
+    "The pinned Ubuntu base digest and HTSlib tarball SHA remain immutable authorities; mutable Ubuntu apt repositories cannot truthfully guarantee retired patch-version availability.",
+    "Resolved apt package versions must be captured inside the built image and the resulting production image must be identified by immutable digest before release.",
+    "Tests that require Git history or .github control files remain mandatory in hosted CI but are not valid production-image build-context tests because .git and .github are intentionally excluded from that context."
+  ],
+  "inputs": [
+    {
+      "role": "failed_github_actions_run",
+      "path": "external://github/liaoyoyo/LongLineage/actions/runs/29674244956",
+      "sha256": null
+    },
+    {
+      "role": "ci_workflow",
+      "path": ".github/workflows/ci.yml",
+      "sha256": null
+    },
+    {
+      "role": "production_container",
+      "path": "containers/Dockerfile",
+      "sha256": null
+    },
+    {
+      "role": "dependency_lock",
+      "path": "containers/versions.lock.tsv",
+      "sha256": null
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "ci_workflow_fix",
+      "path": ".github/workflows/ci.yml",
+      "sha256": null
+    },
+    {
+      "role": "container_apt_policy_fix",
+      "path": "containers/Dockerfile",
+      "sha256": null
+    },
+    {
+      "role": "dependency_lock_regression",
+      "path": "scripts/ci/check_dependency_lock.sh",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Install CMake explicitly in every hosted-runner matrix job and use the apt-owned absolute path required by the toolchain source of truth.",
+      "verify": "Workflow regression confirms cmake is installed, test -x /usr/bin/cmake succeeds before configure, /usr/bin/cmake reports its version, and all six compiler/sanitizer jobs pass Configure."
+    },
+    {
+      "step": "Replace retired apt patch-version pins with a truthful resolved-at-image-build policy while retaining immutable base and HTSlib authorities.",
+      "verify": "Dependency-lock check rejects exact apt package pins, Docker build succeeds, and separate builder/runtime package=version manifests exist under /opt/longlineage/share/provenance/."
+    },
+    {
+      "step": "Replay local release gates and GitHub Actions after the focused fix.",
+      "verify": "Dependency lock, Release CTest/check_all, pinned-container smoke and every PR #1 GitHub Actions check exit 0; remaining scientific release blockers stay unchanged."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ci-hotfix-local-gates",
+      "evidence_path": "docs/audits/20260719_ci_toolchain_hotfix_audit.md",
+      "evidence_kind": "REPORT",
+      "command": "scripts/ci/check_all.sh build-ci-hotfix; docker build --file containers/Dockerfile --tag longlineage:ci-hotfix .; offline package-manifest and CLI smoke checks",
+      "exit_code": 0,
+      "output_excerpt": "FOUNDATION_PASS; repository 33/33 PASS; production-context 30/30 PASS; image sha256:aff89e6b8120284c640511a06991765956703ffe3065decd2831deeab56b0b9d; runtime manifest matches live dpkg",
+      "evidence_sha256": "b5fa6f7620b01f49b4cd8f2861c03aa4aee72f8ed3d12d7a4fb02390bbd999a7",
+      "recorded_at": "2026-07-19T22:22:25+08:00"
+    },
+    {
+      "evidence_id": "ci-hotfix-github-actions",
+      "evidence_path": "docs/audits/20260719_ci_toolchain_hotfix_audit.md",
+      "evidence_kind": "AUDIT",
+      "command": "gh run view 29690309335; gh run view 29690310910; gh pr checks 1 --repo liaoyoyo/LongLineage",
+      "exit_code": 0,
+      "output_excerpt": "head=80481dd38790f52eb0027dec8696af6d509afef5; push=7/7 success; pull_request=7/7 success; PR checks=14 pass, 0 fail, 0 pending",
+      "evidence_sha256": "b5fa6f7620b01f49b4cd8f2861c03aa4aee72f8ed3d12d7a4fb02390bbd999a7",
+      "recorded_at": "2026-07-19T22:22:25+08:00"
+    }
+  ],
+  "deviations": [
+    "The first repaired Docker build passed compilation and then exposed three previously unreachable repository-context test assumptions plus an incomplete archived-parent scratch fixture. The scope expanded only to those CI regressions; no scientific code or phase state changed.",
+    "The hotfix remains on the existing docs/method-performance-audit branch because that branch is PR #1's failing review head. This is a documented branch-naming exception for the minimal repair; new behavior work must return to fix/* or feat/*."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-19T22:22:25+08:00"
+}

@@ -1,0 +1,66 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-output-reduction-review",
+  "owner_agent_id": "codex:root/output-review",
+  "parent_task_id": "20260719-method-performance-publish-audit",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260719-output-reduction-review.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-19T16:00:00+08:00",
+  "heartbeat_at": "2026-07-19T12:26:32+08:00",
+  "task_type": "A",
+  "goals": [
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "BLOCKED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Read-only review of the native artifact catalog, schemas, indexes, staging/freeze plan and query contract for lossless file-count, byte, transient-storage and query-I/O reduction."
+  },
+  "assumptions": [
+    "No scientific row may be omitted, merged or reclassified to reduce output.",
+    "Legacy per-site layout remains an on-demand export and cannot become production authority."
+  ],
+  "inputs": [
+    {
+      "role": "artifact_catalog",
+      "path": "schema/catalog.json",
+      "sha256": "3e5013273c99e5c0e9feb8383938a75e2b9cf02b796f5214eab37720fde3f41b"
+    },
+    {
+      "role": "query_contract",
+      "path": "docs/data/QUERY_GUIDE.md",
+      "sha256": "d164a6e84e0456ba909705552876b1ab96df9bd9ec4cf08d7637f2f27ab5cd1c"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "parent_handoff",
+      "path": "docs/audits/20260719_method_performance_output_audit.md",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Trace every queryable artifact to physical format, sort key, primary key, index and semantic digest.",
+      "verify": "Handoff reports catalog inconsistencies, missing indexes and exact query amplification risks."
+    },
+    {
+      "step": "Rank lossless output reductions by safety and implementation readiness.",
+      "verify": "Each recommendation states affected bytes/files/transient copies, canonical-row invariant and validator check."
+    }
+  ],
+  "evidence": [],
+  "deviations": [],
+  "blockers": [
+    "READ_ONLY_HANDOFF_DELIVERED_PARENT_INTEGRATION_PENDING"
+  ],
+  "updated_at": "2026-07-19T12:26:32+08:00"
+}

@@ -11,6 +11,7 @@ build_dir="${1:-$repo_root/build}"
 "$repo_root/scripts/ci/check_spdx.sh"
 "$repo_root/scripts/ci/check_dependency_lock.sh"
 "$repo_root/scripts/ci/check_json_schema_fixtures.sh"
+"$repo_root/scripts/ci/check_performance_benchmarks.sh"
 
 governance="$build_dir/bin/longlineage-governance"
 [[ -x "$governance" ]] || {

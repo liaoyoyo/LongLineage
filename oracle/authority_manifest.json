@@ -150,6 +150,39 @@
       "status_reason": "Full 154-task output is absent."
     },
     {
+      "artifact_id": "topology_20260719_handoff",
+      "stage": "TOPOLOGY",
+      "authority_class": "NO_GO",
+      "source_path": "InterSubMod/research/20260718_solver_methyl_edge_probe/20260719_最簡演化樹與VAF排序AI交接重點_01.md",
+      "physical_sha256": "7b412e89561924f0dff95a42bc69319b6d7e296ab30792cbe236a1bd16feb306",
+      "truth_usage": "NONE",
+      "copy_policy": "CONTRACT_REVIEW_ONLY",
+      "target": "docs/decisions/ADR-0005-topology-ranking-separation.md",
+      "status_reason": "Objective, family and ranking completion are distinct; the evidence bundle is untracked in InterSubMod and commit 0ee2fa1 does not recover it."
+    },
+    {
+      "artifact_id": "topology_solver_stress_r3_receipt",
+      "stage": "TOPOLOGY",
+      "authority_class": "NO_GO",
+      "source_path": "InterSubMod/research/20260718_solver_methyl_edge_probe/results/solver_stress_panel_v1/runs/authoritative_r3_primary_all_both_r1/receipt.json",
+      "physical_sha256": "933a7776baa3c3d616954593c358a8973a066308f8e205590c02e122798d6d19",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_CONTRACT_FACTS_ONLY",
+      "target": "docs/decisions/ADR-0005-topology-ranking-separation.md",
+      "status_reason": "Machine replay: optimized objective 25/25, family complete 16/25, incomplete ranked zero and performance ratio NOT_COMPARABLE."
+    },
+    {
+      "artifact_id": "topology_compressed_vaf_r3_receipt",
+      "stage": "TOPOLOGY",
+      "authority_class": "NO_GO",
+      "source_path": "InterSubMod/research/20260718_solver_methyl_edge_probe/results/compressed_vaf_rank_probe_v2/main_reverify_r3/receipt.json",
+      "physical_sha256": "4258e04990f748e785a6272849acfdc0e957779661ae315003b8d863c61670d1",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_CONTRACT_FACTS_ONLY",
+      "target": "docs/decisions/ADR-0005-topology-ranking-separation.md",
+      "status_reason": "Machine replay: small oracle passes, hard ranking is not run, ranking_complete is false and production promotion is forbidden."
+    },
+    {
       "artifact_id": "topology_frozen_v2_ranking",
       "stage": "TOPOLOGY",
       "authority_class": "NO_GO",

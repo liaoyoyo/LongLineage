@@ -57,6 +57,8 @@ class BgzfTsvWriter {
 
     static void validate_field(std::string_view value, const char* role);
     static std::string join_fields(const std::vector<std::string>& fields);
+    void write_physical_payload(std::string_view payload);
+    void digest_semantic_payload(std::string_view payload);
     void write_physical_line(const std::string& line);
     void digest_semantic_line(const std::string& line);
     void abort_close() noexcept;

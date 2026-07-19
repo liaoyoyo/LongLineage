@@ -223,35 +223,43 @@ std::string BgzfTsvWriter::join_fields(const std::vector<std::string>& fields) {
     return line;
 }
 
-void BgzfTsvWriter::write_physical_line(const std::string& line) {
+void BgzfTsvWriter::write_physical_payload(std::string_view payload) {
     if (closed_ || output_ == nullptr) {
         throw std::logic_error("cannot write to a closed BGZF TSV artifact");
     }
-    if (line.size() == std::numeric_limits<std::size_t>::max()) {
-        throw std::length_error("logical TSV line is too large");
-    }
-    std::string payload = line;
-    payload.push_back('\n');
     const ssize_t written = bgzf_write(output_, payload.data(), payload.size());
     if (written < 0 || static_cast<std::size_t>(written) != payload.size()) {
         throw std::runtime_error("short or failed BGZF write: " + path_.string());
     }
 }
 
-void BgzfTsvWriter::digest_semantic_line(const std::string& line) {
+void BgzfTsvWriter::digest_semantic_payload(std::string_view payload) {
     if (closed_ || output_ == nullptr) {
         throw std::logic_error("cannot digest a closed BGZF TSV artifact");
     }
-    if (line.size() == std::numeric_limits<std::size_t>::max()) {
-        throw std::length_error("semantic TSV line is too large");
-    }
-    std::string payload = line;
-    payload.push_back('\n');
     if (payload.size() > std::numeric_limits<std::uint64_t>::max() - logical_bytes_) {
         throw std::overflow_error("semantic TSV byte count overflow");
     }
     digest_bytes(digest_->value.get(), payload.data(), payload.size());
     logical_bytes_ += static_cast<std::uint64_t>(payload.size());
+}
+
+void BgzfTsvWriter::write_physical_line(const std::string& line) {
+    if (line.size() == std::numeric_limits<std::size_t>::max()) {
+        throw std::length_error("logical TSV line is too large");
+    }
+    std::string payload = line;
+    payload.push_back('\n');
+    write_physical_payload(payload);
+}
+
+void BgzfTsvWriter::digest_semantic_line(const std::string& line) {
+    if (line.size() == std::numeric_limits<std::size_t>::max()) {
+        throw std::length_error("semantic TSV line is too large");
+    }
+    std::string payload = line;
+    payload.push_back('\n');
+    digest_semantic_payload(payload);
 }
 
 void BgzfTsvWriter::write_row(const std::vector<std::string>& fields) {
@@ -261,9 +269,13 @@ void BgzfTsvWriter::write_row(const std::vector<std::string>& fields) {
     for (const std::string& field : fields) {
         validate_field(field, "row field");
     }
-    const std::string line = join_fields(fields);
-    write_physical_line(line);
-    digest_semantic_line(line);
+    std::string payload = join_fields(fields);
+    if (payload.size() == std::numeric_limits<std::size_t>::max()) {
+        throw std::length_error("logical TSV line is too large");
+    }
+    payload.push_back('\n');
+    write_physical_payload(payload);
+    digest_semantic_payload(payload);
     ++row_count_;
 }
 
