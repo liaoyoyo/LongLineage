@@ -18,6 +18,11 @@ HYGIENE_REPOSITORY	true	all	scripts/ci/check_repo_hygiene.sh	ctest:hygiene_untra
 PREFLIGHT_INPUT_LOCK	true	production	ctest -R preflight	fixture:tests/fixtures/governance/input_sha_mismatch.case.json	input_integrity
 IO_MM_ML	true	production	ctest -R mm_ml	ctest:mm_ml_contract	typed_io
 IO_LATEST_TAG_JOIN	true	production	ctest -R sidecar_join	ctest:sidecar_join_contract	typed_io
+P2_BLOCK_PLANNER	true	production	ctest -R p2_block_plan_boundaries	ctest:p2_block_plan_boundaries	block_planning
+P2_BLOCK_READER_INDEXED	true	production	ctest -R p2_block_reader_indexed	ctest:p2_block_reader_indexed	block_reader
+P2_REORDER_BOUNDED	true	production	ctest -R p2_reorder_sink_adversarial	ctest:p2_reorder_sink_adversarial	reorder_sink
+P2_WORKER_MATRIX	true	production	ctest -R p2_determinism_matrix	ctest:p2_determinism_matrix	determinism
+P2_FAILURE_CANCELLATION	true	production	ctest -R p2_worker_failure_cancellation	ctest:p2_worker_failure_cancellation	failure_cancellation
 DETERMINISM_PACKED	true	production	ctest -R determinism	ctest:determinism_contract	determinism
 VALIDATOR_FAULT_INJECTION	true	validation	ctest -R validator_fault	fixture:tests/fixtures/governance/forged_pass_receipt.case.json	independent_validation
 TOPOLOGY_NO_INCOMPLETE_WINNER	true	science	ctest -R topology_no_incomplete_winner	ctest:topology_no_incomplete_winner	scientific_contract

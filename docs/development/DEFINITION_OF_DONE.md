@@ -8,7 +8,7 @@ A code change is done only when every applicable row has replayable evidence.
 | C++ behavior | format, warning-free Debug build, focused regression, full relevant CTest |
 | Data schema | catalog/type/status binding, positive fixture, unknown/duplicate/order/null negative fixtures |
 | Scientific kernel | frozen authority hash, falsifier, exact discrete parity, independent implementation |
-| Runtime/concurrency | 1/2/4-worker semantic SHA equality, injected worker failure, bounded-memory evidence |
+| Runtime/concurrency | forced-out-of-order 1/2/4/24/40-worker semantic SHA equality; failure cancellation; TSan; logical retained-byte cap |
 | Validator/query | producer-kernel linkage audit, fault injection, non-frozen rejection, read-only check |
 | Release | GCC/Clang, Debug/Release, ASan/UBSan, pinned OCI, all phase and full-scope gates |
 
@@ -35,6 +35,11 @@ The following are never sufficient on their own: source presence, successful
 compilation, one synthetic happy path, a partial probe, an old receipt, or a producer
 self-check. Likewise, the existence of a `fixture:` binding alone is never test
 execution evidence.
+
+A logical retained-byte bound on the reorder payload is not a physical or
+process-wide memory proof. Production completion additionally requires a global
+permit policy and evidence covering HTSlib/BGZF buffers, task/result containers,
+allocator overhead, thread stacks and peak RSS.
 
 ## Review separation
 

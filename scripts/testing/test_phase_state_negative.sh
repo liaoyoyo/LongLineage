@@ -40,8 +40,11 @@ make_scratch_repo() {
     cp "$repo_root/state/project_state.json" "$scratch/state/project_state.json"
     cp "$repo_root/state/phase_ledger.json" "$scratch/state/phase_ledger.json"
     cp "$repo_root/state/audits/"*.json "$scratch/state/audits/"
-    cp "$repo_root/state/tasks/active/20260719-foundation.json" \
-        "$scratch/state/tasks/active/"
+    while IFS= read -r evidence_path; do
+        mkdir -p "$scratch/$(dirname "$evidence_path")"
+        cp "$repo_root/$evidence_path" "$scratch/$evidence_path"
+    done < <(jq -r '.phases[].evidence[].path' "$repo_root/state/phase_ledger.json" | LC_ALL=C sort -u)
+    cp "$repo_root/state/tasks/active/"*.json "$scratch/state/tasks/active/"
     echo "$scratch"
 }
 

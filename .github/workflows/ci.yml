@@ -28,22 +28,32 @@ jobs:
             cxx: g++
             build_type: Debug
             sanitizers: ""
+            tsan: false
           - name: clang-debug
             cxx: clang++
             build_type: Debug
             sanitizers: ""
+            tsan: false
           - name: gcc-release
             cxx: g++
             build_type: Release
             sanitizers: ""
+            tsan: false
           - name: clang-release
             cxx: clang++
             build_type: Release
             sanitizers: ""
+            tsan: false
           - name: clang-asan-ubsan
             cxx: clang++
             build_type: Debug
             sanitizers: address,undefined
+            tsan: false
+          - name: gcc-tsan-p2
+            cxx: g++
+            build_type: Debug
+            sanitizers: thread
+            tsan: true
 
     steps:
       - name: Checkout
@@ -92,9 +102,17 @@ jobs:
         run: /usr/bin/cmake --build build --parallel 4
 
       - name: Synthetic tests and governance under network syscall denial
+        if: matrix.tsan == false
         env:
           LD_LIBRARY_PATH: /usr/local/lib
         run: scripts/ci/check_all.sh build
+
+      - name: P2 concurrency contracts under ThreadSanitizer
+        if: matrix.tsan == true
+        env:
+          LD_LIBRARY_PATH: /usr/local/lib
+          TSAN_OPTIONS: halt_on_error=1:history_size=7
+        run: ctest --test-dir build --output-on-failure -R '^p2_'
 
   pinned-container:
     name: pinned-container

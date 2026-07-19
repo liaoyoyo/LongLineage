@@ -1,7 +1,7 @@
 {
   "schema_name": "longlineage.phase_ledger",
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-19T06:51:28+08:00",
+  "updated_at": "2026-07-19T11:27:17+08:00",
   "phases": [
     {
       "id": "P0",
@@ -74,12 +74,29 @@
         "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
         "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
         "exit_code": 0
+      },
+      {
+        "role": "REPORT",
+        "path": "docs/audits/20260719_p2_block_pipeline_audit.md",
+        "sha256": "2a720028c11e245f4b3ca1ff352b13360db9c60365bac255e05fa2616300a147",
+        "command": null,
+        "exit_code": null
+      },
+      {
+        "role": "AUDIT",
+        "path": "state/audits/20260719-p2-block-pipeline-002.json",
+        "sha256": "2fbb240e5fec9a8dc340d241a768490af4687a7186f0d0df00f094c12ede4cde",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-002.json",
+        "exit_code": 0
       }
       ],
       "blockers": [
-        "BLOCK_READER_NOT_IMPLEMENTED",
-        "STREAMING_REORDER_SINK_NOT_BYTE_BOUNDED",
-        "WORKER_COUNT_MATRIX_1_2_4_24_40_NOT_REPLAYED"
+        "P1_PREDECESSOR_NOT_VERIFIED",
+        "PRODUCTION_WORKER_INPUT_BUNDLE_VCF_SIDECAR_FASTA_NOT_IMPLEMENTED",
+        "ONE_PASS_CIGAR_MULTI_MARKER_PROJECTION_NOT_IMPLEMENTED",
+        "PRODUCTION_STAGING_VALIDATOR_FREEZE_NOT_INTEGRATED",
+        "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
+        "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
       ]
     },
     {

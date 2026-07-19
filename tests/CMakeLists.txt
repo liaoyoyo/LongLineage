@@ -27,6 +27,17 @@ set_tests_properties(
     runtime_solver determinism_contract topology_no_incomplete_winner
     PROPERTIES LABELS "unit;runtime;solver;synthetic" RUN_SERIAL TRUE)
 
+longlineage_add_standalone_test(test_block_pipeline unit/test_block_pipeline.cpp)
+add_test(NAME p2_block_plan_boundaries COMMAND test_block_pipeline block-plan)
+add_test(NAME p2_block_reader_indexed COMMAND test_block_pipeline block-reader)
+add_test(NAME p2_reorder_sink_adversarial COMMAND test_block_pipeline reorder)
+add_test(NAME p2_determinism_matrix COMMAND test_block_pipeline determinism)
+add_test(NAME p2_worker_failure_cancellation COMMAND test_block_pipeline failure)
+set_tests_properties(
+    p2_block_plan_boundaries p2_block_reader_indexed p2_reorder_sink_adversarial
+    p2_determinism_matrix p2_worker_failure_cancellation
+    PROPERTIES LABELS "unit;integration;p2;synthetic" RUN_SERIAL TRUE TIMEOUT 120)
+
 add_test(
     NAME cli_production_gates
     COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_cli_gates.sh"
@@ -68,6 +79,14 @@ add_test(
 set_tests_properties(
     governance_truth_manifest_negative
     PROPERTIES LABELS "governance;negative;synthetic")
+
+add_test(
+    NAME ai_readiness_independent_governance_target
+    COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ai/check_readiness.sh"
+            "${CMAKE_BINARY_DIR}")
+set_tests_properties(
+    ai_readiness_independent_governance_target
+    PROPERTIES LABELS "governance;ai;synthetic" RUN_SERIAL TRUE)
 
 add_test(
     NAME hygiene_untracked_forbidden_negative
@@ -129,4 +148,5 @@ add_custom_target(
         test_dependency_smoke
         test_typed_io
         test_runtime_solver
+        test_block_pipeline
     USES_TERMINAL)

@@ -38,6 +38,13 @@ make_scratch_repo() {
     cp "$repo_root/schema/core/query_response.schema.json" "$scratch/schema/core/"
     cp "$repo_root/schema/core/validation_receipt.schema.json" "$scratch/schema/core/"
     cp "$repo_root/state/project_state.json" "$scratch/state/project_state.json"
+    while IFS= read -r evidence_path; do
+        mkdir -p "$scratch/$(dirname "$evidence_path")"
+        cp "$repo_root/$evidence_path" "$scratch/$evidence_path"
+    done < <(
+        jq -r '.phases[].evidence[] | select(.role != "AUDIT") | .path' \
+            "$repo_root/state/phase_ledger.json" | LC_ALL=C sort -u
+    )
     jq '(.phases[].evidence) |= map(select(.role != "AUDIT"))' \
         "$repo_root/state/phase_ledger.json" >"$scratch/state/phase_ledger.json"
     jq '.evidence = []' \

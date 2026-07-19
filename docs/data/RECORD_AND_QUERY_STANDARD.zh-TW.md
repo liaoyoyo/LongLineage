@@ -106,8 +106,9 @@ vocabulary另由`contracts/v1/lifecycle_codes.tsv`鎖定：
 - SKELETON：target存在且有digest，但不得填verified evidence；
 - VERIFIED：只能建立在IMPLEMENTED target，且必須指向stable gate ID。
 
-目前M1/M2/co-occurrence/topology全parity及P6 query/validator仍blocked；新增契約
-不等同完成實作。
+目前M1/M2/co-occurrence/topology全parity仍blocked；P6 phase為`IN_PROGRESS`，
+但query row execution、validator replay與export parity仍有blocker。新增契約
+不等同完成實作或驗證。
 
 ## 6. 寫入、驗證與凍結
 
@@ -149,8 +150,9 @@ p-value/FDR重算或topology re-ranking。operand JSON type須與schema完全相
 `matched_rows`、`truncated`、source/index digests及receipt/executable digests。
 scan未完成時，`matched_rows`必須為`null`，不可把partial count寫成census。
 
-> **目前狀態**：P6仍為BLOCKED。CLI只驗證frozen/truth boundary後
-> fail closed，尚未讀回row；下列介面是凍結契約，不是已可用功能。
+> **目前狀態**：P6為`IN_PROGRESS`，但CLI目前只驗證frozen/truth boundary後
+> fail closed，尚未讀回row；下列介面是凍結契約，不是已可用功能，相關
+> implementation gates仍未關閉。
 
 ```bash
 longlineage-query --run-root /validated/frozen/run \

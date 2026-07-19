@@ -1,0 +1,181 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260719-p2-block-pipeline-001",
+  "task_id": "20260719-p2-block-pipeline",
+  "scope": {
+    "kind": "REPOSITORY",
+    "completeness": "PARTIAL",
+    "description": "P2 synthetic block-pipeline component verification; production worker bundle, physical global memory bound, validator/freeze integration and full-data execution are excluded.",
+    "included_paths": [
+      "."
+    ],
+    "excluded_paths": []
+  },
+  "source_snapshot_kind": "GIT_COMMIT",
+  "source_commit": "d2636eba1adcf503c675da79c63e8e799c8ac332",
+  "source_tree_sha256": "2d48b4c7e8eccc1a022f897781c136bf4eabd8e60bbe717c5a30cc4dc72ab0bc",
+  "source_dirty": false,
+  "commands": [
+    {
+      "command_id": "clang-format-14",
+      "argv": [
+        "scripts/ci/check_format.sh",
+        "/tmp/clang-format-14-extract/usr/bin/clang-format-14"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "51dc77826a816022d1139a3adc1eeb07b45d408d1f3015be055945b2eab5b437",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:02:11+08:00",
+      "completed_at": "2026-07-19T11:02:12+08:00"
+    },
+    {
+      "command_id": "build-debug",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-debug",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "f95552c123acec0b1409df01468119025c69a75b07b09a82a6904674d8e4277f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:02:20+08:00",
+      "completed_at": "2026-07-19T11:02:20+08:00"
+    },
+    {
+      "command_id": "check-all-debug",
+      "argv": [
+        "scripts/ci/check_all.sh",
+        "build-verify-debug"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "aeefe26a65ef07d3ab745495cc163ac342f1e2f52c746a5b37c3ac48e9e413a6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:02:29+08:00",
+      "completed_at": "2026-07-19T11:03:21+08:00"
+    },
+    {
+      "command_id": "build-release",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-release",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "e253c45745cebd851a1e3c85640b02113db4a244bd92387fe1e0600332a44c56",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:03:29+08:00",
+      "completed_at": "2026-07-19T11:03:30+08:00"
+    },
+    {
+      "command_id": "ctest-release",
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-release",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "2b0fc962c8fb667aa0769c43ec45b62f07f9b54728f1ecd4189a17aa01cbf151",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:03:38+08:00",
+      "completed_at": "2026-07-19T11:04:06+08:00"
+    },
+    {
+      "command_id": "build-asan-ubsan",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-sanitize",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "25ac03775a3abe4187d91d9b9eb32c3476a46759f7ed1a920fb13576020f793e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:04:16+08:00",
+      "completed_at": "2026-07-19T11:04:17+08:00"
+    },
+    {
+      "command_id": "ctest-asan-ubsan",
+      "argv": [
+        "/usr/bin/env",
+        "ASAN_OPTIONS=detect_leaks=0:halt_on_error=1",
+        "UBSAN_OPTIONS=halt_on_error=1",
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-sanitize",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "8d6da91d275d78a68c0fed1ccc9d6ec06611979e41c390decde3a959b9bf6cab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:04:28+08:00",
+      "completed_at": "2026-07-19T11:05:05+08:00"
+    },
+    {
+      "command_id": "build-tsan",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-tsan",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "d92bd90bd0a5d5254ed16915be2fc3ea96af3ac7ee3e86b295396272686e10b1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:05:13+08:00",
+      "completed_at": "2026-07-19T11:05:14+08:00"
+    },
+    {
+      "command_id": "ctest-tsan-p2",
+      "argv": [
+        "/usr/bin/env",
+        "TSAN_OPTIONS=halt_on_error=1:history_size=7",
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-tsan",
+        "--output-on-failure",
+        "-R",
+        "^p2_"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "d87a48c55bffe998e0385e20fb49355c7e7c1a759e030f896ce9473baab94117",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:05:24+08:00",
+      "completed_at": "2026-07-19T11:05:28+08:00"
+    },
+    {
+      "command_id": "ai-readiness",
+      "argv": [
+        "scripts/ai/check_readiness.sh",
+        "build-verify-debug"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "2b0c7c8506198c5cec4c9bb1659fa29bf346ff0ae48c3711ec6a4503a6c2f393",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:05:38+08:00",
+      "completed_at": "2026-07-19T11:05:40+08:00"
+    }
+  ],
+  "captured_at": "2026-07-19T11:05:40+08:00",
+  "captured_by_agent_id": "codex:root",
+  "supersedes": [],
+  "superseded_by": null,
+  "supersession_reason": null
+}

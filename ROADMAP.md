@@ -4,7 +4,7 @@
 |---|---|---|---|
 | P0 | authority, provenance, private repo | oracle hashes; truth fields=0 | IN_PROGRESS |
 | P1 | typed I/O and preflight | parser/status negative tests | IN_PROGRESS |
-| P2 | reader, thread pool, packed writer | 1/2/4 determinism; fail-stop | IN_PROGRESS |
+| P2 | reader, thread pool, packed writer | forced-order 1/2/4/24/40 synthetic semantic SHA; logical retained-byte cap; failure cancellation | IN_PROGRESS |
 | P3 | M1 parity | zero decision/status mismatch | BLOCKED |
 | P4 | M2/co-occurrence parity | frozen boundaries and first authority | BLOCKED |
 | P5 | topology parity | objective/family/parent/tree digest | BLOCKED |

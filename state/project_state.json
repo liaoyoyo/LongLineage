@@ -9,7 +9,7 @@
     "genome": "chr1-22",
     "partial": false
   },
-  "active_milestone": "P0_P1_FOUNDATION",
+  "active_milestone": "P2_RUNTIME_FOUNDATION",
   "goals": [
     "LL-G1",
     "LL-G2",
@@ -36,9 +36,10 @@
     "LINEAGE_COMPATIBLE_FAMILY_CLAIM_CEILING"
   ],
   "next_actions": [
-    "Build and validate schema and typed I/O foundation",
-    "Freeze missing logical M1 vectors before M1 port",
-    "Keep unavailable co-occurrence and topology full authorities blocked"
+    "Implement the complete per-worker BAM/VCF/sidecar/FASTA handle bundle",
+    "Implement one-pass CIGAR multi-marker projection with exact latest-tag join",
+    "Prove a physical process-wide memory bound beyond logical sink accounting",
+    "Integrate staging with the independent validator and atomic freeze boundary"
   ],
-  "last_verified_at": "2026-07-19T07:50:46+08:00"
+  "last_verified_at": "2026-07-19T11:22:05+08:00"
 }

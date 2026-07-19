@@ -133,12 +133,24 @@ else
 fi
 if [[ -n "$governance_binary" ]]; then
     stale_source=""
-    while IFS= read -r source; do
+    # longlineage-governance is an intentional trust-boundary executable: it
+    # links cli_support but not longlineage_core. Producer headers/sources must
+    # therefore not make this independent binary appear stale. CMakeLists is
+    # included so any future target/source linkage change forces a rebuild.
+    governance_build_inputs=(
+        CMakeLists.txt
+        cmake/CompilerPolicy.cmake
+        cmake/Dependencies.cmake
+        apps/cli_support.cpp
+        apps/cli_support.hpp
+        apps/governance_main.cpp
+    )
+    for source in "${governance_build_inputs[@]}"; do
         if [[ "$source" -nt "$governance_binary" ]]; then
             stale_source="$source"
             break
         fi
-    done < <(find apps include src -type f \( -name '*.cpp' -o -name '*.hpp' \) -print)
+    done
     if [[ -n "$stale_source" ]]; then
         fail "compiled governance binary is stale; newer source: LongLineage/$stale_source"
     elif ! "$governance_binary" check-all --repo "$repo_root"; then

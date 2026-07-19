@@ -37,6 +37,21 @@
       "reuse": "concept_and_fixtures_only"
     },
     {
+      "origin_id": "ism-indexed-block-reader",
+      "source_path": "InterSubMod/src/core/BamReader.cpp",
+      "source_sha256": "d2da0ef68b907fe093d8722f739e0f77dee22bc4e12b88d6b37c30ccfe2876af",
+      "target": "src/io/block_reader.cpp",
+      "target_kind": "FILE",
+      "target_presence": "PRESENT",
+      "target_digest_kind": "FILE_SHA256",
+      "target_sha256": "79d0ecdcd94df3074c23ad4872978d0636c90e793819c6835051efd4d79edc83",
+      "implementation_status": "IMPLEMENTED",
+      "verification_status": "CONTRACT_VERIFIED",
+      "verified_evidence_id": "P2_BLOCK_READER_INDEXED",
+      "transformation": "clean_reimplementation_with_frozen_order_block_planning_explicit_index_and_worker_owned_handles",
+      "reuse": "concept_and_synthetic_fixtures_only"
+    },
+    {
       "origin_id": "ism-methylation-parser",
       "source_path": "InterSubMod/src/core/MethylationParser.cpp",
       "source_sha256": "45b51176cd28bda77adf82de1a80a0f618eba5d2cf518da97e0c651cadee1d01",
@@ -44,7 +59,7 @@
       "target_kind": "FILE",
       "target_presence": "PRESENT",
       "target_digest_kind": "FILE_SHA256",
-      "target_sha256": "0a8acfe02d67a7c4403651372533f24a935903d02dc77348f210916f8485574e",
+      "target_sha256": "9a245023a3f576f56fe3e2edb3a8e030524bc800907142cc5e2c12bb774e274c",
       "implementation_status": "IMPLEMENTED",
       "verification_status": "CONTRACT_VERIFIED",
       "verified_evidence_id": "IO_MM_ML",
