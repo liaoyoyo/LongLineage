@@ -103,3 +103,7 @@ Status: in_progress
   `7a8f75e8d23302d14c32c545218de19658667d7d`, 197 tracked blobs and canonical
   tree SHA-256
   `8c8ccdbcad239b2612175852008b36b37ce737dbe78cc3f20578c2aea9952710`.
+- Current audit `20260719-foundation-verification-002` supersedes `001` and
+  binds evidence/fix commit `8b62261a384bd2dd2a469f5b2ad27df2e34f3c8d`, 198
+  tracked blobs and tree SHA-256
+  `eb59c1f1856692569729742378d00ca396ad3a1ed125bc4aa0b395903a155bd3`.

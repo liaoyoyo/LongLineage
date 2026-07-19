@@ -25,9 +25,9 @@
       },
       {
         "role": "AUDIT",
-        "path": "state/audits/20260719-foundation-verification-001.json",
-        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
-        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "path": "state/audits/20260719-foundation-verification-002.json",
+        "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
         "exit_code": 0
       }
       ],
@@ -45,9 +45,9 @@
     "evidence": [
       {
         "role": "AUDIT",
-        "path": "state/audits/20260719-foundation-verification-001.json",
-        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
-        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "path": "state/audits/20260719-foundation-verification-002.json",
+        "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
         "exit_code": 0
       }
     ],
@@ -70,9 +70,9 @@
       },
       {
         "role": "AUDIT",
-        "path": "state/audits/20260719-foundation-verification-001.json",
-        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
-        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "path": "state/audits/20260719-foundation-verification-002.json",
+        "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
         "exit_code": 0
       }
       ],
@@ -155,9 +155,9 @@
       },
       {
         "role": "AUDIT",
-        "path": "state/audits/20260719-foundation-verification-001.json",
-        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
-        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "path": "state/audits/20260719-foundation-verification-002.json",
+        "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
         "exit_code": 0
       }
       ],

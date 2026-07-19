@@ -107,7 +107,7 @@ LeakSanitizer以「current tracing environment不支援」拒絕。該次退出�
 
 ## Git audit binding
 
-Foundation source snapshot：
+Initial foundation source snapshot：
 
 - Git commit：
   `7a8f75e8d23302d14c32c545218de19658667d7d`
@@ -131,3 +131,21 @@ ledger但未複製其audit dependency」的隔離缺口。修正後，task/phase
 完整audit set；audit-DAG tests則先移除baseline AUDIT reference再注入單一圖形
 故障。Debug、Release、ASan/UBSan的三項focused replay均為3/3 PASS；此修正會由
 下一個source snapshot envelope重新綁定。
+
+Current superseding snapshot：
+
+- Git commit：
+  `8b62261a384bd2dd2a469f5b2ad27df2e34f3c8d`
+- Canonical 198-blob tree SHA-256：
+  `eb59c1f1856692569729742378d00ca396ad3a1ed125bc4aa0b395903a155bd3`
+- Current envelope：
+  `state/audits/20260719-foundation-verification-002.json`
+- Envelope physical SHA-256：
+  `414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b`
+- Supersedes：
+  `20260719-foundation-verification-001`
+- Replay command：
+  `scripts/ci/check_audit_source_snapshot.sh`
+
+`002`以相同task與scope forward-supersede `001`，所以查詢時只有`002`是current
+tip；task與P0/P1/P2/P6 ledger reference也只指向`002`。

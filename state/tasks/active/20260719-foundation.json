@@ -102,14 +102,14 @@
   ],
   "evidence": [
     {
-      "evidence_id": "foundation-verification-001",
-      "evidence_path": "state/audits/20260719-foundation-verification-001.json",
+      "evidence_id": "foundation-verification-002",
+      "evidence_path": "state/audits/20260719-foundation-verification-002.json",
       "evidence_kind": "AUDIT",
-      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
       "exit_code": 0,
-      "output_excerpt": "AUDIT SOURCE PASS: 197 Git blobs; Debug, Release and ASan/UBSan CTest 25/25; Debug/Release FOUNDATION_PASS.",
-      "evidence_sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
-      "recorded_at": "2026-07-19T08:59:00+08:00"
+      "output_excerpt": "AUDIT SOURCE PASS: current tip binds 198 Git blobs; Debug/Release FOUNDATION_PASS and ASan/UBSan CTest 25/25.",
+      "evidence_sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
+      "recorded_at": "2026-07-19T09:11:00+08:00"
     }
   ],
   "deviations": [
@@ -126,5 +126,5 @@
     "DIRECT_HIGHS_DEPENDENCY_UNAVAILABLE",
     "DRAFT_2020_12_VALIDATOR_NOT_PINNED"
   ],
-  "updated_at": "2026-07-19T08:59:00+08:00"
+  "updated_at": "2026-07-19T09:11:00+08:00"
 }
