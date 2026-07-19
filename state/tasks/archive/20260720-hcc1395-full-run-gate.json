@@ -1,0 +1,142 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-full-run-gate",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": "20260719-foundation",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-full-run-gate.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-full-run-gate.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.html",
+      "kind": "FILE"
+    },
+    {
+      "path": "presentation/build_readiness_report.py",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [
+    "20260719-foundation"
+  ],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T02:30:00+08:00",
+  "heartbeat_at": "2026-07-20T00:49:42+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G3",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Verify whether the current LongLineage revision can execute one complete HCC1395 production run, independently validate sSNV co-occurrence and regional topology outputs, render a presentation-only HTML audit, and gate any later seven-dataset expansion."
+  },
+  "assumptions": [
+    "HCC1395 is a gate sample, not authority to bypass the exact seven-dataset production contract.",
+    "Historical InterSubMod outputs are comparison context only unless source digest, method, truth boundary and completion semantics match.",
+    "No full-data expansion is legal unless the HCC1395 run reaches VALIDATED_FROZEN with independent validation."
+  ],
+  "inputs": [
+    {
+      "role": "production_input_authority",
+      "path": "oracle/production_input_authority.json",
+      "sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557"
+    },
+    {
+      "role": "phase_ledger",
+      "path": "state/phase_ledger.json",
+      "sha256": "5d0a82015ad28c53ea1b986f63eff0811ec2f9cda4e6988ec0cf41a81789de44"
+    },
+    {
+      "role": "release_attestation",
+      "path": "state/release_attestation.json",
+      "sha256": "b0d9db7ee5788e10cd785670f6c2d0922d397e7cc4a215df7b0ab0dcaad258b0"
+    },
+    {
+      "role": "historical_authority",
+      "path": "oracle/authority_manifest.json",
+      "sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "machine_evidence",
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json",
+      "sha256": "eb6dfe8c444f80f00de766dc82bfef780529d8d8204a67162a620b5bb4ca0c40"
+    },
+    {
+      "role": "reader_report",
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.md",
+      "sha256": "06350e274f4d12304dc83a27a10beec9c1559340fa3c8e1a0ef75071ee55401a"
+    },
+    {
+      "role": "standalone_html",
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.html",
+      "sha256": "bd5024ae675a536503542e67af606ea671dd9f529fffb18fcf649c72366f65b4"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Replay mounted HCC1395 input and index checks without a full BAM scan.",
+      "verify": "BAM quickcheck, BAI idxstats, FASTA faidx, VCF index and sidecar index commands exit 0; all three frozen BAM chunk SHA-256 values match."
+    },
+    {
+      "step": "Execute current foundation, production CLI, validator and strict release gates.",
+      "verify": "CTest passes 33/33 while run exits 6, validator exits 7 and strict release exits 1 with explicit blockers."
+    },
+    {
+      "step": "Audit co-occurrence and topology comparison authorities.",
+      "verify": "Each historical source has path, time, SHA-256, completion semantics and a current comparability verdict."
+    },
+    {
+      "step": "Render and browser-test a current fail-closed HTML report.",
+      "verify": "Frozen audit JSON deterministically produces standalone HTML; desktop, mobile and print smoke checks pass without external requests or document overflow."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "hcc1395-full-run-gate-audit",
+      "evidence_path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json",
+      "evidence_kind": "AUDIT",
+      "command": "jq empty docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json; python3 presentation/build_readiness_report.py --evidence docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json --output /tmp/ll_hcc_report_regenerated.html; cmp docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.html /tmp/ll_hcc_report_regenerated.html",
+      "exit_code": 0,
+      "output_excerpt": "Mounted input replay PASS; CTest 33/33 PASS; production run exit 6; validator exit 7; strict release exit 1; report regeneration byte-identical; verdict NO_GO_EXECUTION_NOW.",
+      "evidence_sha256": "eb6dfe8c444f80f00de766dc82bfef780529d8d8204a67162a620b5bb4ca0c40",
+      "recorded_at": "2026-07-20T00:49:42+08:00"
+    },
+    {
+      "evidence_id": "hcc1395-audit-browser-qa",
+      "evidence_path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.html",
+      "evidence_kind": "REPORT",
+      "command": "python3 presentation/qa_static_report.py --html docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.html --evidence-dir /tmp/ll_hcc_qa_20260720 --receipt /tmp/ll_hcc_qa_20260720/receipt.json",
+      "exit_code": 0,
+      "output_excerpt": "desktop PASS; mobile PASS; print PDF PASS; external requests=0; document overflow=0; scope=PRESENTATION_ONLY_NOT_P8_RELEASE_EVIDENCE.",
+      "evidence_sha256": "bd5024ae675a536503542e67af606ea671dd9f529fffb18fcf649c72366f65b4",
+      "recorded_at": "2026-07-20T00:49:42+08:00"
+    }
+  ],
+  "deviations": [
+    "The requested complete scientific run was not launched after the bounded probes proved that the production engine, co-occurrence authority, complete topology path, independent validator and atomic freeze are unavailable. This is the governed NO-GO outcome, not a runtime failure hidden as completion.",
+    "Three read-only subagents independently inspected mounted inputs, executable readiness and the profiling/report chain. The root agent replayed all completion commands and wrote every repository artifact."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T00:49:42+08:00"
+}

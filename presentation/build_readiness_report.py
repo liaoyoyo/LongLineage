@@ -21,7 +21,7 @@ def esc(value: Any) -> str:
 
 def status_class(value: str) -> str:
     upper = value.upper()
-    if "PASS" in upper or "PRESENT" in upper:
+    if "PASS" in upper or "PRESENT" in upper or "READABLE" in upper:
         return "ok"
     if "BLOCK" in upper or "ABSENT" in upper or "NO_GO" in upper or "FAILED" in upper:
         return "bad"
@@ -146,6 +146,22 @@ def render_sources(rows: Iterable[Dict[str, Any]]) -> str:
     )
 
 
+def render_baseline_rows(rows: Iterable[Dict[str, Any]]) -> str:
+    rendered: List[str] = []
+    for row in rows:
+        rendered.append(
+            "<tr>"
+            f"<td><strong>{esc(row['area'])}</strong><small>{esc(row['classification'])}</small></td>"
+            f"<td>{path_code(row['source'])}</td>"
+            f"<td>{esc(row['recorded_at'])}</td>"
+            f"<td>{esc(row['time'])}</td>"
+            f"<td>{badge(row['digest_status'])}</td>"
+            f"<td>{esc(row['verdict'])}</td>"
+            "</tr>"
+        )
+    return "".join(rendered)
+
+
 def build_html(data: Dict[str, Any]) -> str:
     required = {
         "schema_name",
@@ -176,13 +192,54 @@ def build_html(data: Dict[str, Any]) -> str:
     host = data["host"]
     profile = data["planned_fullspeed_profile"]
     time_answer = data["time_answer"]
+    display = data.get("display", {})
+    page_title = display.get(
+        "page_title",
+        "HCC1395 全速執行就緒度與時間稽核 · LongLineage",
+    )
+    hero_title = display.get("hero_title", "HCC1395 全速執行就緒度與時間稽核")
+    brand_subtitle = display.get("brand_subtitle", "HCC1395 full-speed audit")
+    scope_note = display.get(
+        "scope_note",
+        "Task B · HCC1395 chr1–22 sample-complete；對 7-dataset production corpus 為 partial。",
+    )
+    answer_heading = display.get(
+        "answer_heading",
+        "現在的完整時間不是「很久」，而是「沒有可成功的路徑」",
+    )
+    history_heading = display.get(
+        "history_heading",
+        "歷史時間只回答容量脈絡，不回答新 C++ 總時間",
+    )
+    input_heading = display.get("input_heading", "四項核心輸入被 mount 阻擋")
+    input_lead = display.get(
+        "input_lead",
+        "VCF/sidecar authority 在 big7 可核對；292.06 GB raw BAM、BAI 與 reference 位於目前未掛載的 big8。",
+    )
+    baseline_rows = data.get("baseline_artifacts", [])
+    baseline_nav = '        <a href="#baselines">基準與結果</a>\n' if baseline_rows else ""
+    baseline_section = ""
+    if baseline_rows:
+        baseline_section = f"""      <section id="baselines">
+        <div class="section-kicker">04B · Baseline and result authority</div>
+        <h2>{esc(display.get('baseline_heading', 'sSNV 共現與區域樹基準不能混為同一證據層'))}</h2>
+        <p class="section-lead">{esc(display.get('baseline_lead', '每列同時顯示來源、時間、digest 與可比性；execution PASS 不自動等於 scientific parity。'))}</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Area</th><th>Source</th><th>Recorded</th><th>Time</th><th>Digest</th><th>Current verdict</th></tr></thead>
+            <tbody>{render_baseline_rows(baseline_rows)}</tbody>
+          </table>
+        </div>
+      </section>
+
+"""
     html_document = f"""<!doctype html>
 <html lang="zh-Hant" data-partial="true" data-report-id="{esc(data['report_id'])}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>HCC1395 全速執行就緒度與時間稽核 · LongLineage</title>
+  <title>{esc(page_title)}</title>
   <style>
     :root {{
       --paper:#f3f0e8; --surface:#fffdf8; --ink:#17202a; --muted:#5f6b76;
@@ -323,24 +380,24 @@ def build_html(data: Dict[str, Any]) -> str:
   <div class="partial-ribbon">PARTIAL / READINESS AUDIT — 非 production run、非 P8 release evidence</div>
   <div class="layout">
     <aside>
-      <div class="brand">LongLineage<small>HCC1395 full-speed audit</small></div>
+      <div class="brand">LongLineage<small>{esc(brand_subtitle)}</small></div>
       <nav aria-label="報告章節">
         <a href="#answer">時間答案</a>
         <a href="#measured">本輪實測</a>
         <a href="#pipeline">全流程狀態</a>
         <a href="#history">歷史脈絡</a>
-        <a href="#inputs">輸入</a>
+{baseline_nav}        <a href="#inputs">輸入</a>
         <a href="#bottlenecks">瓶頸</a>
         <a href="#profile">全速設定</a>
         <a href="#commands">命令證據</a>
         <a href="#sources">來源</a>
       </nav>
-      <p class="scope-note">Task B · HCC1395 chr1–22 sample-complete；對 7-dataset production corpus 為 partial。</p>
+      <p class="scope-note">{esc(scope_note)}</p>
     </aside>
     <main>
       <header class="hero">
         <div class="eyebrow">Evidence → Gate → Timing · {esc(data['created_at'])}</div>
-        <h1>HCC1395 全速執行就緒度與時間稽核</h1>
+        <h1>{esc(hero_title)}</h1>
         <p class="hero-lead">{esc(verdict['summary'])}</p>
         <div class="verdict-line">
           <span class="verdict">NO-GO</span>
@@ -357,7 +414,7 @@ def build_html(data: Dict[str, Any]) -> str:
 
       <section id="answer">
         <div class="section-kicker">01 · Direct answer</div>
-        <h2>現在的完整時間不是「很久」，而是「沒有可成功的路徑」</h2>
+        <h2>{esc(answer_heading)}</h2>
         <div class="answer-grid">
           <div class="answer-primary">
             <strong>Production total：不可量測</strong>
@@ -391,15 +448,15 @@ def build_html(data: Dict[str, Any]) -> str:
 
       <section id="history">
         <div class="section-kicker">04 · Non-comparable context</div>
-        <h2>歷史時間只回答容量脈絡，不回答新 C++ 總時間</h2>
+        <h2>{esc(history_heading)}</h2>
         <p class="section-lead">長條以歷史最長 wall time 正規化；0.4% 是顯示下限。每列獨立，禁止相加或外推。</p>
         <div class="history">{render_history(data['historical_context'])}</div>
       </section>
 
-      <section id="inputs">
+{baseline_section}      <section id="inputs">
         <div class="section-kicker">05 · Input readiness</div>
-        <h2>四項核心輸入被 mount 阻擋</h2>
-        <p class="section-lead">VCF/sidecar authority 在 big7 可核對；292.06 GB raw BAM、BAI 與 reference 位於目前未掛載的 big8。</p>
+        <h2>{esc(input_heading)}</h2>
+        <p class="section-lead">{esc(input_lead)}</p>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Role</th><th>Recorded size</th><th>Current state</th><th>Path</th></tr></thead>
