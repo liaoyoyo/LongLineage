@@ -1,0 +1,111 @@
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: ci
+
+on:
+  push:
+    branches: [main, "feat/**", "fix/**", "docs/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: longlineage-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  synthetic-build-test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: gcc-debug
+            cxx: g++
+            build_type: Debug
+            sanitizers: ""
+          - name: clang-debug
+            cxx: clang++
+            build_type: Debug
+            sanitizers: ""
+          - name: gcc-release
+            cxx: g++
+            build_type: Release
+            sanitizers: ""
+          - name: clang-release
+            cxx: clang++
+            build_type: Release
+            sanitizers: ""
+          - name: clang-asan-ubsan
+            cxx: clang++
+            build_type: Debug
+            sanitizers: address,undefined
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build-only dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential clang clang-format-14 curl jq libbz2-dev libdeflate-dev \
+            libjansson-dev liblzma-dev libssl-dev pkg-config strace zlib1g-dev
+          sudo apt-get install -y --no-install-recommends python3-jsonschema
+
+      - name: Build pinned HTSlib
+        env:
+          HTSLIB_VERSION: "1.18"
+          HTSLIB_SHA256: f1ab53a593a2320a1bfadf4ef915dae784006c5b5c922c8a8174d7530a9af18f
+        run: |
+          curl -fsSLo "/tmp/htslib-${HTSLIB_VERSION}.tar.bz2" \
+            "https://github.com/samtools/htslib/releases/download/${HTSLIB_VERSION}/htslib-${HTSLIB_VERSION}.tar.bz2"
+          echo "${HTSLIB_SHA256}  /tmp/htslib-${HTSLIB_VERSION}.tar.bz2" | sha256sum -c -
+          tar -xf "/tmp/htslib-${HTSLIB_VERSION}.tar.bz2" -C /tmp
+          cd "/tmp/htslib-${HTSLIB_VERSION}"
+          ./configure --prefix=/usr/local --disable-libcurl --disable-plugins --with-libdeflate
+          make -j4
+          sudo make install
+          sudo ldconfig
+
+      - name: Check C++ formatting
+        if: matrix.name == 'gcc-debug'
+        run: scripts/ci/check_format.sh clang-format-14
+
+      - name: Configure
+        env:
+          CXX: ${{ matrix.cxx }}
+          PKG_CONFIG_PATH: /usr/local/lib/pkgconfig
+        run: |
+          /usr/bin/cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DLONGLINEAGE_BUILD_TESTS=ON \
+            -DLONGLINEAGE_REQUIRE_EXACT_HTSLIB=ON \
+            -DLONGLINEAGE_WARNINGS_AS_ERRORS=ON \
+            -DLONGLINEAGE_SANITIZERS=${{ matrix.sanitizers }}
+
+      - name: Build
+        run: /usr/bin/cmake --build build --parallel 4
+
+      - name: Synthetic tests and governance under network syscall denial
+        env:
+          LD_LIBRARY_PATH: /usr/local/lib
+        run: scripts/ci/check_all.sh build
+
+  pinned-container:
+    name: pinned-container
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Verify dependency lock
+        run: scripts/ci/check_dependency_lock.sh
+      - name: Build pinned production image
+        run: docker build --file containers/Dockerfile --tag longlineage:ci .
+      - name: Smoke CLI
+        run: docker run --rm --network none longlineage:ci --version

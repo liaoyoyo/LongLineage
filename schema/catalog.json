@@ -1,0 +1,397 @@
+{
+  "schema_name": "longlineage.artifact_schema_catalog",
+  "schema_version": "1.0.0",
+  "coordinate_types": {
+    "Position1": "positive 1-based integer",
+    "Interval0": "0-based half-open [start0,end0)"
+  },
+  "null_token": ".",
+  "schema_id_registry": "schema/id_registry.json",
+  "type_registry": "contracts/v1/type_registry.tsv",
+  "status_reason_registry": "contracts/v1/status_reason_codes.tsv",
+  "site_index_schema": "schema/records/site_index.record.json",
+  "site_index_schema_sha256": "22d612131aa184073d22553dabf62ff162e9dfbab89d5b4744abb45883629530",
+  "run_membership": {
+    "scientific_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary"
+    ],
+    "artifact_catalog_row_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary"
+    ],
+    "data_lineage_output_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary"
+    ],
+    "semantic_digest_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary",
+      "artifact_catalog",
+      "data_lineage"
+    ],
+    "producer_receipt_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary",
+      "artifact_catalog",
+      "data_lineage",
+      "semantic_digests"
+    ],
+    "run_receipt_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary",
+      "artifact_catalog",
+      "data_lineage",
+      "semantic_digests"
+    ],
+    "checksums_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary",
+      "artifact_catalog",
+      "data_lineage",
+      "semantic_digests",
+      "producer_receipt"
+    ],
+    "checksums_include_declared_indexes": true,
+    "checksums_excluded_artifact_ids": [
+      "checksums",
+      "validation_receipt",
+      "run_receipt"
+    ]
+  },
+  "artifacts": [
+    {
+      "artifact_id": "site_reads",
+      "relative_path": "site_reads.tsv.bgz",
+      "format": "TSV_BGZF",
+      "record_schema": "schema/records/site_reads.record.json",
+      "record_schema_sha256": "012396ec33619e685b8194d86d57a08dc5aa6eead63fceadfc0aaecfa3fe8c45",
+      "primary_key": [
+        "dataset_order",
+        "site_order",
+        "read_id"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "site_order",
+        "read_id"
+      ],
+      "index": "indexes/site_reads.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "methyl_calls",
+      "relative_path": "methyl_calls.tsv.bgz",
+      "format": "TSV_BGZF",
+      "record_schema": "schema/records/methyl_calls.record.json",
+      "record_schema_sha256": "eb5511e24b338d3e9c891af63bd9164bc122f2c44e0a670cdd13a0f698ac656a",
+      "primary_key": [
+        "dataset_order",
+        "site_order",
+        "read_id",
+        "cpg_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "site_order",
+        "read_id",
+        "cpg_order"
+      ],
+      "index": "indexes/methyl_calls.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "bernoulli_upper",
+      "relative_path": "bernoulli_upper.llm.bgz",
+      "format": "LLM_BGZF",
+      "record_schema": "schema/records/bernoulli_upper.record.json",
+      "record_schema_sha256": "15aa68edde8528a67ced88cc910a72c84b7256c6aa2e8b2614dcb7ed8bbea97c",
+      "primary_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "index": "indexes/bernoulli_upper.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": false
+    },
+    {
+      "artifact_id": "m1_sites",
+      "relative_path": "m1_sites.tsv.bgz",
+      "format": "TSV_BGZF",
+      "record_schema": "schema/records/m1_sites.record.json",
+      "record_schema_sha256": "e44369af7ff1380a1383a18a85f3152272e754328cd61b8385db8c0e73027458",
+      "primary_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "index": "indexes/m1_sites.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "m1_assignments",
+      "relative_path": "m1_assignments.jsonl.bgz",
+      "format": "JSONL_BGZF",
+      "record_schema": "schema/records/m1_assignment.schema.json",
+      "record_schema_sha256": "e3df3579c8b5f44ab71393ff1faf59fe47ea0c8cb104c7bf125a800d3c1edb9c",
+      "primary_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "index": "indexes/m1_assignments.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "cooccurrence_pairs",
+      "relative_path": "cooccurrence_pairs.tsv.bgz",
+      "format": "TSV_BGZF",
+      "record_schema": "schema/records/cooccurrence_pairs.record.json",
+      "record_schema_sha256": "fb48f6795042ff40982115291ffa4784e83f7ce69e2f7bc2edb8e2c8367ef69a",
+      "primary_key": [
+        "dataset_order",
+        "focal_site_order",
+        "partner_site_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "focal_site_order",
+        "partner_site_order"
+      ],
+      "index": "indexes/cooccurrence_pairs.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "focal_site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "cooccurrence_sites",
+      "relative_path": "cooccurrence_sites.tsv.bgz",
+      "format": "TSV_BGZF",
+      "record_schema": "schema/records/cooccurrence_sites.record.json",
+      "record_schema_sha256": "e701c266902bbf13f6fb79c134c128ed22f2c9e4b20ecdda904667be92a4b3d7",
+      "primary_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "site_order"
+      ],
+      "index": "indexes/cooccurrence_sites.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "site_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "topology_units",
+      "relative_path": "topology_units.jsonl.bgz",
+      "format": "JSONL_BGZF",
+      "record_schema": "schema/records/topology_unit.schema.json",
+      "record_schema_sha256": "76f9489761ba7b4f7b6441ef36d09ad2eeb0c66635b678480bb3f998ea95bd6e",
+      "primary_key": [
+        "dataset_order",
+        "unit_order"
+      ],
+      "sort_key": [
+        "dataset_order",
+        "unit_order"
+      ],
+      "index": "indexes/topology_units.site_index.tsv.bgz",
+      "index_key": ["dataset_order", "unit_order"],
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "summary",
+      "relative_path": "summary.json",
+      "format": "JSON",
+      "record_schema": "schema/core/summary.schema.json",
+      "record_schema_sha256": "b5e4f86519874092887a172dbaebb17bcde13b907558406ff6a4919c1c93b1d8",
+      "primary_key": [
+        "run_id"
+      ],
+      "sort_key": [],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "run_receipt",
+      "relative_path": "run_receipt.json",
+      "format": "JSON",
+      "record_schema": "schema/core/run_receipt.schema.json",
+      "record_schema_sha256": "e94ef084f1118a7ab4d0e20917c6feb1d88a6ea17cb013dacfffe45ed4c8d8ed",
+      "primary_key": [
+        "run_id"
+      ],
+      "sort_key": [],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage-validate",
+      "validator": "longlineage-query",
+      "queryable": true
+    },
+    {
+      "artifact_id": "producer_receipt",
+      "relative_path": "receipts/producer_receipt.json",
+      "format": "JSON",
+      "record_schema": "schema/core/producer_receipt.schema.json",
+      "record_schema_sha256": "2110096ca908a86696edfe30a6cf3c751125e32a56ce52883c506dcb98d1d903",
+      "primary_key": ["run_id"],
+      "sort_key": [],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "artifact_catalog",
+      "relative_path": "artifact_catalog.jsonl.bgz",
+      "format": "JSONL_BGZF",
+      "record_schema": "schema/records/artifact_catalog_record.schema.json",
+      "record_schema_sha256": "488d7aa14c4690e3261c49d5bde875450186375cad1f4e2d7379fe066b0bdf86",
+      "primary_key": ["artifact.artifact_id"],
+      "sort_key": ["artifact.artifact_id"],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "data_lineage",
+      "relative_path": "data_lineage.jsonl.bgz",
+      "format": "JSONL_BGZF",
+      "record_schema": "schema/records/data_lineage_record.schema.json",
+      "record_schema_sha256": "3085fa3777b828344d496034af44f382f2b81addc7c6a6372d94a0519dd73ec9",
+      "primary_key": ["output_artifact_id"],
+      "sort_key": ["output_artifact_id"],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "semantic_digests",
+      "relative_path": "semantic_digests.tsv",
+      "format": "TSV",
+      "record_schema": "schema/records/semantic_digest.record.json",
+      "record_schema_sha256": "845ad155201d78de2bf29cc369451c95114f4ac586fdc4f23a523daf54ae9784",
+      "primary_key": ["artifact_id"],
+      "sort_key": ["artifact_id"],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": true
+    },
+    {
+      "artifact_id": "checksums",
+      "relative_path": "checksums.sha256",
+      "format": "SHA256SUM",
+      "record_schema": "schema/records/checksum.record.json",
+      "record_schema_sha256": "4f7654a9c089509e487a5d775a2b361d8915112e2bbab65dfda769b23516b8bc",
+      "primary_key": ["relative_path"],
+      "sort_key": ["relative_path"],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage",
+      "validator": "longlineage-validate",
+      "queryable": false
+    },
+    {
+      "artifact_id": "validation_receipt",
+      "relative_path": "validation_receipt.json",
+      "format": "JSON",
+      "record_schema": "schema/core/validation_receipt.schema.json",
+      "record_schema_sha256": "372ac1bcf43659e5c7fa31ff69dff645c111f296650c6051320c246e2489fbe6",
+      "primary_key": ["run_id"],
+      "sort_key": [],
+      "index": null,
+      "index_key": null,
+      "producer": "longlineage-validate",
+      "validator": "longlineage-query",
+      "queryable": true
+    }
+  ]
+}

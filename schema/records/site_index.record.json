@@ -1,0 +1,30 @@
+{
+  "schema_name": "longlineage.site_index",
+  "schema_version": "1.0.0",
+  "format": "TSV_BGZF",
+  "header": [
+    "artifact_id",
+    "dataset_order",
+    "record_order",
+    "first_virtual_offset",
+    "past_end_virtual_offset",
+    "logical_rows",
+    "range_semantic_sha256"
+  ],
+  "fields": [
+    {"name": "artifact_id", "type": "string", "required": true},
+    {"name": "dataset_order", "type": "uint32", "required": true},
+    {"name": "record_order", "type": "uint64", "required": true},
+    {"name": "first_virtual_offset", "type": "uint64", "required": true},
+    {"name": "past_end_virtual_offset", "type": "uint64", "required": true},
+    {"name": "logical_rows", "type": "uint64", "required": true},
+    {"name": "range_semantic_sha256", "type": "sha256", "required": true}
+  ],
+  "primary_key": ["artifact_id", "dataset_order", "record_order"],
+  "sort_key": ["artifact_id", "dataset_order", "record_order"],
+  "invariants": [
+    "first_virtual_offset < past_end_virtual_offset",
+    "logical_rows > 0",
+    "ranges do not overlap and exactly cover the indexed logical records"
+  ]
+}

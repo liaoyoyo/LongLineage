@@ -1,0 +1,6 @@
+{
+  "fixture_id": "sidecar_projection_conflict",
+  "gate_id": "IO_LATEST_TAG_JOIN",
+  "expected_rejection": "An exact read projection resolves to conflicting latest HP/PS rows.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

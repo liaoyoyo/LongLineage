@@ -1,0 +1,6 @@
+{
+  "fixture_id": "membership_cycle",
+  "gate_id": "CONTRACT_RUN_MEMBERSHIP",
+  "expected_rejection": "The run-membership dependency graph contains a cycle.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

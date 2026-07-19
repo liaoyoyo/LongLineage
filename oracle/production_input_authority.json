@@ -1,0 +1,192 @@
+{
+  "schema_name": "longlineage.production_input_authority",
+  "schema_version": "1.0.0",
+  "profile_id": "RAW_ALL_PRODUCTION_V2_7_DATASET",
+  "source_closeout": {
+    "schema_name": "intersubmod.longphase_raw_all_receipt_closeout",
+    "schema_version": "1.0.0",
+    "size_bytes": 5533,
+    "sha256": "d5360b7422ee1017d71f60ede51bc3283160e57c6abbb78daa3e74090362ab7c",
+    "dataset_count": 7,
+    "all_pass": true,
+    "total_mapped_alignments": 164253537
+  },
+  "dataset_order": [
+    "HCC1395",
+    "HCC1395_DORADO",
+    "COLO829",
+    "H1437",
+    "H2009",
+    "HCC1937",
+    "HCC1954"
+  ],
+  "datasets": [
+    {
+      "dataset_id": "HCC1395",
+      "dataset_order": 0,
+      "source_receipt_sha256": "de584fa07a3d100fa4c52c8afd05e81c531c9195de00507a250ec342d7474552",
+      "mapped_alignment_count": 40859727,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 1433423193,
+        "sha256": "8e79e89cb668e65b22a8c02aee9dcb9fea81fc8903962c094839d317ebd93dfb"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 910475,
+        "sha256": "f972c1538c91be36d504b516358faa86a44a36e2e452f0c0e0066e35d88b0d76"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 3728864,
+        "sha256": "bc393dda8eb549d46e9993eccebd4b7c4cd7bf809cde20e071b8fdd8ff6437e6"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 344074,
+        "sha256": "d66ecf3dbfbcf3f2b39d9b1e221954aee77a4cbda6f00f0b64021c57ded81fd3"
+      }
+    },
+    {
+      "dataset_id": "HCC1395_DORADO",
+      "dataset_order": 1,
+      "source_receipt_sha256": "37e53d2e6571b809be6fb1fe2f69a69bf87f53d5dd3f4a76cb76d8b30ecaf8ca",
+      "mapped_alignment_count": 40033094,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 1646911913,
+        "sha256": "319b6e88c43fb4163888589b43aed7fd8214bec48e0dff31b589514af6817b73"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 886124,
+        "sha256": "8df6c9a1f8cae2a3192f28685aef517c33d7b32061bfefd516b02c487b970321"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 3676401,
+        "sha256": "99bd353169d8bef10c408cfca63be85d32ad0230d215f4201a7540560c226816"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 347516,
+        "sha256": "57ee34d5386652248f9b92b87a3af2ff018f1066e49b3fbcbbc0c03dbcc8dd0e"
+      }
+    },
+    {
+      "dataset_id": "COLO829",
+      "dataset_order": 2,
+      "source_receipt_sha256": "e2ff97d618899cf83dc4843d041411c24652453e761f13aec6bdfc4766074c36",
+      "mapped_alignment_count": 8255461,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 339540321,
+        "sha256": "7210bb574b298abec189eb1a9bcc5e33ffcb5915652b6287612c2d6a20f48035"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 513448,
+        "sha256": "9752e711a768b33082127d9f07ce4842eccd918ec8d86b0943719d6e4db378aa"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 1228677,
+        "sha256": "b43a6d06e70172dd50fb98cd735c56fe6e2c9916854c01eb0109736ae05fd136"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 282844,
+        "sha256": "061e57bc99124be358b9b3a903472bc96e5b3a849a5443db2fec19f8e2f192ec"
+      }
+    },
+    {
+      "dataset_id": "H1437",
+      "dataset_order": 3,
+      "source_receipt_sha256": "9e095fad9427beb6da0577aa2b2a2a5c1f179ad1ab17b5fae295b99ce4e27b80",
+      "mapped_alignment_count": 14434968,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 585465558,
+        "sha256": "55894ef8ea3c4a5eb156961178be17d5566b5f1bff8db37c588facfab1580ff4"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 588828,
+        "sha256": "664e15748e7d16f50612764b46f7375dc293ea207e157491c1b0d7e4ffc0e72e"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 2819292,
+        "sha256": "d000ef0c3118a24d2c4535cbaadae7397a80b72da4c880b69ba928bdcd912b96"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 389362,
+        "sha256": "4948d48446f8bf7555a53d4ad0b0ae6bf2c7bc106cf08ba9fb0fa851886401d7"
+      }
+    },
+    {
+      "dataset_id": "H2009",
+      "dataset_order": 4,
+      "source_receipt_sha256": "a69607042af61229c662fc9c96f2aaea02834f2278d003228cc9e5014102df71",
+      "mapped_alignment_count": 21690297,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 886667909,
+        "sha256": "547211ed99a3f366149344e41bb985a0f7bdd6135cd07665b4a36fd9caca2b0d"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 658522,
+        "sha256": "a3d0cb7297090a62ba27de2b20a441a8aec00239fe8e067021c32ebe474027e7"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 5714326,
+        "sha256": "7a9be1fc4b7c919953f8042ad7a089a0ea98156c2173acbe384a01bbdd483d62"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 696832,
+        "sha256": "f00ccdde4056c948bad70e1eb0fec57ed575e088a3c1c8234e47e967ee839e41"
+      }
+    },
+    {
+      "dataset_id": "HCC1937",
+      "dataset_order": 5,
+      "source_receipt_sha256": "40980baf3621230d053c16657c96877ec24274f65f7f73146bfcdc9d040d3e5f",
+      "mapped_alignment_count": 23460628,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 728870441,
+        "sha256": "8a2cd1c3684ad11e94a3faa5a6c362c721a61bc624fa02cb1270fd3ad16eae1e"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 662191,
+        "sha256": "69618ad4f9b20e1ac0abb1bd0de119018ac120be48e7182fbfa3957a7c151a88"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 1758615,
+        "sha256": "4e9bf480c169294e872322c9a5eb0a881802e1f825eac2a1c330a33df598d30d"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 188106,
+        "sha256": "d45c8d655cf2ddfcc8ab163290742b65b8fce87134bb824dc556172ea683023d"
+      }
+    },
+    {
+      "dataset_id": "HCC1954",
+      "dataset_order": 6,
+      "source_receipt_sha256": "09f95ba11e9ed346b9bd836076cee221d894c68165df36452071ff70b4260377",
+      "mapped_alignment_count": 15519362,
+      "persisted_tagged_bam": false,
+      "latest_hp_ps_sidecar": {
+        "size_bytes": 635288829,
+        "sha256": "72f60651b82abbafa3e2b50f7d76f8946a198c9fd66c58974f9b676b38189a88"
+      },
+      "latest_hp_ps_sidecar_index": {
+        "size_bytes": 607114,
+        "sha256": "bfa2505d788d4c9c605d218728e0ba894ab80fc12bfe5649580311a8ad72b989"
+      },
+      "pass_biallelic_ssnv_vcf": {
+        "size_bytes": 879096,
+        "sha256": "4e9af1e293cfb34efc91830d35e9047b6b95c9a577e0d84f8e4de9542dacb338"
+      },
+      "pass_biallelic_ssnv_vcf_index": {
+        "size_bytes": 182035,
+        "sha256": "c22223ca30254d26ca03aefeb05f1f65e0e23ba9132f7be09fc0401834fa5dc6"
+      }
+    }
+  ],
+  "constraints": {
+    "latest_tag_join": "EXACT_PROJECTION_NO_FALLBACK",
+    "tagged_bam_output_allowed": false,
+    "production_requires_exact_dataset_set": true,
+    "private_source_paths_stored": false
+  }
+}

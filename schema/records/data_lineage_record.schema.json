@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/data_lineage_record-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "transform_id",
+    "output_artifact_id",
+    "output_semantic_sha256",
+    "inputs",
+    "producer_executable_sha256"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.data_lineage_record"},
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "transform_id": {"type": "string", "minLength": 1},
+    "output_artifact_id": {"type": "string", "minLength": 1},
+    "output_semantic_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "inputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/input_binding"}
+    },
+    "producer_executable_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "input_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_kind", "source_id", "digest_kind", "sha256"],
+      "properties": {
+        "source_kind": {
+          "enum": ["RUN_ARTIFACT", "MANIFEST_INPUT", "CONTRACT"]
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]+$"
+        },
+        "digest_kind": {
+          "enum": ["SEMANTIC_SHA256", "PHYSICAL_SHA256"]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "inputs exactly match the output artifact record",
+    "RUN_ARTIFACT references resolve within the same immutable producer receipt",
+    "the transform and input graph is acyclic and every non-source artifact has at least one input"
+  ]
+}

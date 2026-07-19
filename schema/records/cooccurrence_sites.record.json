@@ -1,0 +1,85 @@
+{
+  "schema_name": "longlineage.cooccurrence_sites",
+  "schema_version": "1.0.0",
+  "format": "TSV_BGZF",
+  "header": [
+    "dataset_order",
+    "dataset_id",
+    "site_order",
+    "chrom",
+    "pos1",
+    "ref",
+    "alt",
+    "m1_group_count",
+    "m2_status",
+    "m2_reason",
+    "m2_precedence_rank",
+    "m2_grid_id",
+    "m2_permutations",
+    "min_group_size",
+    "categorical_v",
+    "continuous_eta2",
+    "power",
+    "partner_universe_size",
+    "exact_testable_pairs",
+    "global_bh_discoveries",
+    "global_by_discoveries",
+    "joint_signature_status",
+    "joint_partner_orders_json",
+    "joint_complete_readset_sha256"
+  ],
+  "fields": [
+    {"name": "dataset_order", "type": "uint32", "required": true},
+    {"name": "dataset_id", "type": "string", "required": true},
+    {"name": "site_order", "type": "uint64", "required": true},
+    {"name": "chrom", "type": "string", "required": true},
+    {"name": "pos1", "type": "Position1", "required": true},
+    {"name": "ref", "type": "base", "required": true},
+    {"name": "alt", "type": "base", "required": true},
+    {"name": "m1_group_count", "type": "uint32", "required": false, "null": "."},
+    {"name": "m2_status", "type": "status_code", "required": true},
+    {"name": "m2_reason", "type": "reason_code", "required": true},
+    {"name": "m2_precedence_rank", "type": "uint32", "required": true},
+    {"name": "m2_grid_id", "type": "string", "required": true},
+    {"name": "m2_permutations", "type": "uint32", "required": true, "const": 499},
+    {"name": "min_group_size", "type": "uint32", "required": false, "null": "."},
+    {"name": "categorical_v", "type": "float64", "required": false, "null": "."},
+    {"name": "continuous_eta2", "type": "float64", "required": false, "null": "."},
+    {"name": "power", "type": "float64", "required": false, "null": "."},
+    {"name": "partner_universe_size", "type": "uint32", "required": true},
+    {"name": "exact_testable_pairs", "type": "uint32", "required": true},
+    {"name": "global_bh_discoveries", "type": "uint32", "required": true},
+    {"name": "global_by_discoveries", "type": "uint32", "required": true},
+    {"name": "joint_signature_status", "type": "status_code", "required": true},
+    {"name": "joint_partner_orders_json", "type": "canonical_json", "required": false, "null": "."},
+    {"name": "joint_complete_readset_sha256", "type": "sha256", "required": false, "null": "."}
+  ],
+  "embedded_json_bindings": {
+    "joint_partner_orders_json": {
+      "schema_id": "https://longlineage.local/schema/joint_partner_orders-1.0.0.json",
+      "schema_path": "schema/records/joint_partner_orders.embedded.schema.json",
+      "schema_sha256": "b3cfad21d87422b3731c0e0cdc4d77620f6658bf99da49d65296e0d1dbbca3a0",
+      "null_policy": "DOT_TOKEN_ONLY",
+      "constraints": [
+        {"operator": "VALUE_PRESENT_IFF_FIELD_EQUALS", "field": "joint_signature_status", "value": "PASS"},
+        {"operator": "NULLABILITY_EQUALS_FIELD", "field": "joint_complete_readset_sha256"},
+        {
+          "operator": "PARTNER_SITE_ORDER_SPACING_AT_LEAST",
+          "distance_bp": 20,
+          "lookup_artifact": "cooccurrence_pairs"
+        }
+      ]
+    }
+  },
+  "status_domain_bindings": {
+    "m2_status": "m2",
+    "m2_reason": "m2",
+    "joint_signature_status": "joint_signature"
+  },
+  "invariants": [
+    "eligibility uses a frozen 499-permutation grid, min group 5, max groups 10, power 0.80, categorical V 0.30 and continuous eta2 0.14",
+    "m2_reason is the first failure in the frozen precedence registry",
+    "joint signature uses at most three partners with >=20 bp spacing on one identical complete-read set",
+    "20 bp spacing is not statistical independence"
+  ]
+}

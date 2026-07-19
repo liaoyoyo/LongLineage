@@ -1,0 +1,164 @@
+{
+  "schema_name": "longlineage.oracle_authority_manifest",
+  "schema_version": "1.0.0",
+  "inter_sub_mod_commit": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99",
+  "truth_fields_in_production_authority": 0,
+  "entries": [
+    {
+      "artifact_id": "production_input_authority",
+      "stage": "P0_INPUT_CONTRACT",
+      "authority_class": "VALIDATED_FULL",
+      "source_path": "external://raw_all_production_sidecars_v2/raw_all_receipt_closeout.json",
+      "physical_sha256": "d5360b7422ee1017d71f60ede51bc3283160e57c6abbb78daa3e74090362ab7c",
+      "truth_usage": "NONE",
+      "copy_policy": "SANITIZED_DIGESTS_COUNTS_AND_DATASET_ORDER_ONLY",
+      "target": "oracle/production_input_authority.json",
+      "status_reason": "Binds the exact seven-dataset sidecar and PASS VCF identities; private source paths are excluded."
+    },
+    {
+      "artifact_id": "longphase_s_knowledge_contract",
+      "stage": "P0_INPUT_CONTRACT",
+      "authority_class": "REVIEWED_KNOWLEDGE",
+      "source_path": "external://knowledge/05_tools/longphase-s.md",
+      "physical_sha256": "f3cb00492eba866a09892ed14961d184bb5a6f6ded61bac0c81259c44965004f",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_CONTRACT_FACTS_ONLY",
+      "target": "contracts/v1/science_parameters.json",
+      "status_reason": "Last verified 2026-07-11; binds the full nine-state HP vocabulary and LongPhase-S semantics."
+    },
+    {
+      "artifact_id": "sam_bam_mm_ml_knowledge_contract",
+      "stage": "P1_IO",
+      "authority_class": "REVIEWED_KNOWLEDGE",
+      "source_path": "external://knowledge/03_file_formats/bam-format.md",
+      "physical_sha256": "807be4e936f7eed611a957b2a49ddd4a33b52cc56be6dc615bd6f811408f6dd0",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_CONTRACT_FACTS_ONLY",
+      "target": "src/io/mm_ml.cpp",
+      "status_reason": "Binds as-sequenced MM orientation, ML interval semantics, skip modes and MN mismatch rejection."
+    },
+    {
+      "artifact_id": "m1_frozen_analyzer",
+      "stage": "M1",
+      "authority_class": "VALIDATED_FULL",
+      "source_path": "InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_all_ssnv_focal_alt_multigroup.pinned_390228ce.py",
+      "physical_sha256": "390228ce1fb98b59409f2517341334ab94329ef6c73a4838555fca85878027b2",
+      "truth_usage": "POSTHOC_ONLY",
+      "copy_policy": "HASH_AND_FROZEN_VECTORS_ONLY",
+      "target": "src/m1",
+      "status_reason": "Execution authority only; C++ parity is not yet verified."
+    },
+    {
+      "artifact_id": "m1_cluster_library",
+      "stage": "M1",
+      "authority_class": "VALIDATED_FULL",
+      "source_path": "InterSubMod/research/20260715_single_fp_alt_multicluster_subclone_validation/scripts/focal_alt_cluster_lib.py",
+      "physical_sha256": "ed5f3c99461248248b20a9f49597ab5de7340a1e2055d77a1d83dbcc2799b72a",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_FROZEN_VECTORS_ONLY",
+      "target": "src/m1",
+      "status_reason": "PCG64, linkage tie and relabel vectors still need a logical freeze."
+    },
+    {
+      "artifact_id": "latest_tag_join_authority",
+      "stage": "P1_IO",
+      "authority_class": "VALIDATED_FULL",
+      "source_path": "InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/latest_tag_join.py",
+      "physical_sha256": "7ddadb05481bb61f2dc3a489762944ec347ab9f5265c69fb17538efd44b543cd",
+      "truth_usage": "NONE",
+      "copy_policy": "DERIVED_REIMPLEMENTATION",
+      "target": "src/io/sidecar.cpp",
+      "status_reason": "C++ implementation must strengthen typed full-identity duplicate checks."
+    },
+    {
+      "artifact_id": "m1_site_results",
+      "stage": "M1",
+      "authority_class": "VALIDATED_FULL",
+      "source_path": "external://m1_frozen_full/all_ssnv_site_results.tsv.gz",
+      "physical_sha256": "a8871af3a8c3955bf31aec5eeef0c93aca0683f52cf6d6f1e06fbbb713324f74",
+      "logical_sha256": null,
+      "truth_usage": "POSTHOC_ONLY",
+      "copy_policy": "EXTERNAL_REFERENCE_ONLY",
+      "target": "tests/parity/m1",
+      "status_reason": "469849 keys; logical-row digest is a P3 prerequisite."
+    },
+    {
+      "artifact_id": "m1_stable_assignments",
+      "stage": "M1",
+      "authority_class": "VALIDATED_FULL",
+      "source_path": "external://m1_frozen_full/all_ssnv_stable_multigroup_read_assignments.jsonl.gz",
+      "physical_sha256": "82af076d8ce70c66c7f75c4ed4bdeacb7d4c5c43d0905859303b121df483a4ba",
+      "logical_sha256": null,
+      "truth_usage": "NONE",
+      "copy_policy": "EXTERNAL_REFERENCE_ONLY",
+      "target": "tests/parity/m1",
+      "status_reason": "102842 stable assignments; logical-row digest is a P3 prerequisite."
+    },
+    {
+      "artifact_id": "m2_eligibility_gate",
+      "stage": "M2",
+      "authority_class": "VALIDATED_INTEGRITY",
+      "source_path": "InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/m2_screen_gate.py",
+      "physical_sha256": "f3d932388bf8ddc90f8fa1a136f6203dfe8d9f5aa9979ae32e9d936c2a413b79",
+      "truth_usage": "NONE",
+      "copy_policy": "DERIVED_REIMPLEMENTATION",
+      "target": "src/m2/eligibility.cpp",
+      "status_reason": "Validated eligibility and integrity, not scientific confirmation."
+    },
+    {
+      "artifact_id": "m2_eligibility_recount",
+      "stage": "M2",
+      "authority_class": "VALIDATED_INTEGRITY",
+      "source_path": "InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/independent_m2_gate_recount.v3.json",
+      "physical_sha256": "4a0f411b9ce39128d07e5d15abfc5a5c999797b8a3f1eb33886185e830031daf",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_ONLY",
+      "target": "tests/parity/m2",
+      "status_reason": "919 eligible, 948 evaluable-ineligible, 100974 indeterminate, 1 K>10."
+    },
+    {
+      "artifact_id": "cooccurrence_live_source",
+      "stage": "COOCCURRENCE",
+      "authority_class": "UNRELEASED_REFERENCE",
+      "source_path": "InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_methyl_ssnv_cooccurrence.py",
+      "physical_sha256": "3d7650983fce68abc122748d167e56b9a53bc6ef9775b9b1beb19793e25a769c",
+      "truth_usage": "POSTHOC_ONLY",
+      "copy_policy": "CONTRACT_REVIEW_ONLY",
+      "target": "src/cooccurrence",
+      "status_reason": "No formal pair, candidate or run receipt exists; attempts 1-6 are excluded."
+    },
+    {
+      "artifact_id": "topology_exact_source",
+      "stage": "TOPOLOGY",
+      "authority_class": "PASS_FOR_PROBE",
+      "source_path": "InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/hypercube_exact.py",
+      "physical_sha256": "1def0de1952d127d8d013820ac7b0eabe33d6f1a66fd8c6d47a1985b14a32f77",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_FROZEN_VECTORS_ONLY",
+      "target": "src/solver",
+      "status_reason": "Current source passed remediation tests but lacks current real dual-pilot and full-family authority."
+    },
+    {
+      "artifact_id": "topology_ranker_source",
+      "stage": "TOPOLOGY",
+      "authority_class": "PASS_FOR_PROBE",
+      "source_path": "InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/build_m2_patterns_and_rank.py",
+      "physical_sha256": "b28d494563bea70cbfea7b13853d99c0b3aeafed7ed4f0c0a6fff3b92c84f0a9",
+      "truth_usage": "NONE",
+      "copy_policy": "HASH_AND_FROZEN_VECTORS_ONLY",
+      "target": "src/solver",
+      "status_reason": "Full 154-task output is absent."
+    },
+    {
+      "artifact_id": "topology_frozen_v2_ranking",
+      "stage": "TOPOLOGY",
+      "authority_class": "NO_GO",
+      "source_path": "external://topology_frozen_v2/ranking_receipt.json",
+      "physical_sha256": null,
+      "truth_usage": "NONE",
+      "copy_policy": "ABSENT",
+      "target": null,
+      "status_reason": "Ranking receipt is absent and the independent pilot verifier is NO_GO."
+    }
+  ]
+}

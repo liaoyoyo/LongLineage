@@ -1,0 +1,51 @@
+{
+  "schema_name": "longlineage.methyl_calls",
+  "schema_version": "1.0.0",
+  "format": "TSV_BGZF",
+  "header": [
+    "dataset_order",
+    "site_order",
+    "read_id",
+    "cpg_order",
+    "query_pos0",
+    "reference_pos1",
+    "canonical_base",
+    "mod_code",
+    "mm_strand",
+    "mm_skip_mode",
+    "mm_group_index",
+    "ml_index",
+    "mn_value",
+    "ml_raw",
+    "probability_lower",
+    "probability_upper",
+    "skip_semantics"
+  ],
+  "fields": [
+    {"name": "dataset_order", "type": "uint32", "required": true},
+    {"name": "site_order", "type": "uint64", "required": true},
+    {"name": "read_id", "type": "opaque_sha256", "required": true},
+    {"name": "cpg_order", "type": "uint32", "required": true},
+    {"name": "query_pos0", "type": "uint64", "required": true},
+    {"name": "reference_pos1", "type": "Position1", "required": false, "null": "."},
+    {"name": "canonical_base", "type": "enum:C", "required": true},
+    {"name": "mod_code", "type": "enum:m", "required": true},
+    {"name": "mm_strand", "type": "enum:+", "required": true},
+    {"name": "mm_skip_mode", "type": "enum:QUESTION", "required": true},
+    {"name": "mm_group_index", "type": "uint32", "required": true},
+    {"name": "ml_index", "type": "uint32", "required": true},
+    {"name": "mn_value", "type": "uint64", "required": false, "null": "."},
+    {"name": "ml_raw", "type": "uint8", "required": true},
+    {"name": "probability_lower", "type": "float64", "required": true, "unit": "probability"},
+    {"name": "probability_upper", "type": "float64", "required": true, "unit": "probability"},
+    {"name": "skip_semantics", "type": "enum:UNKNOWN", "required": true}
+  ],
+  "invariants": [
+    "MM positions are interpreted on the as-sequenced read orientation",
+    "v1 accepts exactly one C+m? group; DOT and UNSPECIFIED skip modes are rejected rather than reinterpreted",
+    "if MN is present it must equal the current sequence length",
+    "probability_lower = ml_raw / 256",
+    "probability_upper = (ml_raw + 1) / 256",
+    "MM/ML cardinality and ordering are exact; no missing ML value is imputed"
+  ]
+}

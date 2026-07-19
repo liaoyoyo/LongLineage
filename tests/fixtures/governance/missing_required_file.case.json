@@ -1,0 +1,6 @@
+{
+  "fixture_id": "missing_required_file",
+  "gate_id": "GOV_COLD_START",
+  "expected_rejection": "A required cold-start source-of-truth file is absent.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

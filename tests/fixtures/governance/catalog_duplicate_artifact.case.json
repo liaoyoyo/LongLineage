@@ -1,0 +1,6 @@
+{
+  "fixture_id": "catalog_duplicate_artifact",
+  "gate_id": "CONTRACT_CATALOG",
+  "expected_rejection": "The artifact catalog contains a duplicate artifact identifier.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

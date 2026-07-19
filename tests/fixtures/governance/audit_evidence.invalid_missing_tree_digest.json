@@ -1,0 +1,33 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260719-foundation-contract-003",
+  "task_id": "20260719-foundation",
+  "scope": {
+    "kind": "REPOSITORY",
+    "completeness": "FULL",
+    "description": "Missing source tree digest must fail closed.",
+    "included_paths": ["."],
+    "excluded_paths": []
+  },
+  "source_snapshot_kind": "UNCOMMITTED_TREE",
+  "source_commit": null,
+  "source_dirty": true,
+  "commands": [
+    {
+      "command_id": "must-not-validate",
+      "argv": ["/usr/bin/false"],
+      "working_directory": ".",
+      "exit_code": 1,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-19T07:50:46+08:00",
+      "completed_at": "2026-07-19T07:50:47+08:00"
+    }
+  ],
+  "captured_at": "2026-07-19T07:50:47+08:00",
+  "captured_by_agent_id": "codex:root/ai_state_hardening",
+  "supersedes": [],
+  "superseded_by": null,
+  "supersession_reason": null
+}

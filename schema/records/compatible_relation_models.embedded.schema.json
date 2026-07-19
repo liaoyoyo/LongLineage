@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compatible_relation_models-1.0.0.json",
+  "title": "LongLineage compatible relation models embedded value",
+  "description": "A closed subset in fixed FOCAL_FIRST, PARTNER_FIRST, BRANCHING order; compatibility is not ancestry.",
+  "oneOf": [
+    {
+      "const": []
+    },
+    {
+      "const": [
+        "FOCAL_FIRST"
+      ]
+    },
+    {
+      "const": [
+        "PARTNER_FIRST"
+      ]
+    },
+    {
+      "const": [
+        "BRANCHING"
+      ]
+    },
+    {
+      "const": [
+        "FOCAL_FIRST",
+        "PARTNER_FIRST"
+      ]
+    },
+    {
+      "const": [
+        "FOCAL_FIRST",
+        "BRANCHING"
+      ]
+    },
+    {
+      "const": [
+        "PARTNER_FIRST",
+        "BRANCHING"
+      ]
+    },
+    {
+      "const": [
+        "FOCAL_FIRST",
+        "PARTNER_FIRST",
+        "BRANCHING"
+      ]
+    }
+  ]
+}

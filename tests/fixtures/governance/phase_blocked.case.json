@@ -1,0 +1,6 @@
+{
+  "fixture_id": "phase_blocked",
+  "gate_id": "RELEASE_PHASES",
+  "expected_rejection": "At least one required implementation phase is not VERIFIED.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

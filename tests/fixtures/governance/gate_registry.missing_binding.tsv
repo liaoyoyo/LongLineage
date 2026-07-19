@@ -1,0 +1,2 @@
+gate_id	required	scope	command	negative_fixture	evidence_role
+SYNTHETIC_MISSING	true	all	scripts/ai/check_readiness.sh		synthetic

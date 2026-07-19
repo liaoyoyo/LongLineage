@@ -1,0 +1,90 @@
+{
+  "schema_name": "longlineage.site_reads",
+  "schema_version": "1.0.0",
+  "format": "TSV_BGZF",
+  "header": [
+    "dataset_order",
+    "dataset_id",
+    "site_order",
+    "chrom",
+    "pos1",
+    "ref",
+    "alt",
+    "read_id",
+    "alignment_flag",
+    "cigar_b2",
+    "typed_aux_sha256_without_rg",
+    "start0",
+    "end0",
+    "mapq",
+    "strand",
+    "query_length",
+    "allele_call",
+    "baseq",
+    "latest_hp",
+    "latest_ps",
+    "latest_tag_source",
+    "full_identity_count",
+    "projection_join_status"
+  ],
+  "fields": [
+    {"name": "dataset_order", "type": "uint32", "required": true},
+    {"name": "dataset_id", "type": "string", "required": true},
+    {"name": "site_order", "type": "uint64", "required": true},
+    {"name": "chrom", "type": "string", "required": true},
+    {"name": "pos1", "type": "Position1", "required": true},
+    {"name": "ref", "type": "base", "required": true},
+    {"name": "alt", "type": "base", "required": true},
+    {"name": "read_id", "type": "opaque_sha256", "required": true},
+    {"name": "alignment_flag", "type": "uint16", "required": true},
+    {"name": "cigar_b2", "type": "hex16", "required": true},
+    {"name": "typed_aux_sha256_without_rg", "type": "sha256", "required": true},
+    {"name": "start0", "type": "uint64", "required": true},
+    {"name": "end0", "type": "uint64", "required": true},
+    {"name": "mapq", "type": "uint8", "required": true},
+    {"name": "strand", "type": "enum:+|-", "required": true},
+    {"name": "query_length", "type": "uint64", "required": true, "unit": "base"},
+    {"name": "allele_call", "type": "enum:R|A|O|X", "required": true},
+    {"name": "baseq", "type": "uint8", "required": false, "null": "."},
+    {"name": "latest_hp", "type": "hp_state", "required": true},
+    {"name": "latest_ps", "type": "uint64", "required": false, "null": "."},
+    {"name": "latest_tag_source", "type": "enum:RAW_ALL_PRODUCTION_SIDECAR_V2", "required": true},
+    {"name": "full_identity_count", "type": "uint32", "required": true},
+    {"name": "projection_join_status", "type": "enum:EXACT_UNIQUE|RG_ONLY_COLLAPSED", "required": true}
+  ],
+  "identity_rules": {
+    "read_id": "lowercase SHA-256 of the UTF-8 C++ read name (QNAME with /1 or /2 suffix when paired flags require it)",
+    "cigar_b2": "lowercase 16-hex BLAKE2b digest_size=8 of the literal SAM CIGAR",
+    "typed_aux_sha256_without_rg": "SHA-256 of canonical typed auxiliary tags excluding RG; tag name, SAM type and value are significant"
+  },
+  "semantic_groups": [
+    {
+      "group_id": "alignment_reference_interval",
+      "semantic_type": "Interval0",
+      "coordinate_system": "ZERO_BASED_HALF_OPEN",
+      "required": true,
+      "members": {
+        "begin": "start0",
+        "end": "end0"
+      },
+      "constraints": [
+        {
+          "operator": "LT",
+          "left_field": "start0",
+          "right_field": "end0"
+        }
+      ],
+      "enforcement": [
+        "PRODUCER",
+        "INDEPENDENT_VALIDATOR"
+      ]
+    }
+  ],
+  "invariants": [
+    "end0 > start0",
+    "R,A,O,X are distinct and O/X are never recoded as R",
+    "upstream HP '.' is normalized explicitly to native HP '0'; all other HP states retain their exact spelling",
+    "latest HP/PS comes only from the manifest-declared production sidecar",
+    "multiple records collapse only when SAM core and every typed auxiliary tag except RG are identical"
+  ]
+}

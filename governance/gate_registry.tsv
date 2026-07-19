@@ -1,0 +1,25 @@
+gate_id	required	scope	command	negative_fixture	evidence_role
+GOV_COLD_START	true	all	scripts/ai/check_readiness.sh	fixture:tests/fixtures/governance/missing_required_file.case.json	repository_readiness
+GOV_POLICY	true	all	longlineage-governance check-policy	fixture:tests/fixtures/governance/governance_policy_unknown_field.case.json	repository_policy
+GOV_PROJECT_STATE	true	all	longlineage-governance check-state	fixture:tests/fixtures/governance/project_state_invalid_transition.case.json	project_state
+GOV_PHASE_LEDGER_SCHEMA	true	all	longlineage-governance check-state	ctest:governance_phase_state_negative	phase_ledger
+GOV_AGENT_TASK	true	all	longlineage-governance check-state	ctest:governance_agent_task_unknown_field_negative	ai_task
+GOV_AUDIT_EVIDENCE	true	all	longlineage-governance check-state	ctest:governance_audit_evidence_negative	audit_evidence
+GOV_GATE_REGISTRY	true	all	longlineage-governance check-gates	ctest:gate_negative_binding_contract	governance_registry
+CONTRACT_CATALOG	true	all	longlineage-governance check-catalog	fixture:tests/fixtures/governance/catalog_duplicate_artifact.case.json	artifact_schema
+CONTRACT_SCHEMA_IDS	true	all	longlineage-governance check-catalog	fixture:tests/fixtures/governance/external_ref_unknown_id.case.json	schema_resolution
+CONTRACT_SCHEMA_DIGEST_CLOSURE	true	all	longlineage-governance check-catalog	fixture:tests/fixtures/governance/schema_digest_mismatch.case.json	schema_resolution
+CONTRACT_RUN_MEMBERSHIP	true	all	longlineage-governance check-catalog	fixture:tests/fixtures/governance/membership_cycle.case.json	artifact_membership
+CONTRACT_STATUS	true	all	longlineage-governance check-status-codes	fixture:tests/fixtures/governance/status_unknown_code.case.json	status_vocabulary
+CONTRACT_RELEASE_ATTESTATION	true	production	ctest -R release_attestation	ctest:release_attestation_run_gate	release_attestation
+BOUNDARY_TRUTH_ISOLATION	true	production	longlineage-governance check-truth-boundary	ctest:governance_truth_manifest_negative	production_boundary
+BOUNDARY_PYTHON_SCIENCE	true	all	scripts/ci/check_source_boundaries.sh	fixture:tests/fixtures/governance/presentation_imports_bam.case.json	production_boundary
+HYGIENE_REPOSITORY	true	all	scripts/ci/check_repo_hygiene.sh	ctest:hygiene_untracked_forbidden_negative	repository_hygiene
+PREFLIGHT_INPUT_LOCK	true	production	ctest -R preflight	fixture:tests/fixtures/governance/input_sha_mismatch.case.json	input_integrity
+IO_MM_ML	true	production	ctest -R mm_ml	ctest:mm_ml_contract	typed_io
+IO_LATEST_TAG_JOIN	true	production	ctest -R sidecar_join	ctest:sidecar_join_contract	typed_io
+DETERMINISM_PACKED	true	production	ctest -R determinism	ctest:determinism_contract	determinism
+VALIDATOR_FAULT_INJECTION	true	validation	ctest -R validator_fault	fixture:tests/fixtures/governance/forged_pass_receipt.case.json	independent_validation
+TOPOLOGY_NO_INCOMPLETE_WINNER	true	science	ctest -R topology_no_incomplete_winner	ctest:topology_no_incomplete_winner	scientific_contract
+QUERY_READ_ONLY	true	query	ctest -R query_read_only	ctest:query_read_only_rejects_unfrozen	query_contract
+RELEASE_PHASES	true	release	scripts/ci/check_release_gate.sh	fixture:tests/fixtures/governance/phase_blocked.case.json	release

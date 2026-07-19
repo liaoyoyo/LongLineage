@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json",
+  "title": "LongLineage source-to-target provenance manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_name",
+    "schema_version",
+    "origin_repository",
+    "origin_commit",
+    "license_review_status",
+    "mappings"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json"
+    },
+    "schema_name": {
+      "const": "longlineage.source_to_target_manifest"
+    },
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "origin_repository": {
+      "const": "InterSubMod"
+    },
+    "origin_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "license_review_status": {
+      "enum": [
+        "PENDING_PUBLIC_RELEASE_AUDIT",
+        "APPROVED_FOR_PRIVATE_USE",
+        "APPROVED_FOR_PUBLIC_RELEASE",
+        "REJECTED"
+      ]
+    },
+    "mappings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/mapping"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "safe_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "origin_id",
+        "source_path",
+        "source_sha256",
+        "target",
+        "target_kind",
+        "target_presence",
+        "target_digest_kind",
+        "target_sha256",
+        "implementation_status",
+        "verification_status",
+        "verified_evidence_id",
+        "transformation",
+        "reuse"
+      ],
+      "properties": {
+        "origin_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "source_path": {
+          "$ref": "#/$defs/safe_relative_path"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "target": {
+          "$ref": "#/$defs/safe_relative_path"
+        },
+        "target_kind": {
+          "enum": [
+            "FILE",
+            "DIRECTORY"
+          ]
+        },
+        "target_presence": {
+          "enum": [
+            "ABSENT",
+            "PRESENT"
+          ]
+        },
+        "target_digest_kind": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "FILE_SHA256",
+            "TREE_SHA256",
+            null
+          ]
+        },
+        "target_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "implementation_status": {
+          "enum": [
+            "PLANNED",
+            "SKELETON",
+            "IMPLEMENTED"
+          ]
+        },
+        "verification_status": {
+          "enum": [
+            "NOT_VERIFIED",
+            "CONTRACT_VERIFIED",
+            "PARITY_VERIFIED"
+          ]
+        },
+        "verified_evidence_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "transformation": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_]*$"
+        },
+        "reuse": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_]*$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "implementation_status": {
+                "const": "PLANNED"
+              }
+            },
+            "required": [
+              "implementation_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_presence": {
+                "const": "ABSENT"
+              },
+              "target_digest_kind": {
+                "type": "null"
+              },
+              "target_sha256": {
+                "type": "null"
+              },
+              "verification_status": {
+                "const": "NOT_VERIFIED"
+              },
+              "verified_evidence_id": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "implementation_status": {
+                "const": "SKELETON"
+              }
+            },
+            "required": [
+              "implementation_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_presence": {
+                "const": "PRESENT"
+              },
+              "target_sha256": {
+                "$ref": "#/$defs/sha256"
+              },
+              "verification_status": {
+                "const": "NOT_VERIFIED"
+              },
+              "verified_evidence_id": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "implementation_status": {
+                "const": "IMPLEMENTED"
+              }
+            },
+            "required": [
+              "implementation_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_presence": {
+                "const": "PRESENT"
+              },
+              "target_sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "target_presence": {
+                "const": "ABSENT"
+              }
+            },
+            "required": [
+              "target_presence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_digest_kind": {
+                "type": "null"
+              },
+              "target_sha256": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "target_kind": {
+                "const": "FILE"
+              },
+              "target_presence": {
+                "const": "PRESENT"
+              }
+            },
+            "required": [
+              "target_kind",
+              "target_presence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_digest_kind": {
+                "const": "FILE_SHA256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "target_kind": {
+                "const": "DIRECTORY"
+              },
+              "target_presence": {
+                "const": "PRESENT"
+              }
+            },
+            "required": [
+              "target_kind",
+              "target_presence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_digest_kind": {
+                "const": "TREE_SHA256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "verification_status": {
+                "const": "NOT_VERIFIED"
+              }
+            },
+            "required": [
+              "verification_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "verified_evidence_id": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "implementation_status": {
+                "const": "IMPLEMENTED"
+              },
+              "verified_evidence_id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

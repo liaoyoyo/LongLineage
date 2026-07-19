@@ -1,0 +1,6 @@
+{
+  "fixture_id": "status_unknown_code",
+  "gate_id": "CONTRACT_STATUS",
+  "expected_rejection": "An artifact uses a status or reason absent from the closed registry.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

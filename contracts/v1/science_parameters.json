@@ -1,0 +1,136 @@
+{
+  "schema_name": "longlineage.science_parameters",
+  "schema_version": "1.0.0",
+  "claim_ceiling": "long-read sSNV co-occurrence and lineage-compatible mutation-state families",
+  "production_input": {
+    "truth_fields_allowed": 0,
+    "raw_bam_authority": ["SEQ", "CIGAR", "QUAL", "MM", "ML", "MN", "SAM_CORE", "TYPED_AUX"],
+    "latest_tag_authority": "RAW_ALL_PRODUCTION_SIDECAR_V2",
+    "latest_tag_join": "EXACT_PROJECTION_NO_FALLBACK",
+    "latest_hp_raw_vocabulary": [".", "1", "2", "3", "4", "1-1", "2-1", "1-2", "2-2"],
+    "latest_hp_canonical_vocabulary": ["0", "1", "2", "3", "4", "1-1", "2-1", "1-2", "2-2"],
+    "missing_hp_normalization": "DOT_TO_0_EXPLICIT",
+    "variant_universe": "FROZEN_PASS_BIALLELIC_SSNV"
+  },
+  "read_filter": {
+    "excluded_flag_masks": [4, 256, 1024, 2048],
+    "minimum_mapq": 20,
+    "minimum_query_length": 1000,
+    "require_mm": true,
+    "require_ml": true,
+    "duplicate_equivalence": "SAM_CORE_AND_ALL_TYPED_AUX_EXCEPT_RG_EXACT_V1",
+    "non_equivalent_duplicate_policy": "FAIL_CLOSED"
+  },
+  "methylation": {
+    "accepted_mm_group": "C+m?",
+    "orientation": "AS_SEQUENCED",
+    "ml_interval": "[N/256,(N+1)/256)",
+    "mn_mismatch_policy": "FAIL_CLOSED",
+    "parse_once_per_read": true
+  },
+  "m1": {
+    "minimum_joined_alt_reads": 6,
+    "minimum_after_complete_distance_peel": 6,
+    "minimum_group_size": 3,
+    "maximum_groups_considered": 6,
+    "distance": "BERNOULLI_FROZEN_V1",
+    "minimum_common_cpg": 3,
+    "minimum_weight_sum": 1e-9,
+    "minimum_between_within_ratio": 1.3,
+    "null_mode": "COLUMN",
+    "null_replicates_per_split": 40,
+    "minimum_valid_null_replicates": 32,
+    "coarse_percentile": 95.0,
+    "fine_percentile": 90.0,
+    "coarse_seed_runs": 10,
+    "rng": "PCG64",
+    "site_seed_derivation": "BLAKE2B8_BIG_ENDIAN(sample|chrom|pos1|offset)_MOD_2^32",
+    "coarse_seed_sequence": "base_seed + seed_order * 101",
+    "fine_seed": "base_seed",
+    "modal_fraction_minimum": 0.7,
+    "modal_assignment_ari_minimum": 0.8,
+    "stable_minimum_non_germline_groups": 2,
+    "axis_order": ["HP_EXACT", "HP_FAMILY", "STRAND", "START", "END", "LENGTH", "MAPQ", "CPG_CALLED"],
+    "axis_evaluation": "ONLY_AFTER_STABLE_GATE"
+  },
+  "m2_eligibility": {
+    "permutations": 499,
+    "minimum_group_size": 5,
+    "maximum_groups": 10,
+    "minimum_power": 0.8,
+    "categorical_cramers_v": 0.3,
+    "continuous_eta_squared": 0.14,
+    "reason_precedence": [
+      "M1_NOT_FLAGGED",
+      "GROUP_COUNT_EXCEEDS_PLANNING_MODEL_MAXIMUM",
+      "AXIS_INDETERMINATE",
+      "HP_AXIS_CONFOUND",
+      "TECHNICAL_AXIS_CONFOUND",
+      "NOT_PHASE_ANCHORED_ROBUST",
+      "ALL_MEASURED_AXES_DETERMINATE_NO_ALIGNED_CONFOUND"
+    ]
+  },
+  "cooccurrence": {
+    "partner_window_bp": 5000,
+    "partner_window_inclusive": true,
+    "endpoint_a": {
+      "minimum_total": 10,
+      "minimum_per_group": 3,
+      "minimum_per_allele": 3,
+      "test": "FIXED_MARGIN_K_BY_2_EXACT",
+      "state_space_ceiling": 250000,
+      "fallback": "NONE_FAIL_CLOSED_NOT_IDENTIFIABLE",
+      "global_fdr_primary": "BY",
+      "global_fdr_sensitivity": "BH",
+      "q_maximum": 0.05,
+      "cramers_v_minimum": 0.3,
+      "delta_alt_fraction_minimum": 0.5,
+      "conditional_permutations": 999,
+      "conditional_p_maximum": 0.05,
+      "conditional_strata": "LATEST_HP_FAMILY_X_PS_X_STRAND"
+    },
+    "endpoint_b": {
+      "allele_calls": ["R", "A", "O", "X"],
+      "pair_cell_order_focal_then_partner": [
+        "RR", "RA", "RO", "RX",
+        "AR", "AA", "AO", "AX",
+        "OR", "OA", "OO", "OX",
+        "XR", "XA", "XO", "XX"
+      ],
+      "relation_model_cells": ["RR", "AR", "RA", "AA"],
+      "o_x_cell_collapse_allowed": false,
+      "minimum_called_depth": 10,
+      "minimum_marginal_count": 3,
+      "minimum_split_count": 3,
+      "error_ceiling": 0.02,
+      "familywise_confidence": 0.95,
+      "relation_family_size": 3,
+      "multiplicity": "BONFERRONI_THREE_RELATION_MODELS",
+      "callability_precedence_contract_status": "P4_BLOCKED_FROZEN_VECTOR_REQUIRED",
+      "claim": "COMPATIBILITY_ONLY"
+    },
+    "joint_signature": {
+      "maximum_markers": 3,
+      "minimum_spacing_bp": 20,
+      "same_complete_read_set_required": true,
+      "spacing_implies_statistical_independence": false
+    }
+  },
+  "topology": {
+    "primary_model": "EVO_M0_RECURRENCE_ALLOWED",
+    "strict_infinite_sites": "EVO_M1_SENSITIVITY_ONLY_AFTER_ALLELE_SPECIFIC_CN_LOH_GATE",
+    "loss_supported_dollo": "UNRESOLVED_NOT_IMPLEMENTED",
+    "solver_order": [
+      "ACTIVE_BIT_COMPRESSION",
+      "DUPLICATE_MANDATORY_SINGLETON_DOMINANCE_CLOSURE",
+      "ANALYTIC_SINGLE_TERMINAL",
+      "SMALL_Q_DP_OBJECTIVE_ONLY",
+      "BITSET_OBLIGATION_BNB_COMPLETE_FAMILY",
+      "DIRECT_PINNED_HIGHS_IF_REQUIRED",
+      "PARENT_MAPPING"
+    ],
+    "incomplete_family_winner_allowed": false,
+    "unary_hidden_chain_effect": "PROJECTION_ONLY_DOES_NOT_CHANGE_PRIMARY_OBJECTIVE_OR_FAMILY",
+    "highs_commit": "4a122958a82e67e725d08153e099efe4dad099a2"
+  }
+}

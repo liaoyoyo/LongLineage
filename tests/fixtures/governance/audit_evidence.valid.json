@@ -1,0 +1,39 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260719-foundation-contract-002",
+  "task_id": "20260719-foundation",
+  "scope": {
+    "kind": "REPOSITORY",
+    "completeness": "FULL",
+    "description": "Synthetic full repository audit evidence envelope.",
+    "included_paths": ["."],
+    "excluded_paths": ["build"]
+  },
+  "source_snapshot_kind": "UNCOMMITTED_TREE",
+  "source_commit": null,
+  "source_tree_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "source_dirty": true,
+  "commands": [
+    {
+      "command_id": "json-schema-contracts",
+      "argv": [
+        "/usr/bin/jsonschema",
+        "-i",
+        "state/project_state.json",
+        "governance/project_state.schema.json"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "stderr_sha256": null,
+      "started_at": "2026-07-19T07:50:46+08:00",
+      "completed_at": "2026-07-19T07:50:47+08:00"
+    }
+  ],
+  "captured_at": "2026-07-19T07:50:47+08:00",
+  "captured_by_agent_id": "codex:root/ai_state_hardening",
+  "supersedes": ["20260719-foundation-contract-001"],
+  "superseded_by": null,
+  "supersession_reason": "Fresh source-tree snapshot supersedes an earlier contract-only replay."
+}

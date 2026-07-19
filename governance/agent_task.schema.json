@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/governance/agent_task-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "task_id",
+    "owner_agent_id",
+    "parent_task_id",
+    "allowed_paths",
+    "depends_on",
+    "lease_state",
+    "lease_expires_at",
+    "heartbeat_at",
+    "task_type",
+    "goals",
+    "status",
+    "scope",
+    "assumptions",
+    "inputs",
+    "expected_outputs",
+    "step_verify",
+    "evidence",
+    "deviations",
+    "blockers",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.agent_task"},
+    "schema_version": {"const": "1.0.0"},
+    "task_id": {"type": "string", "pattern": "^[0-9]{8}-[a-z0-9][a-z0-9-]*$"},
+    "owner_agent_id": {
+      "description": "Framework-qualified stable agent identity, for example codex:root or codex:root/io-worker. Null is allowed only before assignment.",
+      "type": ["string", "null"],
+      "pattern": "^[a-z][a-z0-9_-]{1,31}:[A-Za-z0-9][A-Za-z0-9._/-]{0,126}$"
+    },
+    "parent_task_id": {
+      "description": "Repository task_id of the delegating task; null only for a root task.",
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{8}-[a-z0-9][a-z0-9-]*$"
+    },
+    "allowed_paths": {
+      "description": "Exclusive repository-relative write claims. Glob syntax is forbidden; cross-task overlap is rejected by compiled governance.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/path_claim"}
+    },
+    "depends_on": {
+      "description": "Task IDs whose status must be VERIFIED before this task may become IN_PROGRESS.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[0-9]{8}-[a-z0-9][a-z0-9-]*$"}
+    },
+    "lease_state": {
+      "enum": ["UNASSIGNED", "ACTIVE", "RELEASED", "EXPIRED"]
+    },
+    "lease_expires_at": {
+      "description": "Exclusive write lease expiry. An IN_PROGRESS task must carry a future RFC3339 timestamp.",
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "heartbeat_at": {
+      "description": "Last owner heartbeat. An IN_PROGRESS task must heartbeat no later than lease_expires_at.",
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "task_type": {"enum": ["A", "B", "C", "D", "E", "F"]},
+    "goals": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["LL-G1", "LL-G2", "LL-G3", "LL-G4", "LL-G5"]}
+    },
+    "status": {"enum": ["PLANNED", "IN_PROGRESS", "BLOCKED", "FAILED", "VERIFIED"]},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["completeness", "description"],
+      "properties": {
+        "completeness": {"enum": ["PARTIAL", "FULL"]},
+        "description": {"type": "string", "minLength": 1}
+      }
+    },
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "inputs": {"type": "array", "items": {"$ref": "#/$defs/file_ref"}},
+    "expected_outputs": {"type": "array", "items": {"$ref": "#/$defs/file_ref"}},
+    "step_verify": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["step", "verify"],
+        "properties": {
+          "step": {"type": "string", "minLength": 1},
+          "verify": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "deviations": {"type": "array", "items": {"type": "string"}},
+    "blockers": {"type": "array", "items": {"type": "string"}},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "PLANNED"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "owner_agent_id": {"type": "null"},
+          "lease_state": {"const": "UNASSIGNED"},
+          "lease_expires_at": {"type": "null"},
+          "heartbeat_at": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "IN_PROGRESS"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "owner_agent_id": {"type": "string"},
+          "allowed_paths": {"minItems": 1},
+          "lease_state": {"const": "ACTIVE"},
+          "lease_expires_at": {"type": "string", "format": "date-time"},
+          "heartbeat_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"enum": ["BLOCKED", "FAILED", "VERIFIED"]}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "owner_agent_id": {"type": "string"},
+          "lease_state": {"enum": ["RELEASED", "EXPIRED"]},
+          "lease_expires_at": {"type": "string", "format": "date-time"},
+          "heartbeat_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "VERIFIED"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "minItems": 1,
+            "items": {
+              "allOf": [
+                {"$ref": "#/$defs/evidence"},
+                {"properties": {"exit_code": {"const": 0}}}
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "path_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[?*\\[\\]{}]).+$"
+        },
+        "kind": {"enum": ["FILE", "DIRECTORY_TREE"]}
+      }
+    },
+    "file_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "sha256"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "pattern": "^(?!/)(?!.*\\.\\./).+$"},
+        "sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "evidence_path",
+        "evidence_kind",
+        "command",
+        "exit_code",
+        "output_excerpt",
+        "evidence_sha256",
+        "recorded_at"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+        },
+        "evidence_path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "evidence_kind": {
+          "enum": ["TEST_LOG", "AUDIT", "RECEIPT", "REPORT"]
+        },
+        "command": {"type": "string", "minLength": 1},
+        "exit_code": {"type": "integer", "minimum": 0, "maximum": 255},
+        "output_excerpt": {"type": "string"},
+        "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "recorded_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "owner_agent_id is unique per live worker identity and parent_task_id never equals task_id",
+    "depends_on excludes task_id, is acyclic, and every dependency is VERIFIED before status becomes IN_PROGRESS",
+    "allowed_paths contains normalized repository-relative paths and no two active task write claims overlap",
+    "FILE claims cannot be ancestors; DIRECTORY_TREE claims conflict with equal or descendant paths",
+    "an ACTIVE lease is rejected when heartbeat_at is later than lease_expires_at or current time is at/after lease_expires_at",
+    "only the owner of a live ACTIVE lease may write an allowed path",
+    "VERIFIED evidence is completion evidence and must be independently replayed before archival"
+  ]
+}

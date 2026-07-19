@@ -1,0 +1,46 @@
+{
+  "schema_name": "longlineage.topology_unit",
+  "schema_version": "1.0.0",
+  "dataset_order": 0,
+  "dataset_id": "synthetic",
+  "unit_order": 0,
+  "unit_id": "synthetic-unit-0",
+  "active_bits": [0],
+  "input_patterns": [
+    {"kind": "FULL_STATE", "pattern": "0", "multiplicity": 1},
+    {"kind": "FULL_STATE", "pattern": "1", "multiplicity": 1}
+  ],
+  "input_evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "parent_score_evidence_sha256": "9999999999999999999999999999999999999999999999999999999999999999",
+  "observed_states": ["0", "1"],
+  "solver_route": "SMALL_Q_DP_BNB",
+  "objective_state": "OBJECTIVE_CERTIFIED",
+  "family_state": "FAMILY_COMPLETE",
+  "objective_h": 0,
+  "winner": {
+    "candidate_vertex_set_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "parent_mapping": {"1": "0"},
+    "edge_score": 0.0,
+    "tie": true
+  },
+  "candidate_family_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "candidate_count": 1,
+  "tree_count": "1",
+  "candidates": [
+    {
+      "vertex_set": ["0", "1"],
+      "vertex_set_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "legal_parent_count": 1,
+      "tree_count": "1",
+      "best_additive_edge_score": 0.0,
+      "best_parent_tie_count": "2"
+    }
+  ],
+  "evolution_models": {
+    "evo_m0": "PRIMARY_RECURRENCE_ALLOWED",
+    "evo_m1": "SENSITIVITY_NOT_RUN",
+    "evo_m2": "UNRESOLVED_NOT_IMPLEMENTED"
+  },
+  "multi_mutation_edge_equivalence": [],
+  "reason": "NONE"
+}

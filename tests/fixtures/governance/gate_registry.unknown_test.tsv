@@ -1,0 +1,2 @@
+gate_id	required	scope	command	negative_fixture	evidence_role
+SYNTHETIC_UNKNOWN_TEST	true	all	scripts/ai/check_readiness.sh	ctest:no_such_stable_test_id	synthetic

@@ -1,0 +1,6 @@
+{
+  "fixture_id": "input_sha_mismatch",
+  "gate_id": "PREFLIGHT_INPUT_LOCK",
+  "expected_rejection": "The post-run input SHA-256 differs from the preflight lock.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

@@ -1,0 +1,5 @@
+operator	operand_shape	value_domain	index_mode	scan_policy	implementation_status	verification_status	description
+eq	field+value	declared_scalar	SITE_INDEX_EXACT_OR_NONE	REQUIRE_ALLOW_SCAN_IF_NO_INDEX	PLANNED	NOT_VERIFIED	Exact equality; no type coercion
+in	field+values[1..256]	declared_scalar	NONE	REQUIRE_ALLOW_SCAN	PLANNED	NOT_VERIFIED	Conjunction member is true when the field equals one unique listed value
+range	field+lower+upper	declared_integer_or_float	NONE	REQUIRE_ALLOW_SCAN	PLANNED	NOT_VERIFIED	Closed inclusive interval; lower and upper must have the declared field type
+project	projected_fields[1..256]	declared_field_ref	NONE	NO_SCAN_EFFECT	PLANNED	NOT_VERIFIED	Select existing fields in declared order without deriving values

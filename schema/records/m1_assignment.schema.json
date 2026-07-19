@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/m1_assignment-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "dataset_order",
+    "site_order",
+    "read_ids",
+    "labels",
+    "readset_sha256",
+    "partition_sha256",
+    "representative_seed_order",
+    "coarse_runs",
+    "fine_run"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.m1_assignment"},
+    "schema_version": {"const": "1.0.0"},
+    "dataset_order": {"type": "integer", "minimum": 0},
+    "site_order": {"type": "integer", "minimum": 0},
+    "read_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "labels": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "readset_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "partition_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "representative_seed_order": {"type": "integer", "minimum": 0, "maximum": 9},
+    "coarse_runs": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/run"
+      }
+    },
+    "fine_run": {
+      "$ref": "#/$defs/run"
+    }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "labels": {"minItems": 1},
+        "read_ids": {"minItems": 1}
+      }
+    }
+  ],
+  "$defs": {
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seed_order",
+        "seed_u64",
+        "group_count",
+        "labels",
+        "partition_sha256",
+        "split_trace"
+      ],
+      "properties": {
+        "seed_order": {"type": "integer", "minimum": 0, "maximum": 9},
+        "seed_u64": {"type": "string", "pattern": "^[0-9]+$"},
+        "group_count": {"type": "integer", "minimum": 0},
+        "labels": {"type": "array", "items": {"type": "string"}},
+        "partition_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "split_trace": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/split"}
+        }
+      }
+    },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_order",
+        "n_node",
+        "child_sizes",
+        "observed_between_within",
+        "null_percentile",
+        "null_replicates_requested",
+        "minimum_valid_null",
+        "n_valid_null",
+        "exceedance",
+        "null_threshold",
+        "empirical_p",
+        "passed",
+        "failure"
+      ],
+      "properties": {
+        "node_order": {"type": "integer", "minimum": 0},
+        "n_node": {"type": "integer", "minimum": 0},
+        "child_sizes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "observed_between_within": {"type": ["number", "null"]},
+        "null_percentile": {"enum": [90.0, 95.0]},
+        "null_replicates_requested": {"const": 40},
+        "minimum_valid_null": {"const": 32},
+        "n_valid_null": {"type": "integer", "minimum": 0, "maximum": 40},
+        "exceedance": {"type": ["integer", "null"], "minimum": 0, "maximum": 40},
+        "null_threshold": {"type": ["number", "null"]},
+        "empirical_p": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "passed": {"type": "boolean"},
+        "failure": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "BELOW_SEPARATION_MINIMUM_OR_UNDEFINED",
+            "INSUFFICIENT_VALID_NULL",
+            "NOT_ABOVE_NULL_THRESHOLD",
+            "EMPIRICAL_P_ABOVE_ALPHA"
+          ]
+        }
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "read_ids and every label vector have equal length",
+    "coarse seed_order is exactly 0 through 9 in order",
+    "fine_run uses the base seed and 90th percentile",
+    "every coarse split uses the 95th percentile",
+    "exceedance and decision statuses match frozen integer parity exactly"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/producer_receipt-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "state",
+    "producer_outcome",
+    "producer_executable_sha256",
+    "manifest_sha256",
+    "input_snapshot_before_sha256",
+    "input_snapshot_after_sha256",
+    "schema_catalog_sha256",
+    "science_parameters_sha256",
+    "artifacts",
+    "truth_fields_seen",
+    "finished_at"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.producer_receipt"},
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "state": {"enum": ["RUNNING", "FAILED"]},
+    "producer_outcome": {"enum": ["READY_FOR_VALIDATION", "FAILED"]},
+    "producer_executable_sha256": {"$ref": "#/$defs/sha256"},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "input_snapshot_before_sha256": {"$ref": "#/$defs/sha256"},
+    "input_snapshot_after_sha256": {"$ref": "#/$defs/sha256"},
+    "schema_catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "science_parameters_sha256": {"$ref": "#/$defs/sha256"},
+    "artifacts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "https://longlineage.local/schema/artifact_record-1.0.0.json"
+      }
+    },
+    "truth_fields_seen": {"const": 0},
+    "failure_reason": {"type": ["string", "null"]},
+    "finished_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"producer_outcome": {"const": "READY_FOR_VALIDATION"}},
+        "required": ["producer_outcome"]
+      },
+      "then": {
+        "properties": {
+          "state": {"const": "RUNNING"},
+          "failure_reason": {"type": "null"}
+        }
+      },
+      "else": {
+        "properties": {
+          "state": {"const": "FAILED"},
+          "failure_reason": {"type": "string", "minLength": 1}
+        },
+        "required": ["failure_reason"]
+      }
+    }
+  ],
+  "x-longlineage-invariants": [
+    "input snapshots are equal for every non-failed production result",
+    "producer receipt never declares VALIDATED or VALIDATED_FROZEN",
+    "READY_FOR_VALIDATION means producer work is closed while the run remains RUNNING",
+    "only the independent validator may authorize the next transition"
+  ]
+}

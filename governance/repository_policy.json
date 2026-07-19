@@ -1,0 +1,81 @@
+{
+  "schema_name": "longlineage.repository_policy",
+  "schema_version": "1.0.0",
+  "additional_properties_allowed": false,
+  "permanent_branches": [
+    "main"
+  ],
+  "temporary_branch_prefixes": [
+    "feat/",
+    "fix/",
+    "docs/"
+  ],
+  "required_root_files": [
+    "AGENTS.md",
+    "README.md",
+    "ROADMAP.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "ORIGIN.md",
+    "LICENSE",
+    "CMakeLists.txt",
+    ".ai/README.md",
+    "docs/CURRENT_FOCUS.md",
+    "docs/development/DEFINITION_OF_DONE.md",
+    "governance/project_state.schema.json",
+    "governance/phase_ledger.schema.json",
+    "schema/catalog.json",
+    "schema/id_registry.json",
+    "contracts/v1/science_parameters.json",
+    "oracle/production_input_authority.json",
+    "schema/core/production_input_authority.schema.json",
+    "schema/core/release_attestation.schema.json",
+    "state/project_state.json",
+    "state/phase_ledger.json",
+    "state/release_attestation.json"
+  ],
+  "protected_decisions": [
+    "PRODUCTION_TRUTH_ISOLATION",
+    "LATEST_SIDECAR_ONLY_HP_PS",
+    "NO_PYTHON_SCIENCE",
+    "NO_WINNER_FROM_INCOMPLETE_FAMILY",
+    "LINEAGE_COMPATIBLE_FAMILY_CLAIM_CEILING"
+  ],
+  "sensitive_data_policy": {
+    "maximum_tracked_file_bytes": 1048576,
+    "git_lfs_allowed": false,
+    "real_genomics_payload_allowed": false,
+    "real_coordinates_allowed": false,
+    "absolute_private_paths_allowed": false,
+    "synthetic_contig_prefix": "synchr"
+  },
+  "build_policy": {
+    "minimum_cmake_version": "3.22",
+    "cpp_standard": 17,
+    "production_htslib_exact_version": "1.18",
+    "forbidden_compiler_flags": [
+      "-ffast-math",
+      "-march=native"
+    ],
+    "network_fetch_during_release_configure": false
+  },
+  "truth_aware_targets": [
+    "longlineage-evaluate"
+  ],
+  "contract_sources": [
+    "contracts/v1/science_parameters.json",
+    "contracts/v1/type_registry.tsv",
+    "contracts/v1/status_reason_codes.tsv",
+    "contracts/v1/transform_registry.tsv",
+    "schema/catalog.json",
+    "schema/id_registry.json",
+    "governance/project_state.schema.json",
+    "governance/phase_ledger.schema.json",
+    "oracle/production_input_authority.json",
+    "schema/core/production_input_authority.schema.json",
+    "schema/core/release_attestation.schema.json",
+    "state/release_attestation.json"
+  ],
+  "presentation_source_root": "presentation",
+  "release_requires_explicit_public_authorization": true
+}

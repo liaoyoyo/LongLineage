@@ -1,0 +1,29 @@
+{
+  "schema_name": "longlineage.release_attestation",
+  "schema_version": "1.0.0",
+  "attestation_id": "foundation-not-ready-20260719",
+  "attestation_state": "NOT_READY",
+  "issued_at": "2026-07-19T07:15:00+08:00",
+  "phases": [
+    {
+      "id": "P3",
+      "status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "P4",
+      "status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "P5",
+      "status": "BLOCKED",
+      "evidence": []
+    }
+  ],
+  "blockers": [
+    "P3_M1_PARITY_NOT_VERIFIED",
+    "P4_M2_COOCCURRENCE_PARITY_NOT_VERIFIED",
+    "P5_TOPOLOGY_PARITY_NOT_VERIFIED"
+  ]
+}

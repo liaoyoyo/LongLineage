@@ -1,0 +1,32 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-replace-with-task-id",
+  "owner_agent_id": null,
+  "parent_task_id": null,
+  "allowed_paths": [],
+  "depends_on": [],
+  "lease_state": "UNASSIGNED",
+  "lease_expires_at": null,
+  "heartbeat_at": null,
+  "task_type": "A",
+  "goals": ["LL-G4"],
+  "status": "PLANNED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Replace with the bounded task scope before implementation."
+  },
+  "assumptions": [],
+  "inputs": [],
+  "expected_outputs": [],
+  "step_verify": [
+    {
+      "step": "Replace with one observable implementation step.",
+      "verify": "Replace with an exit code, digest, count or explicit status."
+    }
+  ],
+  "evidence": [],
+  "deviations": [],
+  "blockers": [],
+  "updated_at": "2026-07-19T00:00:00+08:00"
+}

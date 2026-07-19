@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/topology_unit-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "dataset_order",
+    "dataset_id",
+    "unit_order",
+    "unit_id",
+    "active_bits",
+    "input_patterns",
+    "input_evidence_sha256",
+    "parent_score_evidence_sha256",
+    "observed_states",
+    "solver_route",
+    "objective_state",
+    "family_state",
+    "objective_h",
+    "winner",
+    "candidate_family_digest",
+    "candidate_count",
+    "tree_count",
+    "candidates",
+    "evolution_models",
+    "multi_mutation_edge_equivalence",
+    "reason"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.topology_unit"},
+    "schema_version": {"const": "1.0.0"},
+    "dataset_order": {"type": "integer", "minimum": 0},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "unit_order": {"type": "integer", "minimum": 0},
+    "unit_id": {"type": "string", "minLength": 1},
+    "active_bits": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 0},
+      "uniqueItems": true
+    },
+    "input_patterns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/input_pattern"}
+    },
+    "input_evidence_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "parent_score_evidence_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "observed_states": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[01]+$"},
+      "uniqueItems": true
+    },
+    "solver_route": {
+      "enum": ["ANALYTIC_SINGLE_TERMINAL", "SMALL_Q_DP_BNB", "BITSET_BNB", "DIRECT_HIGHS", "ABSTAIN"]
+    },
+    "objective_state": {
+      "enum": ["OBJECTIVE_CERTIFIED", "ABSTAIN_DEPENDENCY_UNAVAILABLE", "ABSTAIN_KERNEL_NOT_VERIFIED", "ABSTAIN_NOT_IDENTIFIABLE"]
+    },
+    "family_state": {
+      "enum": ["FAMILY_COMPLETE", "FAMILY_INCOMPLETE_CAP", "FAMILY_INCOMPLETE_DEADLINE", "ABSTAIN_DEPENDENCY_UNAVAILABLE", "ABSTAIN_KERNEL_NOT_VERIFIED", "ABSTAIN_NOT_IDENTIFIABLE"]
+    },
+    "objective_h": {"type": ["integer", "null"], "minimum": 0},
+    "candidate_family_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "candidate_count": {"type": "integer", "minimum": 0},
+    "tree_count": {"type": "string", "pattern": "^[0-9]+$"},
+    "winner": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/winner"}
+      ]
+    },
+    "candidates": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "evolution_models": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evo_m0", "evo_m1", "evo_m2"],
+      "properties": {
+        "evo_m0": {"const": "PRIMARY_RECURRENCE_ALLOWED"},
+        "evo_m1": {"enum": ["SENSITIVITY_GATE_PASS", "SENSITIVITY_GATE_FAIL", "SENSITIVITY_NOT_RUN"]},
+        "evo_m2": {"const": "UNRESOLVED_NOT_IMPLEMENTED"}
+      }
+    },
+    "multi_mutation_edge_equivalence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from_state", "to_state", "active_bit_orders"],
+        "properties": {
+          "from_state": {"type": "string", "pattern": "^[01]+$"},
+          "to_state": {"type": "string", "pattern": "^[01]+$"},
+          "active_bit_orders": {
+            "type": "array",
+            "minItems": 2,
+            "items": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    },
+    "reason": {
+      "enum": [
+        "NONE",
+        "MAX_FAMILY_SIZE_REACHED",
+        "DEADLINE_REACHED",
+        "HIGHS_NOT_AVAILABLE",
+        "SOLVER_ROUTE_NOT_VERIFIED",
+        "MODEL_NOT_IDENTIFIABLE"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "family_state": {
+            "enum": ["FAMILY_INCOMPLETE_CAP", "FAMILY_INCOMPLETE_DEADLINE"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "winner": {"type": "null"},
+          "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
+          "objective_h": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "FAMILY_COMPLETE"}}
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
+          "objective_h": {"type": "integer", "minimum": 0},
+          "candidate_family_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "parent_score_evidence_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "reason": {"const": "NONE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"winner": {"type": "object"}},
+        "required": ["winner"]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
+          "family_state": {"const": "FAMILY_COMPLETE"},
+          "candidate_count": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "FAMILY_INCOMPLETE_CAP"}},
+        "required": ["family_state"]
+      },
+      "then": {"properties": {"reason": {"const": "MAX_FAMILY_SIZE_REACHED"}}}
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "FAMILY_INCOMPLETE_DEADLINE"}},
+        "required": ["family_state"]
+      },
+      "then": {"properties": {"reason": {"const": "DEADLINE_REACHED"}}}
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"}},
+        "required": ["family_state"]
+      },
+      "then": {
+        "properties": {
+          "solver_route": {"const": "ABSTAIN"},
+          "objective_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"},
+          "objective_h": {"type": "null"},
+          "candidate_family_digest": {"type": "null"},
+          "parent_score_evidence_sha256": {"type": "null"},
+          "candidate_count": {"const": 0},
+          "tree_count": {"const": "0"},
+          "winner": {"type": "null"},
+          "candidates": {"maxItems": 0},
+          "reason": {"const": "HIGHS_NOT_AVAILABLE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"}},
+        "required": ["family_state"]
+      },
+      "then": {
+        "properties": {
+          "solver_route": {"const": "ABSTAIN"},
+          "objective_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"},
+          "objective_h": {"type": "null"},
+          "candidate_family_digest": {"type": "null"},
+          "parent_score_evidence_sha256": {"type": "null"},
+          "candidate_count": {"const": 0},
+          "tree_count": {"const": "0"},
+          "winner": {"type": "null"},
+          "candidates": {"maxItems": 0},
+          "reason": {"const": "SOLVER_ROUTE_NOT_VERIFIED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"}},
+        "required": ["family_state"]
+      },
+      "then": {
+        "properties": {
+          "solver_route": {"const": "ABSTAIN"},
+          "objective_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"},
+          "objective_h": {"type": "null"},
+          "candidate_family_digest": {"type": "null"},
+          "parent_score_evidence_sha256": {"type": "null"},
+          "candidate_count": {"const": 0},
+          "tree_count": {"const": "0"},
+          "winner": {"type": "null"},
+          "candidates": {"maxItems": 0},
+          "reason": {"const": "MODEL_NOT_IDENTIFIABLE"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "input_pattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "pattern", "multiplicity"],
+      "properties": {
+        "kind": {"enum": ["FULL_STATE", "PARTIAL_SUBCUBE"]},
+        "pattern": {"type": "string", "pattern": "^[01X]+$"},
+        "multiplicity": {"type": "integer", "minimum": 1}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"kind": {"const": "FULL_STATE"}},
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {"pattern": {"pattern": "^[01]+$"}}
+          },
+          "else": {
+            "properties": {"pattern": {"pattern": "^(?=.*X)[01X]+$"}}
+          }
+        }
+      ]
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vertex_set",
+        "vertex_set_sha256",
+        "legal_parent_count",
+        "tree_count",
+        "best_additive_edge_score",
+        "best_parent_tie_count"
+      ],
+      "properties": {
+        "vertex_set": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[01]+$"},
+          "uniqueItems": true
+        },
+        "vertex_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "legal_parent_count": {"type": "integer", "minimum": 0},
+        "tree_count": {"type": "string", "pattern": "^[0-9]+$"},
+        "best_additive_edge_score": {"type": ["number", "null"]},
+        "best_parent_tie_count": {"type": "string", "pattern": "^[0-9]+$"}
+      }
+    },
+    "winner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_vertex_set_sha256", "parent_mapping", "edge_score", "tie"],
+      "properties": {
+        "candidate_vertex_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "parent_mapping": {"type": "object", "additionalProperties": {"type": "string"}},
+        "edge_score": {"type": "number"},
+        "tie": {"const": false}
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "every input pattern length equals active_bits length",
+    "input_patterns are sorted by kind then pattern and duplicate kind/pattern pairs are consolidated into multiplicity",
+    "observed_states is the sorted unique set of FULL_STATE input patterns",
+    "input_evidence_sha256 binds the exact receipted upstream row membership and canonical input_patterns stream for this unit",
+    "parent_score_evidence_sha256 binds the independently reproducible per-unit sufficient statistics used by additive edge scoring",
+    "candidate_count equals candidates length and tree_count is the exact decimal sum of candidate tree counts",
+    "winner is non-null only after an objective-certified complete family and only when additive parent mapping has no tie",
+    "any tied best result, incomplete family, deadline, cap or abstention has winner null",
+    "winner candidate_vertex_set_sha256 resolves to exactly one candidates entry",
+    "multi_mutation_edge_equivalence is projection-only and never changes objective_h, candidates or winner"
+  ],
+  "x-longlineage-status-domain-bindings": {
+    "objective_state": "topology_objective",
+    "family_state": "topology_family",
+    "reason": "topology_family"
+  }
+}

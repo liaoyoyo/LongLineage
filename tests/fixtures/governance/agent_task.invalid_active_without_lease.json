@@ -1,0 +1,27 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-invalid-lease",
+  "owner_agent_id": "codex:test-worker",
+  "parent_task_id": null,
+  "allowed_paths": [{"path": "src", "kind": "DIRECTORY_TREE"}],
+  "depends_on": [],
+  "lease_state": "UNASSIGNED",
+  "lease_expires_at": null,
+  "heartbeat_at": null,
+  "task_type": "A",
+  "goals": ["LL-G4"],
+  "status": "IN_PROGRESS",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "An active task without an active lease must fail."
+  },
+  "assumptions": [],
+  "inputs": [],
+  "expected_outputs": [],
+  "step_verify": [{"step": "Attempt work.", "verify": "Schema rejects missing active lease."}],
+  "evidence": [],
+  "deviations": [],
+  "blockers": [],
+  "updated_at": "2026-07-19T07:50:46+08:00"
+}

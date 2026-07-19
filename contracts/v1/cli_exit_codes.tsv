@@ -1,0 +1,10 @@
+code	name	meaning
+0	SUCCESS	Command completed and declared output is valid for its command scope
+2	USAGE_ERROR	Unknown command or invalid arguments
+3	PREFLIGHT_REJECTED	Input or manifest contract failed
+4	IO_ERROR	An HTSlib or filesystem operation failed
+5	SCHEMA_ERROR	A schema or record contract failed
+6	KERNEL_BLOCKED	A required scientific kernel is not VERIFIED
+7	VALIDATION_FAILED	Independent validator rejected the run
+8	QUERY_REJECTED	Query target is not VALIDATED_FROZEN or query is invalid
+9	INTERNAL_ERROR	Unexpected invariant violation

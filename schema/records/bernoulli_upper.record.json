@@ -1,0 +1,22 @@
+{
+  "schema_name": "longlineage.bernoulli_upper",
+  "schema_version": "1.0.0",
+  "format": "LLM_BGZF",
+  "magic": "LLM1",
+  "endianness": "little",
+  "dimension_type": "uint32",
+  "value_type": "float64",
+  "invalid_mask_type": "bitset",
+  "ordering": "row-major strict upper triangle",
+  "site_index_required": true,
+  "frame_checksum": "raw SHA-256 bytes over uncompressed frame fields 1-9",
+  "semantic_digest": "schema preamble followed by uncompressed frame fields 1-9 in dataset/site order",
+  "contract_document": "docs/data/LLM_V1.md",
+  "invariants": [
+    "value_count = dimension * (dimension - 1) / 2 using checked arithmetic",
+    "invalid_mask_bytes = ceil(value_count / 8) and unused padding bits are zero",
+    "masked values have canonical positive-zero payload",
+    "frames are unique and strictly ordered by dataset_order then site_order",
+    "site index ranges contain complete frames and the BGZF stream has canonical EOF"
+  ]
+}

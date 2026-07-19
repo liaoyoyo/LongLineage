@@ -1,0 +1,6 @@
+{
+  "fixture_id": "project_state_invalid_transition",
+  "gate_id": "GOV_PROJECT_STATE",
+  "expected_rejection": "The project state attempts a transition outside the allowed state machine.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

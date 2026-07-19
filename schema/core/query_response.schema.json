@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/query_response-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "run_state",
+    "artifact_id",
+    "artifact_schema",
+    "artifact_schema_version",
+    "normalized_filter",
+    "projected_fields",
+    "query_plan",
+    "matched_rows",
+    "returned_rows",
+    "truncated",
+    "scan_rows",
+    "scan_complete",
+    "artifact_physical_sha256",
+    "artifact_semantic_sha256",
+    "index_physical_sha256",
+    "run_receipt_sha256",
+    "producer_receipt_sha256",
+    "validation_receipt_sha256",
+    "checksums_sha256",
+    "schema_catalog_sha256",
+    "query_executable_sha256",
+    "records"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.query_response"},
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "run_state": {"const": "VALIDATED_FROZEN"},
+    "artifact_id": {"type": "string", "minLength": 1},
+    "artifact_schema": {"type": "string", "minLength": 1},
+    "artifact_schema_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "normalized_filter": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/eq_filter"},
+          {"$ref": "#/$defs/in_filter"},
+          {"$ref": "#/$defs/range_filter"}
+        ]
+      }
+    },
+    "projected_fields": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/field_ref"}
+    },
+    "query_plan": {"$ref": "#/$defs/query_plan"},
+    "matched_rows": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "null"}
+      ]
+    },
+    "returned_rows": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "truncated": {"type": "boolean"},
+    "scan_rows": {"type": "integer", "minimum": 0},
+    "scan_complete": {"type": "boolean"},
+    "artifact_physical_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_semantic_sha256": {"$ref": "#/$defs/sha256"},
+    "index_physical_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "run_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "producer_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "validation_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "checksums_sha256": {"$ref": "#/$defs/sha256"},
+    "schema_catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "query_executable_sha256": {"$ref": "#/$defs/sha256"},
+    "records": {"type": "array", "maxItems": 10000}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "field_ref": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*(?:\\.[A-Za-z][A-Za-z0-9_]*)*$"
+    },
+    "scalar": {
+      "type": ["string", "number", "boolean"]
+    },
+    "eq_filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator", "field", "value"],
+      "properties": {
+        "operator": {"const": "eq"},
+        "field": {"$ref": "#/$defs/field_ref"},
+        "value": {"$ref": "#/$defs/scalar"}
+      }
+    },
+    "in_filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator", "field", "values"],
+      "properties": {
+        "operator": {"const": "in"},
+        "field": {"$ref": "#/$defs/field_ref"},
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/scalar"}
+        }
+      }
+    },
+    "range_filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operator",
+        "field",
+        "lower",
+        "upper",
+        "inclusive_lower",
+        "inclusive_upper"
+      ],
+      "properties": {
+        "operator": {"const": "range"},
+        "field": {"$ref": "#/$defs/field_ref"},
+        "lower": {"type": "number"},
+        "upper": {"type": "number"},
+        "inclusive_lower": {"const": true},
+        "inclusive_upper": {"const": true}
+      }
+    },
+    "query_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "access_method",
+        "allow_scan",
+        "index_used",
+        "scan_budget_rows",
+        "artifact_logical_rows"
+      ],
+      "properties": {
+        "access_method": {
+          "enum": ["SITE_INDEX_EXACT", "SEQUENTIAL_SCAN"]
+        },
+        "allow_scan": {"type": "boolean"},
+        "index_used": {"type": "boolean"},
+        "scan_budget_rows": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1},
+            {"type": "null"}
+          ]
+        },
+        "artifact_logical_rows": {"type": "integer", "minimum": 0}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"access_method": {"const": "SITE_INDEX_EXACT"}},
+            "required": ["access_method"]
+          },
+          "then": {
+            "properties": {
+              "index_used": {"const": true},
+              "scan_budget_rows": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"access_method": {"const": "SEQUENTIAL_SCAN"}},
+            "required": ["access_method"]
+          },
+          "then": {
+            "properties": {
+              "allow_scan": {"const": true},
+              "index_used": {"const": false}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"scan_complete": {"const": false}},
+        "required": ["scan_complete"]
+      },
+      "then": {
+        "properties": {
+          "matched_rows": {"type": "null"},
+          "truncated": {"const": true}
+        }
+      },
+      "else": {
+        "properties": {
+          "matched_rows": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "query_plan": {
+            "properties": {"index_used": {"const": true}},
+            "required": ["index_used"]
+          }
+        },
+        "required": ["query_plan"]
+      },
+      "then": {
+        "properties": {
+          "index_physical_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    }
+  ],
+  "x-longlineage-invariants": [
+    "all normalized_filter predicates are combined with logical AND",
+    "normalized_filter is sorted by field then operator and IN values use the declared scalar order",
+    "filter values exactly match the record schema type; the query executable performs no string or numeric coercion",
+    "range lower is less than or equal to upper after exact declared-type parsing",
+    "SITE_INDEX_EXACT is legal only when equality predicates provide every field in the catalog index_key",
+    "returned_rows equals records length and records remain in canonical artifact order",
+    "scan_complete false means matched_rows is unknown, never a partial count disguised as a census",
+    "scan_rows does not exceed query_plan.artifact_logical_rows or an explicit scan budget",
+    "truncated is true exactly when not all matching rows are returned",
+    "run_receipt_sha256 anchors the replayed frozen receipt whose internal producer, validation and checksum digests equal the three response fields"
+  ]
+}

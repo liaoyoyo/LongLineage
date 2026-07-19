@@ -1,0 +1,6 @@
+{
+  "fixture_id": "out_of_order_writer",
+  "gate_id": "DETERMINISM_PACKED",
+  "expected_rejection": "A bounded reorder buffer emits records outside frozen logical order.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

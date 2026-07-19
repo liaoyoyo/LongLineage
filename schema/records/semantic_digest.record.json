@@ -1,0 +1,21 @@
+{
+  "schema_name": "longlineage.semantic_digest",
+  "schema_version": "1.0.0",
+  "format": "TSV",
+  "header": [
+    "artifact_id",
+    "schema_name",
+    "schema_version",
+    "logical_rows",
+    "semantic_sha256"
+  ],
+  "fields": [
+    {"name": "artifact_id", "type": "string", "required": true},
+    {"name": "schema_name", "type": "string", "required": true},
+    {"name": "schema_version", "type": "string", "required": true},
+    {"name": "logical_rows", "type": "uint64", "required": true},
+    {"name": "semantic_sha256", "type": "sha256", "required": true}
+  ],
+  "primary_key": ["artifact_id"],
+  "sort_key": ["artifact_id"]
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/governance/project_state-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "project",
+    "task_type",
+    "scope",
+    "active_milestone",
+    "goals",
+    "open_gates",
+    "protected_decisions",
+    "next_actions",
+    "last_verified_at"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.project_state"},
+    "schema_version": {"const": "1.0.0"},
+    "project": {"const": "LongLineage"},
+    "task_type": {"const": "B_COMPREHENSIVE_VALIDATION"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["datasets", "biological_samples", "genome", "partial"],
+      "properties": {
+        "datasets": {"const": 7},
+        "biological_samples": {"const": 6},
+        "genome": {"const": "chr1-22"},
+        "partial": {"const": false}
+      }
+    },
+    "active_milestone": {
+      "enum": [
+        "P0_P1_FOUNDATION",
+        "P2_RUNTIME_FOUNDATION",
+        "P3_M1_PARITY",
+        "P4_M2_COOCCURRENCE_PARITY",
+        "P5_TOPOLOGY_PARITY",
+        "P6_INDEPENDENT_VALIDATION",
+        "P7_FULL_DATASET_VALIDATION",
+        "P8_RELEASE_CANDIDATE"
+      ]
+    },
+    "goals": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {"enum": ["LL-G1", "LL-G2", "LL-G3", "LL-G4", "LL-G5"]}
+    },
+    "open_gates": {
+      "description": "Exact phase-gate projection from state/phase_ledger.json: include every P0-P8 phase whose status is not VERIFIED; exclude only VERIFIED phases.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "P0_AUTHORITY_AND_PROVENANCE",
+          "P1_TYPED_IO",
+          "P2_DETERMINISM",
+          "P3_M1_PARITY",
+          "P4_M2_COOCCURRENCE_PARITY",
+          "P5_TOPOLOGY_PARITY",
+          "P6_INDEPENDENT_VALIDATOR",
+          "P7_FULL_DATASET",
+          "P8_RELEASE"
+        ]
+      }
+    },
+    "protected_decisions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "PRODUCTION_TRUTH_ISOLATION",
+          "LATEST_SIDECAR_ONLY_HP_PS",
+          "NO_PYTHON_SCIENCE",
+          "NO_WINNER_FROM_INCOMPLETE_FAMILY",
+          "LINEAGE_COMPATIBLE_FAMILY_CLAIM_CEILING"
+        ]
+      }
+    },
+    "next_actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "last_verified_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"active_milestone": {"const": "P0_P1_FOUNDATION"}},
+        "required": ["active_milestone"]
+      },
+      "then": {
+        "properties": {
+          "open_gates": {
+            "allOf": [
+              {"contains": {"const": "P0_AUTHORITY_AND_PROVENANCE"}},
+              {"contains": {"const": "P1_TYPED_IO"}}
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "x-longlineage-invariants": [
+    "open_gates is exactly the gate-id projection of every non-VERIFIED P0-P8 phase in state/phase_ledger.json",
+    "open_gates has no missing or extra gate and uses canonical P0-P8 order when serialized",
+    "compiled governance recomputes this projection; JSON Schema only enforces the current P0_P1_FOUNDATION minimum"
+  ]
+}

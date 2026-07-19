@@ -1,0 +1,3 @@
+gate_id	required	scope	command	negative_fixture	evidence_role
+SYNTHETIC_FIRST	true	all	scripts/ai/check_readiness.sh	fixture:tests/fixtures/governance/missing_required_file.case.json	synthetic
+SYNTHETIC_SECOND	true	all	scripts/ai/check_readiness.sh	fixture:tests/fixtures/governance/missing_required_file.case.json	synthetic

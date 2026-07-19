@@ -1,0 +1,17 @@
+{
+  "schema_name": "longlineage.checksum",
+  "schema_version": "1.0.0",
+  "format": "SHA256SUM",
+  "fields": [
+    {"name": "sha256", "type": "sha256", "required": true},
+    {"name": "relative_path", "type": "string", "required": true}
+  ],
+  "ordering": "relative_path UTF-8 byte order",
+  "line_encoding": "<64 lowercase hex><two ASCII spaces><relative path><LF>",
+  "invariants": [
+    "paths are relative, normalized, nonempty and contain no parent traversal",
+    "checksums.sha256 never lists itself",
+    "every producer artifact including receipts/producer_receipt.json is listed exactly once",
+    "final run_receipt.json and validator-authored validation_receipt.json are excluded to avoid a digest cycle"
+  ]
+}

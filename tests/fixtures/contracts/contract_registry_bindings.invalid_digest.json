@@ -1,0 +1,54 @@
+{
+  "schema_name": "longlineage.contract_registry_bindings",
+  "schema_version": "1.0.0",
+  "catalog": {
+    "path": "schema/catalog.json",
+    "sha256": "3e5013273c99e5c0e9feb8383938a75e2b9cf02b796f5214eab37720fde3f41b"
+  },
+  "registries": {
+    "artifact_roles": {
+      "path": "contracts/v1/artifact_roles.tsv",
+      "sha256": "845a84770056700cd5282c87f242e5b79e79f2f8b75c64333872db1a36972640",
+      "binding_mode": "CATALOG_EXACT_ROW_SET"
+    },
+    "lifecycle_codes": {
+      "path": "contracts/v1/lifecycle_codes.tsv",
+      "sha256": "fd767cfb102fa96052bd01490a3037979103772a5f122299d954eff808b07cd9",
+      "binding_mode": "CLOSED_VOCABULARY_SHA256_LOCK"
+    },
+    "query_operators": {
+      "path": "contracts/v1/query_operators.tsv",
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "binding_mode": "SHA256_LOCK"
+    },
+    "transform_registry": {
+      "path": "contracts/v1/transform_registry.tsv",
+      "sha256": "a1a85bfe49fce0cdbe14a2da5d211afa4a3d997a05992bf51430131a96634124",
+      "binding_mode": "SHA256_LOCK"
+    }
+  },
+  "artifact_role_relation": {
+    "exact_rule": "ARTIFACT_SCOPE_ROLE_IDS_EQUAL_CATALOG_ARTIFACT_IDS;SUBORDINATE_INDEX_ROLE_IDS_EQUAL_SITE_INDEX_SCHEMA_ROLE",
+    "catalog_artifact_ids": [
+      "site_reads",
+      "methyl_calls",
+      "bernoulli_upper",
+      "m1_sites",
+      "m1_assignments",
+      "cooccurrence_pairs",
+      "cooccurrence_sites",
+      "topology_units",
+      "summary",
+      "run_receipt",
+      "producer_receipt",
+      "artifact_catalog",
+      "data_lineage",
+      "semantic_digests",
+      "checksums",
+      "validation_receipt"
+    ],
+    "subordinate_index_role_ids": [
+      "site_index"
+    ]
+  }
+}

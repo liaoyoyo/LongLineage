@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/run_receipt-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "state",
+    "production_executable",
+    "manifest_sha256",
+    "input_lock_sha256",
+    "phase_ledger_sha256",
+    "artifacts",
+    "truth_fields_seen",
+    "input_snapshot_before_sha256",
+    "input_snapshot_after_sha256",
+    "schema_catalog_sha256",
+    "science_parameters_sha256",
+    "state_history",
+    "performance",
+    "producer_receipt_sha256",
+    "validation_receipt_sha256",
+    "checksums_sha256"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.run_receipt"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "state": {
+      "const": "VALIDATED_FROZEN"
+    },
+    "production_executable": {
+      "$ref": "#/$defs/executable"
+    },
+    "manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "input_lock_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "phase_ledger_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "https://longlineage.local/schema/artifact_record-1.0.0.json"
+      }
+    },
+    "truth_fields_seen": {
+      "const": 0
+    },
+    "input_snapshot_before_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "input_snapshot_after_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "schema_catalog_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "science_parameters_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "state_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "state", "at", "actor_executable_sha256", "previous_event_sha256"],
+        "properties": {
+          "sequence": {"type": "integer", "minimum": 0},
+          "state": {"enum": ["RUNNING", "FAILED", "VALIDATED", "VALIDATED_FROZEN"]},
+          "at": {"type": "string", "format": "date-time"},
+          "actor_executable_sha256": {"$ref": "#/$defs/sha256"},
+          "previous_event_sha256": {
+            "type": ["string", "null"],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "reason": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "performance": {
+      "$ref": "#/$defs/performance"
+    },
+    "producer_receipt_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "validation_receipt_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "checksums_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "executable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "git_commit", "executable_sha256", "compiler", "htslib_version"],
+      "properties": {
+        "name": {"const": "longlineage"},
+        "version": {"type": "string"},
+        "git_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "executable_sha256": {"$ref": "#/$defs/sha256"},
+        "compiler": {"type": "string"},
+        "htslib_version": {"const": "1.18"}
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_seconds",
+        "user_seconds",
+        "system_seconds",
+        "memory_peak_bytes",
+        "oom_events",
+        "io_read_bytes",
+        "io_write_bytes",
+        "major_page_faults",
+        "minor_page_faults",
+        "peak_threads",
+        "queue_wait_seconds",
+        "reorder_wait_seconds",
+        "task_latency_seconds",
+        "logical_records",
+        "logical_bytes",
+        "final_file_count",
+        "transient_file_count",
+        "cache_condition"
+      ],
+      "properties": {
+        "wall_seconds": {"type": "number", "minimum": 0},
+        "user_seconds": {"type": "number", "minimum": 0},
+        "system_seconds": {"type": "number", "minimum": 0},
+        "memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "oom_events": {"type": "integer", "minimum": 0},
+        "io_read_bytes": {"type": "integer", "minimum": 0},
+        "io_write_bytes": {"type": "integer", "minimum": 0},
+        "major_page_faults": {"type": "integer", "minimum": 0},
+        "minor_page_faults": {"type": "integer", "minimum": 0},
+        "peak_threads": {"type": "integer", "minimum": 1, "maximum": 46},
+        "queue_wait_seconds": {"type": "number", "minimum": 0},
+        "reorder_wait_seconds": {"type": "number", "minimum": 0},
+        "task_latency_seconds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p50", "p95", "p99", "max"],
+          "properties": {
+            "p50": {"type": "number", "minimum": 0},
+            "p95": {"type": "number", "minimum": 0},
+            "p99": {"type": "number", "minimum": 0},
+            "max": {"type": "number", "minimum": 0}
+          }
+        },
+        "logical_records": {"type": "integer", "minimum": 0},
+        "logical_bytes": {"type": "integer", "minimum": 0},
+        "final_file_count": {"type": "integer", "minimum": 0},
+        "transient_file_count": {"type": "integer", "minimum": 0},
+        "cache_condition": {"enum": ["COLD", "WARM", "MIXED", "UNKNOWN"]}
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "input_snapshot_before_sha256 equals input_snapshot_after_sha256",
+    "state_history sequences start at zero and increase by one",
+    "state transitions are exactly RUNNING to VALIDATED to VALIDATED_FROZEN",
+    "each previous_event_sha256 binds the preceding canonical state event",
+    "FAILED and incomplete topology artifacts contain no winner"
+  ]
+}

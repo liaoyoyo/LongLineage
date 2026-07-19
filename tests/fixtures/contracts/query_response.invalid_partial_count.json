@@ -1,0 +1,39 @@
+{
+  "schema_name": "longlineage.query_response",
+  "schema_version": "1.0.0",
+  "run_id": "synthetic-query-run",
+  "run_state": "VALIDATED_FROZEN",
+  "artifact_id": "m1_sites",
+  "artifact_schema": "longlineage.m1_sites",
+  "artifact_schema_version": "1.0.0",
+  "normalized_filter": [],
+  "projected_fields": [
+    "site_order"
+  ],
+  "query_plan": {
+    "access_method": "SEQUENTIAL_SCAN",
+    "allow_scan": true,
+    "index_used": false,
+    "scan_budget_rows": 10,
+    "artifact_logical_rows": 100
+  },
+  "matched_rows": 3,
+  "returned_rows": 3,
+  "truncated": true,
+  "scan_rows": 10,
+  "scan_complete": false,
+  "artifact_physical_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "artifact_semantic_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "index_physical_sha256": null,
+  "run_receipt_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "producer_receipt_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "validation_receipt_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+  "checksums_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+  "schema_catalog_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "query_executable_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "records": [
+    {"site_order": 1},
+    {"site_order": 2},
+    {"site_order": 3}
+  ]
+}

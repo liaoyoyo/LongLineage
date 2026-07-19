@@ -1,0 +1,31 @@
+{
+  "schema_name": "longlineage.topology_unit",
+  "schema_version": "1.0.0",
+  "dataset_order": 0,
+  "dataset_id": "synthetic",
+  "unit_order": 1,
+  "unit_id": "synthetic-unit-1",
+  "active_bits": [0, 1, 2, 3, 4],
+  "input_patterns": [
+    {"kind": "FULL_STATE", "pattern": "11111", "multiplicity": 1}
+  ],
+  "input_evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "parent_score_evidence_sha256": null,
+  "observed_states": ["11111"],
+  "solver_route": "ABSTAIN",
+  "objective_state": "ABSTAIN_KERNEL_NOT_VERIFIED",
+  "family_state": "ABSTAIN_KERNEL_NOT_VERIFIED",
+  "objective_h": null,
+  "winner": null,
+  "candidate_family_digest": null,
+  "candidate_count": 0,
+  "tree_count": "0",
+  "candidates": [],
+  "evolution_models": {
+    "evo_m0": "PRIMARY_RECURRENCE_ALLOWED",
+    "evo_m1": "SENSITIVITY_NOT_RUN",
+    "evo_m2": "UNRESOLVED_NOT_IMPLEMENTED"
+  },
+  "multi_mutation_edge_equivalence": [],
+  "reason": "SOLVER_ROUTE_NOT_VERIFIED"
+}

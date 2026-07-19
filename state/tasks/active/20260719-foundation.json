@@ -1,0 +1,119 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-foundation",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {"path": ".ai", "kind": "DIRECTORY_TREE"},
+    {"path": ".github", "kind": "DIRECTORY_TREE"},
+    {"path": "AGENTS.md", "kind": "FILE"},
+    {"path": "CHANGELOG.md", "kind": "FILE"},
+    {"path": "CMakeLists.txt", "kind": "FILE"},
+    {"path": "CONTRIBUTING.md", "kind": "FILE"},
+    {"path": "ORIGIN.md", "kind": "FILE"},
+    {"path": "README.md", "kind": "FILE"},
+    {"path": "ROADMAP.md", "kind": "FILE"},
+    {"path": "SECURITY.md", "kind": "FILE"},
+    {"path": "apps", "kind": "DIRECTORY_TREE"},
+    {"path": "cmake", "kind": "DIRECTORY_TREE"},
+    {"path": "containers", "kind": "DIRECTORY_TREE"},
+    {"path": "contracts", "kind": "DIRECTORY_TREE"},
+    {"path": "docs", "kind": "DIRECTORY_TREE"},
+    {"path": "fixtures", "kind": "DIRECTORY_TREE"},
+    {"path": "governance", "kind": "DIRECTORY_TREE"},
+    {"path": "include", "kind": "DIRECTORY_TREE"},
+    {"path": "oracle", "kind": "DIRECTORY_TREE"},
+    {"path": "presentation", "kind": "DIRECTORY_TREE"},
+    {"path": "provenance", "kind": "DIRECTORY_TREE"},
+    {"path": "schema", "kind": "DIRECTORY_TREE"},
+    {"path": "scripts", "kind": "DIRECTORY_TREE"},
+    {"path": "src", "kind": "DIRECTORY_TREE"},
+    {"path": "state", "kind": "DIRECTORY_TREE"},
+    {"path": "tests", "kind": "DIRECTORY_TREE"}
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T07:50:46+08:00",
+  "heartbeat_at": "2026-07-19T08:45:00+08:00",
+  "task_type": "B",
+  "goals": ["LL-G1", "LL-G2", "LL-G3", "LL-G4", "LL-G5"],
+  "status": "BLOCKED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "P0-P2 repository, governance, versioned data contracts, typed I/O and deterministic runtime foundation; P3-P8 remain separately gated."
+  },
+  "assumptions": [
+    "HTSlib 1.18 from pkg-config is the local production-compatible dependency.",
+    "No historical Python scientific program is executed in LongLineage.",
+    "The current full co-occurrence authority is absent, so P4 cannot be marked VERIFIED."
+  ],
+  "inputs": [
+    {
+      "role": "authority_manifest",
+      "path": "oracle/authority_manifest.json",
+      "sha256": null
+    },
+    {
+      "role": "source_mapping",
+      "path": "provenance/source_to_target_manifest.json",
+      "sha256": null
+    },
+    {
+      "role": "science_contract",
+      "path": "contracts/v1/science_parameters.json",
+      "sha256": null
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "producer_cli",
+      "path": "build/bin/longlineage",
+      "sha256": null
+    },
+    {
+      "role": "independent_validator_cli",
+      "path": "build/bin/longlineage-validate",
+      "sha256": null
+    },
+    {
+      "role": "query_cli",
+      "path": "build/bin/longlineage-query",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Validate governance, schemas and source boundaries.",
+      "verify": "scripts/ci/check_all.sh exits 0 and reports no real data, truth leakage or Python science."
+    },
+    {
+      "step": "Build all C++ targets with the pinned local dependency contract.",
+      "verify": "/usr/bin/cmake configure and build exit 0 with HTSlib 1.18 and no warnings."
+    },
+    {
+      "step": "Replay typed I/O, runtime and topology foundation tests.",
+      "verify": "CTest exits 0; malformed MM/ML, sidecar conflicts, worker failure and incomplete-winner cases are rejected."
+    },
+    {
+      "step": "Publish only the verified foundation to the private repository.",
+      "verify": "Remote visibility is private and phase ledger retains P3-P8 blockers."
+    }
+  ],
+  "evidence": [],
+  "deviations": [
+    "The default PATH cmake is 3.14.4; documented commands use /usr/bin/cmake 3.22.1.",
+    "/usr/bin/jsonschema is 3.2.0 and falls back to Draft 7 for 2020-12 meta-schema URIs; current contracts use compatible keywords and pass exercised fixtures, but the validator must be pinned before release verification.",
+    "Three bootstrap subagents started before the machine lease/write-set registry existed. Their historical writes have no per-agent task record and no lease is retroactively fabricated; all delegation after policy activation must register a non-overlapping child claim before writing.",
+    "The first sanitizer replay omitted the sandbox-specific LeakSanitizer exception and was stopped as invalid environment evidence. The complete replay kept AddressSanitizer and UndefinedBehaviorSanitizer active while setting ASAN_OPTIONS=detect_leaks=0."
+  ],
+  "blockers": [
+    "PRIVATE_REMOTE_NOT_YET_VERIFIED",
+    "M1_LOGICAL_DIGEST_AND_RNG_VECTORS_NOT_FROZEN",
+    "FORMAL_FULL_COOCCURRENCE_AUTHORITY_ABSENT",
+    "CURRENT_REAL_DUAL_PILOT_ABSENT",
+    "DIRECT_HIGHS_DEPENDENCY_UNAVAILABLE",
+    "DRAFT_2020_12_VALIDATOR_NOT_PINNED"
+  ],
+  "updated_at": "2026-07-19T08:45:00+08:00"
+}

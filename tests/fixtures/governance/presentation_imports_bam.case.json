@@ -1,0 +1,6 @@
+{
+  "fixture_id": "presentation_imports_bam",
+  "gate_id": "BOUNDARY_PYTHON_SCIENCE",
+  "expected_rejection": "Presentation-only code imports or reads a scientific BAM input.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

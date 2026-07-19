@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/production_manifest-1.0.0.json",
+  "title": "LongLineage production manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "authority_profile",
+    "run_id",
+    "output_root",
+    "datasets",
+    "runtime",
+    "contract_bindings"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.production_manifest"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "authority_profile": {
+      "enum": ["PRODUCTION_7_DATASET", "SYNTHETIC"]
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "output_root": {
+      "type": "string",
+      "pattern": "^/(?:[^/]+/)*\\.staging/[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "datasets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/dataset"
+      }
+    },
+    "runtime": {
+      "$ref": "#/$defs/runtime"
+    },
+    "contract_bindings": {
+      "$ref": "#/$defs/contract_bindings"
+    }
+  },
+  "$defs": {
+    "locked_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "path",
+        "size_bytes",
+        "sha256"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "raw_bam",
+            "raw_bam_index",
+            "pass_biallelic_ssnv_vcf",
+            "pass_biallelic_ssnv_vcf_index",
+            "latest_hp_ps_sidecar",
+            "latest_hp_ps_sidecar_index",
+            "reference_fasta",
+            "reference_fai"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/(?!.*(?:/\\.\\./|/\\.\\.$|/\\./|/\\.$))(?:[^/]+/)*[^/]+$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "dataset_order",
+        "files"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "dataset_order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "files": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/locked_file"
+          }
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compute_workers",
+        "writer_threads",
+        "coordinator_slots",
+        "buffer_bytes",
+        "max_focal_sites_per_block",
+        "max_estimated_alignments_per_block",
+        "halo_bp"
+      ],
+      "properties": {
+        "compute_workers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40
+        },
+        "writer_threads": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "coordinator_slots": {
+          "const": 2
+        },
+        "buffer_bytes": {
+          "type": "integer",
+          "minimum": 1048576,
+          "maximum": 8589934592
+        },
+        "max_focal_sites_per_block": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "max_estimated_alignments_per_block": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250000
+        },
+        "halo_bp": {
+          "const": 5000
+        }
+      }
+    },
+    "contract_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "science_parameters_sha256",
+        "schema_catalog_sha256",
+        "status_reason_registry_sha256",
+        "type_registry_sha256",
+        "transform_registry_sha256",
+        "authority_manifest_sha256",
+        "source_to_target_manifest_sha256",
+        "production_input_authority_sha256",
+        "schema_id_registry_sha256",
+        "release_attestation_sha256"
+      ],
+      "properties": {
+        "science_parameters_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_catalog_sha256": {"$ref": "#/$defs/sha256"},
+        "status_reason_registry_sha256": {"$ref": "#/$defs/sha256"},
+        "type_registry_sha256": {"$ref": "#/$defs/sha256"},
+        "transform_registry_sha256": {"$ref": "#/$defs/sha256"},
+        "authority_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_to_target_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "production_input_authority_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_id_registry_sha256": {"$ref": "#/$defs/sha256"},
+        "release_attestation_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "x-longlineage-invariants": [
+    "output_root is absolute, contains no dot-dot component and resolves beneath its declared base",
+    "output_root basename exactly equals run_id and parent basename exactly equals .staging",
+    "the final publication path is output_root grandparent joined with run_id",
+    "the staging and final paths do not pre-exist as symlink aliases",
+    "every locked input path is canonical absolute and has no symlink alias",
+    "dataset_order equals frozen array order and file roles occur exactly once",
+    "run accepts only authority_profile PRODUCTION_7_DATASET; preflight and probe may accept SYNTHETIC",
+    "PRODUCTION_7_DATASET exactly matches oracle/production_input_authority.json dataset and four authority-bound file identities",
+    "run requires the manifest-bound state/release_attestation.json to be READY with complete P3/P4/P5 evidence",
+    "run never derives kernel readiness from mutable state/phase_ledger.json",
+    "compute_workers + writer_threads + coordinator_slots is at most 46",
+    "every contract binding equals the SHA-256 recomputed from the installed contract source"
+  ]
+}

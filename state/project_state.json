@@ -1,0 +1,44 @@
+{
+  "schema_name": "longlineage.project_state",
+  "schema_version": "1.0.0",
+  "project": "LongLineage",
+  "task_type": "B_COMPREHENSIVE_VALIDATION",
+  "scope": {
+    "datasets": 7,
+    "biological_samples": 6,
+    "genome": "chr1-22",
+    "partial": false
+  },
+  "active_milestone": "P0_P1_FOUNDATION",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G3",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "open_gates": [
+    "P0_AUTHORITY_AND_PROVENANCE",
+    "P1_TYPED_IO",
+    "P2_DETERMINISM",
+    "P3_M1_PARITY",
+    "P4_M2_COOCCURRENCE_PARITY",
+    "P5_TOPOLOGY_PARITY",
+    "P6_INDEPENDENT_VALIDATOR",
+    "P7_FULL_DATASET",
+    "P8_RELEASE"
+  ],
+  "protected_decisions": [
+    "PRODUCTION_TRUTH_ISOLATION",
+    "LATEST_SIDECAR_ONLY_HP_PS",
+    "NO_PYTHON_SCIENCE",
+    "NO_WINNER_FROM_INCOMPLETE_FAMILY",
+    "LINEAGE_COMPATIBLE_FAMILY_CLAIM_CEILING"
+  ],
+  "next_actions": [
+    "Build and validate schema and typed I/O foundation",
+    "Freeze missing logical M1 vectors before M1 port",
+    "Keep unavailable co-occurrence and topology full authorities blocked"
+  ],
+  "last_verified_at": "2026-07-19T07:50:46+08:00"
+}

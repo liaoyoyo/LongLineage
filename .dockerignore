@@ -1,0 +1,23 @@
+# Repository metadata and local build products.
+.git
+.github
+build
+build-*
+compile_commands.json
+
+# Production and sensitive genomics data are never Docker build context.
+*.bam
+*.bai
+*.cram
+*.crai
+*.vcf
+*.vcf.gz
+*.bcf
+*.tbi
+*.csi
+*.fastq
+*.fastq.gz
+*.pod5
+run-output
+staging
+presentation/output

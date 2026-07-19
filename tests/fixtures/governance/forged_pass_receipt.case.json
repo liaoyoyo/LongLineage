@@ -1,0 +1,7 @@
+{
+  "fixture_id": "forged_pass_receipt",
+  "gate_id": "VALIDATOR_FAULT_INJECTION",
+  "expected_rejection": "A forged PASS receipt is presented without independent validation evidence.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE",
+  "implementation_status": "NOT_IMPLEMENTED_RELEASE_BLOCKER"
+}

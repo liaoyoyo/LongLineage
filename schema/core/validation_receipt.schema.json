@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/validation_receipt-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "producer_receipt_sha256",
+    "validator_executable_sha256",
+    "all_pass",
+    "checks",
+    "validated_at",
+    "validator_independent",
+    "linked_producer_kernels",
+    "input_snapshot_before_sha256",
+    "input_snapshot_after_sha256"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.validation_receipt"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "producer_receipt_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "validator_executable_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "all_pass": {
+      "type": "boolean"
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check_id", "status", "reason", "observed", "expected", "evidence_sha256"],
+        "properties": {
+          "check_id": {"type": "string", "minLength": 1},
+          "status": {"enum": ["PASS", "FAIL"]},
+          "reason": {"type": ["string", "null"]},
+          "observed": {},
+          "expected": {},
+          "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "validated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "validator_independent": {
+      "const": true
+    },
+    "linked_producer_kernels": {
+      "const": false
+    },
+    "input_snapshot_before_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "input_snapshot_after_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "x-longlineage-invariants": [
+    "all_pass is true exactly when every check status is PASS",
+    "input snapshots are equal",
+    "validator binary does not link producer statistical or solver kernels"
+  ]
+}

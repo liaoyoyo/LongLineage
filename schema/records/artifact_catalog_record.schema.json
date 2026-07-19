@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/artifact_catalog_record-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_name", "schema_version", "run_id", "artifact"],
+  "properties": {
+    "schema_name": {"const": "longlineage.artifact_catalog_record"},
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "artifact": {
+      "$ref": "https://longlineage.local/schema/artifact_record-1.0.0.json"
+    }
+  }
+}

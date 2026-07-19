@@ -1,0 +1,5 @@
+{
+  "schema_name": "longlineage.production_manifest",
+  "schema_version": "1.0.0",
+  "truth_label": "synthetic-negative-fixture"
+}

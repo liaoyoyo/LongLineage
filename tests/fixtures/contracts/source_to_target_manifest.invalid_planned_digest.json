@@ -1,0 +1,25 @@
+{
+  "$schema": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json",
+  "schema_name": "longlineage.source_to_target_manifest",
+  "schema_version": "1.1.0",
+  "origin_repository": "InterSubMod",
+  "origin_commit": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99",
+  "license_review_status": "PENDING_PUBLIC_RELEASE_AUDIT",
+  "mappings": [
+    {
+      "origin_id": "planned-port",
+      "source_path": "InterSubMod/src/example.cpp",
+      "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "target": "src/example.cpp",
+      "target_kind": "FILE",
+      "target_presence": "ABSENT",
+      "target_digest_kind": "FILE_SHA256",
+      "target_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "implementation_status": "PLANNED",
+      "verification_status": "NOT_VERIFIED",
+      "verified_evidence_id": null,
+      "transformation": "planned_clean_reimplementation",
+      "reuse": "contract_only"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/release_attestation-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "attestation_id",
+    "attestation_state",
+    "issued_at",
+    "phases",
+    "blockers"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.release_attestation"},
+    "schema_version": {"const": "1.0.0"},
+    "attestation_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "attestation_state": {"enum": ["NOT_READY", "READY"]},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "phases": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/phase"}
+    },
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9_]+$"}
+    }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "evidence"],
+      "properties": {
+        "id": {"enum": ["P3", "P4", "P5"]},
+        "status": {"enum": ["BLOCKED", "VERIFIED"]},
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence"}
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "sha256", "command", "exit_code"],
+      "properties": {
+        "role": {"enum": ["TEST_LOG", "RECEIPT", "AUDIT"]},
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "command": {"type": "string", "minLength": 1},
+        "exit_code": {"const": 0}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"attestation_state": {"const": "READY"}}},
+      "then": {
+        "properties": {
+          "phases": {
+            "items": {
+              "properties": {
+                "status": {"const": "VERIFIED"},
+                "evidence": {"minItems": 1}
+              }
+            }
+          },
+          "blockers": {"maxItems": 0}
+        }
+      },
+      "else": {"properties": {"blockers": {"minItems": 1}}}
+    }
+  ],
+  "x-longlineage-invariants": [
+    "phases occur exactly once and in P3, P4, P5 order",
+    "READY requires complete evidence for all three phases",
+    "each evidence digest is recomputed from its repository-relative path",
+    "a production manifest binds the physical SHA-256 of this exact attestation",
+    "mutable state/phase_ledger.json is never consulted by the production run gate"
+  ]
+}

@@ -1,0 +1,88 @@
+domain	kind	code	terminal	severity	allowed_parent_status	requires_reason	forbids_winner	introduced_in	description	test_id
+parse	status	OK	false	info	.	false	false	1.0.0	Value parsed successfully	parse_ok
+parse	status	OK_EMPTY	false	info	.	false	false	1.0.0	Valid input contains zero logical records	parse_ok_empty
+parse	status	ERROR	true	error	.	true	true	1.0.0	Input cannot be parsed	parse_error
+parse	reason	NONE	false	info	.	false	false	1.0.0	No failure reason	status_none
+parse	reason	MISSING_REQUIRED_FIELD	true	error	ERROR	true	true	1.0.0	A required field or tag is absent	parse_missing
+parse	reason	MALFORMED_VALUE	true	error	ERROR	true	true	1.0.0	A field is syntactically malformed	parse_malformed
+parse	reason	UNSUPPORTED_VALUE	true	error	ERROR	true	true	1.0.0	A value is outside the frozen contract	parse_unsupported
+parse	reason	INDEX_ERROR	true	error	ERROR	true	true	1.0.0	Required index cannot be opened or queried	parse_index
+parse	reason	IO_ERROR	true	error	ERROR	true	true	1.0.0	Underlying reader reported an I/O error	parse_io
+join	status	EXACT_MATCH	false	info	.	false	false	1.0.0	Projection maps to one distinct full identity	join_exact
+join	status	ERROR	true	error	.	true	true	1.0.0	Exact latest-tag join failed	join_error
+join	reason	MISSING_PROJECTION	true	error	ERROR	true	true	1.0.0	Sidecar lacks the read projection	join_missing
+join	reason	FULL_IDENTITY_MISMATCH	true	error	ERROR	true	true	1.0.0	Projection exists but FLAG or CIGAR does not match the required full alignment identity	join_full_identity_mismatch
+join	reason	CONFLICTING_TAGS	true	error	ERROR	true	true	1.0.0	One identity has conflicting HP or PS	join_conflicting_tags
+join	reason	MULTIPLE_FULL_IDENTITIES	true	error	ERROR	true	true	1.0.0	Projection maps to multiple distinct full identities	join_multimatch
+run	status	RUNNING	false	info	.	false	true	1.0.0	Run is active	run_running
+run	status	FAILED	true	error	RUNNING	true	true	1.0.0	Run terminated without validation	run_failed
+run	status	VALIDATED	false	info	RUNNING	false	false	1.0.0	Independent validator passed	run_validated
+run	status	VALIDATED_FROZEN	true	info	VALIDATED	false	false	1.0.0	Validated staging root was atomically frozen	run_frozen
+run	reason	WORKER_ERROR	true	error	FAILED	true	true	1.0.0	A worker failed	run_worker_error
+run	reason	VALIDATOR_REJECTED	true	error	FAILED	true	true	1.0.0	Independent validation failed	run_validator_rejected
+run	reason	KERNEL_NOT_VERIFIED	true	error	FAILED	true	true	1.0.0	Required scientific phase is not verified	run_kernel_blocked
+topology_objective	status	OBJECTIVE_CERTIFIED	false	info	.	false	false	1.0.0	Minimum hidden objective is certified	topology_objective_certified
+topology_objective	status	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	warning	.	true	true	1.0.0	A dependency required to certify the objective is unavailable	topology_objective_dependency
+topology_objective	status	ABSTAIN_KERNEL_NOT_VERIFIED	true	warning	.	true	true	1.0.0	The required objective kernel is not verified	topology_objective_kernel
+topology_objective	status	ABSTAIN_NOT_IDENTIFIABLE	true	warning	.	true	true	1.0.0	The declared model cannot identify an objective	topology_objective_not_identifiable
+topology_family	status	FAMILY_COMPLETE	false	info	OBJECTIVE_CERTIFIED	false	false	1.0.0	All minimum vertex sets were enumerated	topology_family_complete
+topology_family	status	FAMILY_INCOMPLETE_CAP	true	warning	OBJECTIVE_CERTIFIED	true	true	1.0.0	Enumeration reached the family cap	topology_family_cap
+topology_family	status	FAMILY_INCOMPLETE_DEADLINE	true	warning	OBJECTIVE_CERTIFIED	true	true	1.0.0	Enumeration reached the deadline	topology_family_deadline
+topology_family	status	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	warning	.	true	true	1.0.0	A required exact solver dependency is unavailable	topology_dependency
+topology_family	status	ABSTAIN_KERNEL_NOT_VERIFIED	true	warning	.	true	true	1.0.0	The required exact solver route has not passed its phase gate	topology_kernel_not_verified
+topology_family	status	ABSTAIN_NOT_IDENTIFIABLE	true	warning	.	true	true	1.0.0	Declared model cannot identify a family	topology_not_identifiable
+topology_family	reason	MAX_FAMILY_SIZE_REACHED	true	warning	FAMILY_INCOMPLETE_CAP	true	true	1.0.0	Family cap stopped enumeration	topology_cap_reason
+topology_family	reason	DEADLINE_REACHED	true	warning	FAMILY_INCOMPLETE_DEADLINE	true	true	1.0.0	Deadline stopped enumeration	topology_deadline_reason
+topology_family	reason	HIGHS_NOT_AVAILABLE	true	warning	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	true	1.0.0	Pinned direct HiGHS is unavailable	topology_highs_missing
+topology_family	reason	SOLVER_ROUTE_NOT_VERIFIED	true	warning	ABSTAIN_KERNEL_NOT_VERIFIED	true	true	1.0.0	The input requires a solver route not yet verified for production	topology_route_not_verified
+topology_family	reason	MODEL_NOT_IDENTIFIABLE	true	warning	ABSTAIN_NOT_IDENTIFIABLE	true	true	1.0.0	The declared mutation-state constraints do not identify a family	topology_model_not_identifiable
+topology_family	reason	NONE	false	info	FAMILY_COMPLETE	false	false	1.0.0	Complete family has no failure reason	topology_reason_none
+model	status	UNRESOLVED_NOT_IMPLEMENTED	true	warning	.	true	true	1.0.0	Declared sensitivity model is not implemented	model_not_implemented
+m1	status	EVALUABLE	false	info	.	false	false	1.0.0	Site passed read and complete-distance prerequisites	m1_evaluable
+m1	status	INSUFFICIENT_ALT_READS	true	info	.	true	true	1.0.0	Fewer than six joined focal ALT reads	m1_insufficient_alt
+m1	status	INCOMPLETE_DISTANCE_BELOW_MINIMUM	true	info	.	true	true	1.0.0	Fewer than six reads remain after complete-distance peel	m1_incomplete_distance
+m1	reason	INSUFFICIENT_FOCAL_ALT_READS	true	info	INSUFFICIENT_ALT_READS	true	true	1.0.0	Fewer than six focal ALT reads were available	m1_reason_alt
+m1	reason	INSUFFICIENT_MATRIX_JOINED_FOCAL_ALT_READS	true	info	INSUFFICIENT_ALT_READS	true	true	1.0.0	Fewer than six ALT reads joined the frozen methylation matrix	m1_reason_matrix
+m1	reason	INCOMPLETE_DISTANCE_BELOW_MINIMUM	true	info	INCOMPLETE_DISTANCE_BELOW_MINIMUM	true	true	1.0.0	Complete-distance peel left fewer than six reads	m1_reason_distance
+m1	reason	INSUFFICIENT_VALID_NULL	true	warning	EVALUABLE	true	true	1.0.0	Fewer than 32 of 40 requested null replicates were valid	m1_reason_null
+m1_axis	status	NOT_RUN_UNSTABLE	false	info	.	false	false	1.0.0	Axis is intentionally not evaluated before the stable gate	m1_axis_not_run
+m1_axis	status	PASS	false	info	.	false	false	1.0.0	Measured axis passes the frozen confounding gate	m1_axis_pass
+m1_axis	status	FAIL	false	info	.	true	false	1.0.0	Measured axis fails the frozen confounding gate	m1_axis_fail
+m1_axis	status	INDETERMINATE	false	warning	.	true	false	1.0.0	Axis evidence cannot identify pass or fail	m1_axis_indeterminate
+m2	status	PASS	false	info	.	false	false	1.0.0	All measured axes are determinate with no aligned confound	m2_pass
+m2	status	FAIL	false	info	.	true	false	1.0.0	At least one determinate confounding gate fails	m2_fail
+m2	status	NOT_EVALUABLE	true	warning	.	true	true	1.0.0	Eligibility cannot be determined under the frozen grid	m2_not_evaluable
+m2	status	NOT_RUN	true	info	.	true	true	1.0.0	M1 stable gate did not authorize M2	m2_not_run
+m2	reason	M1_NOT_FLAGGED	true	info	NOT_RUN	true	true	1.0.0	M1 stable gate did not pass	m2_reason_m1
+m2	reason	ALL_MEASURED_AXES_DETERMINATE_NO_ALIGNED_CONFOUND	false	info	PASS	false	false	1.0.0	All frozen eligibility axes pass	m2_reason_pass
+m2	reason	HP_AXIS_CONFOUND	false	info	FAIL	true	false	1.0.0	A determinate HP axis is aligned with M1 grouping	m2_reason_hp
+m2	reason	TECHNICAL_AXIS_CONFOUND	false	info	FAIL	true	false	1.0.0	A determinate technical axis is aligned with M1 grouping	m2_reason_technical
+m2	reason	NOT_PHASE_ANCHORED_ROBUST	false	info	FAIL	true	false	1.0.0	Determinable evidence does not meet phase-anchored robustness	m2_reason_robust
+m2	reason	GROUP_COUNT_EXCEEDS_PLANNING_MODEL_MAXIMUM	true	warning	NOT_EVALUABLE	true	true	1.0.0	Group count exceeds the frozen maximum of ten	m2_reason_group_gt10
+m2	reason	AXIS_INDETERMINATE	true	warning	NOT_EVALUABLE	true	true	1.0.0	At least one required axis is missing low-power or otherwise indeterminate	m2_reason_axis
+endpoint_a	status	EXACT_IDENTIFIABLE	false	info	.	false	false	1.0.0	Fixed-margin state space is at most 250000 and exact p-value is available	endpoint_a_exact
+endpoint_a	status	NOT_IDENTIFIABLE_STATE_SPACE_LIMIT	true	warning	.	true	true	1.0.0	Fixed-margin state space exceeds 250000; no asymptotic fallback	endpoint_a_state_limit
+endpoint_a	status	NOT_IDENTIFIABLE_ENDPOINT_A_NOT_TESTABLE	true	info	.	true	true	1.0.0	Depth or margin prerequisite does not pass	endpoint_a_not_testable
+callability	status	PASS_ALL_CORE_READS_CALLABLE	false	info	.	false	false	1.0.0	All core reads are callable	callability_all
+callability	status	PASS_NO_STRONG_DIFFERENTIAL_CALLABILITY_DETECTED	false	info	.	false	false	1.0.0	No strong differential callability is detected	callability_pass
+callability	status	FAIL_DIFFERENTIAL_CALLABILITY_SIGNAL	false	warning	.	true	false	1.0.0	Differential callability gate fails	callability_fail
+callability	status	NOT_IDENTIFIABLE_DIFFERENTIAL_CALLABILITY	true	warning	.	true	true	1.0.0	Differential callability test is not identifiable	callability_not_identifiable
+callability	status	NOT_IDENTIFIABLE_MISSING_CALLABILITY_STATISTIC	true	warning	.	true	true	1.0.0	Required callability statistic is absent	callability_missing
+endpoint_b	status	FOCAL_ANCESTOR_COMPATIBLE_UNDER_FIXED_ERROR_MODEL	false	info	.	false	false	1.0.0	Observed states are compatible with the declared focal-first relation model	endpoint_b_focal
+endpoint_b	status	PARTNER_ANCESTOR_COMPATIBLE_UNDER_FIXED_ERROR_MODEL	false	info	.	false	false	1.0.0	Observed states are compatible with the declared partner-first relation model	endpoint_b_partner
+endpoint_b	status	BRANCHING_COMPATIBLE_UNDER_FIXED_ERROR_MODEL	false	info	.	false	false	1.0.0	Observed states are compatible with the declared branching relation model	endpoint_b_branching
+endpoint_b	status	MULTIPLE_MUTATION_ORDER_MODELS_COMPATIBLE_UNDER_FIXED_ERROR_MODEL	false	info	.	false	false	1.0.0	More than one declared relation model remains compatible	endpoint_b_multiple
+endpoint_b	status	INCOMPATIBLE_OR_COMPLEX_UNDER_FIXED_ERROR_MODEL	false	info	.	true	false	1.0.0	Four-state evidence violates all declared simple compatibility models	endpoint_b_incompatible
+endpoint_b	status	NOT_IDENTIFIABLE_NO_FOCAL_REF	true	info	.	true	true	1.0.0	No focal REF observation is available	endpoint_b_no_ref
+endpoint_b	status	NOT_IDENTIFIABLE_INSUFFICIENT_FOUR_STATE_DEPTH	true	info	.	true	true	1.0.0	Four-state depth is insufficient	endpoint_b_insufficient
+endpoint_b	status	NOT_IDENTIFIABLE_FIXED_ERROR_CEILING	true	info	.	true	true	1.0.0	Fixed-error relation evidence is too imprecise	endpoint_b_error_not_identifiable
+fixed_error_gate	status	COMPATIBLE_WITH_FIXED_ERROR_CEILING	false	info	.	false	false	1.0.0	Bonferroni-adjusted upper bound is at most the fixed error ceiling	fixed_error_compatible
+fixed_error_gate	status	VIOLATES_FIXED_ERROR_CEILING	false	info	.	true	false	1.0.0	Exact one-sided test rejects the fixed error ceiling	fixed_error_violates
+fixed_error_gate	status	NOT_IDENTIFIABLE_LOW_PRECISION	true	info	.	true	true	1.0.0	Precision is insufficient to classify against the fixed error ceiling	fixed_error_low_precision
+fixed_error_gate	status	NOT_IDENTIFIABLE_NO_DENOMINATOR	true	info	.	true	true	1.0.0	Relation-specific denominator is zero	fixed_error_no_denominator
+conditional	status	PERMUTABLE	false	info	.	false	false	1.0.0	At least one informative exchangeable stratum supports the requested permutations	conditional_permutable
+conditional	status	NOT_IDENTIFIABLE_DEGENERATE_TABLE	true	info	.	true	true	1.0.0	Group by category table is degenerate	conditional_degenerate
+conditional	status	NOT_IDENTIFIABLE_NONEXCHANGEABLE	true	info	.	true	true	1.0.0	No informative exchangeable stratum exists	conditional_nonexchangeable
+conditional	status	NOT_RUN_NOT_EXACT_BY_DISCOVERY	true	info	.	true	true	1.0.0	Conditional sensitivity is not run before global BY discovery	conditional_not_run
+joint_signature	status	PASS	false	info	.	false	false	1.0.0	At most three spaced markers pass on one complete-read set	joint_pass
+joint_signature	status	NOT_IDENTIFIABLE_JOINT_SIGNATURE_NOT_TESTABLE	true	info	.	true	true	1.0.0	Joint signature prerequisites do not pass	joint_not_testable

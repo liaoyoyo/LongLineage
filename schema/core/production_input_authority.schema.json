@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/production_input_authority-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "profile_id",
+    "source_closeout",
+    "dataset_order",
+    "datasets",
+    "constraints"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.production_input_authority"},
+    "schema_version": {"const": "1.0.0"},
+    "profile_id": {"const": "RAW_ALL_PRODUCTION_V2_7_DATASET"},
+    "source_closeout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_name",
+        "schema_version",
+        "size_bytes",
+        "sha256",
+        "dataset_count",
+        "all_pass",
+        "total_mapped_alignments"
+      ],
+      "properties": {
+        "schema_name": {"const": "intersubmod.longphase_raw_all_receipt_closeout"},
+        "schema_version": {"const": "1.0.0"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "dataset_count": {"const": 7},
+        "all_pass": {"const": true},
+        "total_mapped_alignments": {"const": 164253537}
+      }
+    },
+    "dataset_order": {
+      "const": [
+        "HCC1395",
+        "HCC1395_DORADO",
+        "COLO829",
+        "H1437",
+        "H2009",
+        "HCC1937",
+        "HCC1954"
+      ]
+    },
+    "datasets": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/dataset"}
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "latest_tag_join",
+        "tagged_bam_output_allowed",
+        "production_requires_exact_dataset_set",
+        "private_source_paths_stored"
+      ],
+      "properties": {
+        "latest_tag_join": {"const": "EXACT_PROJECTION_NO_FALLBACK"},
+        "tagged_bam_output_allowed": {"const": false},
+        "production_requires_exact_dataset_set": {"const": true},
+        "private_source_paths_stored": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "locked_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["size_bytes", "sha256"],
+      "properties": {
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "dataset_order",
+        "source_receipt_sha256",
+        "mapped_alignment_count",
+        "persisted_tagged_bam",
+        "latest_hp_ps_sidecar",
+        "latest_hp_ps_sidecar_index",
+        "pass_biallelic_ssnv_vcf",
+        "pass_biallelic_ssnv_vcf_index"
+      ],
+      "properties": {
+        "dataset_id": {"type": "string", "minLength": 1},
+        "dataset_order": {"type": "integer", "minimum": 0, "maximum": 6},
+        "source_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "mapped_alignment_count": {"type": "integer", "minimum": 1},
+        "persisted_tagged_bam": {"const": false},
+        "latest_hp_ps_sidecar": {"$ref": "#/$defs/locked_artifact"},
+        "latest_hp_ps_sidecar_index": {"$ref": "#/$defs/locked_artifact"},
+        "pass_biallelic_ssnv_vcf": {"$ref": "#/$defs/locked_artifact"},
+        "pass_biallelic_ssnv_vcf_index": {"$ref": "#/$defs/locked_artifact"}
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "dataset_id and dataset_order exactly match dataset_order at each array position",
+    "mapped_alignment_count sums to source_closeout.total_mapped_alignments",
+    "production manifests match all four locked sidecar/VCF role identities exactly",
+    "raw BAM, BAM index, reference and FAI remain independently full-SHA-locked by each production manifest"
+  ]
+}

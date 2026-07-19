@@ -1,0 +1,47 @@
+{
+  "schema_name": "longlineage.query_response",
+  "schema_version": "1.0.0",
+  "run_id": "synthetic-query-run",
+  "run_state": "VALIDATED_FROZEN",
+  "artifact_id": "m1_sites",
+  "artifact_schema": "longlineage.m1_sites",
+  "artifact_schema_version": "1.0.0",
+  "normalized_filter": [
+    {
+      "operator": "eq",
+      "field": "site_order",
+      "value": 7
+    }
+  ],
+  "projected_fields": [
+    "site_order",
+    "analysis_status"
+  ],
+  "query_plan": {
+    "access_method": "SITE_INDEX_EXACT",
+    "allow_scan": false,
+    "index_used": true,
+    "scan_budget_rows": null,
+    "artifact_logical_rows": 10
+  },
+  "matched_rows": 1,
+  "returned_rows": 1,
+  "truncated": false,
+  "scan_rows": 1,
+  "scan_complete": true,
+  "artifact_physical_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "artifact_semantic_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "index_physical_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "run_receipt_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "producer_receipt_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "validation_receipt_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+  "checksums_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+  "schema_catalog_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "query_executable_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "records": [
+    {
+      "site_order": 7,
+      "analysis_status": "EVALUABLE"
+    }
+  ]
+}

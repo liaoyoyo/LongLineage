@@ -1,0 +1,6 @@
+{
+  "fixture_id": "malformed_mm_ml",
+  "gate_id": "IO_MM_ML",
+  "expected_rejection": "MM/ML tags violate their frozen typed parsing contract.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/artifact_record-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_id",
+    "role",
+    "relative_path",
+    "schema_name",
+    "schema_version",
+    "format",
+    "size_bytes",
+    "physical_sha256",
+    "logical_rows",
+    "semantic_sha256",
+    "index",
+    "sensitivity",
+    "transform_id",
+    "producer_executable_sha256",
+    "inputs",
+    "primary_key_first",
+    "primary_key_last"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]+$"
+    },
+    "role": {
+      "type": "string"
+    },
+    "relative_path": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\./).+$"
+    },
+    "schema_name": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "format": {
+      "enum": [
+        "JSON",
+        "TSV_BGZF",
+        "JSONL_BGZF",
+        "LLM_BGZF",
+        "TSV",
+        "SHA256SUM"
+      ]
+    },
+    "size_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "physical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "logical_rows": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "semantic_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "index": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/index_binding"}
+      ]
+    },
+    "sensitivity": {
+      "enum": [
+        "SYNTHETIC_PUBLIC",
+        "REAL_RESTRICTED",
+        "AGGREGATE_SANITIZED"
+      ]
+    },
+    "transform_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]+$"
+    },
+    "producer_executable_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "inputs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/input_binding"
+      }
+    },
+    "primary_key_first": {
+      "type": ["array", "null"],
+      "items": {"type": ["string", "integer"]}
+    },
+    "primary_key_last": {
+      "type": ["array", "null"],
+      "items": {"type": ["string", "integer"]}
+    }
+  },
+  "$defs": {
+    "index_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relative_path",
+        "schema_name",
+        "schema_version",
+        "size_bytes",
+        "physical_sha256",
+        "logical_rows",
+        "semantic_sha256"
+      ],
+      "properties": {
+        "relative_path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*\\.\\./).+$"
+        },
+        "schema_name": {
+          "const": "longlineage.site_index"
+        },
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "physical_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "logical_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "input_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_kind", "source_id", "digest_kind", "sha256"],
+      "properties": {
+        "source_kind": {
+          "enum": ["RUN_ARTIFACT", "MANIFEST_INPUT", "CONTRACT"]
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]+$"
+        },
+        "digest_kind": {
+          "enum": ["SEMANTIC_SHA256", "PHYSICAL_SHA256"]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "index is non-null exactly when the schema catalog declares an index path and that path matches",
+    "RUN_ARTIFACT inputs use SEMANTIC_SHA256 and identify an artifact in the same run",
+    "MANIFEST_INPUT and CONTRACT inputs use PHYSICAL_SHA256 and identify a bound manifest role or contract",
+    "input bindings are unique by source_kind and source_id"
+  ]
+}

@@ -1,0 +1,7 @@
+dimension	code	rank	description
+implementation	PLANNED	0	Target contract is declared but no target implementation exists
+implementation	SKELETON	1	A present target is incomplete and cannot claim verification
+implementation	IMPLEMENTED	2	Declared target behavior is implemented but verification is a separate axis
+verification	NOT_VERIFIED	0	No stable contract or parity evidence is bound
+verification	CONTRACT_VERIFIED	1	Contract-level tests pass and a stable evidence gate is bound
+verification	PARITY_VERIFIED	2	Frozen scientific parity vectors pass and a stable evidence gate is bound

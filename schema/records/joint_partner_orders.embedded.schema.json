@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/joint_partner_orders-1.0.0.json",
+  "title": "LongLineage joint signature partner-order embedded value",
+  "description": "One to three frozen partner_site_order values in joint-signature selection order.",
+  "type": "array",
+  "minItems": 1,
+  "maxItems": 3,
+  "uniqueItems": true,
+  "items": {
+    "type": "integer",
+    "minimum": 0
+  }
+}

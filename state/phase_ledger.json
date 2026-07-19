@@ -1,0 +1,168 @@
+{
+  "schema_name": "longlineage.phase_ledger",
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-19T06:51:28+08:00",
+  "phases": [
+    {
+      "id": "P0",
+      "name": "authority_and_provenance",
+      "status": "IN_PROGRESS",
+      "predecessors": [],
+      "evidence": [
+        {
+          "role": "CONTRACT",
+          "path": "oracle/authority_manifest.json",
+          "sha256": null,
+          "command": null,
+          "exit_code": null
+        },
+        {
+          "role": "CONTRACT",
+          "path": "provenance/source_to_target_manifest.json",
+          "sha256": null,
+          "command": null,
+          "exit_code": null
+        }
+      ],
+      "blockers": [
+        "PRIVATE_REMOTE_NOT_YET_VERIFIED"
+      ]
+    },
+    {
+      "id": "P1",
+      "name": "typed_io_and_preflight",
+      "status": "IN_PROGRESS",
+      "predecessors": [
+        "P0"
+      ],
+      "evidence": [],
+      "blockers": []
+    },
+    {
+      "id": "P2",
+      "name": "reader_threading_and_packed_writer",
+      "status": "IN_PROGRESS",
+      "predecessors": [
+        "P1"
+      ],
+      "evidence": [
+        {
+          "role": "REPORT",
+          "path": "docs/audits/20260719_runtime_solver_audit.md",
+          "sha256": null,
+          "command": null,
+          "exit_code": null
+        }
+      ],
+      "blockers": [
+        "BLOCK_READER_NOT_IMPLEMENTED",
+        "STREAMING_REORDER_SINK_NOT_BYTE_BOUNDED",
+        "WORKER_COUNT_MATRIX_1_2_4_24_40_NOT_REPLAYED"
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "m1_parity",
+      "status": "BLOCKED",
+      "predecessors": [
+        "P2"
+      ],
+      "evidence": [],
+      "blockers": [
+        "M1_LOGICAL_DIGEST_AND_RNG_VECTORS_NOT_FROZEN",
+        "HP_FAMILY_VERSIONED_MAPPING_REGISTRY_NOT_FROZEN"
+      ]
+    },
+    {
+      "id": "P4",
+      "name": "m2_and_cooccurrence_parity",
+      "status": "BLOCKED",
+      "predecessors": [
+        "P3"
+      ],
+      "evidence": [],
+      "blockers": [
+        "FORMAL_FULL_COOCCURRENCE_AUTHORITY_ABSENT",
+        "ENDPOINT_B_O_X_CALLABILITY_PRECEDENCE_VECTORS_NOT_FROZEN",
+        "HP_FAMILY_VERSIONED_MAPPING_REGISTRY_NOT_FROZEN"
+      ]
+    },
+    {
+      "id": "P5",
+      "name": "topology_parity",
+      "status": "BLOCKED",
+      "predecessors": [
+        "P4"
+      ],
+      "evidence": [],
+      "blockers": [
+        "CURRENT_REAL_DUAL_PILOT_ABSENT",
+        "DIRECT_HIGHS_DEPENDENCY_UNAVAILABLE",
+        "TOPOLOGY_WINNER_TIE_PARITY_VECTORS_NOT_FROZEN",
+        "TOPOLOGY_UNIT_EVIDENCE_MEMBERSHIP_VECTORS_NOT_FROZEN"
+      ]
+    },
+    {
+      "id": "P6",
+      "name": "independent_validator_export_and_query",
+      "status": "IN_PROGRESS",
+      "predecessors": [
+        "P5"
+      ],
+      "evidence": [
+        {
+          "role": "CONTRACT",
+          "path": "schema/core/validation_receipt.schema.json",
+          "sha256": null,
+          "command": null,
+          "exit_code": null
+        },
+        {
+          "role": "CONTRACT",
+          "path": "schema/core/query_response.schema.json",
+          "sha256": null,
+          "command": null,
+          "exit_code": null
+        },
+        {
+          "role": "REPORT",
+          "path": "docs/data/QUERY_GUIDE.md",
+          "sha256": null,
+          "command": null,
+          "exit_code": null
+        }
+      ],
+      "blockers": [
+        "INDEPENDENT_ARTIFACT_REPLAY_NOT_IMPLEMENTED",
+        "VALIDATOR_FAULT_INJECTION_NOT_IMPLEMENTED",
+        "QUERY_EXECUTABLE_AST_AND_INDEX_BINDING_NOT_IMPLEMENTED",
+        "LEGACY_LOGICAL_ROW_PARITY_NOT_IMPLEMENTED"
+      ]
+    },
+    {
+      "id": "P7",
+      "name": "seven_dataset_full_validation",
+      "status": "BLOCKED",
+      "predecessors": [
+        "P6"
+      ],
+      "evidence": [],
+      "blockers": [
+        "P3_P4_P5_NOT_VERIFIED"
+      ]
+    },
+    {
+      "id": "P8",
+      "name": "presentation_and_release_candidate",
+      "status": "BLOCKED",
+      "predecessors": [
+        "P7"
+      ],
+      "evidence": [],
+      "blockers": [
+        "P7_NOT_VERIFIED",
+        "LICENSE_AUDIT_PENDING"
+      ]
+    }
+  ]
+}

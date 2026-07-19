@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/governance/phase_ledger-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_name", "schema_version", "updated_at", "phases"],
+  "properties": {
+    "schema_name": {"const": "longlineage.phase_ledger"},
+    "schema_version": {"const": "1.0.0"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "phases": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {"$ref": "#/$defs/phase"}
+    }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "status",
+        "predecessors",
+        "evidence",
+        "blockers"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^P[0-8]$"},
+        "name": {"type": "string", "pattern": "^[a-z][a-z0-9_]+$"},
+        "status": {
+          "enum": ["NOT_STARTED", "IN_PROGRESS", "VERIFIED", "BLOCKED", "FAILED"]
+        },
+        "predecessors": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^P[0-8]$"}
+        },
+        "evidence": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/evidence"}
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9_]+$"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "VERIFIED"}}},
+          "then": {
+            "properties": {
+              "evidence": {
+                "minItems": 1,
+                "items": {"$ref": "#/$defs/verified_evidence"}
+              },
+              "blockers": {"maxItems": 0}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"status": {"enum": ["BLOCKED", "FAILED"]}}
+          },
+          "then": {"properties": {"blockers": {"minItems": 1}}}
+        }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "sha256", "command", "exit_code"],
+      "properties": {
+        "role": {
+          "enum": ["CONTRACT", "AUDIT", "TEST_LOG", "RECEIPT", "REPORT"]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "command": {"type": ["string", "null"], "minLength": 1},
+        "exit_code": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 255
+        }
+      }
+    },
+    "verified_evidence": {
+      "allOf": [
+        {"$ref": "#/$defs/evidence"},
+        {
+          "properties": {
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "command": {"type": "string", "minLength": 1},
+            "exit_code": {"const": 0}
+          }
+        }
+      ]
+    }
+  },
+  "x-longlineage-invariants": [
+    "phases occur exactly once and in P0 through P8 order",
+    "P0 has no predecessor; Pn has the sole predecessor P(n-1)",
+    "a VERIFIED phase requires every predecessor to be VERIFIED",
+    "every evidence path exists beneath the repository root",
+    "every non-null evidence digest is recomputed from its path",
+    "command and exit_code are both null or both non-null",
+    "ROADMAP.md and docs/CURRENT_FOCUS.md phase mirrors exactly match this ledger"
+  ]
+}

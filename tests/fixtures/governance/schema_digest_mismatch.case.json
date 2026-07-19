@@ -1,0 +1,6 @@
+{
+  "fixture_id": "schema_digest_mismatch",
+  "gate_id": "CONTRACT_SCHEMA_DIGEST_CLOSURE",
+  "expected_rejection": "A bound schema digest differs from the physical schema bytes.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

@@ -1,0 +1,6 @@
+{
+  "fixture_id": "external_ref_unknown_id",
+  "gate_id": "CONTRACT_SCHEMA_IDS",
+  "expected_rejection": "A schema reference resolves to no registered offline schema identifier.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

@@ -1,0 +1,6 @@
+{
+  "fixture_id": "governance_policy_unknown_field",
+  "gate_id": "GOV_POLICY",
+  "expected_rejection": "The governance policy contains an unknown closed-world field.",
+  "evidence_semantics": "DECLARED_NEGATIVE_INPUT_NOT_EXECUTION_EVIDENCE"
+}

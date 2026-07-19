@@ -1,0 +1,21 @@
+type_name	physical_encoding	constraints	null_rule	unit_or_semantics
+uint8	unsigned decimal integer	0..255	never	integer
+uint16	unsigned decimal integer	0..65535	never	integer
+uint32	unsigned decimal integer	0..4294967295	never	integer
+uint64	unsigned decimal integer	0..18446744073709551615	never	integer
+int64	signed decimal integer	-9223372036854775808..9223372036854775807	never	integer
+float64	LONGLINEAGE_SCI17 decimal	IEEE-754 binary64 finite and non-negative-zero only	schema-declared	one digit dot sixteen digits e signed three-digit exponent
+bool	ASCII true or false	exact lowercase	never	boolean
+string	UTF-8	no TAB LF NUL in TSV	schema-declared	text
+Position1	unsigned decimal integer	>=1	never	1-based genomic base
+Interval0	two uint64 fields	start0 < end0	never	0-based half-open interval
+base	ASCII uppercase base	A C G or T	never	nucleotide
+sha256	ASCII lowercase hex	exactly 64 hex digits	schema-declared	SHA-256 digest
+opaque_sha256	ASCII lowercase hex	exactly 64 hex digits	never	SHA-256 opaque identifier
+hex16	ASCII lowercase hex	exactly 16 hex digits	never	8-byte digest
+canonical_json	JSON text	no duplicate keys or insignificant whitespace	schema-declared	schema-order canonical JSON
+status_code	ASCII identifier	must exist as kind=status in status_reason_codes.tsv	never	typed status vocabulary
+reason_code	ASCII identifier	must exist as kind=reason in status_reason_codes.tsv	never	typed reason vocabulary
+axis_status	ASCII identifier	NOT_RUN_UNSTABLE PASS FAIL or INDETERMINATE	never	M1 axis decision
+hp_state	ASCII identifier	0 1 2 3 4 1-1 2-1 1-2 or 2-2	never	normalized latest LongPhase-S HP; upstream dot is emitted as 0
+enum:<A|B>	ASCII identifier	exactly one schema-declared token	never	closed vocabulary

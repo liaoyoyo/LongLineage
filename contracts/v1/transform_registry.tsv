@@ -1,0 +1,13 @@
+transform_id	executable	trust_domain	implementation_status	verification_status	evidence_gate_id	description
+raw_alignment_to_site_reads	longlineage	production	SKELETON	NOT_VERIFIED	.	Project raw BAM alignments once per block
+site_reads_to_methyl_calls	longlineage	production	SKELETON	NOT_VERIFIED	.	Parse frozen C+m MM/ML calls once per read
+methyl_calls_to_m1	longlineage	production	PLANNED	NOT_VERIFIED	.	Run truth-blind M1
+m1_to_cooccurrence	longlineage	production	PLANNED	NOT_VERIFIED	.	Run M2 eligibility and sSNV co-occurrence
+cooccurrence_to_topology	longlineage	production	SKELETON	NOT_VERIFIED	.	Solve mutation-state family and parent mapping
+run_artifacts_to_summary	longlineage	production	PLANNED	NOT_VERIFIED	.	Emit declared-grain summary counts from frozen native artifacts
+scientific_artifacts_to_lineage	longlineage	production	PLANNED	NOT_VERIFIED	.	Emit the acyclic per-artifact provenance graph
+scientific_artifacts_to_catalog	longlineage	production	PLANNED	NOT_VERIFIED	.	Emit immutable scientific artifact records without self or receipt membership
+artifacts_to_semantic_digests	longlineage	production	PLANNED	NOT_VERIFIED	.	Emit logical digests for earlier scientific and metadata artifacts without self membership
+native_to_legacy	longlineage-export-legacy	export	PLANNED	NOT_VERIFIED	.	Reformat validated native records without science
+frozen_to_evaluation	longlineage-evaluate	evaluation	PLANNED	NOT_VERIFIED	.	Posthoc truth-aware benchmark
+chart_ready_to_html	presentation/build_report.py	presentation	PLANNED	NOT_VERIFIED	.	Map C++ chart-ready rows to standalone HTML

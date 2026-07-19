@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/summary-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "scope",
+    "counts",
+    "phase_status"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.summary"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_type", "completeness", "dataset_count", "dataset_ids", "site_population"],
+      "properties": {
+        "task_type": {"enum": ["A", "B", "C", "D", "E", "F"]},
+        "completeness": {"enum": ["PARTIAL", "FULL"]},
+        "dataset_count": {"type": "integer", "minimum": 1},
+        "dataset_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "site_population": {"type": "string", "minLength": 1}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "site_keys",
+        "site_keys_missing",
+        "site_keys_extra",
+        "site_keys_duplicate",
+        "m1_evaluable",
+        "m1_insufficient_alt_reads",
+        "m1_incomplete_distance",
+        "m1_stable_assignments",
+        "latest_tag_exact_joins",
+        "latest_tag_missing",
+        "latest_tag_conflict",
+        "latest_tag_multimatch",
+        "m2_eligible",
+        "m2_evaluable_ineligible",
+        "m2_axis_indeterminate",
+        "m2_group_count_gt10",
+        "raw_expected",
+        "raw_matched",
+        "raw_rg_only_duplicate_occurrences",
+        "topology_primary_hp_units",
+        "topology_regions",
+        "topology_fully_complete_regions",
+        "topology_incomplete_regions",
+        "topology_incomplete_units_with_winner"
+      ],
+      "properties": {
+        "site_keys": {"$ref": "#/$defs/count"},
+        "site_keys_missing": {"$ref": "#/$defs/count"},
+        "site_keys_extra": {"$ref": "#/$defs/count"},
+        "site_keys_duplicate": {"$ref": "#/$defs/count"},
+        "m1_evaluable": {"$ref": "#/$defs/count"},
+        "m1_insufficient_alt_reads": {"$ref": "#/$defs/count"},
+        "m1_incomplete_distance": {"$ref": "#/$defs/count"},
+        "m1_stable_assignments": {"$ref": "#/$defs/count"},
+        "latest_tag_exact_joins": {"$ref": "#/$defs/count"},
+        "latest_tag_missing": {"$ref": "#/$defs/count"},
+        "latest_tag_conflict": {"$ref": "#/$defs/count"},
+        "latest_tag_multimatch": {"$ref": "#/$defs/count"},
+        "m2_eligible": {"$ref": "#/$defs/count"},
+        "m2_evaluable_ineligible": {"$ref": "#/$defs/count"},
+        "m2_axis_indeterminate": {"$ref": "#/$defs/count"},
+        "m2_group_count_gt10": {"$ref": "#/$defs/count"},
+        "raw_expected": {"$ref": "#/$defs/count"},
+        "raw_matched": {"$ref": "#/$defs/count"},
+        "raw_rg_only_duplicate_occurrences": {"$ref": "#/$defs/count"},
+        "topology_primary_hp_units": {"$ref": "#/$defs/count"},
+        "topology_regions": {"$ref": "#/$defs/count"},
+        "topology_fully_complete_regions": {"$ref": "#/$defs/count"},
+        "topology_incomplete_regions": {"$ref": "#/$defs/count"},
+        "topology_incomplete_units_with_winner": {"$ref": "#/$defs/count"}
+      }
+    },
+    "phase_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P0", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"],
+      "properties": {
+        "P0": {"$ref": "#/$defs/phase"},
+        "P1": {"$ref": "#/$defs/phase"},
+        "P2": {"$ref": "#/$defs/phase"},
+        "P3": {"$ref": "#/$defs/phase"},
+        "P4": {"$ref": "#/$defs/phase"},
+        "P5": {"$ref": "#/$defs/phase"},
+        "P6": {"$ref": "#/$defs/phase"},
+        "P7": {"$ref": "#/$defs/phase"},
+        "P8": {"$ref": "#/$defs/phase"}
+      }
+    }
+  },
+  "$defs": {
+    "count": {"type": "integer", "minimum": 0},
+    "phase": {"enum": ["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "FAILED", "VERIFIED"]}
+  },
+  "x-longlineage-count-grains": {
+    "site_keys": "frozen dataset plus VCF-record site keys",
+    "m1_evaluable": "focal site keys",
+    "m1_insufficient_alt_reads": "focal site keys",
+    "m1_incomplete_distance": "focal site keys",
+    "m1_stable_assignments": "focal site keys with one stable assignment record, not read-label rows",
+    "latest_tag_exact_joins": "mapped alignment occurrences after permitted RG-only duplication",
+    "raw_expected": "canonical raw recovery occurrences before RG-only duplicate expansion",
+    "raw_rg_only_duplicate_occurrences": "additional alignment occurrences",
+    "raw_matched": "all matched alignment occurrences including RG-only duplicates",
+    "m2_eligible": "mutually exclusive stable focal site keys",
+    "m2_evaluable_ineligible": "mutually exclusive stable focal site keys",
+    "m2_axis_indeterminate": "mutually exclusive stable focal site keys",
+    "m2_group_count_gt10": "mutually exclusive stable focal site keys",
+    "topology_primary_hp_units": "HP-lineage analysis units",
+    "topology_regions": "genomic analysis regions",
+    "topology_fully_complete_regions": "genomic analysis regions",
+    "topology_incomplete_regions": "genomic analysis regions",
+    "topology_incomplete_units_with_winner": "HP-lineage analysis units"
+  },
+  "x-longlineage-invariants": [
+    "site_keys = m1_evaluable + m1_insufficient_alt_reads + m1_incomplete_distance",
+    "site_keys_missing = site_keys_extra = site_keys_duplicate = 0 for a FULL validated run",
+    "latest_tag_missing = latest_tag_conflict = latest_tag_multimatch = 0",
+    "m2 stable-site census is mutually exclusive and conserved",
+    "raw_expected + raw_rg_only_duplicate_occurrences = raw_matched",
+    "topology_fully_complete_regions + topology_incomplete_regions = topology_regions",
+    "topology_primary_hp_units and topology_regions are distinct grains and must never be added",
+    "topology_incomplete_units_with_winner = 0"
+  ]
+}
