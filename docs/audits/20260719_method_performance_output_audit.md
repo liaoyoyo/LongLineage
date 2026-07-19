@@ -5,7 +5,7 @@
 關聯檔案:
   - LongLineage/docs/development/PERFORMANCE_AND_OUTPUT_POLICY.md
   - LongLineage/state/benchmarks/20260719-bgzf-row-payload-local.json
-  - LongLineage/state/tasks/active/20260719-method-performance-publish-audit.json
+  - LongLineage/state/tasks/archive/20260719-method-performance-publish-audit.json
 -->
 
 # LongLineage Method, Performance and Output Audit
@@ -232,9 +232,22 @@ configured token invalid
 local remote absent
 ```
 
-已啟動官方`gh auth login -h github.com -p https -w` device flow。Token不進repo、
-task、audit或對話；只有`gh auth status`通過後，才可建立/驗證
-`liaoyoyo/LongLineage`為PRIVATE、push branch及建立draft PR。
+完成狀態：
+
+```text
+repository     liaoyoyo/LongLineage
+visibility     PRIVATE
+default branch main
+main SHA       3a789d3c8b384606dfad01ae0227834df01661ff
+P2 SHA         1d986806f4fe1d4c8617bfa7fa2915f9bafd513f
+audit SHA      3ef1f7f18db76f8213c72b2947713a2c73781d6f
+draft PR       https://github.com/liaoyoyo/LongLineage/pull/1
+```
+
+官方device flow完成後，restricted sandbox內的`gh auth status`因網路阻擋誤報
+token invalid；在允許網路的驗證邊界重播後，帳號、`repo`與`workflow`scopes均
+PASS。Token未寫入repo、task、audit或對話。三個遠端branch SHA已用
+`git ls-remote --heads`逐一核對，正式本機repo亦已追蹤audit branch。
 
 ## 9. Release blockers
 

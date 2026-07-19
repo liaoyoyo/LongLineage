@@ -66,7 +66,8 @@ independent source for changing phase state.
 
 ## Active blockers
 
-- Private GitHub remote creation and privacy verification.
+- Draft PR #1 review and gated merge; private visibility and all three uploaded
+  branch SHAs are already verified.
 - A Draft 2020-12-capable JSON Schema validator pinned in the release toolchain.
 - P3 M1 PCG64/RNG/tie parity and a frozen, versioned mapping from normalized
   HP states to HP families. No family grouping may be inferred ad hoc.
@@ -88,8 +89,8 @@ independent source for changing phase state.
 
 ## Next legal actions
 
-1. Create and verify the private GitHub remote without changing visibility to
-   public.
+1. Review draft PR #1 and keep the repository private; merge only after the
+   intended branch scope and required checks are accepted.
 2. Pin a validator that actually implements each schema's declared draft and
    replay the full positive/negative fixture set.
 3. Extend the verified indexed-BAM component into the complete per-worker

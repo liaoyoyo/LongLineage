@@ -197,3 +197,9 @@ Status: in_progress
 - [折衷] Exact compressed output for very large candidate families is not
   invented in this audit. Explicit output remains the contract; compression
   requires a separate ADR, expansion/count oracle and query semantics.
+- GitHub device authentication succeeded. A restricted-network `gh auth status`
+  replay initially misreported the fresh token as invalid; the allowed-network
+  replay passed without exposing credentials. `liaoyoyo/LongLineage` was
+  created PRIVATE, `main`, `feat/p2-block-pipeline` and
+  `docs/method-performance-audit` were SHA-verified after push, and draft PR #1
+  was opened.
