@@ -1,0 +1,551 @@
+{
+  "schema_name": "longlineage.hcc1395_fullspeed_readiness_timing_audit",
+  "schema_version": "1.0.0",
+  "report_id": "20260719-hcc1395-fullspeed-readiness-timing-001",
+  "created_at": "2026-07-19T23:56:16+08:00",
+  "task": {
+    "type": "B_COMPREHENSIVE_VALIDATION",
+    "services_goals": [
+      "LL-G2",
+      "LL-G3",
+      "LL-G4",
+      "LL-G5"
+    ],
+    "scope_statement": "HCC1395 chr1-22 sample-complete readiness audit; partial for the governed seven-dataset corpus",
+    "partial": true,
+    "partial_reason": "The requested timing scope is one dataset, while the current production authority requires exactly seven datasets."
+  },
+  "verdict": {
+    "state": "NO_GO",
+    "impact": "HIGH",
+    "confidence": "HIGH",
+    "headline": "目前不能合法啟動 HCC1395 全流程，也不能量測 production HTML 時間",
+    "summary": "LongLineage production engine、M1、M2/co-occurrence、完整 topology、independent validator、chart-ready bundle 與 HTML builder 尚未完成；同時 <BIG8_INPUT> 未掛載，raw BAM、BAI、reference FASTA/FAI 當下不可讀。",
+    "scientific_output_created": false,
+    "production_run_started": false,
+    "validated_frozen_root_created": false
+  },
+  "claim_ceiling": {
+    "allowed": "可報 current foundation 實測、輸入就緒度與歷史 non-comparable context。",
+    "forbidden": "不可把 synthetic/component、舊 Python pipeline、失敗 run 或跨資料集時間外推成 LongLineage HCC1395 production 總時間；不可把本 HTML 稱為 P8 report。"
+  },
+  "path_aliases": {
+    "<LONG_LINEAGE_REPO>": "The checked-out LongLineage repository root.",
+    "<INTERSUBMOD_REPO>": "The sibling InterSubMod repository root containing historical receipts.",
+    "<BIG7_OUTPUT>": "The external governed output root; the absolute host path is intentionally not stored in Git.",
+    "<BIG8_INPUT>": "The frozen raw-input mount root; the absolute host path is intentionally not stored in Git."
+  },
+  "source_snapshot": {
+    "repo": "<LONG_LINEAGE_REPO>",
+    "branch": "docs/cpp-output-efficiency-validation",
+    "git_commit": "540dba8732e3b626cc16fe2ba023e7b7386a2162",
+    "worktree_at_audit_start": "CLEAN",
+    "longlineage_binary_sha256": "52584a2ec9d55af92adf04e0d97bfe89496430532eedd810f16f67c838562a8e",
+    "validator_binary_sha256": "7a5e92bd676068470c6d285fe18584f2ae837b4a23012433b6f318268b6a6a7b",
+    "release_attestation_sha256": "b0d9db7ee5788e10cd785670f6c2d0922d397e7cc4a215df7b0ab0dcaad258b0",
+    "phase_ledger_sha256": "5d0a82015ad28c53ea1b986f63eff0811ec2f9cda4e6988ec0cf41a81789de44",
+    "production_input_authority_sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557"
+  },
+  "host": {
+    "logical_cpus": 48,
+    "cpu_model": "AMD Opteron 6344",
+    "numa_nodes": 8,
+    "memory_total_display": "503 GiB",
+    "memory_available_display": "約 495 GiB",
+    "swap_display": "8 GiB，使用 0",
+    "big7_free_bytes": 767482445824,
+    "big7_free_display": "714.8 GiB",
+    "big7_usage": "99%",
+    "big8_mount_state": "ABSENT",
+    "active_longlineage_processes": 0
+  },
+  "inputs": [
+    {
+      "role": "raw_bam",
+      "path": "<BIG8_INPUT>/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam",
+      "size_bytes": 292055926761,
+      "size_display": "292.06 GB",
+      "state": "ABSENT_MOUNT_BLOCKER",
+      "authority": "frozen historical manifest"
+    },
+    {
+      "role": "raw_bam_index",
+      "path": "<BIG8_INPUT>/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam.bai",
+      "size_bytes": 119741784,
+      "size_display": "119.74 MB",
+      "state": "ABSENT_MOUNT_BLOCKER",
+      "authority": "frozen historical manifest"
+    },
+    {
+      "role": "reference_fasta",
+      "path": "<BIG8_INPUT>/ref/GRCh38_no_alt_analysis_set.fasta",
+      "size_bytes": 3144230986,
+      "size_display": "3.14 GB",
+      "state": "ABSENT_MOUNT_BLOCKER",
+      "authority": "frozen historical manifest"
+    },
+    {
+      "role": "reference_fai",
+      "path": "<BIG8_INPUT>/ref/GRCh38_no_alt_analysis_set.fasta.fai",
+      "size_bytes": 7804,
+      "size_display": "7.8 KB",
+      "state": "ABSENT_MOUNT_BLOCKER",
+      "authority": "frozen historical manifest"
+    },
+    {
+      "role": "latest_hp_ps_sidecar",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz",
+      "size_bytes": 1433423193,
+      "size_display": "1.43 GB",
+      "state": "PRESENT_SIZE_AUTHORITY_MATCH",
+      "authority": "LongLineage/oracle/production_input_authority.json"
+    },
+    {
+      "role": "latest_hp_ps_sidecar_index",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz.tbi",
+      "size_bytes": 910475,
+      "size_display": "910.5 KB",
+      "state": "PRESENT_SHA256_AUTHORITY_MATCH",
+      "authority": "LongLineage/oracle/production_input_authority.json"
+    },
+    {
+      "role": "pass_biallelic_ssnv_vcf",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz",
+      "size_bytes": 3728864,
+      "size_display": "3.73 MB",
+      "state": "PRESENT_SHA256_AUTHORITY_MATCH",
+      "authority": "LongLineage/oracle/production_input_authority.json"
+    },
+    {
+      "role": "pass_biallelic_ssnv_vcf_index",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz.csi",
+      "size_bytes": 344074,
+      "size_display": "344.1 KB",
+      "state": "PRESENT_SHA256_AUTHORITY_MATCH",
+      "authority": "LongLineage/oracle/production_input_authority.json"
+    }
+  ],
+  "scope_counts": {
+    "vcf_all_contigs_records": 113061,
+    "autosomal_chr1_22_sites": 79687,
+    "chrX_records_excluded": 33371,
+    "chrY_records_excluded": 3,
+    "mapped_alignments": 40859727,
+    "unique_read_identities": 34265113,
+    "exact_duplicate_alignments": 6594614,
+    "sidecar_conflicts": 0
+  },
+  "current_measurements": [
+    {
+      "measurement_id": "CURRENT-INCREMENTAL-BUILD-001",
+      "stage": "C++ incremental build",
+      "classification": "CURRENT_MEASURED_FOUNDATION",
+      "wall_seconds": 0.23,
+      "wall_display": "0.23 秒",
+      "max_rss_kib": 16600,
+      "result": "PASS",
+      "exit_code": 0,
+      "scope": "Already-configured warm incremental build; not a clean build and not scientific runtime.",
+      "command": "/usr/bin/cmake --build build-cpp-output-validation -j4"
+    },
+    {
+      "measurement_id": "CURRENT-CTEST-001",
+      "stage": "C++ foundation CTest",
+      "classification": "CURRENT_MEASURED_FOUNDATION",
+      "wall_seconds": 28.22,
+      "wall_display": "28.22 秒",
+      "max_rss_kib": 27688,
+      "result": "33/33 PASS",
+      "exit_code": 0,
+      "scope": "Synthetic/foundation tests only; does not process HCC1395.",
+      "command": "ctest --test-dir build-cpp-output-validation --output-on-failure"
+    },
+    {
+      "measurement_id": "CURRENT-CLI-GATES-001",
+      "stage": "CLI fail-closed gate suite",
+      "classification": "CURRENT_MEASURED_FOUNDATION",
+      "wall_seconds": 0.34,
+      "wall_display": "0.34 秒",
+      "max_rss_kib": 14104,
+      "result": "Harness PASS; production run correctly rejected with exit 6",
+      "exit_code": 0,
+      "scope": "Negative gate verification only; zero scientific work.",
+      "command": "scripts/testing/test_cli_gates.sh build-cpp-output-validation/bin/longlineage <LONG_LINEAGE_REPO>"
+    },
+    {
+      "measurement_id": "CURRENT-STRICT-RELEASE-GATE-001",
+      "stage": "Strict release gate",
+      "classification": "CURRENT_MEASURED_GATE",
+      "wall_seconds": null,
+      "wall_display": "未列入時間主張",
+      "result": "BLOCKED",
+      "exit_code": 1,
+      "scope": "Foundation checks pass, strict release remains blocked by declared/missing execution evidence.",
+      "command": "scripts/ci/check_release_gate.sh build-cpp-output-validation"
+    },
+    {
+      "measurement_id": "CURRENT-CHECK-ALL-001",
+      "stage": "Repository full foundation gate",
+      "classification": "CURRENT_MEASURED_FOUNDATION",
+      "wall_seconds": 44.58,
+      "wall_display": "44.58 秒",
+      "max_rss_kib": 27692,
+      "result": "FOUNDATION_PASS; 33/33 PASS; no-network PASS",
+      "exit_code": 0,
+      "scope": "Repository foundation and boundary validation; release-phase blockers remain governed.",
+      "command": "scripts/ci/check_all.sh build-cpp-output-validation"
+    },
+    {
+      "measurement_id": "CURRENT-AUDIT-HTML-001",
+      "stage": "本稽核 HTML render",
+      "classification": "PRESENTATION_ONLY_MEASURED",
+      "wall_seconds": 0.07,
+      "wall_display": "0.06–0.07 秒",
+      "max_rss_kib": 13080,
+      "result": "PASS; standalone audit HTML emitted",
+      "exit_code": 0,
+      "scope": "Audit JSON to standalone HTML only; not production P8 and does not read scientific artifacts.",
+      "command": "python3 presentation/build_readiness_report.py --evidence docs/audits/20260719_HCC1395全速執行就緒度與時間稽核_01.json --output docs/audits/20260719_HCC1395全速執行就緒度與時間稽核_01.html"
+    }
+  ],
+  "historical_context": [
+    {
+      "context_id": "LEGACY-HCC1395-EXTRACTION-001",
+      "stage": "舊 InterSubMod C++ read/CpG/Bernoulli extraction",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 7061.9845,
+      "wall_display": "1:57:41.98",
+      "bar_width_percent": 16.4,
+      "scope": "HCC1395 chr1-22, 79,687 sites, 6 threads",
+      "result": "PASS; 79,687 reads files + 79,687 Bernoulli files + 79,687 methylation files",
+      "limitation": "Different program, output model and thread model; it is not a LongLineage timing."
+    },
+    {
+      "context_id": "LEGACY-M1-SIX-DATASET-001",
+      "stage": "舊 Python M1 screen",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 43069,
+      "wall_display": "11:57:49",
+      "bar_width_percent": 100,
+      "scope": "Combined first six datasets, 447,449 sites, 40 workers",
+      "result": "EXECUTION_PASS",
+      "limitation": "HCC1395 time cannot be separated; Python scientific execution is forbidden for new production."
+    },
+    {
+      "context_id": "LEGACY-M2-ATTEMPT6-001",
+      "stage": "舊 Python M2/co-occurrence attempt 6",
+      "classification": "FAILED_NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 14091,
+      "wall_display": "3:54:51",
+      "bar_width_percent": 32.7,
+      "scope": "102,842 selected M1 rows, 40 workers, 999 permutations",
+      "result": "FAILED before publication; no formal result or receipt",
+      "limitation": "Failure time is not completion time and cannot predict the C++ kernel."
+    },
+    {
+      "context_id": "LEGACY-LAYERED-SEVEN-DATASET-001",
+      "stage": "舊 layered reconstruction + verification",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 12616.17,
+      "wall_display": "約 3:30:16",
+      "bar_width_percent": 29.3,
+      "scope": "Seven datasets, chr1-22, four samples in parallel",
+      "result": "7/7 verification PASS",
+      "limitation": "Earlier Python-led method and seven-dataset scope; not current P5 production topology."
+    },
+    {
+      "context_id": "CURRENT-BGZF-COMPONENT-001",
+      "stage": "C++ BGZF row-payload writer",
+      "classification": "COMPONENT_MEASURED",
+      "wall_seconds": 0.8296,
+      "wall_display": "0.8296 秒 / 500,000 synthetic rows",
+      "bar_width_percent": 0.4,
+      "scope": "Synthetic mixed-cache component",
+      "result": "7.93% median wall reduction",
+      "limitation": "production_claim_allowed=false; cannot be extrapolated to HCC1395 or HTML."
+    }
+  ],
+  "pipeline_stages": [
+    {
+      "order": 0,
+      "stage": "Input mount / authority / lock",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "implementation": "Authority contracts exist; real 8-role manifest absent.",
+      "bottleneck": "<BIG8_INPUT> missing; production profile also requires exact seven datasets."
+    },
+    {
+      "order": 1,
+      "stage": "Preflight",
+      "status": "PARTIAL_IMPLEMENTATION",
+      "timing": "NOT_MEASURED_REAL_DATA",
+      "implementation": "C++ typed preflight exists.",
+      "bottleneck": "Complete file SHA-256 and indexed probes are serial; HCC1395-only production profile is illegal."
+    },
+    {
+      "order": 2,
+      "stage": "HTS read / latest-tag join / multi-marker projection",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "implementation": "Synthetic indexed BAM block reader only.",
+      "bottleneck": "Persistent VCF/sidecar/FASTA handles and one-pass CIGAR multi-marker projection are missing."
+    },
+    {
+      "order": 3,
+      "stage": "M1",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "implementation": "No production C++ M1 kernel.",
+      "bottleneck": "PCG64/RNG/logical digest and HP-family mapping vectors are not frozen."
+    },
+    {
+      "order": 4,
+      "stage": "M2 / co-occurrence",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "implementation": "No production C++ M2/co-occurrence kernel.",
+      "bottleneck": "Formal full authority and O/X callability precedence vectors are absent."
+    },
+    {
+      "order": 5,
+      "stage": "Topology objective / family / ranking",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "implementation": "q<=4 exhaustive oracle only; q>4 abstains.",
+      "bottleneck": "Bitset B&B, direct HiGHS parity, complete family and outward-rounded ranking certificates are missing."
+    },
+    {
+      "order": 6,
+      "stage": "Artifact write / index / physical hash",
+      "status": "COMPONENT_ONLY",
+      "timing": "SYNTHETIC_ONLY",
+      "implementation": "BGZF writer component exists; catalog plans 16 artifacts + 8 indexes.",
+      "bottleneck": "No production producer, global physical-memory proof or full performance collector."
+    },
+    {
+      "order": 7,
+      "stage": "Independent validator / atomic freeze",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "implementation": "CLI is an independent target but is a fail-closed stub.",
+      "bottleneck": "Validator always exits 7 and writes no validation receipt."
+    },
+    {
+      "order": 8,
+      "stage": "C++ chart-ready report bundle",
+      "status": "ABSENT",
+      "timing": "UNKNOWN",
+      "implementation": "No artifact, schema or executable exists.",
+      "bottleneck": "Python must not recompute science; C++ must first emit governed chart-ready arrays."
+    },
+    {
+      "order": 9,
+      "stage": "Python HTML render / browser QA",
+      "status": "ABSENT_PRODUCTION_CHAIN",
+      "timing": "UNKNOWN",
+      "implementation": "Only this audit-specific renderer is added; production presentation remains absent.",
+      "bottleneck": "No P8 builder, pinned presentation environment, accessibility or offline QA receipt."
+    }
+  ],
+  "bottlenecks": [
+    {
+      "rank": 1,
+      "severity": "BLOCKER",
+      "title": "流程本身尚未存在",
+      "detail": "The current producer always returns KernelBlocked even after preflight; M1, M2, full topology, validator and report bundle are not release-enabled.",
+      "unblock": "Complete and independently verify P2 through P6 before any full-data timing."
+    },
+    {
+      "rank": 2,
+      "severity": "BLOCKER",
+      "title": "資料 mount 缺失",
+      "detail": "<BIG8_INPUT> is an empty local directory in this session, not the frozen NFS mount.",
+      "unblock": "Restore the exact mount and re-verify BAM/BAI/FASTA/FAI identities before preflight."
+    },
+    {
+      "rank": 3,
+      "severity": "BLOCKER",
+      "title": "HCC1395-only 與 production authority 衝突",
+      "detail": "The production CLI accepts only the exact seven-dataset profile; a one-dataset run is rejected.",
+      "unblock": "Add a governed BOUNDED_REAL_DATA benchmark profile that stays PARTIAL and cannot be promoted to production evidence."
+    },
+    {
+      "rank": 4,
+      "severity": "HIGH",
+      "title": "序列 I/O 與 full hashing",
+      "detail": "Preflight recomputes complete SHA-256 per locked file and scans indexed records; with a 292.06 GB BAM this can dominate before science starts.",
+      "unblock": "Measure per-stage I/O with C++ /proc/self/io and getrusage; never skip identity checks for speed."
+    },
+    {
+      "rank": 5,
+      "severity": "HIGH",
+      "title": "舊輸出的小檔案爆量",
+      "detail": "The legacy HCC1395 extractor produced at least 239,061 site-level files across three artifact families.",
+      "unblock": "Use streamed BGZF native artifacts and indexes; do not recreate per-site directory trees."
+    },
+    {
+      "rank": 6,
+      "severity": "HIGH",
+      "title": "記憶體與 transient storage 尚無物理上限證據",
+      "detail": "Current P2 accounting covers logical retained payload only; HTSlib buffers, allocator overhead, thread stacks and transient files are not bounded.",
+      "unblock": "Implement a process-wide permit budget, RSS sampler and transient-space/inode preflight."
+    }
+  ],
+  "planned_fullspeed_profile": {
+    "state": "PLANNED_NOT_EXECUTED",
+    "authority_profile": "BOUNDED_REAL_DATA_HCC1395_PARTIAL_PROPOSED",
+    "compute_workers": 40,
+    "writer_threads": 4,
+    "coordinator_slots": 2,
+    "total_declared_threads": 46,
+    "buffer_bytes": 8589934592,
+    "halo_bp": 5000,
+    "run_id": "20260719_HCC1395_autosomes_w40_fullspeed_v1",
+    "staging_root": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260719_longlineage_hcc1395_fullspeed_profile_v1/.staging/20260719_HCC1395_autosomes_w40_fullspeed_v1",
+    "final_root": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260719_longlineage_hcc1395_fullspeed_profile_v1/20260719_HCC1395_autosomes_w40_fullspeed_v1",
+    "storage_reservation": "200 GiB proposed first-run reservation; fail closed below 100 GiB free",
+    "storage_reservation_classification": "ESTIMATED_ACCEPTANCE_POLICY_NOT_MEASURED"
+  },
+  "time_answer": {
+    "production_total": "不可量測：不存在可成功的 production execution path。",
+    "production_html": "不可量測：C++ chart-ready bundle、Python builder與QA chain尚未實作。",
+    "legacy_reference": "舊 InterSubMod C++ extraction單一步驟為1:57:41.98；不是新流程總時間、不是下限，也不可與其他歷史列相加。",
+    "audit_html": "觀察範圍0.06–0.07秒、maximum RSS 13,080 KiB；只代表這份 readiness JSON 的靜態 HTML 映射。",
+    "sum_historical_rows_allowed": false
+  },
+  "presentation_qa": {
+    "scope": "PRESENTATION_ONLY_NOT_P8_RELEASE_EVIDENCE",
+    "wall_seconds": 5.06,
+    "max_rss_kib": 157964,
+    "html_size_bytes": 34134,
+    "html_sha256": "74e1cbd453c982788c3c1612774b252b818073fb05c32f153a1b8d79a1969046",
+    "desktop": {
+      "viewport_width": 1440,
+      "document_scroll_width": 1440,
+      "screenshot_sha256": "cd23f87cb809a658e559997671c786c0b6c91176ac5b04cf16eb51872a1facc8",
+      "pass": true
+    },
+    "mobile": {
+      "viewport_width": 390,
+      "document_scroll_width": 390,
+      "screenshot_sha256": "9cf7269fe3985c8550c8d972f4488183f642512fada2daf3f0b75bf98118653c",
+      "pass": true
+    },
+    "print_pdf_sha256": "734acd72ae12f88759e881e592750b84760f7e52ad47b0609c60482f3c31d982",
+    "checks": {
+      "no_external_requests": true,
+      "no_console_errors": true,
+      "no_page_errors": true,
+      "no_document_horizontal_overflow": true,
+      "partial_flag_and_ribbon_present": true,
+      "desktop_mobile_print_artifacts_created": true
+    },
+    "pass": true,
+    "limitation": "QA evidence is an ephemeral local smoke receipt under /tmp and is not a governed P8 receipt."
+  },
+  "commands": [
+    {
+      "purpose": "Incremental build",
+      "input": "<LONG_LINEAGE_REPO> source and build-cpp-output-validation",
+      "command": "/usr/bin/cmake --build <LONG_LINEAGE_REPO>/build-cpp-output-validation -j4",
+      "output": "<LONG_LINEAGE_REPO>/build-cpp-output-validation/bin/",
+      "exit_code": 0,
+      "output_snippet": "[100%] Built target test_block_pipeline"
+    },
+    {
+      "purpose": "Foundation validation",
+      "input": "<LONG_LINEAGE_REPO>/build-cpp-output-validation",
+      "command": "ctest --test-dir <LONG_LINEAGE_REPO>/build-cpp-output-validation --output-on-failure",
+      "output": "terminal CTest receipt",
+      "exit_code": 0,
+      "output_snippet": "100% tests passed, 0 tests failed out of 33; Total Test time (real) = 28.20 sec"
+    },
+    {
+      "purpose": "Production fail-closed verification",
+      "input": "synthetic generated manifests bound to repository contracts",
+      "command": "<LONG_LINEAGE_REPO>/scripts/testing/test_cli_gates.sh <LONG_LINEAGE_REPO>/build-cpp-output-validation/bin/longlineage <LONG_LINEAGE_REPO>",
+      "output": "/tmp/longlineage-cli-gates.* scratch, removed by harness",
+      "exit_code": 0,
+      "output_snippet": "verified_kernel_gate: PASS exit=6; release attestation is NOT_READY"
+    },
+    {
+      "purpose": "Strict release gate",
+      "input": "<LONG_LINEAGE_REPO> repository and build",
+      "command": "<LONG_LINEAGE_REPO>/scripts/ci/check_release_gate.sh <LONG_LINEAGE_REPO>/build-cpp-output-validation",
+      "output": "terminal gate report",
+      "exit_code": 1,
+      "output_snippet": "RELEASE GATE BLOCKED: P0-P8 are not all VERIFIED with evidence"
+    },
+    {
+      "purpose": "Full repository foundation gate after report changes",
+      "input": "<LONG_LINEAGE_REPO> repository and build-cpp-output-validation",
+      "command": "scripts/ci/check_all.sh build-cpp-output-validation",
+      "output": "terminal foundation and boundary report",
+      "exit_code": 0,
+      "output_snippet": "BOUNDARY RESULT: PASS validator_link=independent python_science=absent; 33/33 PASS; NO-NETWORK RESULT: PASS; CHECK ALL RESULT: FOUNDATION_PASS"
+    }
+  ],
+  "sources": [
+    {
+      "label": "LongLineage current focus",
+      "path": "<LONG_LINEAGE_REPO>/docs/CURRENT_FOCUS.md"
+    },
+    {
+      "label": "Machine phase ledger",
+      "path": "<LONG_LINEAGE_REPO>/state/phase_ledger.json"
+    },
+    {
+      "label": "Release attestation",
+      "path": "<LONG_LINEAGE_REPO>/state/release_attestation.json"
+    },
+    {
+      "label": "Production CLI fail-closed source",
+      "path": "<LONG_LINEAGE_REPO>/apps/longlineage_main.cpp"
+    },
+    {
+      "label": "Validator fail-closed source",
+      "path": "<LONG_LINEAGE_REPO>/apps/validate_main.cpp"
+    },
+    {
+      "label": "Production input authority",
+      "path": "<LONG_LINEAGE_REPO>/oracle/production_input_authority.json"
+    },
+    {
+      "label": "Performance and output policy",
+      "path": "<LONG_LINEAGE_REPO>/docs/development/PERFORMANCE_AND_OUTPUT_POLICY.md"
+    },
+    {
+      "label": "Historical HCC1395 extraction receipt",
+      "path": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/all_ssnv_intersubmod_batch.v2_verification_fix.json"
+    },
+    {
+      "label": "Historical six-dataset M1 run manifest",
+      "path": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v9_first_six_thread_pinned_source_locked/run_manifest.json"
+    },
+    {
+      "label": "Historical M2 attempt-6 incident",
+      "path": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/cooccurrence_execution_incident.v3_attempt6_summary_totality.json"
+    },
+    {
+      "label": "Historical layered reconstruction launch receipt",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/launch_receipt.json"
+    },
+    {
+      "label": "Historical layered reconstruction verification summary",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/verification_summary.json"
+    },
+    {
+      "label": "C++ writer component benchmark",
+      "path": "<LONG_LINEAGE_REPO>/state/benchmarks/20260719-bgzf-row-payload-local.json"
+    }
+  ],
+  "multi_agent_review": {
+    "active_analysis_conflict_found": false,
+    "other_compute_process_found": false,
+    "reviews": [
+      "LongLineage run readiness and executable audit",
+      "HCC1395 input, mount, authority and capacity audit",
+      "Runtime profiler and HTML chain audit"
+    ]
+  }
+}
