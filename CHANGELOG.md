@@ -20,6 +20,17 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 - Positive and negative governance tests for stale/future leases, path aliases,
   symlink ancestors, dependency cycles, forged audit references and supersession
   cycles.
+- Deterministic sample/contig/cost block planning with exact 4,096-site,
+  250,000-estimated-alignment and clipped ±5 kb boundary contracts.
+- Move-only, explicitly indexed BAM block readers for worker-owned HTSlib
+  handles; fixed flag/MAPQ/query-length/MM/ML filters expose typed exclusion
+  counters.
+- A centrally sized logical retained-byte reorder sink with reserved frontier
+  credit, completion-order-independent oversize rejection, duplicate/late/gap
+  rejection and pool/sink cancellation wake-up.
+- Dedicated P2 gates for planner, indexed reader, adversarial reorder,
+  forced-out-of-order 1/2/4/24/40 worker/chunk semantic determinism and worker
+  failure cancellation/staging behavior.
 
 ### Safety
 
@@ -28,5 +39,8 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
   process-isolated so parallel build configurations cannot overwrite one another.
 - Release attestation remains `NOT_READY`; unimplemented validator fault injection,
   P3/P4/P5 parity and full seven-dataset evidence cannot be bypassed.
-- Foundation verification passes 25/25 tests in Debug, Release and ASan/UBSan;
-  strict release coverage still fails closed on 12 declared blockers.
+- Foundation plus P2 synthetic verification passes 30/30 tests in Debug,
+  Release and ASan/UBSan; P2 concurrency cases also pass 5/5 under TSan.
+  P2 remains `IN_PROGRESS`/partial until the complete production input bundle,
+  physical global memory bound, multi-marker projection, validator/freeze
+  integration and P7 full-data replay exist.

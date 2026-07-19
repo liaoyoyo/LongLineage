@@ -53,4 +53,10 @@ struct MmMlMnTags {
 // back to legacy/lowercase tags.
 [[nodiscard]] ParseResult<MmMlMnTags> parse_mm_ml_mn(const bam1_t& alignment);
 
+// Reuses an already decoded BAM sequence in reference/alignment orientation.
+// Reverse alignments are converted to the original as-sequenced orientation
+// exactly once before applying the frozen MM delta semantics.
+[[nodiscard]] ParseResult<MmMlMnTags> parse_mm_ml_mn(const bam1_t& alignment,
+                                                     std::string_view decoded_bam_sequence_reference_orientation);
+
 }  // namespace longlineage

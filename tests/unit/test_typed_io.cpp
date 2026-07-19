@@ -193,6 +193,12 @@ void test_mm_ml_and_typed_aux() {
     CHECK(tags.value->calls[1].ml_raw == 128);
     CHECK(std::abs(tags.value->calls[1].probability_lower - 0.5) < 1e-15);
     CHECK(std::abs(tags.value->calls[1].probability_upper - (129.0 / 256.0)) < 1e-15);
+    const auto decoded = longlineage::decode_bam_sequence(*alignment);
+    CHECK(decoded.ok());
+    CHECK(longlineage::parse_mm_ml_mn(*alignment, *decoded.value).ok());
+    const auto wrong_decoded_length = longlineage::parse_mm_ml_mn(*alignment, "AC");
+    CHECK(!wrong_decoded_length.ok());
+    CHECK(wrong_decoded_length.reason == longlineage::ParseReason::kMalformedValue);
 
     const auto empty = longlineage::parse_frozen_cm_unknown("AC", "C+m?;", {}, 2);
     CHECK(empty.ok() && empty.empty() && empty.value->calls.empty());

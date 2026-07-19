@@ -1,0 +1,192 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-p2-block-pipeline",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": "20260719-foundation",
+  "allowed_paths": [
+    {
+      "path": "CHANGELOG.md",
+      "kind": "FILE"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "kind": "FILE"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "ROADMAP.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/CURRENT_FOCUS.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260719_p2_block_pipeline_audit.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/development/implementation-notes.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/data/RECORD_AND_QUERY_STANDARD.zh-TW.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/development/DEFINITION_OF_DONE.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "governance/gate_registry.tsv",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/block_reader.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/mm_ml.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/runtime/byte_bounded_reorder_sink.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/runtime/ordered_thread_pool.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "provenance/source_to_target_manifest.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/block_reader.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/mm_ml.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/audits/20260719-p2-block-pipeline-001.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/phase_ledger.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/project_state.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/active/20260719-p2-block-pipeline.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/CMakeLists.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_typed_io.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_block_pipeline.cpp",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "ACTIVE",
+  "lease_expires_at": "2026-07-19T12:21:44+08:00",
+  "heartbeat_at": "2026-07-19T10:52:44+08:00",
+  "task_type": "A",
+  "goals": [
+    "LL-G2",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "IN_PROGRESS",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "P2 synthetic component foundation: block planning, independent indexed-BAM worker handles, logical retained-byte-bounded reorder sink and forced-out-of-order 1/2/4/24/40 determinism matrix. Production VCF/sidecar/FASTA handles, physical process-wide memory proof and full-data execution are excluded."
+  },
+  "assumptions": [
+    "Focal sites arrive in frozen dataset/VCF order and block planning never reorders them.",
+    "Every worker owns a separate BAM handle and index.",
+    "Synthetic worker-count parity is necessary but does not replace seven-dataset P7 evidence."
+  ],
+  "inputs": [
+    {
+      "role": "typed_alignment_contract",
+      "path": "include/longlineage/io/alignment.hpp",
+      "sha256": null
+    },
+    {
+      "role": "runtime_contract",
+      "path": "include/longlineage/runtime/ordered_thread_pool.hpp",
+      "sha256": null
+    },
+    {
+      "role": "phase_state",
+      "path": "state/phase_ledger.json",
+      "sha256": null
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "block_reader",
+      "path": "include/longlineage/io/block_reader.hpp",
+      "sha256": "8062ec0cb52d7d4915f1c9b23a2837b3bc6c046509005043e273f038e18c89fd"
+    },
+    {
+      "role": "reorder_sink",
+      "path": "include/longlineage/runtime/byte_bounded_reorder_sink.hpp",
+      "sha256": "8b491bbd74e505fbaac61221759cf7af49670529c3907da9b5d6828078f313e3"
+    },
+    {
+      "role": "determinism_test",
+      "path": "tests/unit/test_block_pipeline.cpp",
+      "sha256": "140cb3c0a1a009c42c0b5cdb324bcad95a6108c23219c1e4dae882cdf3984b9e"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Implement deterministic sample/contig/cost block planning with a clipped 5 kb halo.",
+      "verify": "Boundary tests cover 4096/4097 sites, 250000/250001 estimated alignments, contig transitions and coordinate clipping."
+    },
+    {
+      "step": "Implement one independent HTSlib indexed BAM reader per worker.",
+      "verify": "Actual indexed synthetic BAM is fetched once per block and malformed/missing index paths return explicit ParseResult reasons."
+    },
+    {
+      "step": "Implement a logical retained-byte-bounded ordered result sink with cancellation.",
+      "verify": "Every item above the deterministic per-item ceiling returns ITEM_TOO_LARGE regardless of sequence/completion order; charged buffered bytes stay within the configured logical cap and duplicate/late sequence IDs fail closed."
+    },
+    {
+      "step": "Replay the same logical blocks at 1/2/4/24/40 workers.",
+      "verify": "Every run has an identical logical semantic SHA-256; worker_count>1 proves sequence 1 buffered before sequence 0; injected worker failure cancels the sink, returns no ordered batch and retains diagnostic staging without claiming production freeze."
+    }
+  ],
+  "evidence": [],
+  "deviations": [
+    "The first TSan determinism replay identified a condition-variable double-lock report in the test-only worker activation barrier. The barrier was replaced by an atomic arrival gate and the race report disappeared.",
+    "TSan runtime helper threads make the production process-thread ceiling unobservable under instrumentation; the <=46 assertion remains active and passed in non-TSan Debug and Release builds.",
+    "Two read-only review subagents were spawned without child task records. They made no filesystem writes; root independently applied and verified their findings. This is recorded as a process deviation rather than backfilled with a false historical lease, and future delegation requires a child task record before spawn."
+  ],
+  "blockers": [
+    "P1_PREDECESSOR_NOT_VERIFIED",
+    "PRODUCTION_WORKER_INPUT_BUNDLE_VCF_SIDECAR_FASTA_NOT_IMPLEMENTED",
+    "ONE_PASS_CIGAR_MULTI_MARKER_PROJECTION_NOT_IMPLEMENTED",
+    "PRODUCTION_STAGING_VALIDATOR_FREEZE_NOT_INTEGRATED",
+    "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
+    "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
+  ],
+  "updated_at": "2026-07-19T10:52:44+08:00"
+}

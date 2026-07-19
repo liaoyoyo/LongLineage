@@ -24,6 +24,21 @@ Status: in_progress
   conservation；兩個scalar形成座標時以machine-readable semantic group表達。
 - Registry與source port都有獨立implementation／verification lifecycle；存在
   target或契約不等於parity完成。
+- P2 block planner只切分authoritative input order；dataset/contig轉換必切，
+  4,096 sites或250,000 estimated alignments任一先到即切。單一site若已超過
+  cost ceiling會fail closed，因v1尚無凍結的site內拆分規則。
+- Indexed BAM reader要求caller明示index路徑，每個pool worker以stable worker
+  index綁定自己的move-only reader；不得共享mutable HTSlib stream/iterator。
+- Result reorder由payload type的`retained_bytes() const noexcept`提供唯一logical
+  sizing authority，使用`capacity-max_item`非frontier額度與一筆frontier reserve。
+  Oversize不分sequence或completion order一律`ITEM_TOO_LARGE`；duplicate、late、
+  gap、zero byte與writer exception皆進terminal failure。
+- Pool terminal observer在worker error/manual cancel後、且不持有pool result
+  mutex時喚醒sink；sink failure由worker轉成exception回傳pool，避免雙鎖與永久
+  wait。
+- 這個cap只約束sink admitted logical payload，不涵蓋HTSlib/BGZF buffer、
+  allocator overhead、thread stack、task queue、callback-local payload或RSS；
+  production仍需global permit pool與實測證據。
 
 ## Deviations
 
@@ -39,6 +54,9 @@ Status: in_progress
 - `/usr/bin/jsonschema` 3.2.0會把未識別的2020-12 metaschema fallback到Draft 7。
   本輪只引用實際正負fixture結果；正式release前仍需統一schema draft或pin真正
   支援宣告draft的validator。
+- P2修正期啟動兩個唯讀review subagent前未先建立child task record。兩者沒有
+  filesystem寫入，所有建議均由root在既有lease內重作與驗證；此流程偏離不倒填
+  偽造歷史lease。後續delegation必須先註冊child task與read/write scope。
 
 ## Trade-offs
 
@@ -56,6 +74,11 @@ Status: in_progress
   仍需由明示的獨立replay命令重跑比對，不可把digest欄位存在當作執行證據。
 - P3 requires frozen PCG64/RNG/logical-digest vectors and a versioned HP-family
   mapping; P4 also requires frozen Endpoint-B O/X callability precedence vectors.
+- P2 production completion still requires persistent VCF/Tabix,
+  latest-HP/PS-sidecar/Tabix and FASTA/FAI handles, exact sidecar join in the
+  worker bundle, one-pass CIGAR projection for all partner markers, a physical
+  process-wide memory bound, and staging→independent-validator→atomic-freeze
+  integration.
 
 ## Lore
 
@@ -85,6 +108,12 @@ Status: in_progress
   audit set; the audit-DAG tests instead remove baseline AUDIT references before
   creating their controlled synthetic graph. Debug, Release and ASan/UBSan focused
   replays then passed 3/3.
+- The first P2 TSan matrix reported a double lock in the test-only
+  condition-variable activation barrier. Replacing it with one atomic arrival
+  flag per stable worker removed the report. A subsequent TSan run exceeded the
+  production `<=46` process-thread assertion only because the TSan runtime adds
+  helper threads; that assertion remains enabled and passed in ordinary Debug/
+  Release, while TSan continues to verify all P2 memory races.
 
 ## Foundation verification snapshot
 
@@ -107,3 +136,17 @@ Status: in_progress
   binds evidence/fix commit `8b62261a384bd2dd2a469f5b2ad27df2e34f3c8d`, 198
   tracked blobs and tree SHA-256
   `eb59c1f1856692569729742378d00ca396ad3a1ed125bc4aa0b395903a155bd3`.
+
+## P2 synthetic component verification
+
+- Debug/Release/ASan+UBSan full CTest: 30/30 PASS in each build.
+- TSan focused CTest: 5/5 P2 tests PASS after the test-barrier repair.
+- Worker/chunk replay: workers `1,2,4,24,40` × block sizes `1,2`, plus a
+  40-worker/4-BGZF-writer replay.
+- Frozen synthetic semantic SHA-256:
+  `9179c42faf14000c9b1c87386a09cd33cae4bce27078d7d5af2798269c4fead0`.
+- Every replay decompresses 80 ordered rows and checks an independent covering
+  read oracle; ordinary 40-worker/4-writer execution remains at or below 46
+  process threads.
+- This evidence is explicitly `PARTIAL`, not a claim about seven real datasets
+  or the still-missing complete production worker input bundle.

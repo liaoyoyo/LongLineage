@@ -1,7 +1,7 @@
 {
   "schema_name": "longlineage.phase_ledger",
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-19T06:51:28+08:00",
+  "updated_at": "2026-07-19T10:37:04+08:00",
   "phases": [
     {
       "id": "P0",
@@ -77,9 +77,12 @@
       }
       ],
       "blockers": [
-        "BLOCK_READER_NOT_IMPLEMENTED",
-        "STREAMING_REORDER_SINK_NOT_BYTE_BOUNDED",
-        "WORKER_COUNT_MATRIX_1_2_4_24_40_NOT_REPLAYED"
+        "P1_PREDECESSOR_NOT_VERIFIED",
+        "PRODUCTION_WORKER_INPUT_BUNDLE_VCF_SIDECAR_FASTA_NOT_IMPLEMENTED",
+        "ONE_PASS_CIGAR_MULTI_MARKER_PROJECTION_NOT_IMPLEMENTED",
+        "PRODUCTION_STAGING_VALIDATOR_FREEZE_NOT_INTEGRATED",
+        "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
+        "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
       ]
     },
     {

@@ -73,18 +73,27 @@ struct OrderedBatchResult {
 // submission order only when every submitted task succeeded. On any worker
 // exception, queued tasks are cancelled and the returned result vector is empty,
 // preventing accidental publication of a partial batch.
+//
+// Result values remain resident until finish(). Production integrations must
+// therefore return only a fixed-size acknowledgement (for example, a block
+// sequence) after sending the payload through ByteBoundedReorderSink. This
+// generic container does not itself prove a process-wide physical memory cap.
 template <typename Result>
 class OrderedThreadPool {
    public:
     using Work = std::function<Result()>;
+    using IndexedWork = std::function<Result(std::size_t)>;
+    using TerminalObserver = std::function<void(const std::string&)>;
 
-    OrderedThreadPool(std::size_t worker_count, std::size_t queue_capacity_bytes) : tasks_(queue_capacity_bytes) {
+    OrderedThreadPool(std::size_t worker_count, std::size_t queue_capacity_bytes,
+                      TerminalObserver terminal_observer = {})
+        : tasks_(queue_capacity_bytes), terminal_observer_(std::move(terminal_observer)) {
         if (worker_count == 0) {
             throw std::invalid_argument("OrderedThreadPool worker_count must be positive");
         }
         workers_.reserve(worker_count);
         for (std::size_t index = 0; index < worker_count; ++index) {
-            workers_.emplace_back([this] { worker_loop(); });
+            workers_.emplace_back([this, index] { worker_loop(index); });
         }
     }
 
@@ -101,6 +110,16 @@ class OrderedThreadPool {
     PoolSubmitResult submit(std::size_t charged_bytes, Work work) {
         if (!work) {
             return {PoolStatus::kInternalInvariantError, std::nullopt, "task callback is empty"};
+        }
+        return submit_indexed(charged_bytes, [work = std::move(work)](std::size_t) mutable { return work(); });
+    }
+
+    // The worker index is stable for the lifetime of the pool. This permits a
+    // caller to bind one independent HTSlib handle bundle to each worker
+    // without sharing mutable file or iterator state.
+    PoolSubmitResult submit_indexed(std::size_t charged_bytes, IndexedWork work) {
+        if (!work) {
+            return {PoolStatus::kInternalInvariantError, std::nullopt, "indexed task callback is empty"};
         }
 
         std::lock_guard<std::mutex> submit_lock(submit_mutex_);
@@ -119,13 +138,16 @@ class OrderedThreadPool {
     }
 
     bool cancel(std::string reason) {
+        const std::string normalized_reason = reason.empty() ? "cancelled without a reason" : std::move(reason);
         {
             std::lock_guard<std::mutex> lock(result_mutex_);
             if (manual_cancellation_reason_.empty()) {
-                manual_cancellation_reason_ = reason.empty() ? "cancelled without a reason" : reason;
+                manual_cancellation_reason_ = normalized_reason;
             }
         }
-        return tasks_.cancel(std::move(reason));
+        const bool changed = tasks_.cancel(normalized_reason);
+        notify_terminal(normalized_reason);
+        return changed;
     }
 
     OrderedBatchResult<Result> finish() {
@@ -183,7 +205,7 @@ class OrderedThreadPool {
    private:
     struct Task {
         std::uint64_t sequence;
-        Work work;
+        IndexedWork work;
     };
 
     static PoolStatus map_queue_status(QueueOperationStatus status) noexcept {
@@ -202,14 +224,14 @@ class OrderedThreadPool {
         return PoolStatus::kInternalInvariantError;
     }
 
-    void worker_loop() noexcept {
+    void worker_loop(std::size_t worker_index) noexcept {
         while (true) {
             QueuePopResult<Task> next = tasks_.pop();
             if (next.status != QueueOperationStatus::kSuccess) {
                 return;
             }
             try {
-                Result result = (*next.value).work();
+                Result result = (*next.value).work(worker_index);
                 bool inserted = false;
                 {
                     std::lock_guard<std::mutex> result_lock(result_mutex_);
@@ -231,14 +253,36 @@ class OrderedThreadPool {
     }
 
     void record_worker_failure(std::uint64_t sequence, std::string message) noexcept {
+        const std::string normalized_message = message.empty() ? "worker failed without a message" : std::move(message);
         {
             std::lock_guard<std::mutex> result_lock(result_mutex_);
-            if (!first_worker_error_sequence_.has_value()) {
+            if (!first_worker_error_sequence_.has_value() || sequence < *first_worker_error_sequence_) {
                 first_worker_error_sequence_ = sequence;
-                first_worker_error_message_ = message.empty() ? "worker failed without a message" : std::move(message);
+                first_worker_error_message_ = normalized_message;
             }
         }
         tasks_.cancel("worker error");
+        notify_terminal("worker error at sequence " + std::to_string(sequence) + ": " + normalized_message);
+    }
+
+    void notify_terminal(const std::string& reason) noexcept {
+        bool should_notify = false;
+        {
+            std::lock_guard<std::mutex> result_lock(result_mutex_);
+            if (terminal_observer_notified_) {
+                return;
+            }
+            terminal_observer_notified_ = true;
+            should_notify = true;
+        }
+        if (should_notify && terminal_observer_) {
+            try {
+                terminal_observer_(reason);
+            } catch (...) {
+                // A terminal observer is a wake-up path. It must not replace
+                // or mask the original worker/cancellation failure.
+            }
+        }
     }
 
     void join_workers() noexcept {
@@ -263,6 +307,8 @@ class OrderedThreadPool {
     std::optional<std::uint64_t> first_worker_error_sequence_;
     std::string first_worker_error_message_;
     std::string manual_cancellation_reason_;
+    TerminalObserver terminal_observer_;
+    bool terminal_observer_notified_ = false;
 };
 
 }  // namespace longlineage::runtime

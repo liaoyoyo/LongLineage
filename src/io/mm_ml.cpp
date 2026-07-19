@@ -308,6 +308,20 @@ ParseResult<MmMlMnTags> parse_frozen_cm_unknown(std::string_view sequence_as_seq
 }
 
 ParseResult<MmMlMnTags> parse_mm_ml_mn(const bam1_t& alignment) {
+    auto sequence = decode_bam_sequence(alignment);
+    if (!sequence.ok()) {
+        return ParseResult<MmMlMnTags>::failure(sequence.reason, std::move(sequence.detail));
+    }
+    return parse_mm_ml_mn(alignment, *sequence.value);
+}
+
+ParseResult<MmMlMnTags> parse_mm_ml_mn(const bam1_t& alignment,
+                                       std::string_view decoded_bam_sequence_reference_orientation) {
+    if (alignment.core.l_qseq < 0 ||
+        decoded_bam_sequence_reference_orientation.size() != static_cast<std::size_t>(alignment.core.l_qseq)) {
+        return ParseResult<MmMlMnTags>::failure(
+            ParseReason::kMalformedValue, "supplied decoded BAM sequence length differs from alignment.core.l_qseq");
+    }
     auto mm = parse_mm_string(alignment);
     if (!mm.ok()) {
         return ParseResult<MmMlMnTags>::failure(mm.reason, std::move(mm.detail));
@@ -320,18 +334,15 @@ ParseResult<MmMlMnTags> parse_mm_ml_mn(const bam1_t& alignment) {
     if (!mn.ok()) {
         return ParseResult<MmMlMnTags>::failure(mn.reason, std::move(mn.detail));
     }
-    auto sequence = decode_bam_sequence(alignment);
-    if (!sequence.ok()) {
-        return ParseResult<MmMlMnTags>::failure(sequence.reason, std::move(sequence.detail));
-    }
+    std::string sequence(decoded_bam_sequence_reference_orientation);
     if ((alignment.core.flag & BAM_FREVERSE) != 0) {
-        auto as_sequenced = reverse_complement(*sequence.value);
+        auto as_sequenced = reverse_complement(sequence);
         if (!as_sequenced.ok()) {
             return ParseResult<MmMlMnTags>::failure(as_sequenced.reason, std::move(as_sequenced.detail));
         }
-        sequence = std::move(as_sequenced);
+        sequence = std::move(*as_sequenced.value);
     }
-    return parse_frozen_cm_unknown(*sequence.value, *mm.value, *ml.value, *mn.value);
+    return parse_frozen_cm_unknown(sequence, *mm.value, *ml.value, *mn.value);
 }
 
 }  // namespace longlineage
