@@ -26,12 +26,12 @@ logical/physical bytes plus semantic SHA; its measured `7.93%` median wall
 reduction applies only to that synthetic writer workload and explicitly does not
 authorize a production speedup claim.
 
-Draft PR #1的CI toolchain hotfix已通過本機驗證，遠端rerun仍待push。Hosted
+Draft PR #1的CI toolchain hotfix已通過本機與遠端驗證。Hosted
 matrix現在明示使用apt-owned `/usr/bin/cmake`與full Git history；production
 image保留immutable base digest與HTSlib SHA，mutable apt解決結果改由image內
 builder/runtime package manifests如實保存。本機full repository gate為33/33
-PASS，sanitized production-context no-network gate為30/30 PASS；兩者scope不可
-互相冒充。
+PASS，sanitized production-context no-network gate為30/30 PASS；GitHub push與
+PR runs各7/7 PASS。三者scope不可互相冒充。
 
 ## Phase status mirror
 
@@ -73,8 +73,6 @@ independent source for changing phase state.
 
 ## Active blockers
 
-- Draft PR #1的CI hotfix尚待push與全部GitHub Actions jobs終態PASS；在此之前
-  `LOCAL_VERIFIED_GITHUB_PENDING`不得升級。
 - Draft PR #1 review and gated merge; private visibility and all three uploaded
   branch SHAs are already verified.
 - A Draft 2020-12-capable JSON Schema validator pinned in the release toolchain.

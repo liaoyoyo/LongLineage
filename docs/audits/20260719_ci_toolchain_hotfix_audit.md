@@ -8,14 +8,14 @@ related_files: .github/workflows/ci.yml, containers/Dockerfile, containers/versi
 
 # CI toolchain hotfix audit
 
-Status: `LOCAL_VERIFIED_GITHUB_PENDING`
+Status: `VERIFIED_GITHUB_PASS`
 
 ## TL;DR
 
 PR #1 的七個失敗 job 已定位為兩個初始工具鏈問題，並在修復後揭露、收斂三個
 repository-context test 假設與一個不完整 scratch fixture。最終本機完整
 repository gate 為 33/33 PASS，production image 的 hermetic/no-network gate 為
-30/30 PASS；GitHub rerun 尚未完成，因此本文件不得宣稱遠端 CI 已恢復。
+30/30 PASS；同一head的GitHub push與PR runs各7/7 PASS，合計14/14 PASS。
 
 這是 Task Type E hotfix，服務 LL-G4/LL-G5。沒有修改 scientific kernel、
 artifact schema、phase ledger或release attestation。
@@ -87,9 +87,9 @@ control files塞入production build context，並執行其餘30個hermetic tests
 | Production image | sanitized Docker context | `docker build --file containers/Dockerfile --tag longlineage:ci-hotfix .` | local OCI image | exit 0；30/30 no-network PASS |
 | Image provenance與smoke | local OCI image | `docker image inspect`；offline TSV schema/sort/unique/SHA/runtime-dpkg checks；`longlineage --version` | image ID與manifest census | exit 0；image `sha256:aff89e6b8120284c640511a06991765956703ffe3065decd2831deeab56b0b9d`；builder 207 rows／`f556d5b0603e912d7415650bd41e8fbb9a38c2db2445b6bd368c3c9d5c7107c5`；runtime 105 rows／`174a2633d22c0ade4f3419c800c55ddc20831082f14a3c1f3efed55a16a93e8f`；runtime逐列match；`longlineage 0.1.0` |
 
-本機PATH沒有`clang-format-14`，因此直接format probe明確exit 1；本次未修改C++，
-且hosted `gcc-debug` job仍會安裝並執行clang-format 14 gate。遠端結果回來前不可
-把format標為PASS。
+本機PATH沒有`clang-format-14`，因此直接format probe明確exit 1；本次未修改C++。
+Hosted `gcc-debug` job已安裝並執行clang-format 14 gate，push與PR兩次皆PASS；
+format authority以這兩筆遠端結果為準。
 
 ## 分支與發布限制
 
@@ -100,8 +100,13 @@ control files塞入production build context，並執行其餘30個hermetic tests
 本hotfix只恢復CI可執行性與provenance真實性。P3/P4/P5/P7/P8、validator
 fault-injection及full-data release gates仍維持既有BLOCKED狀態。
 
-## GitHub closeout（待填）
+## GitHub closeout
 
-- Push commit：`PENDING`
-- GitHub Actions rerun：`PENDING`
+- Push commit：`80481dd38790f52eb0027dec8696af6d509afef5`，local、remote branch與
+  PR head SHA一致。
+- [Push run 29690309335](https://github.com/liaoyoyo/LongLineage/actions/runs/29690309335)：
+  completed/success，7/7 jobs PASS。
+- [PR run 29690310910](https://github.com/liaoyoyo/LongLineage/actions/runs/29690310910)：
+  completed/success，7/7 jobs PASS。
+- `gh pr checks 1`：14 pass、0 fail、0 pending。
 - Draft PR #1：保持draft；未取得明示授權不得merge。

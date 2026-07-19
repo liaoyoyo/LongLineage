@@ -149,6 +149,9 @@ Status: in_progress
   repository-context assumptions與一個archived-parent scratch缺口。最終將
   full-history/host-control tests留在hosted gate，production image執行30個
   hermetic tests；scratch則複製archived task與其digest-bound evidence。
+- CI hotfix commit `80481dd38790f52eb0027dec8696af6d509afef5`的push與PR
+  workflows各7/7 PASS；format、GCC/Clang Debug/Release、ASan/UBSan、TSan與
+  pinned-container合計14/14 PASS。PR #1仍是draft，沒有因CI修復自動merge。
 
 ## Foundation verification snapshot
 
