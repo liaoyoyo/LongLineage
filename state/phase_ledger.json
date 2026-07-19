@@ -1,7 +1,7 @@
 {
   "schema_name": "longlineage.phase_ledger",
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-19T10:37:04+08:00",
+  "updated_at": "2026-07-19T11:09:00+08:00",
   "phases": [
     {
       "id": "P0",
@@ -73,6 +73,20 @@
         "path": "state/audits/20260719-foundation-verification-002.json",
         "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
         "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
+        "exit_code": 0
+      },
+      {
+        "role": "REPORT",
+        "path": "docs/audits/20260719_p2_block_pipeline_audit.md",
+        "sha256": "b5b2b850c247cd4a59df68762eefaac95de3ca26e0bfc9f7aaa3a477e575220f",
+        "command": null,
+        "exit_code": null
+      },
+      {
+        "role": "AUDIT",
+        "path": "state/audits/20260719-p2-block-pipeline-001.json",
+        "sha256": "115a0d0a6beab7b4b623f244ff3f9ae67d0804d97d86fa4a96eafadf2dfa93ba",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-001.json",
         "exit_code": 0
       }
       ],

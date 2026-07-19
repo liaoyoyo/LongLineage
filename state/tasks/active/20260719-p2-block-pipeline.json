@@ -70,6 +70,18 @@
       "kind": "FILE"
     },
     {
+      "path": "scripts/testing/test_agent_task_negative.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/testing/test_audit_evidence_negative.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/testing/test_phase_state_negative.sh",
+      "kind": "FILE"
+    },
+    {
       "path": "src/io/block_reader.cpp",
       "kind": "FILE"
     },
@@ -108,8 +120,8 @@
   ],
   "depends_on": [],
   "lease_state": "ACTIVE",
-  "lease_expires_at": "2026-07-19T12:21:44+08:00",
-  "heartbeat_at": "2026-07-19T11:00:27+08:00",
+  "lease_expires_at": "2026-07-19T13:11:00+08:00",
+  "heartbeat_at": "2026-07-19T11:11:00+08:00",
   "task_type": "A",
   "goals": [
     "LL-G2",
@@ -178,12 +190,24 @@
       "verify": "Every run has an identical logical semantic SHA-256; worker_count>1 proves sequence 1 buffered before sequence 0; injected worker failure cancels the sink, returns no ordered batch and retains diagnostic staging without claiming production freeze."
     }
   ],
-  "evidence": [],
+  "evidence": [
+    {
+      "evidence_id": "p2-block-pipeline-001",
+      "evidence_path": "state/audits/20260719-p2-block-pipeline-001.json",
+      "evidence_kind": "AUDIT",
+      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-001.json",
+      "exit_code": 0,
+      "output_excerpt": "AUDIT SOURCE PASS: snapshot=20260719-p2-block-pipeline-001 commit=d2636eba1adcf503c675da79c63e8e799c8ac332 blobs=204 tree_sha256=2d48b4c7e8eccc1a022f897781c136bf4eabd8e60bbe717c5a30cc4dc72ab0bc",
+      "evidence_sha256": "115a0d0a6beab7b4b623f244ff3f9ae67d0804d97d86fa4a96eafadf2dfa93ba",
+      "recorded_at": "2026-07-19T11:09:00+08:00"
+    }
+  ],
   "deviations": [
     "The first TSan determinism replay identified a condition-variable double-lock report in the test-only worker activation barrier. The barrier was replaced by an atomic arrival gate and the race report disappeared.",
     "TSan runtime helper threads make the production process-thread ceiling unobservable under instrumentation; the <=46 assertion remains active and passed in non-TSan Debug and Release builds.",
     "Two read-only review subagents were spawned without child task records. They made no filesystem writes; root independently applied and verified their findings. This is recorded as a process deviation rather than backfilled with a false historical lease, and future delegation requires a child task record before spawn.",
-    "The first clean-commit AI readiness replay failed because the script treated an unrelated producer header newer than the intentionally independent governance executable as a stale governance build. The evidence was rejected, the dependency scope was repaired and a positive CTest regression was added before recapturing the audit."
+    "The first clean-commit AI readiness replay failed because the script treated an unrelated producer header newer than the intentionally independent governance executable as a stale governance build. The evidence was rejected, the dependency scope was repaired and a positive CTest regression was added before recapturing the audit.",
+    "The first evidence-binding patch matched P0's foundation-audit row and inserted the P2 report/audit under P0. Main-repo schema/state checks passed because the paths existed, but three scratch negative tests caught the missing copied report. The released task was resumed with a fresh lease, the bindings were moved to P2, and full integration was replayed before release."
   ],
   "blockers": [
     "P1_PREDECESSOR_NOT_VERIFIED",
@@ -193,5 +217,5 @@
     "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
     "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
   ],
-  "updated_at": "2026-07-19T11:00:27+08:00"
+  "updated_at": "2026-07-19T11:11:00+08:00"
 }

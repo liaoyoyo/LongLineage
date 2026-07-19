@@ -40,6 +40,10 @@ make_scratch_repo() {
     cp "$repo_root/state/project_state.json" "$scratch/state/project_state.json"
     cp "$repo_root/state/phase_ledger.json" "$scratch/state/phase_ledger.json"
     cp "$repo_root/state/audits/"*.json "$scratch/state/audits/"
+    while IFS= read -r evidence_path; do
+        mkdir -p "$scratch/$(dirname "$evidence_path")"
+        cp "$repo_root/$evidence_path" "$scratch/$evidence_path"
+    done < <(jq -r '.phases[].evidence[].path' "$repo_root/state/phase_ledger.json" | LC_ALL=C sort -u)
 
     local now
     local expiry
@@ -56,6 +60,19 @@ make_scratch_repo() {
         .blockers = []
     ' "$repo_root/state/tasks/active/20260719-foundation.json" \
         >"$scratch/state/tasks/active/20260719-foundation.json"
+    for task_path in "$repo_root"/state/tasks/active/*.json; do
+        if [[ "$(basename "$task_path")" == "20260719-foundation.json" ]]; then
+            continue
+        fi
+        jq '
+            .status = "BLOCKED" |
+            .lease_state = "RELEASED" |
+            .blockers = if (.blockers | length) == 0
+                        then ["SCRATCH_BASELINE_BLOCKER"]
+                        else .blockers
+                        end
+        ' "$task_path" >"$scratch/state/tasks/active/$(basename "$task_path")"
+    done
     echo "$scratch"
 }
 
