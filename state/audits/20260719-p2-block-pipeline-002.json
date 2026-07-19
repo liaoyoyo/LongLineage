@@ -1,0 +1,183 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260719-p2-block-pipeline-002",
+  "task_id": "20260719-p2-block-pipeline",
+  "scope": {
+    "kind": "REPOSITORY",
+    "completeness": "PARTIAL",
+    "description": "P2 synthetic block-pipeline component verification; production worker bundle, physical global memory bound, validator/freeze integration and full-data execution are excluded.",
+    "included_paths": [
+      "."
+    ],
+    "excluded_paths": []
+  },
+  "source_snapshot_kind": "GIT_COMMIT",
+  "source_commit": "ba5f29d1b26edd3dc15dd94691ca3fda5682e295",
+  "source_tree_sha256": "893d8fa51e4aac373ca314f0d87b5e5ac5ec8f8633a826766265903131c5ae82",
+  "source_dirty": false,
+  "commands": [
+    {
+      "command_id": "clang-format-14",
+      "argv": [
+        "scripts/ci/check_format.sh",
+        "/tmp/clang-format-14-extract/usr/bin/clang-format-14"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "51dc77826a816022d1139a3adc1eeb07b45d408d1f3015be055945b2eab5b437",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:17:43+08:00",
+      "completed_at": "2026-07-19T11:17:45+08:00"
+    },
+    {
+      "command_id": "build-debug",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-debug",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "7fdfde497ce612c58b97b3048bac49b82348e9f7ee4ca3e673892eadc6aa372d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:17:56+08:00",
+      "completed_at": "2026-07-19T11:17:56+08:00"
+    },
+    {
+      "command_id": "check-all-debug",
+      "argv": [
+        "scripts/ci/check_all.sh",
+        "build-verify-debug"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "b06812d92d54a1a91b7b332fd312f707b355b7e5216d03a196c498931ddae3ee",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:18:08+08:00",
+      "completed_at": "2026-07-19T11:19:04+08:00"
+    },
+    {
+      "command_id": "build-release",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-release",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "0bff6152207769b859d503a49a4b61f9d22f4d878072f7b543b19fe702f08f58",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:19:17+08:00",
+      "completed_at": "2026-07-19T11:19:18+08:00"
+    },
+    {
+      "command_id": "ctest-release",
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-release",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "55ce98dcf3fb4cd4f913b68d8f2efbc1d539b761cd9deece317bc33f623a2941",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:19:31+08:00",
+      "completed_at": "2026-07-19T11:20:02+08:00"
+    },
+    {
+      "command_id": "build-asan-ubsan",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-sanitize",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "66d7538083a7b2fb07ba916f0d18dc4095672dd7c3094d11e8cb2e4d6c04ad6e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:20:26+08:00",
+      "completed_at": "2026-07-19T11:20:27+08:00"
+    },
+    {
+      "command_id": "ctest-asan-ubsan",
+      "argv": [
+        "/usr/bin/env",
+        "ASAN_OPTIONS=detect_leaks=0:halt_on_error=1",
+        "UBSAN_OPTIONS=halt_on_error=1",
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-sanitize",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "749f56cde8b51b9bd51561ba95afcfd52a86390b065a35a2c2c9f8f90b1a0218",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:20:40+08:00",
+      "completed_at": "2026-07-19T11:21:25+08:00"
+    },
+    {
+      "command_id": "build-tsan",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-verify-tsan",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "f6feea8333f97c67cf31687fa025ee3d25e1d319f28eee9eca5333656c078e52",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:21:36+08:00",
+      "completed_at": "2026-07-19T11:21:36+08:00"
+    },
+    {
+      "command_id": "ctest-tsan-p2",
+      "argv": [
+        "/usr/bin/env",
+        "TSAN_OPTIONS=halt_on_error=1:history_size=7",
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-tsan",
+        "--output-on-failure",
+        "-R",
+        "^p2_"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "c47b5ab67fb07239d71c7455308b11fbc7d40203c8d22c0d706177f9082d5c95",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:21:49+08:00",
+      "completed_at": "2026-07-19T11:21:53+08:00"
+    },
+    {
+      "command_id": "ai-readiness",
+      "argv": [
+        "scripts/ai/check_readiness.sh",
+        "build-verify-debug"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "2b0c7c8506198c5cec4c9bb1659fa29bf346ff0ae48c3711ec6a4503a6c2f393",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T11:22:04+08:00",
+      "completed_at": "2026-07-19T11:22:05+08:00"
+    }
+  ],
+  "captured_at": "2026-07-19T11:22:05+08:00",
+  "captured_by_agent_id": "codex:root",
+  "supersedes": [
+    "20260719-p2-block-pipeline-001"
+  ],
+  "superseded_by": null,
+  "supersession_reason": "Binding snapshot 001 exposed missing report dependencies in governance scratch repositories; snapshot 002 includes and replays the corrected evidence-copy harness."
+}

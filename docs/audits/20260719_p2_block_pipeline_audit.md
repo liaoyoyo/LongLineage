@@ -2,7 +2,7 @@
 建立時間: 2026-07-19
 目標: 稽核 P2 deterministic block planner、indexed BAM reader、logical retained-byte reorder、worker determinism 與 AI readiness
 處理範圍: synthetic component only；不含 production VCF/sidecar/FASTA bundle、physical global memory proof、validator/freeze integration或7-dataset run
-關聯檔案: LongLineage/state/audits/20260719-p2-block-pipeline-001.json、LongLineage/tests/unit/test_block_pipeline.cpp
+關聯檔案: LongLineage/state/audits/20260719-p2-block-pipeline-002.json、LongLineage/tests/unit/test_block_pipeline.cpp
 -->
 
 # P2 Block Pipeline 元件稽核
@@ -27,11 +27,16 @@ worker bundle，也未接上independent validator與atomic freeze。P7的7-datas
 - 類型／scope：`A / PARTIAL`
 - 服務目標：LL-G2、LL-G4、LL-G5
 - Source commit：
-  `d2636eba1adcf503c675da79c63e8e799c8ac332`
-- Canonical 204-blob tree SHA-256：
-  `2d48b4c7e8eccc1a022f897781c136bf4eabd8e60bbe717c5a30cc4dc72ab0bc`
+  `ba5f29d1b26edd3dc15dd94691ca3fda5682e295`
+- Canonical 206-blob tree SHA-256：
+  `893d8fa51e4aac373ca314f0d87b5e5ac5ec8f8633a826766265903131c5ae82`
 - Immutable command envelope：
-  `LongLineage/state/audits/20260719-p2-block-pipeline-001.json`
+  `LongLineage/state/audits/20260719-p2-block-pipeline-002.json`
+
+Envelope `002` supersedes `001` without rewriting it. The replacement source snapshot
+contains the corrected governance scratch-repository dependencies found while binding
+the first envelope into the phase ledger; both snapshots remain queryable through the
+audit DAG.
 
 ## Step → Verify
 
@@ -108,7 +113,7 @@ Production仍需global permit pool、固定size acknowledgement整合與RSS/I/O�
 ### 輸入
 
 - Source：clean Git commit
-  `d2636eba1adcf503c675da79c63e8e799c8ac332`
+  `ba5f29d1b26edd3dc15dd94691ca3fda5682e295`
 - Synthetic tests：
   `LongLineage/tests/unit/test_block_pipeline.cpp`
 - Contracts：
@@ -130,7 +135,7 @@ Production仍需global permit pool、固定size acknowledgement整合與RSS/I/O�
 | `scripts/ai/check_readiness.sh build-verify-debug` | AI/cold-start/governance readiness | `0`; `failures=0 warnings=0` |
 
 所有command的exact argv、start/end、exit code與stdout/stderr SHA-256位於
-`LongLineage/state/audits/20260719-p2-block-pipeline-001.json`。空stderr的
+`LongLineage/state/audits/20260719-p2-block-pipeline-002.json`。空stderr的
 SHA-256固定為
 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`。
 
@@ -166,6 +171,9 @@ SHA-256固定為
 - 第一個clean-commit readiness replay把unlinked producer header誤判為
   governance binary stale而exit 1。staleness scope已改為governance target的
   實際source/CMake inputs，加入positive CTest後重新擷取；舊失敗不列為PASS。
+- 第一份P2 envelope `001`在綁定phase evidence後，scratch negative tests揭露
+  report與非foundation task fixture未完整帶入。修正copy/normalization harness、
+  重跑完整gate後以`002`取代目前權威；`001`保留且由supersession edge查詢。
 - Synthetic malformed aux fixture會產生HTSlib corruption diagnostic；測試預期
   LongLineage回`MALFORMED_VALUE`，不是忽略stderr後硬判成功。
 

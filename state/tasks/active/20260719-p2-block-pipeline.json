@@ -94,6 +94,10 @@
       "kind": "FILE"
     },
     {
+      "path": "state/audits/20260719-p2-block-pipeline-002.json",
+      "kind": "FILE"
+    },
+    {
       "path": "state/phase_ledger.json",
       "kind": "FILE"
     },
@@ -119,16 +123,16 @@
     }
   ],
   "depends_on": [],
-  "lease_state": "ACTIVE",
+  "lease_state": "RELEASED",
   "lease_expires_at": "2026-07-19T13:11:00+08:00",
-  "heartbeat_at": "2026-07-19T11:11:00+08:00",
+  "heartbeat_at": "2026-07-19T11:29:50+08:00",
   "task_type": "A",
   "goals": [
     "LL-G2",
     "LL-G4",
     "LL-G5"
   ],
-  "status": "IN_PROGRESS",
+  "status": "BLOCKED",
   "scope": {
     "completeness": "PARTIAL",
     "description": "P2 synthetic component foundation: block planning, independent indexed-BAM worker handles, logical retained-byte-bounded reorder sink and forced-out-of-order 1/2/4/24/40 determinism matrix. Production VCF/sidecar/FASTA handles, physical process-wide memory proof and full-data execution are excluded."
@@ -192,14 +196,14 @@
   ],
   "evidence": [
     {
-      "evidence_id": "p2-block-pipeline-001",
-      "evidence_path": "state/audits/20260719-p2-block-pipeline-001.json",
+      "evidence_id": "p2-block-pipeline-002",
+      "evidence_path": "state/audits/20260719-p2-block-pipeline-002.json",
       "evidence_kind": "AUDIT",
-      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-001.json",
+      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-002.json",
       "exit_code": 0,
-      "output_excerpt": "AUDIT SOURCE PASS: snapshot=20260719-p2-block-pipeline-001 commit=d2636eba1adcf503c675da79c63e8e799c8ac332 blobs=204 tree_sha256=2d48b4c7e8eccc1a022f897781c136bf4eabd8e60bbe717c5a30cc4dc72ab0bc",
-      "evidence_sha256": "115a0d0a6beab7b4b623f244ff3f9ae67d0804d97d86fa4a96eafadf2dfa93ba",
-      "recorded_at": "2026-07-19T11:09:00+08:00"
+      "output_excerpt": "AUDIT SOURCE PASS: snapshot=20260719-p2-block-pipeline-002 commit=ba5f29d1b26edd3dc15dd94691ca3fda5682e295 blobs=206 tree_sha256=893d8fa51e4aac373ca314f0d87b5e5ac5ec8f8633a826766265903131c5ae82",
+      "evidence_sha256": "2fbb240e5fec9a8dc340d241a768490af4687a7186f0d0df00f094c12ede4cde",
+      "recorded_at": "2026-07-19T11:27:17+08:00"
     }
   ],
   "deviations": [
@@ -217,5 +221,5 @@
     "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
     "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
   ],
-  "updated_at": "2026-07-19T11:11:00+08:00"
+  "updated_at": "2026-07-19T11:29:50+08:00"
 }
