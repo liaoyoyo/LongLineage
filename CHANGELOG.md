@@ -34,6 +34,20 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 - AI readiness staleness checks scoped to the intentionally independent
   governance target, with a CTest regression preventing unrelated producer
   headers from invalidating the governance executable.
+- A versioned performance-benchmark schema, reproducible BGZF writer harness,
+  source-digest replay, raw-trial/median checks and production-claim tamper test.
+- A performance/output policy separating implemented, component/bounded/full
+  measurements, derived values, estimates and plans, with exact comparability
+  and semantic-invariance gates.
+- ADR-0005 and release gates separating topology objective, candidate-family
+  completion and BQ-aware vertex-set ranking, including numerical-certificate
+  and large-family output requirements.
+
+### Changed
+
+- BGZF TSV rows now use one canonical payload for both physical write and
+  semantic digest, removing a redundant per-row allocation/copy while retaining
+  exact decompressed bytes and digests.
 
 ### Safety
 

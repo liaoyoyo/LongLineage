@@ -1,0 +1,67 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-method-performance-code-review",
+  "owner_agent_id": "codex:root/code-review",
+  "parent_task_id": "20260719-method-performance-publish-audit",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260719-method-performance-code-review.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-19T16:00:00+08:00",
+  "heartbeat_at": "2026-07-19T12:25:35+08:00",
+  "task_type": "A",
+  "goals": [
+    "LL-G2",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "BLOCKED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Read-only component review of LongLineage runtime, HTSlib reader, topology and artifact-writing code for existing accelerations, bottlenecks, semantic risks and bounded lossless improvements. No source modification is authorized."
+  },
+  "assumptions": [
+    "Current implementation may be incomplete and must not be described as production-ready.",
+    "A code-path observation is not a measured performance claim."
+  ],
+  "inputs": [
+    {
+      "role": "runtime_and_io_code",
+      "path": "src",
+      "sha256": null
+    },
+    {
+      "role": "runtime_and_io_headers",
+      "path": "include",
+      "sha256": null
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "parent_handoff",
+      "path": "docs/audits/20260719_method_performance_output_audit.md",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Map implemented and planned accelerations to exact code and contract paths.",
+      "verify": "Handoff lists each item with status, path, semantic invariant and missing verification."
+    },
+    {
+      "step": "Identify no more than five high-value lossless implementation candidates.",
+      "verify": "Each candidate includes risk, expected metric and a test capable of rejecting semantic drift."
+    }
+  ],
+  "evidence": [],
+  "deviations": [],
+  "blockers": [
+    "READ_ONLY_HANDOFF_DELIVERED_PARENT_INTEGRATION_PENDING"
+  ],
+  "updated_at": "2026-07-19T12:25:35+08:00"
+}

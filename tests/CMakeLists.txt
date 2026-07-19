@@ -128,10 +128,13 @@ add_test(
 add_test(
     NAME json_schema_contract_fixtures
     COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_json_schema_fixtures.sh")
+add_test(
+    NAME performance_benchmark_records
+    COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_performance_benchmarks.sh")
 set_tests_properties(
     governance_phase_state_negative governance_audit_evidence_negative gate_negative_binding_contract
     release_attestation_run_gate
-    json_schema_contract_fixtures
+    json_schema_contract_fixtures performance_benchmark_records
     PROPERTIES LABELS "governance;contract;negative;synthetic")
 
 add_custom_target(

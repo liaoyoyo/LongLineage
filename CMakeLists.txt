@@ -12,6 +12,7 @@ include(GNUInstallDirs)
 include(CTest)
 
 option(LONGLINEAGE_BUILD_TESTS "Build synthetic-only tests" ON)
+option(LONGLINEAGE_BUILD_BENCHMARKS "Build local, non-production benchmark executables" OFF)
 option(LONGLINEAGE_REQUIRE_EXACT_HTSLIB "Require the production HTSlib 1.18 pin" ON)
 option(LONGLINEAGE_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" ON)
 set(LONGLINEAGE_SANITIZERS "" CACHE STRING "Comma-separated sanitizers (Debug only)")
@@ -85,6 +86,15 @@ add_custom_target(
             --repo "${CMAKE_CURRENT_SOURCE_DIR}"
     DEPENDS longlineage_governance
     USES_TERMINAL)
+
+if(LONGLINEAGE_BUILD_BENCHMARKS)
+    add_executable(longlineage_benchmark_bgzf_writer
+        benchmarks/bgzf_writer_microbenchmark.cpp)
+    set_target_properties(longlineage_benchmark_bgzf_writer
+        PROPERTIES OUTPUT_NAME "longlineage-benchmark-bgzf-writer")
+    target_link_libraries(longlineage_benchmark_bgzf_writer
+        PRIVATE longlineage_core longlineage_build_options)
+endif()
 
 install(DIRECTORY include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 install(FILES LICENSE ORIGIN.md DESTINATION "${CMAKE_INSTALL_DATADIR}/longlineage")

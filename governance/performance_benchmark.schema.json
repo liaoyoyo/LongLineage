@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/governance/performance_benchmark-1.0.0.json",
+  "title": "LongLineage bounded performance benchmark record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "benchmark_id",
+    "task_id",
+    "classification",
+    "component",
+    "production_claim_allowed",
+    "workload",
+    "environment",
+    "source",
+    "commands",
+    "trials",
+    "result",
+    "semantic_invariants",
+    "limitations",
+    "recorded_at"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.performance_benchmark"},
+    "schema_version": {"const": "1.0.0"},
+    "benchmark_id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}-[a-z0-9][a-z0-9-]*-[0-9]{3}$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}-[a-z0-9][a-z0-9-]*$"
+    },
+    "classification": {
+      "enum": ["LOCAL_COMPONENT_MICROBENCHMARK", "BOUNDED_REAL_DATA", "FULL_PRODUCTION_COMPARISON"]
+    },
+    "component": {"type": "string", "minLength": 1},
+    "production_claim_allowed": {"const": false},
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rows",
+        "columns",
+        "logical_bytes",
+        "physical_bytes",
+        "writer_threads",
+        "repetitions_per_variant",
+        "cache_condition",
+        "output_filesystem",
+        "output_root_role"
+      ],
+      "properties": {
+        "rows": {"type": "integer", "minimum": 1},
+        "columns": {"type": "integer", "minimum": 1},
+        "logical_bytes": {"type": "integer", "minimum": 1},
+        "physical_bytes": {"type": "integer", "minimum": 1},
+        "writer_threads": {"type": "integer", "minimum": 1, "maximum": 4},
+        "repetitions_per_variant": {"type": "integer", "minimum": 5},
+        "cache_condition": {"enum": ["COLD", "WARM", "MIXED", "UNKNOWN"]},
+        "output_filesystem": {"type": "string", "minLength": 1},
+        "output_root_role": {"enum": ["SCRATCH", "STAGING", "VALIDATED_FROZEN"]}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operating_system",
+        "kernel",
+        "architecture",
+        "cpu_model",
+        "compiler",
+        "build_type",
+        "htslib_version"
+      ],
+      "properties": {
+        "operating_system": {"type": "string", "minLength": 1},
+        "kernel": {"type": "string", "minLength": 1},
+        "architecture": {"type": "string", "minLength": 1},
+        "cpu_model": {"type": "string", "minLength": 1},
+        "compiler": {"type": "string", "minLength": 1},
+        "build_type": {"enum": ["Debug", "Release", "RelWithDebInfo", "MinSizeRel"]},
+        "htslib_version": {"const": "1.18"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_commit",
+        "baseline_files",
+        "candidate_files",
+        "harness_path",
+        "harness_sha256",
+        "baseline_binary_sha256",
+        "candidate_binary_sha256"
+      ],
+      "properties": {
+        "baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "baseline_files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/file_digest"}
+        },
+        "candidate_files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/file_digest"}
+        },
+        "harness_path": {"type": "string", "const": "benchmarks/bgzf_writer_microbenchmark.cpp"},
+        "harness_sha256": {"$ref": "#/$defs/sha256"},
+        "baseline_binary_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_binary_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "trials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["before_seconds", "after_seconds"],
+      "properties": {
+        "before_seconds": {
+          "type": "array",
+          "minItems": 5,
+          "items": {"type": "number", "exclusiveMinimum": 0}
+        },
+        "after_seconds": {
+          "type": "array",
+          "minItems": 5,
+          "items": {"type": "number", "exclusiveMinimum": 0}
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "before_median_seconds",
+        "after_median_seconds",
+        "relative_wall_reduction_percent"
+      ],
+      "properties": {
+        "status": {"const": "COMPONENT_IMPROVEMENT_MEASURED"},
+        "before_median_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "after_median_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "relative_wall_reduction_percent": {"type": "number"}
+      }
+    },
+    "semantic_invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantic_sha256",
+        "same_semantic_sha256",
+        "same_logical_bytes",
+        "same_physical_bytes",
+        "verification_tests"
+      ],
+      "properties": {
+        "semantic_sha256": {"$ref": "#/$defs/sha256"},
+        "same_semantic_sha256": {"const": true},
+        "same_logical_bytes": {"const": true},
+        "same_physical_bytes": {"const": true},
+        "verification_tests": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "recorded_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "file_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "trial array lengths equal workload.repetitions_per_variant",
+    "reported medians are recomputed from trial arrays",
+    "relative_wall_reduction_percent is recomputed from the two medians",
+    "baseline file digests are replayed from baseline_commit and candidate file digests from the current tree",
+    "LOCAL_COMPONENT_MICROBENCHMARK and BOUNDED_REAL_DATA records can never authorize a production speed claim"
+  ]
+}

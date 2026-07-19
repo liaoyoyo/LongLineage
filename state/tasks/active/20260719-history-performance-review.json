@@ -1,0 +1,64 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260719-history-performance-review",
+  "owner_agent_id": "codex:root/history-review",
+  "parent_task_id": "20260719-method-performance-publish-audit",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260719-history-performance-review.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-19T16:00:00+08:00",
+  "heartbeat_at": "2026-07-19T12:28:56+08:00",
+  "task_type": "A",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G4"
+  ],
+  "status": "BLOCKED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Read-only review of prior InterSubMod strategies, sidecar/candidate-window experiments and performance records to separate comparable measurements from estimates and non-transferable scientific methods."
+  },
+  "assumptions": [
+    "Historical evidence is context, not LongLineage release evidence.",
+    "Only paths and metrics recoverable from source records may be reported."
+  ],
+  "inputs": [
+    {
+      "role": "source_mapping",
+      "path": "provenance/source_to_target_manifest.json",
+      "sha256": null
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "parent_handoff",
+      "path": "docs/audits/20260719_method_performance_output_audit.md",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Recover exact prior paths, scopes, metrics and limitations for reusable acceleration strategies.",
+      "verify": "Handoff labels every number MEASURED, DERIVED, ESTIMATED or PLANNED and cites its source path."
+    },
+    {
+      "step": "Separate reusable systems strategies from science-specific shortcuts.",
+      "verify": "Every reusable strategy includes a LongLineage semantic-parity condition; every unsafe transfer is explicitly rejected."
+    }
+  ],
+  "evidence": [],
+  "deviations": [
+    "An initial broad recursive pattern search matched large payload JSON and was interrupted; every cited result was subsequently re-read from exact manifest, receipt or bounded document paths."
+  ],
+  "blockers": [
+    "READ_ONLY_HANDOFF_DELIVERED_PARENT_INTEGRATION_PENDING"
+  ],
+  "updated_at": "2026-07-19T12:28:56+08:00"
+}

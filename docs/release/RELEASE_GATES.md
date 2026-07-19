@@ -30,7 +30,19 @@ receipt fixture is not a substitute for that implementation.
 
 - P3: M1 read set/partition/K/status/permutation decisions exact.
 - P4: M2 boundaries, precedence, exact-state ceiling and FDR family exact.
-- P5: objective, complete candidate family digest, legal parents and tree count exact.
+- P5 structural: objective, complete candidate-family digest, legal parents and
+  tree count exact; q<=4 exhaustive-oracle PASS is bounded evidence and does not
+  promote the q>4 production router.
+- P5 ranking: `objective_state`, `family_state` and `ranking_state` are separately
+  machine-enforced. Primary BQ-aware likelihood is evaluated once per candidate
+  vertex set, only after a complete family; it never selects parent edges within
+  that vertex set.
+- P5 numerical: every pruned published rank has replayable outward-rounded interval
+  certificates and a complete best-score tie class. Ordinary floating-point bounds,
+  incomplete families, caps and deadlines publish no rank.
+- P5 representation: explicit candidate enumeration is the current contract. Any
+  exact compressed family/count/tie representation requires a versioned schema,
+  independent expansion/count oracle and query contract before use.
 - P6: all fault injections caught by independent validator.
 - P7: 24/40 worker runs have identical semantic SHA and unchanged input SHA.
 

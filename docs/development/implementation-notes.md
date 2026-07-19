@@ -39,6 +39,15 @@ Status: in_progress
 - 這個cap只約束sink admitted logical payload，不涵蓋HTSlib/BGZF buffer、
   allocator overhead、thread stack、task queue、callback-local payload或RSS；
   production仍需global permit pool與實測證據。
+- Performance claim採`IMPLEMENTED / COMPONENT_MEASURED / BOUNDED_MEASURED /
+  FULL_PRODUCTION_MEASURED / DERIVED / ESTIMATED / PLANNED`分級。Bounded record
+  固定`production_claim_allowed=false`；只有P7兩個VALIDATED_FROZEN receipts可
+  支持production比較。
+- BGZF TSV row只建立一次canonical `row+LF` payload，同一buffer依序寫入BGZF與
+  semantic SHA。Field validation、decompressed bytes、logical/physical bytes、
+  close後physical SHA及writer-thread-independent semantic identity不變。
+- Local benchmark是versioned governance record；CI重播baseline Git blobs、
+  candidate source、harness SHA、raw-trial median與偽production-claim負向案例。
 
 ## Deviations
 
@@ -63,6 +72,8 @@ Status: in_progress
 - Jansson is used for local C++ JSON parsing to avoid a vendored header; the pinned
   production container records its exact version.
 - A small in-repo CTest harness avoids network-time test dependencies.
+- Close後完整重讀BGZF計算physical SHA會增加I/O，但它是freeze/validator的獨立
+  evidence，保留；不以writer內部digest取代。
 
 ## Open questions
 
@@ -70,6 +81,8 @@ Status: in_progress
 - Public-release license compatibility.
 - Private GitHub remote cannot be verified until the configured GitHub credential is
   valid.
+- Runtime performance collector尚未實作；run receipt schema存在不等於wall/RSS/I/O
+  等欄位已被正確收集。
 - Audit envelope的source-tree Git replay已定義；recorded command output digest
   仍需由明示的獨立replay命令重跑比對，不可把digest欄位存在當作執行證據。
 - P3 requires frozen PCG64/RNG/logical-digest vectors and a versioned HP-family
@@ -119,6 +132,9 @@ Status: in_progress
   `longlineage-governance`的實際source/CMake inputs，並新增
   `ai_readiness_independent_governance_target` CTest；原失敗不列入PASS
   envelope，修復後才重新擷取證據。
+- 第一個performance record replay因committed harness usage字串與/tmp原型不同，
+  正確拒絕harness SHA。Record更新為repo source的實際SHA後才PASS；原型binary
+  digests與raw trials保留，沒有把失敗驗證冒充PASS。
 
 ## Foundation verification snapshot
 
@@ -155,3 +171,29 @@ Status: in_progress
   process threads.
 - This evidence is explicitly `PARTIAL`, not a claim about seven real datasets
   or the still-missing complete production worker input bundle.
+
+## Method/performance audit snapshot
+
+- Historical strategy labels are separated into MEASURED, DERIVED, ESTIMATED and
+  PLANNED; candidate-window and topology bounded results are not promoted to
+  production claims.
+- Native catalog implies 16 artifacts plus 8 indexes; the 24-file target is a
+  contract-derived count pending P7 filesystem census.
+- BGZF row-payload local benchmark: 500,000 rows, 8+8 trials, median
+  `0.9010325 s → 0.8295770 s` (`7.930402067%` component wall reduction);
+  logical bytes, physical bytes and semantic SHA are identical.
+- Machine record:
+  `state/benchmarks/20260719-bgzf-row-payload-local.json`; it explicitly forbids
+  a production claim.
+- The 2026-07-19 topology/VAF handoff and both cited R3 receipts were replayed
+  read-only: three machine predicates, two receipt hashes and seven source
+  bindings passed. The result remains `NO_GO_PRODUCTION`.
+- [決策] ADR-0005 separates objective certification, complete-family
+  enumeration and ranking completion. Primary BQ-aware likelihood scores each
+  candidate vertex set once and cannot select parent edges within that set.
+- [偏離] The existing `topology_unit` 1.0.0 schema has only objective/family
+  states and additive parent-score winner semantics. No production ranker will
+  target it; a versioned schema migration is now an explicit P5 blocker.
+- [折衷] Exact compressed output for very large candidate families is not
+  invented in this audit. Explicit output remains the contract; compression
+  requires a separate ADR, expansion/count oracle and query semantics.

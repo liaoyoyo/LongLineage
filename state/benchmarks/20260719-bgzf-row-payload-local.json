@@ -1,0 +1,106 @@
+{
+  "schema_name": "longlineage.performance_benchmark",
+  "schema_version": "1.0.0",
+  "benchmark_id": "20260719-bgzf-row-payload-local-001",
+  "task_id": "20260719-method-performance-publish-audit",
+  "classification": "LOCAL_COMPONENT_MICROBENCHMARK",
+  "component": "BgzfTsvWriter shared row payload for physical write and semantic digest",
+  "production_claim_allowed": false,
+  "workload": {
+    "rows": 500000,
+    "columns": 5,
+    "logical_bytes": 71888972,
+    "physical_bytes": 1610593,
+    "writer_threads": 4,
+    "repetitions_per_variant": 8,
+    "cache_condition": "MIXED",
+    "output_filesystem": "ext4",
+    "output_root_role": "SCRATCH"
+  },
+  "environment": {
+    "operating_system": "Ubuntu 22.04",
+    "kernel": "Linux 5.15.0-173-generic",
+    "architecture": "x86_64",
+    "cpu_model": "AMD Opteron(tm) Processor 6344",
+    "compiler": "g++ 11.4.0",
+    "build_type": "Release",
+    "htslib_version": "1.18"
+  },
+  "source": {
+    "baseline_commit": "1d986806f4fe1d4c8617bfa7fa2915f9bafd513f",
+    "baseline_files": [
+      {
+        "path": "include/longlineage/artifact/bgzf_tsv_writer.hpp",
+        "sha256": "12926b21db102245ddf3a310dd239b8016bd6ae942ab4bdc3cb8095a0d9a6b59"
+      },
+      {
+        "path": "src/artifact/bgzf_tsv_writer.cpp",
+        "sha256": "59484d4dbb5e69813d5bbe49351b82329c2a72fd6837200d36fca59c2c6d25e0"
+      }
+    ],
+    "candidate_files": [
+      {
+        "path": "include/longlineage/artifact/bgzf_tsv_writer.hpp",
+        "sha256": "471c239eb4dc1f1f6d49d6bb2701546ae8f6063dc34c8c48b57bfef751d5b813"
+      },
+      {
+        "path": "src/artifact/bgzf_tsv_writer.cpp",
+        "sha256": "382ac57bcc9b383c3be601f2f3d1855dbe3218d236b359acd44ffb5f9b692acb"
+      }
+    ],
+    "harness_path": "benchmarks/bgzf_writer_microbenchmark.cpp",
+    "harness_sha256": "ad573638288e6befb5d4e264c225b4ce4dad13e8ef58e462a61248ebf9a67e0a",
+    "baseline_binary_sha256": "8095cab8b9d0cb2df4429185df6cdd17156c3053d37dca7cff211321f0f89753",
+    "candidate_binary_sha256": "0b84dcaf06220a1dc12a1144f8e752b66c5af5fc9c6d542f80c8f3d685bba560"
+  },
+  "commands": [
+    "g++ -std=c++17 -O3 -DNDEBUG -Iinclude -I/usr/local/include benchmarks/bgzf_writer_microbenchmark.cpp <release-liblonglineage_core.a> -L/usr/local/lib -lhts -ljansson -lssl -lcrypto -lpthread -o <variant-binary>",
+    "<variant-binary> /tmp/longlineage_bgzf_<variant>_<trial>.tsv.bgz 500000 4"
+  ],
+  "trials": {
+    "before_seconds": [
+      0.896143,
+      0.896070,
+      0.905922,
+      0.908174,
+      0.909219,
+      0.892955,
+      0.895826,
+      0.915648
+    ],
+    "after_seconds": [
+      0.826765,
+      0.836715,
+      0.832690,
+      0.815538,
+      0.832877,
+      0.827053,
+      0.827565,
+      0.831589
+    ]
+  },
+  "result": {
+    "status": "COMPONENT_IMPROVEMENT_MEASURED",
+    "before_median_seconds": 0.9010325,
+    "after_median_seconds": 0.829577,
+    "relative_wall_reduction_percent": 7.930402067
+  },
+  "semantic_invariants": {
+    "semantic_sha256": "e6db09aaae343569e5a74b2f4f44aa1f7aaa4df4d284c26bc1b2e2f91348f06b",
+    "same_semantic_sha256": true,
+    "same_logical_bytes": true,
+    "same_physical_bytes": true,
+    "verification_tests": [
+      "runtime_solver",
+      "determinism_contract",
+      "p2_determinism_matrix"
+    ]
+  },
+  "limitations": [
+    "Synthetic fixed-width rows do not represent the distribution of production artifact schemas.",
+    "The benchmark runs on scratch ext4 with MIXED cache state and does not control other host load.",
+    "The result measures only the BGZF TSV row assembly/write/digest component, not the LongLineage pipeline.",
+    "No seven-dataset, 24-worker or 40-worker comparison was run; production speedup claims remain forbidden."
+  ],
+  "recorded_at": "2026-07-19T12:31:56+08:00"
+}

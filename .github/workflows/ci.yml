@@ -94,6 +94,7 @@ jobs:
           /usr/bin/cmake -S . -B build \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DLONGLINEAGE_BUILD_TESTS=ON \
+            -DLONGLINEAGE_BUILD_BENCHMARKS=ON \
             -DLONGLINEAGE_REQUIRE_EXACT_HTSLIB=ON \
             -DLONGLINEAGE_WARNINGS_AS_ERRORS=ON \
             -DLONGLINEAGE_SANITIZERS=${{ matrix.sanitizers }}
