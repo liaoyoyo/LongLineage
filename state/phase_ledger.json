@@ -16,13 +16,20 @@
           "command": null,
           "exit_code": null
         },
-        {
-          "role": "CONTRACT",
-          "path": "provenance/source_to_target_manifest.json",
-          "sha256": null,
-          "command": null,
-          "exit_code": null
-        }
+      {
+        "role": "CONTRACT",
+        "path": "provenance/source_to_target_manifest.json",
+        "sha256": null,
+        "command": null,
+        "exit_code": null
+      },
+      {
+        "role": "AUDIT",
+        "path": "state/audits/20260719-foundation-verification-001.json",
+        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "exit_code": 0
+      }
       ],
       "blockers": [
         "PRIVATE_REMOTE_NOT_YET_VERIFIED"
@@ -35,7 +42,15 @@
       "predecessors": [
         "P0"
       ],
-      "evidence": [],
+    "evidence": [
+      {
+        "role": "AUDIT",
+        "path": "state/audits/20260719-foundation-verification-001.json",
+        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "exit_code": 0
+      }
+    ],
       "blockers": []
     },
     {
@@ -46,13 +61,20 @@
         "P1"
       ],
       "evidence": [
-        {
-          "role": "REPORT",
-          "path": "docs/audits/20260719_runtime_solver_audit.md",
-          "sha256": null,
-          "command": null,
-          "exit_code": null
-        }
+      {
+        "role": "REPORT",
+        "path": "docs/audits/20260719_runtime_solver_audit.md",
+        "sha256": null,
+        "command": null,
+        "exit_code": null
+      },
+      {
+        "role": "AUDIT",
+        "path": "state/audits/20260719-foundation-verification-001.json",
+        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "exit_code": 0
+      }
       ],
       "blockers": [
         "BLOCK_READER_NOT_IMPLEMENTED",
@@ -124,13 +146,20 @@
           "command": null,
           "exit_code": null
         },
-        {
-          "role": "REPORT",
-          "path": "docs/data/QUERY_GUIDE.md",
-          "sha256": null,
-          "command": null,
-          "exit_code": null
-        }
+      {
+        "role": "REPORT",
+        "path": "docs/data/QUERY_GUIDE.md",
+        "sha256": null,
+        "command": null,
+        "exit_code": null
+      },
+      {
+        "role": "AUDIT",
+        "path": "state/audits/20260719-foundation-verification-001.json",
+        "sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
+        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+        "exit_code": 0
+      }
       ],
       "blockers": [
         "INDEPENDENT_ARTIFACT_REPLAY_NOT_IMPLEMENTED",

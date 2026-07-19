@@ -1,0 +1,126 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260719-foundation-verification-001",
+  "task_id": "20260719-foundation",
+  "scope": {
+    "kind": "REPOSITORY",
+    "completeness": "FULL",
+    "description": "Full tracked LongLineage foundation source snapshot and governed synthetic verification.",
+    "included_paths": [
+      "."
+    ],
+    "excluded_paths": []
+  },
+  "source_snapshot_kind": "GIT_COMMIT",
+  "source_commit": "7a8f75e8d23302d14c32c545218de19658667d7d",
+  "source_tree_sha256": "8c8ccdbcad239b2612175852008b36b37ce737dbe78cc3f20578c2aea9952710",
+  "source_dirty": false,
+  "commands": [
+    {
+      "command_id": "clang-format-14",
+      "argv": [
+        "scripts/ci/check_format.sh",
+        "/tmp/clang-format-14-root/usr/bin/clang-format-14"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "420fb63862661535eb8af4c491443804c32964a032d53cddbe74711c8cff0209",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:52:19+08:00",
+      "completed_at": "2026-07-19T08:52:21+08:00"
+    },
+    {
+      "command_id": "ctest-debug",
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-debug",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "7f0a00e379cd7fa3769c97ed3117889a128d929e8efc98071076c15fa6b95c6a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:52:29+08:00",
+      "completed_at": "2026-07-19T08:52:59+08:00"
+    },
+    {
+      "command_id": "ctest-release",
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-release",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "2a7c1f4b6c7bd5ffafd9bca853fcb1c941d8a76ee730f801b52374cc35909ab3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:53:11+08:00",
+      "completed_at": "2026-07-19T08:53:37+08:00"
+    },
+    {
+      "command_id": "ctest-asan-ubsan",
+      "argv": [
+        "/usr/bin/env",
+        "ASAN_OPTIONS=detect_leaks=0",
+        "UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1",
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-verify-sanitize",
+        "--output-on-failure"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "f239dfe127ba3f2b93c8283cf64e9742bf0e20e8a98d73685080bf9816d89a2e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:53:44+08:00",
+      "completed_at": "2026-07-19T08:54:19+08:00"
+    },
+    {
+      "command_id": "check-all-debug",
+      "argv": [
+        "scripts/ci/check_all.sh",
+        "build-verify-debug"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "fd73d9f338c0edac8fdf5e1c188d3f3db2bdd4f94846f94dc996052b00893801",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:54:27+08:00",
+      "completed_at": "2026-07-19T08:55:19+08:00"
+    },
+    {
+      "command_id": "check-all-release",
+      "argv": [
+        "scripts/ci/check_all.sh",
+        "build-verify-release"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "706e64f7527e5f4052cafad85969d010d71310a61594bc130e3ebe72faa40aa8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:55:27+08:00",
+      "completed_at": "2026-07-19T08:56:24+08:00"
+    },
+    {
+      "command_id": "ai-readiness",
+      "argv": [
+        "scripts/ai/check_readiness.sh",
+        "build-verify-debug"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "93d07e0104724ccf787c90debacf05d6b20e24c8e441e5d5f7165bb97f2809f0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T08:56:35+08:00",
+      "completed_at": "2026-07-19T08:56:36+08:00"
+    }
+  ],
+  "captured_at": "2026-07-19T08:56:36+08:00",
+  "captured_by_agent_id": "codex:root",
+  "supersedes": [],
+  "superseded_by": null,
+  "supersession_reason": null
+}

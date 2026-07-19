@@ -100,7 +100,18 @@
       "verify": "Remote visibility is private and phase ledger retains P3-P8 blockers."
     }
   ],
-  "evidence": [],
+  "evidence": [
+    {
+      "evidence_id": "foundation-verification-001",
+      "evidence_path": "state/audits/20260719-foundation-verification-001.json",
+      "evidence_kind": "AUDIT",
+      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json",
+      "exit_code": 0,
+      "output_excerpt": "AUDIT SOURCE PASS: 197 Git blobs; Debug, Release and ASan/UBSan CTest 25/25; Debug/Release FOUNDATION_PASS.",
+      "evidence_sha256": "e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5",
+      "recorded_at": "2026-07-19T08:59:00+08:00"
+    }
+  ],
   "deviations": [
     "The default PATH cmake is 3.14.4; documented commands use /usr/bin/cmake 3.22.1.",
     "/usr/bin/jsonschema is 3.2.0 and falls back to Draft 7 for 2020-12 meta-schema URIs; current contracts use compatible keywords and pass exercised fixtures, but the validator must be pinned before release verification.",
@@ -115,5 +126,5 @@
     "DIRECT_HIGHS_DEPENDENCY_UNAVAILABLE",
     "DRAFT_2020_12_VALIDATOR_NOT_PINNED"
   ],
-  "updated_at": "2026-07-19T08:45:00+08:00"
+  "updated_at": "2026-07-19T08:59:00+08:00"
 }

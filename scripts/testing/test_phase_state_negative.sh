@@ -39,6 +39,7 @@ make_scratch_repo() {
     cp "$repo_root/schema/core/validation_receipt.schema.json" "$scratch/schema/core/"
     cp "$repo_root/state/project_state.json" "$scratch/state/project_state.json"
     cp "$repo_root/state/phase_ledger.json" "$scratch/state/phase_ledger.json"
+    cp "$repo_root/state/audits/"*.json "$scratch/state/audits/"
     cp "$repo_root/state/tasks/active/20260719-foundation.json" \
         "$scratch/state/tasks/active/"
     echo "$scratch"

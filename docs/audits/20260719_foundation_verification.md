@@ -107,7 +107,27 @@ LeakSanitizer以「current tracing environment不支援」拒絕。該次退出�
 
 ## Git audit binding
 
-本文件先隨foundation source snapshot提交。首次commit後另建立immutable
-`state/audits/*.json`，以commit SHA、canonical tree SHA與實際command-output
-digests綁定；該envelope及其task/phase reference會在後續evidence commit加入。
-不倒填不存在的subagent lease，也不把未提交worktree稱為clean snapshot。
+Foundation source snapshot：
+
+- Git commit：
+  `7a8f75e8d23302d14c32c545218de19658667d7d`
+- Canonical 197-blob tree SHA-256：
+  `8c8ccdbcad239b2612175852008b36b37ce737dbe78cc3f20578c2aea9952710`
+- Immutable envelope：
+  `state/audits/20260719-foundation-verification-001.json`
+- Envelope physical SHA-256：
+  `e63ec54e2ad6ddcaf3ba085dda0bc5a9389b20bd72f02cf23a4aaadc284a80a5`
+- Replay command：
+  `scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-001.json`
+- 實際片段：
+  `AUDIT SOURCE PASS ... blobs=197 ... tree_sha256=8c8ccdbc...`
+
+Envelope保存7個成功命令的完整argv、時間、exit code與stdout/stderr SHA；
+phase/task只引用envelope physical SHA。它不倒填不存在的subagent lease，也不把
+後續evidence commit混入先前source snapshot。
+
+首次把真實envelope reference加入ledger後，負向測試的scratch repo暴露「複製
+ledger但未複製其audit dependency」的隔離缺口。修正後，task/phase tests複製
+完整audit set；audit-DAG tests則先移除baseline AUDIT reference再注入單一圖形
+故障。Debug、Release、ASan/UBSan的三項focused replay均為3/3 PASS；此修正會由
+下一個source snapshot envelope重新綁定。

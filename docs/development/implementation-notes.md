@@ -78,6 +78,13 @@ Status: in_progress
   classified as environment-invalid evidence, and replayed with leak detection
   disabled while AddressSanitizer and UndefinedBehaviorSanitizer remained active;
   the governed replay passed 25/25.
+- After the first real audit envelope was bound into the phase/task ledgers, three
+  negative-test scratch repositories copied the ledger but not its referenced
+  `state/audits` files. They therefore failed at baseline setup before reaching the
+  intended injected fault. The task/phase tests now copy the complete immutable
+  audit set; the audit-DAG tests instead remove baseline AUDIT references before
+  creating their controlled synthetic graph. Debug, Release and ASan/UBSan focused
+  replays then passed 3/3.
 
 ## Foundation verification snapshot
 
@@ -92,3 +99,7 @@ Status: in_progress
 - Catalog: 22 offline schema IDs, 16 artifacts and 87 closed status/reason rows.
 - Full command, input/output and blocker evidence is recorded in
   `docs/audits/20260719_foundation_verification.md`.
+- Machine audit `20260719-foundation-verification-001` binds source commit
+  `7a8f75e8d23302d14c32c545218de19658667d7d`, 197 tracked blobs and canonical
+  tree SHA-256
+  `8c8ccdbcad239b2612175852008b36b37ce737dbe78cc3f20578c2aea9952710`.

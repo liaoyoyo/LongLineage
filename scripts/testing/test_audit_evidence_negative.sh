@@ -38,9 +38,11 @@ make_scratch_repo() {
     cp "$repo_root/schema/core/query_response.schema.json" "$scratch/schema/core/"
     cp "$repo_root/schema/core/validation_receipt.schema.json" "$scratch/schema/core/"
     cp "$repo_root/state/project_state.json" "$scratch/state/project_state.json"
-    cp "$repo_root/state/phase_ledger.json" "$scratch/state/phase_ledger.json"
-    cp "$repo_root/state/tasks/active/20260719-foundation.json" \
-        "$scratch/state/tasks/active/"
+    jq '(.phases[].evidence) |= map(select(.role != "AUDIT"))' \
+        "$repo_root/state/phase_ledger.json" >"$scratch/state/phase_ledger.json"
+    jq '.evidence = []' \
+        "$repo_root/state/tasks/active/20260719-foundation.json" \
+        >"$scratch/state/tasks/active/20260719-foundation.json"
     echo "$scratch"
 }
 
