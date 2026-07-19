@@ -31,6 +31,9 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 - Dedicated P2 gates for planner, indexed reader, adversarial reorder,
   forced-out-of-order 1/2/4/24/40 worker/chunk semantic determinism and worker
   failure cancellation/staging behavior.
+- AI readiness staleness checks scoped to the intentionally independent
+  governance target, with a CTest regression preventing unrelated producer
+  headers from invalidating the governance executable.
 
 ### Safety
 
@@ -39,7 +42,7 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
   process-isolated so parallel build configurations cannot overwrite one another.
 - Release attestation remains `NOT_READY`; unimplemented validator fault injection,
   P3/P4/P5 parity and full seven-dataset evidence cannot be bypassed.
-- Foundation plus P2 synthetic verification passes 30/30 tests in Debug,
+- Foundation plus P2 synthetic verification passes 31/31 tests in Debug,
   Release and ASan/UBSan; P2 concurrency cases also pass 5/5 under TSan.
   P2 remains `IN_PROGRESS`/partial until the complete production input bundle,
   physical global memory bound, multi-marker projection, validator/freeze

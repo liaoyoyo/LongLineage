@@ -81,6 +81,14 @@ set_tests_properties(
     PROPERTIES LABELS "governance;negative;synthetic")
 
 add_test(
+    NAME ai_readiness_independent_governance_target
+    COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ai/check_readiness.sh"
+            "${CMAKE_BINARY_DIR}")
+set_tests_properties(
+    ai_readiness_independent_governance_target
+    PROPERTIES LABELS "governance;ai;synthetic" RUN_SERIAL TRUE)
+
+add_test(
     NAME hygiene_untracked_forbidden_negative
     COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_hygiene_untracked.sh")
 set_tests_properties(

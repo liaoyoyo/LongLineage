@@ -114,6 +114,11 @@ Status: in_progress
   production `<=46` process-thread assertion only because the TSan runtime adds
   helper threads; that assertion remains enabled and passed in ordinary Debug/
   Release, while TSan continues to verify all P2 memory races.
+- 第一個clean-commit readiness replay把未連結到governance target的producer
+  header mtime誤判為stale binary而exit 1。Readiness現在只比較
+  `longlineage-governance`的實際source/CMake inputs，並新增
+  `ai_readiness_independent_governance_target` CTest；原失敗不列入PASS
+  envelope，修復後才重新擷取證據。
 
 ## Foundation verification snapshot
 
@@ -139,7 +144,7 @@ Status: in_progress
 
 ## P2 synthetic component verification
 
-- Debug/Release/ASan+UBSan full CTest: 30/30 PASS in each build.
+- Debug/Release/ASan+UBSan full CTest: 31/31 PASS in each build.
 - TSan focused CTest: 5/5 P2 tests PASS after the test-barrier repair.
 - Worker/chunk replay: workers `1,2,4,24,40` × block sizes `1,2`, plus a
   40-worker/4-BGZF-writer replay.

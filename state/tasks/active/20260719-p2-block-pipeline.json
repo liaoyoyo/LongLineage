@@ -66,6 +66,10 @@
       "kind": "FILE"
     },
     {
+      "path": "scripts/ai/check_readiness.sh",
+      "kind": "FILE"
+    },
+    {
       "path": "src/io/block_reader.cpp",
       "kind": "FILE"
     },
@@ -105,7 +109,7 @@
   "depends_on": [],
   "lease_state": "ACTIVE",
   "lease_expires_at": "2026-07-19T12:21:44+08:00",
-  "heartbeat_at": "2026-07-19T10:52:44+08:00",
+  "heartbeat_at": "2026-07-19T11:00:27+08:00",
   "task_type": "A",
   "goals": [
     "LL-G2",
@@ -178,7 +182,8 @@
   "deviations": [
     "The first TSan determinism replay identified a condition-variable double-lock report in the test-only worker activation barrier. The barrier was replaced by an atomic arrival gate and the race report disappeared.",
     "TSan runtime helper threads make the production process-thread ceiling unobservable under instrumentation; the <=46 assertion remains active and passed in non-TSan Debug and Release builds.",
-    "Two read-only review subagents were spawned without child task records. They made no filesystem writes; root independently applied and verified their findings. This is recorded as a process deviation rather than backfilled with a false historical lease, and future delegation requires a child task record before spawn."
+    "Two read-only review subagents were spawned without child task records. They made no filesystem writes; root independently applied and verified their findings. This is recorded as a process deviation rather than backfilled with a false historical lease, and future delegation requires a child task record before spawn.",
+    "The first clean-commit AI readiness replay failed because the script treated an unrelated producer header newer than the intentionally independent governance executable as a stale governance build. The evidence was rejected, the dependency scope was repaired and a positive CTest regression was added before recapturing the audit."
   ],
   "blockers": [
     "P1_PREDECESSOR_NOT_VERIFIED",
@@ -188,5 +193,5 @@
     "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
     "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
   ],
-  "updated_at": "2026-07-19T10:52:44+08:00"
+  "updated_at": "2026-07-19T11:00:27+08:00"
 }
