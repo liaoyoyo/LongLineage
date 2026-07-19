@@ -1,5 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
+option(
+    LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS
+    "Register tests that require Git history or repository control files excluded from production build contexts"
+    ON)
+
 add_executable(test_dependency_smoke test_main.cpp)
 target_link_libraries(test_dependency_smoke PRIVATE longlineage_core longlineage_build_options)
 add_test(NAME dependency_smoke COMMAND test_dependency_smoke)
@@ -88,12 +93,14 @@ set_tests_properties(
     ai_readiness_independent_governance_target
     PROPERTIES LABELS "governance;ai;synthetic" RUN_SERIAL TRUE)
 
-add_test(
-    NAME hygiene_untracked_forbidden_negative
-    COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_hygiene_untracked.sh")
-set_tests_properties(
-    hygiene_untracked_forbidden_negative
-    PROPERTIES LABELS "governance;negative;synthetic")
+if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
+    add_test(
+        NAME hygiene_untracked_forbidden_negative
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_hygiene_untracked.sh")
+    set_tests_properties(
+        hygiene_untracked_forbidden_negative
+        PROPERTIES LABELS "governance;negative;synthetic;repository-context")
+endif()
 
 add_test(
     NAME governance_agent_task_unknown_field_negative
@@ -128,14 +135,25 @@ add_test(
 add_test(
     NAME json_schema_contract_fixtures
     COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_json_schema_fixtures.sh")
-add_test(
-    NAME performance_benchmark_records
-    COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_performance_benchmarks.sh")
-set_tests_properties(
+if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
+    add_test(
+        NAME performance_benchmark_records
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_performance_benchmarks.sh")
+    add_test(
+        NAME dependency_lock_negative
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_dependency_lock_negative.sh")
+endif()
+set(longlineage_governance_contract_tests
     governance_phase_state_negative governance_audit_evidence_negative gate_negative_binding_contract
-    release_attestation_run_gate
-    json_schema_contract_fixtures performance_benchmark_records
+    release_attestation_run_gate json_schema_contract_fixtures)
+set_tests_properties(
+    ${longlineage_governance_contract_tests}
     PROPERTIES LABELS "governance;contract;negative;synthetic")
+if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
+    set_tests_properties(
+        performance_benchmark_records dependency_lock_negative
+        PROPERTIES LABELS "governance;contract;negative;synthetic;repository-context")
+endif()
 
 add_custom_target(
     check

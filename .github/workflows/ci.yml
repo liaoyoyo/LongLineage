@@ -58,14 +58,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install build-only dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            build-essential clang clang-format-14 curl jq libbz2-dev libdeflate-dev \
+            build-essential clang clang-format-14 cmake curl jq libbz2-dev libdeflate-dev \
             libjansson-dev liblzma-dev libssl-dev pkg-config strace zlib1g-dev
           sudo apt-get install -y --no-install-recommends python3-jsonschema
+          test -x /usr/bin/cmake
+          /usr/bin/cmake --version
 
       - name: Build pinned HTSlib
         env:
@@ -126,5 +130,27 @@ jobs:
         run: scripts/ci/check_dependency_lock.sh
       - name: Build pinned production image
         run: docker build --file containers/Dockerfile --tag longlineage:ci .
+      - name: Verify resolved package manifests
+        run: |
+          docker image inspect longlineage:ci --format 'IMAGE_ID={{.Id}}'
+          docker run --rm --network none --entrypoint /bin/sh longlineage:ci -c \
+            'set -eu
+             validate_manifest() {
+               file="$1"
+               test -s "$file"
+               LC_ALL=C sort -c "$file"
+               awk -F "\t" "NF != 2 || \$1 == \"\" || \$2 == \"\" { exit 1 }" "$file"
+               test "$(cut -f1 "$file" | LC_ALL=C sort | uniq -d | wc -l)" -eq 0
+               printf "PACKAGE_MANIFEST path=%s rows=%s sha256=%s\n" \
+                 "$file" "$(wc -l < "$file")" "$(sha256sum "$file" | cut -d " " -f1)"
+             }
+             builder=/opt/longlineage/share/provenance/builder-apt-packages.tsv
+             runtime=/opt/longlineage/share/provenance/runtime-apt-packages.tsv
+             validate_manifest "$builder"
+             validate_manifest "$runtime"
+             live="$(mktemp)"
+             dpkg-query -W -f="\${binary:Package}\t\${Version}\n" | LC_ALL=C sort > "$live"
+             cmp "$runtime" "$live"
+             echo "RUNTIME_MANIFEST_LIVE_DPKG_MATCH=PASS"'
       - name: Smoke CLI
         run: docker run --rm --network none longlineage:ci --version

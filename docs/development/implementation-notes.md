@@ -48,6 +48,13 @@ Status: in_progress
   close後physical SHA及writer-thread-independent semantic identity不變。
 - Local benchmark是versioned governance record；CI重播baseline Git blobs、
   candidate source、harness SHA、raw-trial median與偽production-claim負向案例。
+- CI的CMake authority與本機toolchain SoT一致：hosted runner先明示安裝apt
+  CMake，再只使用`/usr/bin/cmake`。需要Git history或`.github` control files的
+  tests標為`repository-context`並由full-history hosted checkout執行；production
+  Docker context不攜帶這些repository metadata。
+- Mutable Ubuntu apt archive不再使用會被汰換的patch-version pins。Immutable
+  base image digest與HTSlib SHA仍是hard authority；實際builder/runtime package
+  versions寫入image provenance manifests，release再以final image digest封存。
 
 ## Deviations
 
@@ -66,6 +73,9 @@ Status: in_progress
 - P2修正期啟動兩個唯讀review subagent前未先建立child task record。兩者沒有
   filesystem寫入，所有建議均由root在既有lease內重作與驗證；此流程偏離不倒填
   偽造歷史lease。後續delegation必須先註冊child task與read/write scope。
+- CI hotfix留在既有`docs/method-performance-audit` branch，因它是draft PR #1
+  的失敗head；這是一次性快速修復branch-name deviation，後續行為變更恢復
+  `fix/*`或`feat/*`。
 
 ## Trade-offs
 
@@ -135,6 +145,10 @@ Status: in_progress
 - 第一個performance record replay因committed harness usage字串與/tmp原型不同，
   正確拒絕harness SHA。Record更新為repo source的實際SHA後才PASS；原型binary
   digests與raw trials保留，沒有把失敗驗證冒充PASS。
+- 第一個CI hotfix image在apt/CMake前置問題解除後，正確揭露三個
+  repository-context assumptions與一個archived-parent scratch缺口。最終將
+  full-history/host-control tests留在hosted gate，production image執行30個
+  hermetic tests；scratch則複製archived task與其digest-bound evidence。
 
 ## Foundation verification snapshot
 

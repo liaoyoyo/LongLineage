@@ -42,12 +42,22 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 - ADR-0005 and release gates separating topology objective, candidate-family
   completion and BQ-aware vertex-set ranking, including numerical-certificate
   and large-family output requirements.
+- CI dependency-lock negative regressions for retired apt pins, missing
+  apt-owned CMake and shallow benchmark-history checkout.
+- Builder/runtime apt package manifests embedded in the production image for
+  resolved-package provenance.
 
 ### Changed
 
 - BGZF TSV rows now use one canonical payload for both physical write and
   semantic digest, removing a redundant per-row allocation/copy while retaining
   exact decompressed bytes and digests.
+- Hosted CI explicitly installs and uses `/usr/bin/cmake`, checks out full Git
+  history for benchmark replay, and separates repository-context tests from the
+  sanitized production-image build context.
+- The production container retains immutable Ubuntu/HTSlib authorities while
+  resolving supported Jammy security packages at image build and recording the
+  exact installed versions.
 
 ### Safety
 
