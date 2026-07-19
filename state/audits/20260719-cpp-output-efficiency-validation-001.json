@@ -1,0 +1,157 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260719-cpp-output-efficiency-validation-001",
+  "task_id": "20260719-cpp-output-efficiency-validation",
+  "scope": {
+    "kind": "BUILD",
+    "completeness": "PARTIAL",
+    "description": "Clean-commit source snapshot for the implemented C++ P2 deterministic-output path, BGZF TSV writer, executable fail-closed gates, benchmark checker and phase authorities. The contemporaneous report, replay receipt and task record are evidence outputs and are deliberately excluded from the source snapshot.",
+    "included_paths": [
+      "CMakeLists.txt",
+      "apps/evaluate_main.cpp",
+      "apps/export_legacy_main.cpp",
+      "apps/longlineage_main.cpp",
+      "apps/query_main.cpp",
+      "apps/validate_main.cpp",
+      "benchmarks/bgzf_writer_microbenchmark.cpp",
+      "include/longlineage/artifact/bgzf_tsv_writer.hpp",
+      "schema/catalog.json",
+      "scripts/ci/check_all.sh",
+      "scripts/ci/check_performance_benchmarks.sh",
+      "scripts/testing/test_cli_gates.sh",
+      "src/artifact/bgzf_tsv_writer.cpp",
+      "state/benchmarks/20260719-bgzf-row-payload-local.json",
+      "state/phase_ledger.json",
+      "state/release_attestation.json",
+      "tests/CMakeLists.txt",
+      "tests/unit/test_block_pipeline.cpp",
+      "tests/unit/test_runtime_solver.cpp"
+    ],
+    "excluded_paths": [
+      "build-cpp-output-validation",
+      "docs/audits/20260719_cpp_output_efficiency_validation.md",
+      "state/audits/20260719-cpp-output-efficiency-validation-001.json",
+      "state/benchmarks/20260719-bgzf-row-payload-replay-local.json",
+      "state/tasks/active/20260719-cpp-output-efficiency-validation.json"
+    ]
+  },
+  "source_snapshot_kind": "GIT_COMMIT",
+  "source_commit": "9dec6b13150bd38c25d737add945e032707408bd",
+  "source_tree_sha256": "802829c97122fdfa6b3bdee4b0481d81fb2293ba74a2860e8785dfb5484cabfe",
+  "source_dirty": false,
+  "commands": [
+    {
+      "command_id": "configure_release",
+      "argv": [
+        "/usr/bin/cmake",
+        "-S",
+        ".",
+        "-B",
+        "build-cpp-output-validation",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DLONGLINEAGE_BUILD_TESTS=ON",
+        "-DLONGLINEAGE_BUILD_BENCHMARKS=ON",
+        "-DLONGLINEAGE_REQUIRE_EXACT_HTSLIB=ON",
+        "-DLONGLINEAGE_WARNINGS_AS_ERRORS=ON",
+        "-DLONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS=ON"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "0116f12a44ef8af8cd940087534a360ef8bb676b7fc74db778129726929a0dab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:09:46+08:00",
+      "completed_at": "2026-07-19T23:09:46+08:00"
+    },
+    {
+      "command_id": "build_release",
+      "argv": [
+        "/usr/bin/cmake",
+        "--build",
+        "build-cpp-output-validation",
+        "--parallel",
+        "4"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "52fa2e7f4668342ad795af49ec36ba194531edc6aabef8334940f21758421ed2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:09:46+08:00",
+      "completed_at": "2026-07-19T23:09:47+08:00"
+    },
+    {
+      "command_id": "focused_cpp_validation",
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "build-cpp-output-validation",
+        "--output-on-failure",
+        "-R",
+        "^(runtime_solver|determinism_contract|p2_determinism_matrix|performance_benchmark_records)$"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "eff57a3d5c0e15a15b5ad2495856101e0a9e39a4de6a65a0d3b794e4ec39c049",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:09:47+08:00",
+      "completed_at": "2026-07-19T23:09:49+08:00"
+    },
+    {
+      "command_id": "direct_determinism_contract",
+      "argv": [
+        "./build-cpp-output-validation/bin/test_block_pipeline",
+        "determinism"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "1451bd73b858e6a1f71d1b20313247ea854fbd26f0b0c7026fb56077d020c27c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:09:49+08:00",
+      "completed_at": "2026-07-19T23:09:49+08:00"
+    },
+    {
+      "command_id": "benchmark_record_validation",
+      "argv": [
+        "scripts/ci/check_performance_benchmarks.sh"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "13a06aeeeba5613858952697824e046f0a36ed6d67f9f57dfe7077a18cecfaf6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:09:49+08:00",
+      "completed_at": "2026-07-19T23:09:52+08:00"
+    },
+    {
+      "command_id": "complete_foundation_gate",
+      "argv": [
+        "scripts/ci/check_all.sh",
+        "build-cpp-output-validation"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "a127efb828705cb9856921395aa6de1dd2e0d84070e70bdaea3af7052c6b2cd9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:09:52+08:00",
+      "completed_at": "2026-07-19T23:10:35+08:00"
+    },
+    {
+      "command_id": "production_cli_fail_closed",
+      "argv": [
+        "scripts/testing/test_cli_gates.sh",
+        "build-cpp-output-validation/bin/longlineage",
+        "."
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "6cc99258c42540039aab4664dc41de79f07a88b4785e5c7d6d0317ac7c707ceb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-19T23:10:35+08:00",
+      "completed_at": "2026-07-19T23:10:36+08:00"
+    }
+  ],
+  "captured_at": "2026-07-19T23:10:36+08:00",
+  "captured_by_agent_id": "codex:root",
+  "supersedes": [],
+  "superseded_by": null,
+  "supersession_reason": null
+}
