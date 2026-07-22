@@ -32,6 +32,7 @@ expected_header=$'component\tversion\tsource\tsha256_or_digest'
 }
 
 base_digest="$(awk -F '\t' '$1=="ubuntu_base"{print $4}' "$lock")"
+boost_version="$(awk -F '\t' '$1=="boost"{print $2}' "$lock")"
 htslib_version="$(awk -F '\t' '$1=="htslib"{print $2}' "$lock")"
 htslib_sha="$(awk -F '\t' '$1=="htslib"{print $4}' "$lock")"
 apt_resolution="$(awk -F '\t' '$1=="apt_resolution"{print $2 "\t" $4}' "$lock")"
@@ -42,6 +43,10 @@ apt_resolution="$(awk -F '\t' '$1=="apt_resolution"{print $2 "\t" $4}' "$lock")"
 }
 [[ "$htslib_version" == "1.18" && "$htslib_sha" =~ ^[0-9a-f]{64}$ ]] || {
     echo "DEPENDENCY LOCK FAIL: malformed HTSlib pin" >&2
+    exit 1
+}
+[[ "$boost_version" == "1.74.x" ]] || {
+    echo "DEPENDENCY LOCK FAIL: malformed Boost version policy" >&2
     exit 1
 }
 [[ "$apt_resolution" == $'jammy-current-at-image-build\tcaptured-in-image' ]] || {
@@ -62,6 +67,10 @@ grep -Fq "HTSLIB_VERSION=1.18" "$dockerfile" || {
 }
 grep -Fq "$htslib_sha" "$dockerfile" || {
     echo "DEPENDENCY LOCK FAIL: Dockerfile HTSlib SHA differs from lock" >&2
+    exit 1
+}
+grep -Fq "libboost-dev" "$dockerfile" || {
+    echo "DEPENDENCY LOCK FAIL: builder image does not install libboost-dev" >&2
     exit 1
 }
 apt_install_commands="$(
@@ -115,6 +124,10 @@ grep -Eq '^[[:space:]]+build-essential clang clang-format-14 cmake curl' <<<"$sy
     echo "DEPENDENCY LOCK FAIL: hosted runner does not install cmake explicitly" >&2
     exit 1
 }
+grep -Fq "libboost-dev" <<<"$synthetic_job" || {
+    echo "DEPENDENCY LOCK FAIL: hosted runner does not install libboost-dev" >&2
+    exit 1
+}
 grep -Fq "test -x /usr/bin/cmake" <<<"$synthetic_job" || {
     echo "DEPENDENCY LOCK FAIL: hosted runner does not probe apt-owned cmake" >&2
     exit 1
@@ -138,4 +151,4 @@ for manifest_check in "sort -c" "uniq -d" "sha256sum" 'cmp "$runtime" "$live"'; 
     }
 done
 
-echo "DEPENDENCY LOCK RESULT: PASS base=${base_digest} htslib=${htslib_version} apt=resolved-and-captured"
+echo "DEPENDENCY LOCK RESULT: PASS base=${base_digest} boost=${boost_version} htslib=${htslib_version} apt=resolved-and-captured"

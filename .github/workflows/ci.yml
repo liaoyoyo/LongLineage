@@ -125,7 +125,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            build-essential clang clang-format-14 cmake curl jq libbz2-dev libdeflate-dev \
+            build-essential clang clang-format-14 cmake curl jq libboost-dev libbz2-dev libdeflate-dev \
             libjansson-dev liblzma-dev libssl-dev pkg-config strace zlib1g-dev
           sudo apt-get install -y --no-install-recommends python3-jsonschema
           test -x /usr/bin/cmake

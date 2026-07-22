@@ -12,6 +12,7 @@
     {"path": "ROADMAP.md", "kind": "FILE"},
     {"path": "apps", "kind": "DIRECTORY_TREE"},
     {"path": "cmake", "kind": "DIRECTORY_TREE"},
+    {"path": "containers", "kind": "DIRECTORY_TREE"},
     {"path": "contracts", "kind": "DIRECTORY_TREE"},
     {"path": "docs", "kind": "DIRECTORY_TREE"},
     {"path": "governance", "kind": "DIRECTORY_TREE"},
@@ -34,7 +35,7 @@
   "depends_on": [],
   "lease_state": "ACTIVE",
   "lease_expires_at": "2026-07-23T03:55:30+08:00",
-  "heartbeat_at": "2026-07-22T22:53:15+08:00",
+  "heartbeat_at": "2026-07-22T23:08:20+08:00",
   "task_type": "C",
   "goals": ["LL-G1", "LL-G4", "LL-G5"],
   "status": "IN_PROGRESS",
@@ -60,7 +61,9 @@
     {"role": "publication_task", "path": "state/tasks/active/20260722-release-repair-and-publish.json", "sha256": null},
     {"role": "private_path_map_schema", "path": "schema/compat/regional_compat_input_paths.schema.json", "sha256": null},
     {"role": "history_hygiene_gate", "path": "scripts/ci/check_history_hygiene.sh", "sha256": null},
-    {"role": "portable_report_qa", "path": "presentation/qa_static_report.py", "sha256": null}
+    {"role": "portable_report_qa", "path": "presentation/qa_static_report.py", "sha256": null},
+    {"role": "declared_boost_dependency", "path": "cmake/Dependencies.cmake", "sha256": null},
+    {"role": "dependency_lock", "path": "containers/versions.lock.tsv", "sha256": null}
   ],
   "step_verify": [
     {
@@ -81,7 +84,9 @@
     }
   ],
   "evidence": [],
-  "deviations": [],
+  "deviations": [
+    "The first hosted runs for commit b9797605cdc859e571c1961c1b4343c40d7c7183 exposed an undeclared Boost header dependency: all six compiler/sanitizer matrix builds failed before tests, while history hygiene and browser QA passed. The dependency is now declared in CMake, hosted CI, the production-image builder and the lock contract; failed runs are not completion evidence."
+  ],
   "blockers": [],
-  "updated_at": "2026-07-22T22:53:15+08:00"
+  "updated_at": "2026-07-22T23:08:20+08:00"
 }

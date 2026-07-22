@@ -1,6 +1,7 @@
 component	version	source	sha256_or_digest
 ubuntu_base	22.04	docker.io/library/ubuntu	sha256:0e0a0fc6d18feda9db1590da249ac93e8d5abfea8f4c3c0c849ce512b5ef8982
 apt_resolution	jammy-current-at-image-build	Ubuntu-jammy-updates-security	captured-in-image
+boost	1.74.x	Ubuntu-jammy	resolved-in-image
 cmake	3.22.x	Ubuntu-jammy	resolved-in-image
 gcc	11	Ubuntu-jammy	apt-major
 clang_format	14.x	Ubuntu-jammy	resolved-in-ci-log

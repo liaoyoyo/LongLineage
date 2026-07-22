@@ -62,6 +62,7 @@ target_include_directories(longlineage_core
 target_link_libraries(longlineage_core
     PUBLIC
         longlineage_build_options
+        Boost::boost
         PkgConfig::HTSLIB
         PkgConfig::JANSSON
         OpenSSL::Crypto

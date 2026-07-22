@@ -1000,3 +1000,15 @@ Status: in_progress · PARTIAL — private draft publication scope; not P8 or a 
   8,222 regions、20,119 units、106,559 patterns與0 mismatch未改變，新增的
   TOCTOU/history文字明示non-cooperating same-UID race與post-commit CI仍待完成。
   Machine JSON SHA為`08bada86…d04daa`，standalone HTML SHA為`ad466c79…0bb19b`。
+- [偏離 2026-07-22] 第一個private draft commit `b9797605…c7183`的實際
+  introduced-history scan通過（1 commit、252 blobs），PR #4維持PRIVATE/DRAFT；但
+  push與pull_request兩個hosted workflow的六個compiler/sanitizer build jobs均在
+  `src/cooccurrence/statistics.cpp`因缺少`boost/math/distributions/beta.hpp`失敗。
+  History與browser QA job通過，故這是CI dependency declaration落差，不是科學結果
+  或HTML內容失配；失敗run不列為completion evidence。
+- [修復 2026-07-22] Hosted runner與container builder均加入`libboost-dev`，dependency
+  lock固定Jammy Boost 1.74.x；CMake加入`find_package(Boost 1.74 REQUIRED)`與
+  `Boost::boost`，讓缺少header時在configure fail closed。正向lock、移除hosted Boost、
+  移除container Boost與禁用CMake Boost的負向控制均PASS；fresh Release configure
+  解析Boost 1.74.0，warnings-as-errors build exit 0，完整`check_all`為47/47、
+  no-network PASS與`FOUNDATION_PASS`。修復後current-head hosted CI仍須重跑全綠。

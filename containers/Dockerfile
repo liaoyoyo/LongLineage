@@ -13,6 +13,7 @@ RUN apt-get update \
         ca-certificates \
         cmake \
         curl \
+        libboost-dev \
         libbz2-dev \
         libdeflate-dev \
         libjansson-dev \

@@ -43,7 +43,8 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
   completion and BQ-aware vertex-set ranking, including numerical-certificate
   and large-family output requirements.
 - CI dependency-lock negative regressions for retired apt pins, missing
-  apt-owned CMake and shallow benchmark-history checkout.
+  apt-owned CMake, missing hosted/container Boost headers and shallow
+  benchmark-history checkout.
 - Builder/runtime apt package manifests embedded in the production image for
   resolved-package provenance.
 - A bounded HCC1395 whole-autosome dataset gate with same-binary 24/40-worker
@@ -85,8 +86,10 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
   semantic digest, removing a redundant per-row allocation/copy while retaining
   exact decompressed bytes and digests.
 - Hosted CI explicitly installs and uses `/usr/bin/cmake`, checks out full Git
-  history for benchmark replay, and separates repository-context tests from the
-  sanitized production-image build context.
+  history for benchmark replay, installs the declared Boost 1.74 header
+  dependency, and separates repository-context tests from the sanitized
+  production-image build context. CMake now rejects a missing Boost dependency
+  during configure instead of failing later during compilation.
 - The production container retains immutable Ubuntu/HTSlib authorities while
   resolving supported Jammy security packages at image build and recording the
   exact installed versions.

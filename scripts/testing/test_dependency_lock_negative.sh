@@ -16,6 +16,35 @@ cp "$checker" "$scratch/scripts/ci/check_dependency_lock.sh"
 
 LONGLINEAGE_REPO_ROOT="$scratch" "$scratch/scripts/ci/check_dependency_lock.sh" >/dev/null
 
+sed -i 's/ libboost-dev//' "$scratch/.github/workflows/ci.yml"
+set +e
+hosted_boost_output="$(
+    LONGLINEAGE_REPO_ROOT="$scratch" "$scratch/scripts/ci/check_dependency_lock.sh" 2>&1
+)"
+hosted_boost_status=$?
+set -e
+[[ "$hosted_boost_status" -ne 0 &&
+   "$hosted_boost_output" == *"hosted runner does not install libboost-dev"* ]] || {
+    echo "DEPENDENCY LOCK NEGATIVE FAIL: missing hosted-runner Boost was not rejected" >&2
+    exit 1
+}
+
+cp "$repo_root/.github/workflows/ci.yml" "$scratch/.github/workflows/ci.yml"
+sed -i '/^[[:space:]]*libboost-dev \\/d' "$scratch/containers/Dockerfile"
+set +e
+image_boost_output="$(
+    LONGLINEAGE_REPO_ROOT="$scratch" "$scratch/scripts/ci/check_dependency_lock.sh" 2>&1
+)"
+image_boost_status=$?
+set -e
+[[ "$image_boost_status" -ne 0 &&
+   "$image_boost_output" == *"builder image does not install libboost-dev"* ]] || {
+    echo "DEPENDENCY LOCK NEGATIVE FAIL: missing builder-image Boost was not rejected" >&2
+    exit 1
+}
+
+cp "$repo_root/containers/Dockerfile" "$scratch/containers/Dockerfile"
+
 sed -i \
     '0,/ca-certificates \\/s/ca-certificates \\/ca-certificates=0.invalid \\/' \
     "$scratch/containers/Dockerfile"
