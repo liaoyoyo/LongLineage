@@ -35,7 +35,7 @@
   "depends_on": [],
   "lease_state": "ACTIVE",
   "lease_expires_at": "2026-07-23T03:55:30+08:00",
-  "heartbeat_at": "2026-07-22T23:08:20+08:00",
+  "heartbeat_at": "2026-07-23T00:38:09+08:00",
   "task_type": "C",
   "goals": ["LL-G1", "LL-G4", "LL-G5"],
   "status": "IN_PROGRESS",
@@ -63,7 +63,18 @@
     {"role": "history_hygiene_gate", "path": "scripts/ci/check_history_hygiene.sh", "sha256": null},
     {"role": "portable_report_qa", "path": "presentation/qa_static_report.py", "sha256": null},
     {"role": "declared_boost_dependency", "path": "cmake/Dependencies.cmake", "sha256": null},
-    {"role": "dependency_lock", "path": "containers/versions.lock.tsv", "sha256": null}
+    {"role": "dependency_lock", "path": "containers/versions.lock.tsv", "sha256": null},
+    {"role": "hosted_ci_definition", "path": ".github/workflows/ci.yml", "sha256": null},
+    {"role": "release_change_log", "path": "CHANGELOG.md", "sha256": null},
+    {"role": "git_commit_build_binding", "path": "CMakeLists.txt", "sha256": null},
+    {"role": "pinned_container_definition", "path": "containers/Dockerfile", "sha256": null},
+    {"role": "dependency_lock_gate", "path": "scripts/ci/check_dependency_lock.sh", "sha256": null},
+    {"role": "dependency_lock_negative_tests", "path": "scripts/testing/test_dependency_lock_negative.sh", "sha256": null},
+    {"role": "audit_resource_lifetime_fix", "path": "src/audit/hcc1395_determinism.cpp", "sha256": null},
+    {"role": "validator_resource_lifetime_fix", "path": "src/validation/artifact_validator.cpp", "sha256": null},
+    {"role": "synthetic_provenance_separation", "path": "tests/CMakeLists.txt", "sha256": null},
+    {"role": "live_focus_state", "path": "docs/CURRENT_FOCUS.md", "sha256": null},
+    {"role": "project_state", "path": "state/project_state.json", "sha256": null}
   ],
   "step_verify": [
     {
@@ -85,8 +96,10 @@
   ],
   "evidence": [],
   "deviations": [
-    "The first hosted runs for commit b9797605cdc859e571c1961c1b4343c40d7c7183 exposed an undeclared Boost header dependency: all six compiler/sanitizer matrix builds failed before tests, while history hygiene and browser QA passed. The dependency is now declared in CMake, hosted CI, the production-image builder and the lock contract; failed runs are not completion evidence."
+    "The first hosted runs for commit b9797605cdc859e571c1961c1b4343c40d7c7183 exposed an undeclared Boost header dependency: all six compiler/sanitizer matrix builds failed before tests, while history hygiene and browser QA passed. The dependency is now declared in CMake, hosted CI, the production-image builder and the lock contract; failed runs are not completion evidence.",
+    "Subsequent hosted runs exposed a Clang-only unused-constant warning, sanitizer-visible Jansson and BGZF lifetime leaks, and missing Git provenance/tooling in the deliberately .git-free container context. Each issue was repaired without changing scientific decisions; the failed hosted runs remain negative evidence only.",
+    "Independent review rejected the initial shape-only source commit check because a fabricated 40-hex value or dirty checkout could be mislabeled. The repaired contract verifies clean HEAD when Git metadata exists, makes .git-free provenance an explicit trusted-CI assertion, and consumes the commit argument after stable dependency layers."
   ],
   "blockers": [],
-  "updated_at": "2026-07-22T23:08:20+08:00"
+  "updated_at": "2026-07-23T00:38:09+08:00"
 }

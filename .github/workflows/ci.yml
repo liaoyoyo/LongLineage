@@ -189,7 +189,20 @@ jobs:
       - name: Verify dependency lock
         run: scripts/ci/check_dependency_lock.sh
       - name: Build pinned production image
-        run: docker build --file containers/Dockerfile --tag longlineage:ci .
+        run: |
+          verify_source_binding() {
+            actual_commit="$(git rev-parse --verify HEAD)"
+            test "$actual_commit" = "$GITHUB_SHA"
+            git cat-file -e "${GITHUB_SHA}^{commit}"
+            test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          }
+          verify_source_binding
+          docker build \
+            --build-arg LONGLINEAGE_GIT_COMMIT="${GITHUB_SHA}" \
+            --file containers/Dockerfile \
+            --tag longlineage:ci \
+            .
+          verify_source_binding
       - name: Verify resolved package manifests
         run: |
           docker image inspect longlineage:ci --format 'IMAGE_ID={{.Id}}'

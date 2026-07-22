@@ -152,11 +152,17 @@ independent source for changing phase state.
   registry binding；兩者都是P8 external handoff blocker。
 - Print PDF是A4、17頁且無JavaScript，但`Tagged: no`；屬低嚴重度P8
   accessibility缺口。
-- 發布候選已由`origin/main`建立分支`fix/release-repair-verify`；current-tree
-  hygiene與AST source-boundary已PASS，但目前`origin/main..HEAD`尚無commit，因此
-  introduced-history scan與hosted CI仍待首次commit後取得實質證據。含private
-  path/coordinate-shaped blob的舊feature branch只保留為
-  本機recovery reference，不可合併或push。
+- 發布候選已由`origin/main`建立分支`fix/release-repair-verify`並建立private draft
+  PR #4。遠端目前head為`b170712ccddbc034bf1347c0c5e878288971de2c`；introduced-history
+  scan、GCC/Clang Debug/Release、GCC TSan與browser QA已PASS，但兩輪hosted CI揭露並
+  保留為negative evidence的LeakSanitizer與pinned-container provenance問題。本機hotfix
+  已以Release 47/47與GCC ASan+UBSan（`detect_leaks=1`）47/47驗證，仍須commit、push並
+  取得新head全部hosted jobs成功後，才可結束本次private-draft publication task。含
+  private path/coordinate-shaped blob的舊feature branch只保留為本機recovery reference，
+  不可合併或push。
+- Restricted HCC performance authority v3仍可由歷史`a3e41c...`snapshot重現，但對目前
+  checkout僅40/41 source bindings一致；這不改變已凍結HCC counters，卻禁止宣稱其為
+  current-head fully bound或完整C++/Python production speedup證據。
 - GPL/source-origin公開稽核尚未完成；repository與draft PR必須保持private，且不得
   建立public release/tag。
 
@@ -170,8 +176,8 @@ independent source for changing phase state.
    >=13 active-bit exact/abstain contract；不完整family不得排名。
 4. 對下一次full run先補cache protocol、slowest-block ID、I/O ops與transient
    peak bytes，使用w24作目前預設。
-5. 將history-safe private draft branch推送後等待GCC/Clang/sanitizer/container CI
-   全綠；舊feature history不得推送或合併。
+5. Commit並推送目前history-safe hotfix，要求private draft PR #4的current-head
+   GCC/Clang/sanitizer/container CI全部成功；舊feature history不得推送或合併。
 6. 把12個fixture-only release bindings升級為可執行negative tests，再重跑strict
    gate。
 7. P3-P5與P7-P8維持BLOCKED，直到七資料集w24/w40、semantic SHA與獨立validator

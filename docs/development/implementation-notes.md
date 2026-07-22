@@ -1012,3 +1012,51 @@ Status: in_progress · PARTIAL — private draft publication scope; not P8 or a 
   移除container Boost與禁用CMake Boost的負向控制均PASS；fresh Release configure
   解析Boost 1.74.0，warnings-as-errors build exit 0，完整`check_all`為47/47、
   no-network PASS與`FOUNDATION_PASS`。修復後current-head hosted CI仍須重跑全綠。
+- [偏離 2026-07-22] Boost修補後的hosted矩陣已證明GCC/Clang Debug與Release、GCC
+  TSan、history及browser QA可通過，但又揭露三個獨立lifetime/container問題：Clang
+  warnings-as-errors拒絕一個零引用常數；LeakSanitizer在validator找到41個未decref的
+  Jansson空object，並在audit negative callback找到22個未走手動close/free的BGZF
+  streams；pinned context因刻意排除`.git`而得到zero commit，且builder未安裝供report
+  self-test建立synthetic repo的`git`。兩輪失敗run均只作negative evidence。
+- [修復 2026-07-22] 已刪除零引用常數；validator以lazy `JsonPtr`持有並重用
+  unconstrained schema；compressed audit reader以BGZF/kstring RAII覆蓋exception path。
+  GCC ASan+UBSan且`detect_leaks=1`重跑原三個失敗測試為3/3 PASS（75.46秒），未關閉
+  leak detection。Pinned build改由workflow注入`GITHUB_SHA`，Docker與CMake都拒絕
+  非40位、非lowercase或全零值，`.git`仍不進context；builder新增lock-recorded Git。
+  Test-only sentinel SHA的完整image build exit 0、container no-network 43/43 PASS，原
+  audit/report兩測試分別PASS 0.95秒與6.83秒。整合後current-head hosted CI仍待重跑。
+- [驗證 2026-07-23] Dirty-tree precommit整合驗證完成：fresh GCC Release
+  `check_all.sh`為47/47、102.58秒、no-network PASS；clean-rebuilt GCC Debug
+  ASan+UBSan在`ASAN_OPTIONS=detect_leaks=1:halt_on_error=1`下為47/47、447.49秒、
+  no-network PASS。第一個sanitizer replay因舊build內governance binary早於最新
+  `CMakeLists.txt`而46/47（exit 8）；clean rebuild後該readiness test與完整suite均PASS，
+  故失敗run保留為build freshness negative evidence。這些仍不是final commit SHA或
+  七資料集production證據；commit後必須以新SHA clean build並等待hosted CI全綠。
+- [未決 2026-07-23] Restricted HCC performance authority v3的歷史
+  `a3e41c...`source snapshot可重現41/41，但對current checkout只匹配40/41：
+  `verification_receipt_v2.json`已因history sanitization改為新SHA。Frozen counters與
+  既有HTML數值未漂移，但v3不得宣稱current-head fully bound，亦不得作完整C++對Python
+  production speedup結論。P8另仍缺seven-dataset final HTML、claim IDs、registered
+  report schema與完整accessibility驗證。
+- [修復 2026-07-23] 獨立review證明「40位小寫非零」不足以等同exact source
+  binding：格式合法的虛構SHA與dirty checkout原可被嵌入。CMake現於Git metadata存在時
+  強制explicit SHA等於HEAD且tracked/untracked皆clean；dirty auto-discovery改編入全零
+  commit，讓production gate fail closed。`.git`-free build必須另開trusted-builder
+  opt-in；hosted pinned job在docker build前後核對`GITHUB_SHA`、commit object與clean
+  checkout。因此container內欄位明確是外部CI assertion，而非container自行證明Git
+  object存在。實測mismatched SHA與dirty explicit checkout均exit 1，dirty auto configure
+  exit 0但compile definition為全零；dependency negative suite亦PASS。
+- [加速 2026-07-23] `LONGLINEAGE_GIT_COMMIT` Docker ARG移至apt與HTSlib完成後才
+  consume，避免每個source commit使固定依賴層cache失效。此為build-time cache改善，
+  不得解讀為science runtime或C++對Python加速證據。
+- [修復 2026-07-23] Dirty-tree production commit改為全零後，最初使HCC audit
+  synthetic positive test因共用production library而正確拒絕、但破壞precommit suite。
+  現以獨立、不安裝的`test_hcc1395_audit_support`編入明示fixture commit；production
+  `longlineage-audit`仍只連結fail-closed production library。測試identity與production
+  provenance不再混用，且不得把fixture commit寫入正式receipt。
+- [驗證 2026-07-23] 最新dirty-tree precommit Release從fresh build完整通過47/47、
+  104.05秒、no-network PASS與`FOUNDATION_PASS`；production targets確認編入全零commit，
+  HCC test-only support編入fixture commit。Hosted `verify_source_binding`現於docker build
+  前後各重播HEAD equality、commit object與clean-tree三項；dependency checker驗證兩次
+  呼叫必須依序包住docker build，negative suite會移除equality、cat-file、post-call及把
+  ARG移回dependency前，四種mutation均須fail closed。

@@ -8,16 +8,70 @@ project(
     DESCRIPTION "Truth-isolated long-read co-occurrence and mutation-state family analysis"
     LANGUAGES CXX)
 
+set(LONGLINEAGE_ZERO_GIT_COMMIT "0000000000000000000000000000000000000000")
+set(LONGLINEAGE_GIT_COMMIT "" CACHE STRING
+    "Source Git commit; verified against a clean checkout when Git metadata is available")
+set(LONGLINEAGE_ALLOW_EXTERNAL_GIT_COMMIT_ASSERTION OFF CACHE BOOL
+    "Trust an explicit source commit only when the .git-free builder verifies it externally")
+
 execute_process(
-    COMMAND git rev-parse HEAD
+    COMMAND git rev-parse --verify HEAD
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    OUTPUT_VARIABLE LONGLINEAGE_GIT_COMMIT
+    RESULT_VARIABLE LONGLINEAGE_GIT_REV_PARSE_STATUS
+    OUTPUT_VARIABLE LONGLINEAGE_DISCOVERED_GIT_COMMIT
     OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_QUIET)
-string(LENGTH "${LONGLINEAGE_GIT_COMMIT}" LONGLINEAGE_GIT_COMMIT_LENGTH)
-if(NOT LONGLINEAGE_GIT_COMMIT_LENGTH EQUAL 40 OR
-   NOT LONGLINEAGE_GIT_COMMIT MATCHES "^[0-9a-f]+$")
-    set(LONGLINEAGE_GIT_COMMIT "0000000000000000000000000000000000000000")
+execute_process(
+    COMMAND git status --porcelain=v1 --untracked-files=all
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    RESULT_VARIABLE LONGLINEAGE_GIT_STATUS_STATUS
+    OUTPUT_VARIABLE LONGLINEAGE_GIT_STATUS_OUTPUT
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET)
+string(LENGTH "${LONGLINEAGE_DISCOVERED_GIT_COMMIT}" LONGLINEAGE_DISCOVERED_GIT_COMMIT_LENGTH)
+set(LONGLINEAGE_GIT_CHECKOUT_AVAILABLE OFF)
+if(LONGLINEAGE_GIT_REV_PARSE_STATUS EQUAL 0 AND
+   LONGLINEAGE_DISCOVERED_GIT_COMMIT_LENGTH EQUAL 40 AND
+   LONGLINEAGE_DISCOVERED_GIT_COMMIT MATCHES "^[0-9a-f]+$" AND
+   NOT LONGLINEAGE_DISCOVERED_GIT_COMMIT STREQUAL "${LONGLINEAGE_ZERO_GIT_COMMIT}")
+    set(LONGLINEAGE_GIT_CHECKOUT_AVAILABLE ON)
+endif()
+
+if("${LONGLINEAGE_GIT_COMMIT}" STREQUAL "")
+    if(LONGLINEAGE_GIT_CHECKOUT_AVAILABLE AND
+       LONGLINEAGE_GIT_STATUS_STATUS EQUAL 0 AND
+       "${LONGLINEAGE_GIT_STATUS_OUTPUT}" STREQUAL "")
+        set(LONGLINEAGE_GIT_COMMIT "${LONGLINEAGE_DISCOVERED_GIT_COMMIT}")
+    else()
+        set(LONGLINEAGE_GIT_COMMIT "${LONGLINEAGE_ZERO_GIT_COMMIT}")
+        message(STATUS
+            "Source commit provenance is unavailable or dirty; production executables will fail closed")
+    endif()
+else()
+    string(LENGTH "${LONGLINEAGE_GIT_COMMIT}" LONGLINEAGE_GIT_COMMIT_LENGTH)
+    if(NOT LONGLINEAGE_GIT_COMMIT_LENGTH EQUAL 40 OR
+       NOT LONGLINEAGE_GIT_COMMIT MATCHES "^[0-9a-f]+$" OR
+       "${LONGLINEAGE_GIT_COMMIT}" STREQUAL "${LONGLINEAGE_ZERO_GIT_COMMIT}")
+        message(FATAL_ERROR
+            "Explicit LONGLINEAGE_GIT_COMMIT must be a 40-character lowercase non-zero SHA-1")
+    endif()
+    if(LONGLINEAGE_GIT_CHECKOUT_AVAILABLE)
+        if(NOT "${LONGLINEAGE_GIT_COMMIT}" STREQUAL "${LONGLINEAGE_DISCOVERED_GIT_COMMIT}")
+            message(FATAL_ERROR
+                "Explicit LONGLINEAGE_GIT_COMMIT does not match checkout HEAD")
+        endif()
+        if(NOT LONGLINEAGE_GIT_STATUS_STATUS EQUAL 0 OR
+           NOT "${LONGLINEAGE_GIT_STATUS_OUTPUT}" STREQUAL "")
+            message(FATAL_ERROR
+                "Explicit LONGLINEAGE_GIT_COMMIT requires a clean tracked and untracked checkout")
+        endif()
+    elseif(NOT LONGLINEAGE_ALLOW_EXTERNAL_GIT_COMMIT_ASSERTION)
+        message(FATAL_ERROR
+            "A .git-free source commit assertion requires explicit trusted-builder opt-in")
+    else()
+        message(STATUS
+            "Using an externally verified source commit assertion from a trusted .git-free builder")
+    endif()
 endif()
 set(LONGLINEAGE_COMPILER_ID
     "${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}")

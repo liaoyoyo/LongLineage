@@ -13,6 +13,7 @@ RUN apt-get update \
         ca-certificates \
         cmake \
         curl \
+        git \
         libboost-dev \
         libbz2-dev \
         libdeflate-dev \
@@ -43,6 +44,18 @@ RUN curl -fsSLo "htslib-${HTSLIB_VERSION}.tar.bz2" \
     && make -j"$(nproc)" \
     && make install
 
+ARG LONGLINEAGE_GIT_COMMIT
+RUN if [ "${#LONGLINEAGE_GIT_COMMIT}" -ne 40 ] \
+        || [ "${LONGLINEAGE_GIT_COMMIT}" = "0000000000000000000000000000000000000000" ]; then \
+        echo "LONGLINEAGE_GIT_COMMIT must be a 40-character lowercase non-zero SHA-1" >&2; \
+        exit 1; \
+    fi \
+    && case "${LONGLINEAGE_GIT_COMMIT}" in \
+        *[!0-9a-f]*) \
+            echo "LONGLINEAGE_GIT_COMMIT must be a 40-character lowercase non-zero SHA-1" >&2; \
+            exit 1 ;; \
+    esac
+
 WORKDIR /src
 COPY . /src
 ENV PKG_CONFIG_PATH=/opt/longlineage-deps/lib/pkgconfig
@@ -51,6 +64,8 @@ RUN cmake -S /src -B /tmp/build \
         -DCMAKE_INSTALL_PREFIX=/opt/longlineage \
         -DLONGLINEAGE_BUILD_TESTS=ON \
         -DLONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS=OFF \
+        -DLONGLINEAGE_ALLOW_EXTERNAL_GIT_COMMIT_ASSERTION=ON \
+        -DLONGLINEAGE_GIT_COMMIT="${LONGLINEAGE_GIT_COMMIT}" \
         -DLONGLINEAGE_REQUIRE_EXACT_HTSLIB=ON \
         -DLONGLINEAGE_WARNINGS_AS_ERRORS=ON \
     && cmake --build /tmp/build --parallel 4

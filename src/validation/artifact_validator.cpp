@@ -739,6 +739,7 @@ std::string canonical_json_object(const json_t* value, const json_t* schema, con
     order.insert(order.end(), extra.begin(), extra.end());
 
     std::string result = "{";
+    JsonPtr unconstrained_schema;
     for (std::size_t index = 0; index < order.size(); ++index) {
         if (index != 0U) {
             result.push_back(',');
@@ -751,8 +752,17 @@ std::string canonical_json_object(const json_t* value, const json_t* schema, con
         }
         result.append(quote_json_string(name));
         result.push_back(':');
-        result.append(child_schema == nullptr ? canonical_json(child_value, json_object(), document, store)
-                                              : canonical_json(child_value, child_schema, document, store));
+        if (child_schema == nullptr) {
+            if (!unconstrained_schema) {
+                unconstrained_schema.reset(json_object());
+                if (!unconstrained_schema) {
+                    reject("INTERNAL_VALIDATOR_ERROR", "cannot allocate unconstrained object field schema");
+                }
+            }
+            result.append(canonical_json(child_value, unconstrained_schema.get(), document, store));
+        } else {
+            result.append(canonical_json(child_value, child_schema, document, store));
+        }
     }
     result.push_back('}');
     return result;

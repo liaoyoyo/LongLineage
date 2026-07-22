@@ -160,11 +160,25 @@ set_tests_properties(
     PROPERTIES LABELS "integration;boundary;p2;p3;p4;p5;p6;synthetic"
                RUN_SERIAL TRUE TIMEOUT 120)
 
-add_executable(test_hcc1395_audit
-    unit/test_hcc1395_audit.cpp)
+add_library(test_hcc1395_audit_support STATIC
+    ../src/audit/hcc1395_determinism.cpp)
+target_include_directories(test_hcc1395_audit_support
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include")
+target_link_libraries(
+    test_hcc1395_audit_support
+    PUBLIC
+        longlineage_build_options
+        PkgConfig::HTSLIB
+        PkgConfig::JANSSON
+        OpenSSL::Crypto)
+target_compile_definitions(
+    test_hcc1395_audit_support
+    PRIVATE LONGLINEAGE_GIT_COMMIT="1111111111111111111111111111111111111111")
+
+add_executable(test_hcc1395_audit unit/test_hcc1395_audit.cpp)
 target_link_libraries(
     test_hcc1395_audit
-    PRIVATE longlineage_hcc1395_audit longlineage_build_options ZLIB::ZLIB)
+    PRIVATE test_hcc1395_audit_support longlineage_build_options ZLIB::ZLIB)
 target_compile_definitions(
     test_hcc1395_audit
     PRIVATE LONGLINEAGE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/..")

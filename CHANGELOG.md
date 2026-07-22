@@ -103,6 +103,21 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
   run-local rather than project-ledger status.
 - Receipt-only post-rename recovery now fails closed until a validator-aware
   recovery path can repeat the complete input and publication replay.
+- Canonical validator JSON replay now owns its unconstrained Jansson schema
+  object with RAII, eliminating the sanitizer-visible reference leak without
+  changing canonical bytes or validation decisions.
+- HCC1395 compressed audit readers now close BGZF streams and free kstring
+  buffers on callback exceptions as well as normal completion.
+- Pinned container builds receive a clean-HEAD commit assertion verified by
+  hosted CI while `.git` remains excluded from the build context. CMake rejects
+  mismatched or dirty Git checkouts and requires explicit trusted-builder
+  acknowledgement without Git metadata; builder-only Git is declared and
+  recorded so repository self-tests remain runnable offline.
+- Commit-specific Docker arguments are consumed only after stable apt and
+  HTSlib layers, preserving dependency cache reuse across source commits.
+- HCC audit synthetic tests use a separate test-only library identity, so a
+  dirty development checkout can exercise negative and exception paths while
+  every production audit executable retains the zero-commit fail-closed rule.
 
 ### Safety
 

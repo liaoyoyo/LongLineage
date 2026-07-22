@@ -42,7 +42,7 @@
     "Exercise a real nonzero topology case and implement the direct HiGHS and active-bit completeness contracts",
     "Record controlled cache condition, I/O operations, transient peak bytes and slowest-block identity before the next full comparison",
     "Run all seven datasets at 24 and 40 workers only after P3-P6 blockers close",
-    "Push the history-safe private draft branch, require every current-head GitHub Actions job to pass, and keep public release blocked pending source-origin audit"
+    "Commit and push the current history-safe CI hotfix to private draft PR 4, require every current-head GitHub Actions job to pass, and keep public release blocked pending source-origin and P3-P8 audits"
   ],
-  "last_verified_at": "2026-07-22T22:53:15+08:00"
+  "last_verified_at": "2026-07-23T00:38:09+08:00"
 }

@@ -81,6 +81,30 @@ struct EvpContextDeleter {
 };
 using EvpContextPtr = std::unique_ptr<EVP_MD_CTX, EvpContextDeleter>;
 
+struct BgzfDeleter {
+    void operator()(BGZF* value) const noexcept {
+        if (value != nullptr) {
+            bgzf_close(value);
+        }
+    }
+};
+using BgzfPtr = std::unique_ptr<BGZF, BgzfDeleter>;
+
+class KStringBuffer final {
+   public:
+    KStringBuffer() = default;
+    ~KStringBuffer() { std::free(value_.s); }
+
+    KStringBuffer(const KStringBuffer&) = delete;
+    KStringBuffer& operator=(const KStringBuffer&) = delete;
+
+    [[nodiscard]] kstring_t* get() noexcept { return &value_; }
+    [[nodiscard]] const char* data() const noexcept { return value_.s; }
+
+   private:
+    kstring_t value_{0U, 0U, nullptr};
+};
+
 class Sha256 {
    public:
     Sha256() : context_(EVP_MD_CTX_new()) {
@@ -442,41 +466,34 @@ void checked_add(std::uint64_t& target, std::uint64_t value, const std::string& 
 
 void for_each_compressed_line(const std::filesystem::path& path, const std::string& check_id,
                               const std::function<void(std::string_view, std::uint64_t)>& callback) {
-    BGZF* stream = bgzf_open(path.c_str(), "r");
-    if (stream == nullptr) {
+    BgzfPtr stream(bgzf_open(path.c_str(), "r"));
+    if (!stream) {
         reject(check_id, "cannot open gzip/BGZF TSV: " + path.string());
     }
-    kstring_t line{0U, 0U, nullptr};
+    KStringBuffer line;
     std::uint64_t line_number = 0;
     while (true) {
-        const int length = bgzf_getline(stream, '\n', &line);
+        const int length = bgzf_getline(stream.get(), '\n', line.get());
         if (length == -1) {
             break;
         }
         if (length < -1) {
-            std::free(line.s);
-            bgzf_close(stream);
             reject(check_id, "compressed TSV read failed");
         }
         ++line_number;
         if (static_cast<std::size_t>(length) > kMaximumTsvLineBytes) {
-            std::free(line.s);
-            bgzf_close(stream);
             reject(check_id, "compressed TSV line exceeds bounded size");
         }
-        std::string_view view(line.s, static_cast<std::size_t>(length));
+        std::string_view view(line.data(), static_cast<std::size_t>(length));
         if (!view.empty() && view.back() == '\r') {
             view.remove_suffix(1U);
         }
         if (view.find('\0') != std::string_view::npos) {
-            std::free(line.s);
-            bgzf_close(stream);
             reject(check_id, "compressed TSV contains embedded NUL");
         }
         callback(view, line_number);
     }
-    std::free(line.s);
-    if (bgzf_close(stream) != 0) {
+    if (bgzf_close(stream.release()) != 0) {
         reject(check_id, "compressed TSV close/checksum failed");
     }
 }
