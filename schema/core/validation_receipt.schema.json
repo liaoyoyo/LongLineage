@@ -7,8 +7,18 @@
     "schema_name",
     "schema_version",
     "run_id",
+    "validation_profile",
+    "production_claim_allowed",
     "producer_receipt_sha256",
+    "producer_executable_sha256",
     "validator_executable_sha256",
+    "producer_hostname",
+    "producer_kernel_release",
+    "validator_hostname",
+    "validator_kernel_release",
+    "input_mount_identity_sha256",
+    "schema_catalog_sha256",
+    "science_parameters_sha256",
     "all_pass",
     "checks",
     "validated_at",
@@ -27,11 +37,43 @@
     "run_id": {
       "type": "string"
     },
+    "validation_profile": {
+      "const": "DATASET_GATE"
+    },
+    "production_claim_allowed": {
+      "const": false
+    },
     "producer_receipt_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
+    "producer_executable_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
     "validator_executable_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "producer_hostname": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,252}$"
+    },
+    "producer_kernel_release": {"type": "string", "minLength": 1, "maxLength": 255},
+    "validator_hostname": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,252}$"
+    },
+    "validator_kernel_release": {"type": "string", "minLength": 1, "maxLength": 255},
+    "input_mount_identity_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "schema_catalog_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "science_parameters_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
@@ -77,6 +119,8 @@
   "x-longlineage-invariants": [
     "all_pass is true exactly when every check status is PASS",
     "input snapshots are equal",
-    "validator binary does not link producer statistical or solver kernels"
+    "validator binary does not link producer statistical or solver kernels",
+    "DATASET_GATE is preproduction and production_claim_allowed is always false",
+    "general query, evaluate and legacy-export entrypoints do not accept this receipt profile"
   ]
 }

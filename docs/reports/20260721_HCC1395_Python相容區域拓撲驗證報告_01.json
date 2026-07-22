@@ -1,0 +1,1129 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "HCC1395 Python 相容 sSNV 區域拓撲驗證",
+    "description": "HCC1395 descriptive compatibility report; project-partial, non-production and not P8 release evidence.",
+    "generatedAt": "2026-07-22T14:17:47Z",
+    "cards": [],
+    "charts": [
+      {
+        "id": "region_determinacy",
+        "title": "Region determinacy 分布",
+        "subtitle": "完整 8,222 regions；分類互斥且總和守恆。",
+        "type": "bar",
+        "dataset": "region_determinacy",
+        "sourceId": "query_region_determinacy",
+        "encodings": {
+          "x": {
+            "field": "outcome",
+            "type": "ordinal",
+            "label": "Region outcome"
+          },
+          "y": {
+            "field": "regions",
+            "type": "quantitative",
+            "label": "Regions",
+            "format": "number"
+          },
+          "tooltip": [
+            {
+              "field": "regions",
+              "type": "quantitative",
+              "label": "Regions",
+              "format": "number"
+            },
+            {
+              "field": "share",
+              "type": "quantitative",
+              "label": "Share",
+              "format": "percent"
+            },
+            {
+              "field": "denominator",
+              "type": "quantitative",
+              "label": "Denominator",
+              "format": "number"
+            }
+          ]
+        },
+        "yAxisTitle": "Regions",
+        "valueFormat": "number",
+        "layout": "full"
+      }
+    ],
+    "tables": [
+      {
+        "id": "parity",
+        "title": "逐層 Python-to-C++ crosswalk",
+        "subtitle": "所有比較均以 key map 對齊，不依賴舊 JSON 的顯示順序。",
+        "dataset": "parity_layers",
+        "sourceId": "query_parity_layers",
+        "defaultSort": {
+          "field": "expected",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "layer",
+            "label": "Layer",
+            "type": "text"
+          },
+          {
+            "field": "expected",
+            "label": "Python",
+            "format": "number"
+          },
+          {
+            "field": "actual",
+            "label": "C++",
+            "format": "number"
+          },
+          {
+            "field": "mismatches",
+            "label": "Mismatch",
+            "format": "number"
+          }
+        ]
+      },
+      {
+        "id": "unit_classes",
+        "title": "Unit class 計數",
+        "subtitle": "全部 20,119 units 與 10,904 primary mutation lineages。",
+        "dataset": "unit_counts",
+        "sourceId": "query_unit_counts",
+        "defaultSort": {
+          "field": "count",
+          "direction": "desc"
+        },
+        "columns": [
+          {
+            "field": "cohort",
+            "label": "Cohort",
+            "type": "text"
+          },
+          {
+            "field": "class",
+            "label": "Class",
+            "type": "text"
+          },
+          {
+            "field": "count",
+            "label": "Count",
+            "format": "number"
+          },
+          {
+            "field": "share",
+            "label": "Share",
+            "format": "percent"
+          },
+          {
+            "field": "denominator",
+            "label": "Denominator",
+            "format": "number"
+          }
+        ]
+      },
+      {
+        "id": "settings",
+        "title": "Frozen 方法設定",
+        "subtitle": "設定值是 compatibility contract，不是 runtime 自動調參。",
+        "dataset": "parameters",
+        "sourceId": "query_parameters",
+        "defaultSort": {
+          "field": "setting",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "setting",
+            "label": "Setting",
+            "type": "text"
+          },
+          {
+            "field": "value",
+            "label": "Value",
+            "format": "number"
+          },
+          {
+            "field": "meaning",
+            "label": "Meaning",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "flow",
+        "title": "端到端判斷與驗證流程",
+        "subtitle": "每個 stage 都有明確輸入、決策和可觀察驗證。",
+        "dataset": "flow",
+        "sourceId": "query_flow",
+        "defaultSort": {
+          "field": "stage",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "stage",
+            "label": "Stage",
+            "type": "text"
+          },
+          {
+            "field": "decision",
+            "label": "Decision",
+            "type": "text"
+          },
+          {
+            "field": "verification",
+            "label": "Verification",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "performance",
+        "title": "執行時間與比較條件",
+        "subtitle": "Full 與 probe scope、cache 狀態及 validation state 分列，禁止直接混算。",
+        "dataset": "performance",
+        "sourceId": "query_performance",
+        "defaultSort": {
+          "field": "minutes",
+          "direction": "desc"
+        },
+        "columns": [
+          {
+            "field": "observation",
+            "label": "Observation",
+            "type": "text"
+          },
+          {
+            "field": "minutes",
+            "label": "Minutes",
+            "format": "number"
+          },
+          {
+            "field": "workers",
+            "label": "Workers",
+            "type": "text"
+          },
+          {
+            "field": "comparison_scope",
+            "label": "Scope",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "validation",
+        "title": "Independent validator checks",
+        "subtitle": "Receipt 內 13 項檢查加上 FROZEN SHA binding。",
+        "dataset": "validation_checks",
+        "sourceId": "query_validation_checks",
+        "defaultSort": {
+          "field": "check",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "check",
+            "label": "Check",
+            "type": "text"
+          },
+          {
+            "field": "status",
+            "label": "Status",
+            "type": "text"
+          },
+          {
+            "field": "detail",
+            "label": "Detail",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "outputs",
+        "title": "Frozen bundle 輸出契約",
+        "subtitle": "科學資料由 C++ 產生；Python 只包裝此報告。",
+        "dataset": "outputs",
+        "sourceId": "query_outputs",
+        "defaultSort": {
+          "field": "file",
+          "direction": "asc"
+        },
+        "columns": [
+          {
+            "field": "file",
+            "label": "File",
+            "type": "text"
+          },
+          {
+            "field": "rows",
+            "label": "Rows",
+            "format": "number"
+          },
+          {
+            "field": "purpose",
+            "label": "Purpose",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "cpp_summary",
+        "label": "Frozen C++ regional summary · SHA-256 05286733975758352c7b0d79e99efdb23bc53fd6e9bbc782f54f63b634309dd3",
+        "path": "restricted-evidence/hcc1395-regional-compat-v2/summary.json",
+        "description": "Validated C++ row counts, censuses, parameters and timing."
+      },
+      {
+        "id": "validation_receipt",
+        "label": "Independent validator receipt · SHA-256 aac8234081d042e88e9be292f6a4d6119471bed4592d2ae2d34e0172b01e1053",
+        "path": "restricted-evidence/hcc1395-regional-compat-v2/validation_receipt.json",
+        "description": "Independent fail-closed artifact and foreign-key replay."
+      },
+      {
+        "id": "crosswalk_receipt",
+        "label": "Python-to-C++ crosswalk over frozen authorities (not independently frozen) · SHA-256 515928252f368c57071dcd36d2559d09c5c6a0ff22a3c70f4b49b98cb1a5b753",
+        "path": "restricted-evidence/hcc1395-regional-compat-v2/crosswalk_receipt.json",
+        "description": "Map-based region, unit, pattern and solver parity evidence."
+      },
+      {
+        "id": "performance_receipt",
+        "label": "Regional compatibility performance receipt · SHA-256 9853d950391d908de6935ebe68dad242b4d0d1bbd30167391c54dc64c89bad3c",
+        "path": "restricted-evidence/hcc1395-regional-compat-v2/performance_receipt.json",
+        "description": "Measured C++ timing, historical Python timing basis and cache caveats."
+      },
+      {
+        "id": "query_region_determinacy",
+        "label": "Presentation SELECT for region_determinacy",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"outcome\", \"outcome_id\", \"regions\", \"share\", \"denominator\", \"rank\" FROM \"presentation_region_determinacy\" ORDER BY rowid",
+          "description": "Selects reviewed region_determinacy presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_region_determinacy"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_parity_layers",
+        "label": "Presentation SELECT for parity_layers",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"layer\", \"expected\", \"actual\", \"mismatches\", \"sha256\" FROM \"presentation_parity_layers\" ORDER BY rowid",
+          "description": "Selects reviewed parity_layers presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_parity_layers"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_unit_counts",
+        "label": "Presentation SELECT for unit_counts",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"cohort\", \"class\", \"count\", \"share\", \"denominator\" FROM \"presentation_unit_counts\" ORDER BY rowid",
+          "description": "Selects reviewed unit_counts presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_unit_counts"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_parameters",
+        "label": "Presentation SELECT for parameters",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"setting\", \"value\", \"meaning\" FROM \"presentation_parameters\" ORDER BY rowid",
+          "description": "Selects reviewed parameters presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_parameters"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_flow",
+        "label": "Presentation SELECT for flow",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"stage\", \"decision\", \"verification\" FROM \"presentation_flow\" ORDER BY rowid",
+          "description": "Selects reviewed flow presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_flow"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_performance",
+        "label": "Presentation SELECT for performance",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"observation\", \"seconds\", \"minutes\", \"workers\", \"state\", \"cache\", \"comparison_scope\" FROM \"presentation_performance\" ORDER BY rowid",
+          "description": "Selects reviewed performance presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_performance"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_validation_checks",
+        "label": "Presentation SELECT for validation_checks",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"check\", \"status\", \"detail\" FROM \"presentation_validation_checks\" ORDER BY rowid",
+          "description": "Selects reviewed validation_checks presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_validation_checks"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      },
+      {
+        "id": "query_outputs",
+        "label": "Presentation SELECT for outputs",
+        "path": "presentation/build_regional_compat_report.py",
+        "query": {
+          "engine": "sqlite",
+          "language": "sql",
+          "sql": "SELECT \"file\", \"rows\", \"purpose\" FROM \"presentation_outputs\" ORDER BY rowid",
+          "description": "Selects reviewed outputs presentation rows from frozen receipt-derived values.",
+          "tables_used": [
+            "presentation_outputs"
+          ],
+          "executed_at": "2026-07-22T14:17:47Z",
+          "filters": [
+            "Rows are copied without scientific recomputation from validated frozen receipts."
+          ]
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "id": "technical_summary",
+        "type": "markdown",
+        "sourceId": "crosswalk_receipt",
+        "body": "## 完整 C++ 模式已重現 8,222 regions，逐鍵 mismatch 為 0\n\n**結論：在 HCC1395 描述性共享欄位契約內，receipt 報告逐鍵 0 mismatch。** C++ indexed BAM pipeline 重現 frozen Python 的 50 kb grouping、HP family、MINREAD=3 與 legacy solver；8,222 regions、20,119 units、106,559 patterns 在 map-based crosswalk 全部一致。Crosswalk 本身沒有獨立 freeze/validator，故這項證據不擴張為廣義 production correctness。此端點不取代 formal M2 topology，也不宣稱 clone、祖先或時間方向。"
+      },
+      {
+        "id": "key_finding",
+        "type": "markdown",
+        "sourceId": "cpp_summary",
+        "body": "## 主要結果不是『每區都有唯一樹』，而是完整且誠實的分類\n\nRegion determinacy 以 primary mutation-bearing HP1/HP2 為準：5,104 個含 ambiguity、2,019 個全 determined、781 個 capped、28 個 recurrence-required、290 個沒有 primary lineage。圖表從 0 起算並以 8,222 為固定分母；`capped` 是誠實 abstain，不是失敗或任意丟棄。"
+      },
+      {
+        "id": "region_chart",
+        "type": "chart",
+        "chartId": "region_determinacy",
+        "layout": "full"
+      },
+      {
+        "id": "parity_explanation",
+        "type": "markdown",
+        "sourceId": "crosswalk_receipt",
+        "body": "## 一致性驗證到 region、unit、pattern，而不只比總數\n\nRegion 比較涵蓋 key、座標、selected positions、family census 與 determinacy；unit 比較涵蓋 role、read/pattern census、mutation-bearing、n_hidden、n_trees、capped 與 class；pattern 則比較每個 full/subread pattern 與支持數。最後兩個 CPython 3.9 capped fallback 差異也已納入 golden，不以『不影響主分類』為理由略過。"
+      },
+      {
+        "id": "parity_table",
+        "type": "table",
+        "tableId": "parity",
+        "layout": "full"
+      },
+      {
+        "id": "unit_table",
+        "type": "table",
+        "tableId": "unit_classes",
+        "layout": "full"
+      },
+      {
+        "id": "scope_definitions",
+        "type": "markdown",
+        "sourceId": "cpp_summary",
+        "body": "## Scope 與分母先固定，才談數字\n\n分析 cohort 是 HCC1395 chr1–22 上 79,687 個 frozen PASS biallelic sSNV。相鄰 gap ≤50 kb 以 transitive closure 分區；8,279 個 positional singleton 不進 multi-locus topology，408 個過密 component 套 MAX8 後排除 44,306 sites，保留 27,102 sites。輸入只含 raw BAM、其 index、PASS VCF、truth-free latest HP/PS sidecar、reference 與索引；沒有 truth role，也沒有 persisted truth-tagged BAM。"
+      },
+      {
+        "id": "settings_table",
+        "type": "table",
+        "tableId": "settings",
+        "layout": "full"
+      },
+      {
+        "id": "methodology",
+        "type": "markdown",
+        "sourceId": "cpp_summary",
+        "body": "## 判斷規則逐步鎖定，避免模糊 fallback\n\n每個 region 是一個 parallel task；worker 自有 BAM/Tabix handle，結果依 submission order 發布。Read identity 使用 QNAME、alignment coordinates、FLAG 與 CIGAR digest 做 exact sidecar join。Allele call 保留 R/A/O/X；legacy topology pattern 將 OTHER、missing、deletion 與 refskip 明確映射為 X。HP 以 prefix 1/2、exact 3/4、其餘 none 分 family；full 與 subread pattern 各自需至少 3 reads。Solver 搜尋最少 hidden nodes，extra cap=4、per-level budget=150,000；超限走已重現 CPython 3.9 set-table 行為的 capped fallback。"
+      },
+      {
+        "id": "flow_table",
+        "type": "table",
+        "tableId": "flow",
+        "layout": "full"
+      },
+      {
+        "id": "performance_finding",
+        "type": "markdown",
+        "sourceId": "performance_receipt",
+        "body": "## C++ wall time 觀察值較短，但不可視為受控 speedup\n\nValidated 24-worker C++ science wall 為 **298.812 秒**；frozen historical Python observation 為 **5086.676 秒**，表面比值 17.023×。然而 Python 是四樣本 scheduler 下的 launch-to-manifest observation，C++ validated run 又是 warm NFS cache，因此 `full_controlled_speedup_claim_allowed=false`。較接近 cold cache 的 C++ candidate 為 534.462 秒（約 9.517×），但因兩個 capped display fields 尚未修正而未 freeze，只能當工程 baseline。相同前 100 regions 的 workers=1/24 科學 wall 為 14.947/7.333 秒，輸出 byte-identical，證明可以 deterministic parallel 執行。"
+      },
+      {
+        "id": "performance_table",
+        "type": "table",
+        "tableId": "performance",
+        "layout": "full"
+      },
+      {
+        "id": "bottleneck",
+        "type": "markdown",
+        "sourceId": "performance_receipt",
+        "body": "## 主要瓶頸是 NFS BAM I/O 與 region depth 偏斜，不是 solver\n\nFull run 的 summed input time 為 6979.661 秒，solver 僅 28.784 秒；10 秒 telemetry 平均約 309.2% process CPU、111 MiB/s read。24 workers 實際建立 25 threads，但無法接近 24-core 飽和，表示多數時間受遠端 BAM 讀取、解壓與不同 region 深度限制。增加到更多 threads 預期先增加記憶體與 handle 成本，而不是線性加速。"
+      },
+      {
+        "id": "validation_finding",
+        "type": "markdown",
+        "sourceId": "validation_receipt",
+        "body": "## Fail-closed validator 獨立重播後才允許 FROZEN\n\nValidator 不連結 producer solver kernel；它拒絕 missing、extra、symlink、截斷、錯序、row-count mismatch、partial probe 與已測的 snapshot drift/mutation window。這不證明非合作同 UID writer race 已消除。Descriptive compatibility bundle 通過 layout、checksum、schema/profile、三份 TSV、foreign key 與穩定性檢查，然後先發布 validation receipt，再發布綁定 receipt SHA 的 FROZEN marker。"
+      },
+      {
+        "id": "validation_table",
+        "type": "table",
+        "tableId": "validation",
+        "layout": "full"
+      },
+      {
+        "id": "output_table",
+        "type": "table",
+        "tableId": "outputs",
+        "layout": "full"
+      },
+      {
+        "id": "limitations",
+        "type": "markdown",
+        "body": "## 限制與不應延伸的結論\n\n- 此 profile 是 evaluation/descriptive compatibility；formal M2 topology 的 fail-closed gate 保持不變。\n- CN/LOH 是舊 Python 的 post-tree annotation，未納入本 endpoint；不能把 `unavailable` 解讀成 neutral。\n- 沒有重跑完整 workers=1 BAM；determinism 證據是完整 w24 crosswalk 加相同 BAM 的 100-region w1/w24 byte comparison。\n- Crosswalk 比較兩份 SHA-bound frozen authorities，但 receipt 本身未由獨立 validator freeze；0 mismatch 僅適用於列出的共享欄位契約。\n- Historical Python 與 C++ cache/scheduler scope 不同，因此只能列出較短的觀察值，不能稱受控語言 benchmark。\n- Current-tree pre-commit hygiene已驗證；post-commit introduced-history scan與GitHub CI仍待實際commit後執行。GPL/source-origin公開稽核亦尚未完成，因此不可改成public visibility或建立release。"
+      },
+      {
+        "id": "next_steps",
+        "type": "markdown",
+        "body": "## 建議下一步\n\n1. 將此 profile 保持為獨立 compatibility CLI，供舊 8,222-region 描述性結果與回歸測試使用。\n2. 若要正式比較效能，在專用 cache 條件下各跑一次 isolated Python/C++，固定同一 process scope 並記錄 NFS counters。\n3. 將相同 frozen contract 推廣到其他樣本前，先各做 region/unit/pattern map crosswalk，不只驗 aggregate。\n4. 完成首個commit後的introduced-history scan，再推送history-safe private draft branch並等待GCC/Clang/sanitizer/container CI全綠；公開前另做GPL/source-origin稽核並取得明確授權。"
+      },
+      {
+        "id": "further_questions",
+        "type": "markdown",
+        "body": "## 仍待回答的問題\n\n- 其他樣本是否也有 CPython capped fallback 對 set-table order 敏感的 edge cases？\n- 在 BAM 本機 SSD cache 或 CRAM/region batching 下，I/O wall 能再下降多少？\n- 是否需要獨立 query/export CLI 讀取此 compatibility frozen bundle，而不污染 production catalog？"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-07-22T14:17:47Z",
+    "status": "ready",
+    "datasets": {
+      "headline": [
+        {
+          "regions": 8222,
+          "units": 20119,
+          "patterns": 106559,
+          "mismatches": 0
+        }
+      ],
+      "region_determinacy": [
+        {
+          "outcome": "含多解",
+          "outcome_id": "has_ambiguous",
+          "regions": 5104,
+          "share": 0.6207735344198492,
+          "denominator": 8222,
+          "rank": 1
+        },
+        {
+          "outcome": "全為 determined",
+          "outcome_id": "all_determined",
+          "regions": 2019,
+          "share": 0.24556069082948187,
+          "denominator": 8222,
+          "rank": 2
+        },
+        {
+          "outcome": "含 capped",
+          "outcome_id": "has_capped",
+          "regions": 781,
+          "share": 0.09498905375820968,
+          "denominator": 8222,
+          "rank": 3
+        },
+        {
+          "outcome": "無 primary lineage",
+          "outcome_id": "no_primary_lineage",
+          "regions": 290,
+          "share": 0.03527122354658234,
+          "denominator": 8222,
+          "rank": 4
+        },
+        {
+          "outcome": "需 recurrence",
+          "outcome_id": "has_recurrence",
+          "regions": 28,
+          "share": 0.0034054974458769156,
+          "denominator": 8222,
+          "rank": 5
+        }
+      ],
+      "parity_layers": [
+        {
+          "layer": "Region shared map",
+          "expected": 8222,
+          "actual": 8222,
+          "mismatches": 0,
+          "sha256": "fc4d252b04c396ce0c1d7d4dbb52820430af94735cc2bc13d6e70fc8a7fb4850"
+        },
+        {
+          "layer": "Unit shared fields",
+          "expected": 20119,
+          "actual": 20119,
+          "mismatches": 0,
+          "sha256": "da2d26a24161f07f6cb822f894ec24708eab26efc65ea53235db1fc320bc48dc"
+        },
+        {
+          "layer": "Pattern exact map",
+          "expected": 106559,
+          "actual": 106559,
+          "mismatches": 0,
+          "sha256": "82eaff814021120ba106ce87fce126ca7f44ab69b8d14015f577fd60ba5b4242"
+        },
+        {
+          "layer": "Solver unit replay",
+          "expected": 20119,
+          "actual": 20119,
+          "mismatches": 0,
+          "sha256": "7c9272c6d033fbb55d9223ffb3388f13dd94c4b83f09d038fda2c3477db9488f"
+        }
+      ],
+      "unit_counts": [
+        {
+          "cohort": "全部 units",
+          "class": "determined",
+          "count": 12738,
+          "share": 0.6331328594860579,
+          "denominator": 20119
+        },
+        {
+          "cohort": "全部 units",
+          "class": "ambiguous_structure",
+          "count": 6395,
+          "share": 0.3178587404940603,
+          "denominator": 20119
+        },
+        {
+          "cohort": "全部 units",
+          "class": "capped",
+          "count": 956,
+          "share": 0.04751727223023013,
+          "denominator": 20119
+        },
+        {
+          "cohort": "全部 units",
+          "class": "recurrence_required",
+          "count": 30,
+          "share": 0.0014911277896515732,
+          "denominator": 20119
+        },
+        {
+          "cohort": "Primary units",
+          "class": "determined",
+          "count": 4217,
+          "share": 0.38673881144534117,
+          "denominator": 10904
+        },
+        {
+          "cohort": "Primary units",
+          "class": "ambiguous_structure",
+          "count": 5875,
+          "share": 0.5387931034482759,
+          "denominator": 10904
+        },
+        {
+          "cohort": "Primary units",
+          "class": "capped",
+          "count": 784,
+          "share": 0.0719002201027146,
+          "denominator": 10904
+        },
+        {
+          "cohort": "Primary units",
+          "class": "recurrence_required",
+          "count": 28,
+          "share": 0.0025678650036683784,
+          "denominator": 10904
+        }
+      ],
+      "parameters": [
+        {
+          "setting": "TIER_R",
+          "value": 50000,
+          "meaning": "相鄰 sSNV gap ≤ 50 kb 形成 transitive component"
+        },
+        {
+          "setting": "MAX_SNV",
+          "value": 8,
+          "meaning": "超過 8 sites 時取最小 span 的連續 8 sites；平手取最左"
+        },
+        {
+          "setting": "MAPQ_MIN",
+          "value": 20,
+          "meaning": "alignment mapping quality 下限"
+        },
+        {
+          "setting": "BASEQ_MIN",
+          "value": 0,
+          "meaning": "pileup base quality 下限，與 frozen Python 相同為 0"
+        },
+        {
+          "setting": "MINREAD",
+          "value": 3,
+          "meaning": "full/subread pattern 進 solver 的最少 read 支持"
+        },
+        {
+          "setting": "EXTRA_NODE_CAP",
+          "value": 4,
+          "meaning": "每個 unit 額外 hidden node 搜尋上限"
+        },
+        {
+          "setting": "PER_LEVEL_BUDGET",
+          "value": 150000,
+          "meaning": "單一 extra-node level 的 combination 上限"
+        }
+      ],
+      "performance": [
+        {
+          "observation": "Historical Python",
+          "seconds": 5086.676135,
+          "minutes": 84.77793558333333,
+          "workers": "sample scheduler",
+          "state": "frozen historical",
+          "cache": "unknown",
+          "comparison_scope": "launch-to-HCC-manifest; not isolated timer"
+        },
+        {
+          "observation": "C++ w24 near-cold candidate",
+          "seconds": 534.46187902,
+          "minutes": 8.907697983666667,
+          "workers": "24",
+          "state": "superseded; not frozen",
+          "cache": "cold/partially cold",
+          "comparison_scope": "engineering baseline only"
+        },
+        {
+          "observation": "C++ w24 validated",
+          "seconds": 298.811903861,
+          "minutes": 4.980198397683334,
+          "workers": "24",
+          "state": "VALIDATED_FROZEN",
+          "cache": "warm",
+          "comparison_scope": "complete HCC1395 descriptive-profile C++ science + producer output"
+        },
+        {
+          "observation": "C++ probe w1",
+          "seconds": 14.946728502,
+          "minutes": 0.24911214169999998,
+          "workers": "1",
+          "state": "PARTIAL_PROBE",
+          "cache": "warm",
+          "comparison_scope": "same first 100 regions"
+        },
+        {
+          "observation": "C++ probe w24",
+          "seconds": 7.333399048,
+          "minutes": 0.12222331746666668,
+          "workers": "24",
+          "state": "PARTIAL_PROBE",
+          "cache": "warm",
+          "comparison_scope": "same first 100 regions"
+        }
+      ],
+      "validation_checks": [
+        {
+          "check": "ROOT_LAYOUT",
+          "status": "PASS",
+          "detail": "flat bundle root contains only governed regular files"
+        },
+        {
+          "check": "REQUIRED_FILES",
+          "status": "PASS",
+          "detail": "six required producer files are present"
+        },
+        {
+          "check": "NO_EXTRA_FILES",
+          "status": "PASS",
+          "detail": "no unknown bundle entry is present"
+        },
+        {
+          "check": "VALIDATOR_PROVENANCE",
+          "status": "PASS",
+          "detail": "validator executable SHA-256 replayed"
+        },
+        {
+          "check": "CHECKSUM_MANIFEST",
+          "status": "PASS",
+          "detail": "five producer artifact SHA-256 values match"
+        },
+        {
+          "check": "SUMMARY_CONTRACT",
+          "status": "PASS",
+          "detail": "summary schema, profile and row counts are typed"
+        },
+        {
+          "check": "PRODUCER_RECEIPT",
+          "status": "PASS",
+          "detail": "receipt binds run, summary and four artifacts"
+        },
+        {
+          "check": "REGIONS_TSV",
+          "status": "PASS",
+          "detail": "region header, key order and typed invariants replayed"
+        },
+        {
+          "check": "UNITS_TSV",
+          "status": "PASS",
+          "detail": "unit header, key order, role and region FK replayed"
+        },
+        {
+          "check": "PATTERNS_TSV",
+          "status": "PASS",
+          "detail": "pattern header, order, R/A/X states and unit FK replayed"
+        },
+        {
+          "check": "ROW_COUNTS",
+          "status": "PASS",
+          "detail": "summary, receipt and observed row counts agree"
+        },
+        {
+          "check": "FOREIGN_KEYS",
+          "status": "PASS",
+          "detail": "region-unit-pattern foreign keys and censuses agree"
+        },
+        {
+          "check": "TOCTOU_STABLE",
+          "status": "PASS",
+          "detail": "producer SHA and identity/size/mtime/ctime snapshots are stable"
+        },
+        {
+          "check": "FROZEN_BINDING",
+          "status": "PASS",
+          "detail": "FROZEN marker binds both validation and producer receipt SHA-256 values."
+        }
+      ],
+      "outputs": [
+        {
+          "file": "summary.json",
+          "rows": 1,
+          "purpose": "input contract, census, parameters and timing"
+        },
+        {
+          "file": "regions.tsv",
+          "rows": 8222,
+          "purpose": "region membership, selected positions and determinacy"
+        },
+        {
+          "file": "units.tsv",
+          "rows": 20119,
+          "purpose": "region-family role and solver result"
+        },
+        {
+          "file": "patterns.tsv",
+          "rows": 106559,
+          "purpose": "full/subread supported pattern evidence"
+        },
+        {
+          "file": "producer_receipt.json",
+          "rows": 1,
+          "purpose": "producer semantic and artifact SHA binding"
+        },
+        {
+          "file": "validation_receipt.json",
+          "rows": 1,
+          "purpose": "independent validator result"
+        },
+        {
+          "file": "FROZEN",
+          "rows": 1,
+          "purpose": "authoritative immutable state marker"
+        }
+      ],
+      "flow": [
+        {
+          "stage": "1. Input lock",
+          "decision": "只接受 raw BAM、PASS biallelic sSNV VCF、truth-free HP/PS sidecar、reference",
+          "verification": "8 個 input roles 精確匹配；truth roles=0"
+        },
+        {
+          "stage": "2. Region plan",
+          "decision": "50 kb transitive grouping；singleton 不進 multi-locus；MAX8 densest window",
+          "verification": "79,687 = 8,279 + 44,306 + 27,102"
+        },
+        {
+          "stage": "3. Parallel extraction",
+          "decision": "一個 region 一個 task；每 worker 持有獨立 indexed genomic I/O handle",
+          "verification": "24 workers + main；ordered publication；100-region w1/w24 byte-identical"
+        },
+        {
+          "stage": "4. Read evidence",
+          "decision": "MAPQ≥20、BQ≥0、exact alignment identity sidecar join；R/A/O/X",
+          "verification": "1,934,226 exposures = exact joins；conflict=0"
+        },
+        {
+          "stage": "5. Family/pattern",
+          "decision": "HP prefix family；full/subread pattern 各自 MINREAD≥3",
+          "verification": "106,559 pattern rows exact map mismatch=0"
+        },
+        {
+          "stage": "6. Legacy solver",
+          "decision": "min hidden nodes；extra cap=4；level budget=150k；CPython 3.9 capped fallback",
+          "verification": "20,119 unit shared fields + solver replay mismatch=0"
+        },
+        {
+          "stage": "7. Classification",
+          "decision": "determined / ambiguous_order / ambiguous_structure / recurrence_required / capped",
+          "verification": "unit and region aggregate counts exact"
+        },
+        {
+          "stage": "8. Fail-closed closeout",
+          "decision": "producer writes six governed files；independent validator replays before FROZEN",
+          "verification": "13 receipt checks + atomic output transaction + FROZEN binding PASS"
+        }
+      ],
+      "report_notes": [
+        {
+          "audience": "technical",
+          "delivery_mode": "html",
+          "scope": "PARTIAL_HCC1395_ONLY",
+          "claim_ceiling": "DESCRIPTIVE_NON_PRODUCTION_NOT_P8",
+          "source_data_as_of": "2026-07-21T00:15:00Z",
+          "report_generated_at": "2026-07-22T14:17:47Z",
+          "chart_map": "Region determinacy / comparison bar / outcome, regions, share / single-root palette.",
+          "omitted_visuals": "Performance uses a table because only three full-scope observations exist and cache conditions differ.",
+          "python_boundary": "Python reads validated chart-ready JSON only; no BAM/VCF/sidecar science is executed."
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "cpp_summary",
+      "label": "Frozen C++ regional summary · SHA-256 05286733975758352c7b0d79e99efdb23bc53fd6e9bbc782f54f63b634309dd3",
+      "path": "restricted-evidence/hcc1395-regional-compat-v2/summary.json",
+      "description": "Validated C++ row counts, censuses, parameters and timing."
+    },
+    {
+      "id": "validation_receipt",
+      "label": "Independent validator receipt · SHA-256 aac8234081d042e88e9be292f6a4d6119471bed4592d2ae2d34e0172b01e1053",
+      "path": "restricted-evidence/hcc1395-regional-compat-v2/validation_receipt.json",
+      "description": "Independent fail-closed artifact and foreign-key replay."
+    },
+    {
+      "id": "crosswalk_receipt",
+      "label": "Python-to-C++ crosswalk over frozen authorities (not independently frozen) · SHA-256 515928252f368c57071dcd36d2559d09c5c6a0ff22a3c70f4b49b98cb1a5b753",
+      "path": "restricted-evidence/hcc1395-regional-compat-v2/crosswalk_receipt.json",
+      "description": "Map-based region, unit, pattern and solver parity evidence."
+    },
+    {
+      "id": "performance_receipt",
+      "label": "Regional compatibility performance receipt · SHA-256 9853d950391d908de6935ebe68dad242b4d0d1bbd30167391c54dc64c89bad3c",
+      "path": "restricted-evidence/hcc1395-regional-compat-v2/performance_receipt.json",
+      "description": "Measured C++ timing, historical Python timing basis and cache caveats."
+    },
+    {
+      "id": "query_region_determinacy",
+      "label": "Presentation SELECT for region_determinacy",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"outcome\", \"outcome_id\", \"regions\", \"share\", \"denominator\", \"rank\" FROM \"presentation_region_determinacy\" ORDER BY rowid",
+        "description": "Selects reviewed region_determinacy presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_region_determinacy"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_parity_layers",
+      "label": "Presentation SELECT for parity_layers",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"layer\", \"expected\", \"actual\", \"mismatches\", \"sha256\" FROM \"presentation_parity_layers\" ORDER BY rowid",
+        "description": "Selects reviewed parity_layers presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_parity_layers"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_unit_counts",
+      "label": "Presentation SELECT for unit_counts",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"cohort\", \"class\", \"count\", \"share\", \"denominator\" FROM \"presentation_unit_counts\" ORDER BY rowid",
+        "description": "Selects reviewed unit_counts presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_unit_counts"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_parameters",
+      "label": "Presentation SELECT for parameters",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"setting\", \"value\", \"meaning\" FROM \"presentation_parameters\" ORDER BY rowid",
+        "description": "Selects reviewed parameters presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_parameters"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_flow",
+      "label": "Presentation SELECT for flow",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"stage\", \"decision\", \"verification\" FROM \"presentation_flow\" ORDER BY rowid",
+        "description": "Selects reviewed flow presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_flow"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_performance",
+      "label": "Presentation SELECT for performance",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"observation\", \"seconds\", \"minutes\", \"workers\", \"state\", \"cache\", \"comparison_scope\" FROM \"presentation_performance\" ORDER BY rowid",
+        "description": "Selects reviewed performance presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_performance"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_validation_checks",
+      "label": "Presentation SELECT for validation_checks",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"check\", \"status\", \"detail\" FROM \"presentation_validation_checks\" ORDER BY rowid",
+        "description": "Selects reviewed validation_checks presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_validation_checks"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    },
+    {
+      "id": "query_outputs",
+      "label": "Presentation SELECT for outputs",
+      "path": "presentation/build_regional_compat_report.py",
+      "query": {
+        "engine": "sqlite",
+        "language": "sql",
+        "sql": "SELECT \"file\", \"rows\", \"purpose\" FROM \"presentation_outputs\" ORDER BY rowid",
+        "description": "Selects reviewed outputs presentation rows from frozen receipt-derived values.",
+        "tables_used": [
+          "presentation_outputs"
+        ],
+        "executed_at": "2026-07-22T14:17:47Z",
+        "filters": [
+          "Rows are copied without scientific recomputation from validated frozen receipts."
+        ]
+      }
+    }
+  ],
+  "package_info": {
+    "originUrl": "artifact://longlineage/hcc1395-python-compatible-regional-topology",
+    "controls": {
+      "edit": false,
+      "refresh": false,
+      "share": false
+    }
+  }
+}

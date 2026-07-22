@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/dataset_gate_input_authority-1.0.0.json",
+  "title": "LongLineage governed single-dataset input authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "authority_id",
+    "authority_profile",
+    "allowed_terminal_state",
+    "dataset_id",
+    "dataset_order",
+    "truth_fields",
+    "private_source_paths_stored",
+    "tagged_bam_persisted",
+    "latest_tag_join",
+    "variant_scope",
+    "files",
+    "full_content_freeze",
+    "claim"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.dataset_gate_input_authority"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "authority_id": {
+      "const": "HCC1395_RAW_BAM_LPS_SIDECAR_V2_PASS_SSNV_GRCH38_20260720"
+    },
+    "authority_profile": {
+      "const": "HCC1395_DATASET_GATE"
+    },
+    "allowed_terminal_state": {
+      "const": "VALIDATED_FROZEN_DATASET_GATE"
+    },
+    "dataset_id": {
+      "const": "HCC1395"
+    },
+    "dataset_order": {
+      "const": 0
+    },
+    "truth_fields": {
+      "const": 0
+    },
+    "private_source_paths_stored": {
+      "const": false
+    },
+    "tagged_bam_persisted": {
+      "const": false
+    },
+    "latest_tag_join": {
+      "const": "EXACT_PROJECTION_NO_FALLBACK"
+    },
+    "variant_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_pass_biallelic_ssnv",
+        "autosomal_chr1_to_chr22",
+        "outside_autosomal_scope"
+      ],
+      "properties": {
+        "all_pass_biallelic_ssnv": {
+          "const": 113061
+        },
+        "autosomal_chr1_to_chr22": {
+          "const": 79687
+        },
+        "outside_autosomal_scope": {
+          "const": 33374
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "path_token", "size_bytes", "sha256"],
+        "properties": {
+          "role": {
+            "enum": [
+              "raw_bam",
+              "raw_bam_index",
+              "pass_biallelic_ssnv_vcf",
+              "pass_biallelic_ssnv_vcf_index",
+              "latest_hp_ps_sidecar",
+              "latest_hp_ps_sidecar_index",
+              "reference_fasta",
+              "reference_fai"
+            ]
+          },
+          "path_token": {
+            "type": "string",
+            "pattern": "^LOCAL_[A-Z0-9_]+$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "full_content_freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "started_at",
+        "observed_complete_no_later_than",
+        "observed_wall_upper_bound_seconds",
+        "timing_precision",
+        "cost_domain"
+      ],
+      "properties": {
+        "command": {
+          "const": "sha256sum <raw_bam> <reference_fasta>"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "observed_complete_no_later_than": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "observed_wall_upper_bound_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timing_precision": {
+          "const": "POLL_BOUNDED_NOT_EXACT"
+        },
+        "cost_domain": {
+          "const": "INPUT_FREEZE_NOT_SCIENCE_RUNTIME"
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_gate_allowed",
+        "production_seven_dataset_claim_allowed",
+        "cross_dataset_generalization_allowed"
+      ],
+      "properties": {
+        "dataset_gate_allowed": {
+          "const": true
+        },
+        "production_seven_dataset_claim_allowed": {
+          "const": false
+        },
+        "cross_dataset_generalization_allowed": {
+          "const": false
+        }
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "the eight file roles are unique and complete",
+    "all eight size/SHA identities must equal the HCC1395_DATASET_GATE manifest",
+    "raw_bam is not a persisted tagged BAM and HP/PS comes only from the exact latest sidecar",
+    "this authority can never enable a seven-dataset production or cross-dataset claim"
+  ]
+}

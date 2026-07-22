@@ -1,0 +1,16 @@
+LongLineage P6 validator first-stage immutable receipt v1
+recorded_at=2026-07-20T03:34:40+08:00
+backfilled_at=2026-07-20T04:14:38+08:00
+scope=P6_PHASE_ONE_BOUNDED_SYNTHETIC_ONLY
+production_ready=false
+full_p6_dataset_gate=false
+source_path=tests/integration/test_validator_fault.cpp
+source_sha256_at_verification=54ec9a238a0f9961341ab42b7439188109d3411d5443cbb5156d26568c1c0997
+command=ctest --test-dir build-p6-validator -R '^(validator_fault|run_root_transaction)$' --output-on-failure
+exit_code=0
+output_excerpt=100% tests passed, 0 tests failed out of 2; validator executable fault table covered one positive control and nine fail-closed fault cases.
+boundary_command=bash scripts/ci/check_source_boundaries.sh
+boundary_exit_code=0
+boundary_output_excerpt=BOUNDARY RESULT: PASS validator_link=independent python_science=absent; validator link.txt contained no liblonglineage_core.
+reason_for_backfill=The successor full-validator task intentionally extended the mutable fault-test source, so the archived phase-one task could no longer use that source file itself as immutable evidence.
+non_claim=This receipt does not prove LLM_BGZF replay, full scientific conservation, dataset-gate freeze, HCC1395 execution, seven-dataset production readiness, or performance.

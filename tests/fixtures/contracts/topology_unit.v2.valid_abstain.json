@@ -1,0 +1,64 @@
+{
+  "schema_name": "longlineage.topology_unit",
+  "schema_version": "2.0.0",
+  "dataset_order": 0,
+  "dataset_id": "synthetic",
+  "unit_order": 2,
+  "unit_id": "synthetic-abstain",
+  "active_bits": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  "input_patterns": [
+    {"kind": "FULL_STATE", "pattern": "1111111111111", "multiplicity": 1}
+  ],
+  "input_evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "observed_states": ["1111111111111"],
+  "solver_route": "ABSTAIN",
+  "objective_state": "ABSTAIN_KERNEL_NOT_VERIFIED",
+  "objective_h": null,
+  "objective_bounds": null,
+  "objective_evidence_sha256": null,
+  "objective_reason": "SOLVER_ROUTE_NOT_VERIFIED",
+  "family_state": "ABSTAIN_KERNEL_NOT_VERIFIED",
+  "family_representation": null,
+  "family_evidence_sha256": null,
+  "family_reason": "SOLVER_ROUTE_NOT_VERIFIED",
+  "candidate_family_digest": null,
+  "candidate_count": 0,
+  "tree_count": "0",
+  "candidates": [],
+  "ranking_state": "RANKING_NOT_RUN_OBJECTIVE_ABSTAIN",
+  "ranking_endpoint_id": null,
+  "ranking_mode": null,
+  "ranking_evidence_sha256": null,
+  "ranking_certificate": null,
+  "published_rank": null,
+  "ranking_reason": "OBJECTIVE_NOT_CERTIFIED",
+  "edge_endpoint": {
+    "status": "EDGE_NOT_RUN",
+    "endpoint_id": null,
+    "evidence_sha256": null,
+    "candidate_results": [],
+    "reason": "NOT_REQUESTED"
+  },
+  "evolution_models": {
+    "evo_m0": {
+      "role": "PRIMARY",
+      "model": "RECURRENCE_ALLOWED",
+      "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    "evo_m1": {
+      "role": "SENSITIVITY_ONLY",
+      "model": "STRICT_INFINITE_SITES",
+      "cn_loh_gate": "NOT_EVALUATED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    },
+    "evo_m2": {
+      "role": "UNRESOLVED",
+      "model": "LOSS_SUPPORTED_DOLLO",
+      "state": "UNRESOLVED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    }
+  },
+  "multi_mutation_edge_equivalence": []
+}

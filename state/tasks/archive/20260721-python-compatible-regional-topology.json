@@ -1,0 +1,146 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260721-python-compatible-regional-topology",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {"path": "state/tasks/active/20260721-python-compatible-regional-topology.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260721-python-compatible-regional-topology.json", "kind": "FILE"},
+    {"path": "CMakeLists.txt", "kind": "FILE"},
+    {"path": "tests/CMakeLists.txt", "kind": "FILE"},
+    {"path": "governance/gate_registry.tsv", "kind": "FILE"},
+    {"path": "include/longlineage/compat", "kind": "DIRECTORY_TREE"},
+    {"path": "src/compat", "kind": "DIRECTORY_TREE"},
+    {"path": "include/longlineage/validation/regional_compat_validator.hpp", "kind": "FILE"},
+    {"path": "src/validation/regional_compat_validator.cpp", "kind": "FILE"},
+    {"path": "apps/regional_compat_main.cpp", "kind": "FILE"},
+    {"path": "apps/regional_compat_validate_main.cpp", "kind": "FILE"},
+    {"path": "tests/unit/test_regional_compat.cpp", "kind": "FILE"},
+    {"path": "tests/integration/test_regional_compat_validator.cpp", "kind": "FILE"},
+    {"path": "tests/fixtures/regional_compat", "kind": "DIRECTORY_TREE"},
+    {"path": "schema/compat", "kind": "DIRECTORY_TREE"},
+    {"path": "scripts/run_hcc1395_regional_compat.sh", "kind": "FILE"},
+    {"path": "presentation/build_regional_compat_report.py", "kind": "FILE"},
+    {"path": "presentation/deliver_portable_report.mjs", "kind": "FILE"},
+    {"path": "docs/audits/20260721_Python相容區域拓撲實作前稽核_01.md", "kind": "FILE"},
+    {"path": "docs/decisions/ADR-0007-python-compatible-regional-topology.md", "kind": "FILE"},
+    {"path": "docs/development/implementation-notes.md", "kind": "FILE"},
+    {"path": "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.json", "kind": "FILE"},
+    {"path": "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.html", "kind": "FILE"},
+    {"path": "docs/CURRENT_FOCUS.md", "kind": "FILE"},
+    {"path": "CHANGELOG.md", "kind": "FILE"},
+    {"path": "provenance/source_to_target_manifest.json", "kind": "FILE"}
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-22T06:50:00+08:00",
+  "heartbeat_at": "2026-07-21T08:44:30+08:00",
+  "task_type": "B",
+  "goals": ["LL-G1", "LL-G2", "LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Implement and validate a separate C++/HTSlib Python-v2-compatible 50 kb regional sSNV topology endpoint for full HCC1395 autosomes, including deterministic parallel execution, fail-closed validation, frozen provenance, semantic parity and controlled performance evidence."
+  },
+  "assumptions": [
+    "The compatibility endpoint is descriptive/evaluation-only and cannot replace the formal M2/topology claim endpoint.",
+    "Python-v2 L0/L1 counts are independent of post-tree SEQC2 CN annotation; production-compatible output therefore reports CN/LOH as unavailable.",
+    "Exact parity requires region, selected-locus, HP-family and supported-pattern membership equality, not only the aggregate 8222-region count.",
+    "The frozen raw BAM plus authoritative truth-free HP/PS sidecar is the input authority; truth-bearing persisted tagged BAM is evaluation-only."
+  ],
+  "inputs": [
+    {"role": "production_input_authority", "path": "oracle/production_input_authority.json", "sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557"},
+    {"role": "historical_authority", "path": "oracle/authority_manifest.json", "sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16"},
+    {"role": "source_port_lifecycle", "path": "provenance/source_to_target_manifest.json", "sha256": "22c74df7fe419579f2c24495a202b9dd7db0f5aa99481c513e0d56f89533bec9"},
+    {"role": "prior_predecision_audit", "path": "docs/audits/20260720_HCC1395科學parity實作前稽核_01.md", "sha256": "aa9db9e39f506aca40390d649694c8e90a98ae5fe76cab02e6657dba4574d2ad"}
+  ],
+  "expected_outputs": [
+    {"role": "predecision_audit", "path": "docs/audits/20260721_Python相容區域拓撲實作前稽核_01.md", "sha256": "19ccc72d93fe76ca5fdb5cd8ad14425a7fedebd96c1c095a3246896838a9c818"},
+    {"role": "compatibility_contract", "path": "docs/decisions/ADR-0007-python-compatible-regional-topology.md", "sha256": "b62b203eaa6248cb1c1313de06437fe6ce0cdb5d7c06450c051cd1d0bf45a57a"},
+    {"role": "validated_report", "path": "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.json", "sha256": "08bada867965dde07c05bffe675ae53ed9294168be97140c5fa559a0f8d04daa"},
+    {"role": "standalone_report", "path": "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.html", "sha256": "ad466c79c13f2b418c56845f949f8e8394c73c5dde537e11e649a2e0720bb19b"}
+  ],
+  "step_verify": [
+    {"step": "Freeze the Python-v2 regional contract and negative cases.", "verify": "Audit and ADR identify exact 50 kb grouping, first-tie densest-8 cap, HP-family mapping, minimum-three pattern support, legacy cap semantics and claim boundary."},
+    {"step": "Implement C++/HTSlib extraction, legacy solver and deterministic worker ordering.", "verify": "Synthetic unit and integration tests pass at workers 1 and 4 with identical semantic SHA and expected negative exits."},
+    {"step": "Replay frozen Python HCC1395 intermediate artifacts.", "verify": "Zero mismatch for region keys, selected loci, HP-family supported patterns, unit class and exact integer counts before any BAM full run."},
+    {"step": "Run full HCC1395 with 24 workers plus a same-input bounded one/24-worker determinism probe.", "verify": "The full run validates and freezes with exact Python-v2 aggregate and membership parity; the bounded one/24-worker TSV artifacts are byte-identical."},
+    {"step": "Publish controlled performance and HTML evidence.", "verify": "Measured wall/RSS/thread counts and scope-matched Python baseline are explicitly separated from estimates and formal-topology timings."}
+  ],
+  "evidence": [
+    {
+      "evidence_id": "20260721-regional-compat-predecision-audit",
+      "evidence_path": "docs/audits/20260721_Python相容區域拓撲實作前稽核_01.md",
+      "evidence_kind": "AUDIT",
+      "command": "sha256sum docs/audits/20260721_Python相容區域拓撲實作前稽核_01.md",
+      "exit_code": 0,
+      "output_excerpt": "PROBE-first contract freezes grouping, read evidence, HP family, solver cap, parallel determinism, truth isolation and claim boundaries.",
+      "evidence_sha256": "19ccc72d93fe76ca5fdb5cd8ad14425a7fedebd96c1c095a3246896838a9c818",
+      "recorded_at": "2026-07-21T08:44:30+08:00"
+    },
+    {
+      "evidence_id": "20260721-regional-compat-adr",
+      "evidence_path": "docs/decisions/ADR-0007-python-compatible-regional-topology.md",
+      "evidence_kind": "AUDIT",
+      "command": "sha256sum docs/decisions/ADR-0007-python-compatible-regional-topology.md",
+      "exit_code": 0,
+      "output_excerpt": "Accepted descriptive-only contract records the complete HCC1395 zero-mismatch validation outcome and keeps formal topology separate.",
+      "evidence_sha256": "b62b203eaa6248cb1c1313de06437fe6ce0cdb5d7c06450c051cd1d0bf45a57a",
+      "recorded_at": "2026-07-21T08:44:30+08:00"
+    },
+    {
+      "evidence_id": "20260721-regional-compat-machine-report",
+      "evidence_path": "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.json",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.json",
+      "exit_code": 0,
+      "output_excerpt": "Presentation builder accepted only the VALIDATED_FROZEN regional profile, exact 8222/20119/106559 rows and zero crosswalk mismatch; scope is PARTIAL_HCC1395_ONLY, NON_PRODUCTION and NOT_P8, with no controlled-speedup claim.",
+      "evidence_sha256": "08bada867965dde07c05bffe675ae53ed9294168be97140c5fa559a0f8d04daa",
+      "recorded_at": "2026-07-22T22:17:47+08:00"
+    },
+    {
+      "evidence_id": "20260721-regional-compat-html-report",
+      "evidence_path": "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.html",
+      "evidence_kind": "REPORT",
+      "command": "node presentation/deliver_portable_report.mjs --plugin-root PLUGIN_ROOT --input docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.json --output docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.html",
+      "exit_code": 0,
+      "output_excerpt": "Portable and Playwright QA passed 19 blocks, one chart, seven tables, one visible H1, explicit descriptive/non-production PARTIAL ribbon, zh-Hant language, 1440/390/print, zero external requests/errors/overflow and keyboard source-dialog access.",
+      "evidence_sha256": "ad466c79c13f2b418c56845f949f8e8394c73c5dde537e11e649a2e0720bb19b",
+      "recorded_at": "2026-07-22T22:17:47+08:00"
+    },
+    {
+      "evidence_id": "20260721-regional-compat-ctest",
+      "evidence_path": "state/audits/20260722-historical-ctest-evidence-preservation-001.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "ctest --test-dir build-regional-compat-v2 --output-on-failure --parallel 8",
+      "exit_code": 0,
+      "output_excerpt": "Preserved historical receipt: 100% tests passed, 0 failed out of 46; regional_compat and regional_compat_validator both passed. This is not current-source validation.",
+      "evidence_sha256": "5e589bb657682e46f9bfe5bf96880f9049854435f2591740aa02f19a9617bf16",
+      "recorded_at": "2026-07-21T08:44:30+08:00"
+    },
+    {
+      "evidence_id": "20260721-regional-compat-governance",
+      "evidence_path": "governance/gate_registry.tsv",
+      "evidence_kind": "RECEIPT",
+      "command": "build-regional-compat-v2/bin/longlineage-governance check-all --repo .",
+      "exit_code": 0,
+      "output_excerpt": "Cold start, policy, state, catalog, status codes, 30 required gates and truth boundary all passed; the regional parity gate has a unique executable negative binding.",
+      "evidence_sha256": "39bff1ee8bc289130c3e9174ec99c040330c35d502eb66b42fc528a361d1c906",
+      "recorded_at": "2026-07-21T08:44:30+08:00"
+    }
+  ],
+  "deviations": [
+    "The task draft requested full workers=1 and workers=24 BAM runs. The full validated run used workers=24; deterministic parallelism was tested on the same first 100 BAM regions with workers=1 and 24 and byte-identical regions/units/patterns TSVs. A redundant full workers=1 NFS scan was not represented as completed.",
+    "Repository policy forbids a new Python science rerun. The frozen historical Python duration is a four-sample scheduler observation rather than an isolated timer, and the validated C++ run used warm NFS cache; therefore the apparent 17.023x ratio is reported only as an observation with full_controlled_claim_allowed=false.",
+    "The first full workers=24 C++ candidate matched aggregate classes but differed in two capped display-only n_hidden/n_trees fields. It was not frozen. CPython 3.9 set merge/copy table behavior was then reproduced, two golden edge cases were added, and the final run has zero mismatch in all compared fields.",
+    "The shared portable renderer initially rejected the report for horizontal overflow. The final presentation-only deliverer adds a scrollbar-safe full-bleed top-bar width override and then reruns the canonical static-chart, desktop/mobile, source and keyboard QA; scientific artifact bytes are unaffected.",
+    "System jsonschema 3.2.0 cannot interpret Draft 2020-12 prefixItems. Its rejection was not used as evidence; the existing pinned jsonschema 4.26.0 validated all three closed compatibility schemas with zero errors.",
+    "The frozen five-file source bundle is bound by individual SHA-256 values and frozen output manifests; the historical origin commit alone is not sufficient to reconstruct that bundle.",
+    "The BAM is read on the governed host from the authoritative remote input mount, not from a separate local work-root copy. The manifest locks the raw BAM SHA-256 and pairs it with a truth-free HP/PS sidecar; no persisted truth-tagged BAM is used.",
+    "Repository-wide source-boundary and hygiene scripts retain one and thirteen pre-existing baseline failures respectively, while this change adds none. Existing unsafe history and pending license/source-origin audit prevent direct public GitHub push and remain outside this verified scientific task.",
+    "The 2026-07-22 publication repair regenerated only the presentation layer from the same frozen receipts: it removed a redundant Markdown title that produced two visible H1 headings after hydration, added a descriptive/non-production PARTIAL ribbon, and reran canonical renderer plus desktop/mobile/print QA. All artifact datasets other than the removed title block remained byte-semantic identical."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-22T22:17:47+08:00"
+}

@@ -18,6 +18,7 @@ run	status	RUNNING	false	info	.	false	true	1.0.0	Run is active	run_running
 run	status	FAILED	true	error	RUNNING	true	true	1.0.0	Run terminated without validation	run_failed
 run	status	VALIDATED	false	info	RUNNING	false	false	1.0.0	Independent validator passed	run_validated
 run	status	VALIDATED_FROZEN	true	info	VALIDATED	false	false	1.0.0	Validated staging root was atomically frozen	run_frozen
+run	status	VALIDATED_FROZEN_DATASET_GATE	true	info	VALIDATED	false	false	1.0.0	Validated single-dataset staging root was atomically frozen without a production claim	run_frozen_dataset_gate
 run	reason	WORKER_ERROR	true	error	FAILED	true	true	1.0.0	A worker failed	run_worker_error
 run	reason	VALIDATOR_REJECTED	true	error	FAILED	true	true	1.0.0	Independent validation failed	run_validator_rejected
 run	reason	KERNEL_NOT_VERIFIED	true	error	FAILED	true	true	1.0.0	Required scientific phase is not verified	run_kernel_blocked
@@ -25,22 +26,52 @@ topology_objective	status	OBJECTIVE_CERTIFIED	false	info	.	false	false	1.0.0	Min
 topology_objective	status	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	warning	.	true	true	1.0.0	A dependency required to certify the objective is unavailable	topology_objective_dependency
 topology_objective	status	ABSTAIN_KERNEL_NOT_VERIFIED	true	warning	.	true	true	1.0.0	The required objective kernel is not verified	topology_objective_kernel
 topology_objective	status	ABSTAIN_NOT_IDENTIFIABLE	true	warning	.	true	true	1.0.0	The declared model cannot identify an objective	topology_objective_not_identifiable
+topology_objective	status	ABSTAIN_RESOURCE_LIMIT	true	warning	.	true	true	2.0.0	Search stopped before an exhaustive objective proof	topology_objective_resource
+topology_objective	status	ABSTAIN_DIFFERENTIAL_MISMATCH	true	error	.	true	true	2.0.0	Independent exact kernels disagree on the objective	topology_objective_differential
+topology_objective	reason	NONE	false	info	OBJECTIVE_CERTIFIED	false	false	2.0.0	Certified objective has no failure reason	topology_objective_reason_none
+topology_objective	reason	DEPENDENCY_UNAVAILABLE	true	warning	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	true	2.0.0	Objective dependency is unavailable	topology_objective_reason_dependency
+topology_objective	reason	SOLVER_ROUTE_NOT_VERIFIED	true	warning	ABSTAIN_KERNEL_NOT_VERIFIED	true	true	2.0.0	Required exact objective route is outside its verified boundary	topology_objective_reason_kernel
+topology_objective	reason	MODEL_NOT_IDENTIFIABLE	true	warning	ABSTAIN_NOT_IDENTIFIABLE	true	true	2.0.0	Declared constraints do not identify an objective	topology_objective_reason_model
+topology_objective	reason	SEARCH_RESOURCE_LIMIT_REACHED	true	warning	ABSTAIN_RESOURCE_LIMIT	true	true	2.0.0	Node or state-space limit stopped objective proof	topology_objective_reason_resource
+topology_objective	reason	DIFFERENTIAL_CHECK_FAILED	true	error	ABSTAIN_DIFFERENTIAL_MISMATCH	true	true	2.0.0	Oracle B-and-B or DP objective results differ	topology_objective_reason_differential
 topology_family	status	FAMILY_COMPLETE	false	info	OBJECTIVE_CERTIFIED	false	false	1.0.0	All minimum vertex sets were enumerated	topology_family_complete
 topology_family	status	FAMILY_INCOMPLETE_CAP	true	warning	OBJECTIVE_CERTIFIED	true	true	1.0.0	Enumeration reached the family cap	topology_family_cap
 topology_family	status	FAMILY_INCOMPLETE_DEADLINE	true	warning	OBJECTIVE_CERTIFIED	true	true	1.0.0	Enumeration reached the deadline	topology_family_deadline
 topology_family	status	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	warning	.	true	true	1.0.0	A required exact solver dependency is unavailable	topology_dependency
 topology_family	status	ABSTAIN_KERNEL_NOT_VERIFIED	true	warning	.	true	true	1.0.0	The required exact solver route has not passed its phase gate	topology_kernel_not_verified
 topology_family	status	ABSTAIN_NOT_IDENTIFIABLE	true	warning	.	true	true	1.0.0	Declared model cannot identify a family	topology_not_identifiable
+topology_family	status	ABSTAIN_RESOURCE_LIMIT	true	warning	.	true	true	2.0.0	Search stopped before objective and family completion	topology_family_resource
+topology_family	status	ABSTAIN_DIFFERENTIAL_MISMATCH	true	error	.	true	true	2.0.0	Independent exact kernels disagree	topology_family_differential
 topology_family	reason	MAX_FAMILY_SIZE_REACHED	true	warning	FAMILY_INCOMPLETE_CAP	true	true	1.0.0	Family cap stopped enumeration	topology_cap_reason
 topology_family	reason	DEADLINE_REACHED	true	warning	FAMILY_INCOMPLETE_DEADLINE	true	true	1.0.0	Deadline stopped enumeration	topology_deadline_reason
 topology_family	reason	HIGHS_NOT_AVAILABLE	true	warning	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	true	1.0.0	Pinned direct HiGHS is unavailable	topology_highs_missing
 topology_family	reason	SOLVER_ROUTE_NOT_VERIFIED	true	warning	ABSTAIN_KERNEL_NOT_VERIFIED	true	true	1.0.0	The input requires a solver route not yet verified for production	topology_route_not_verified
 topology_family	reason	MODEL_NOT_IDENTIFIABLE	true	warning	ABSTAIN_NOT_IDENTIFIABLE	true	true	1.0.0	The declared mutation-state constraints do not identify a family	topology_model_not_identifiable
 topology_family	reason	NONE	false	info	FAMILY_COMPLETE	false	false	1.0.0	Complete family has no failure reason	topology_reason_none
+topology_family	reason	DEPENDENCY_UNAVAILABLE	true	warning	ABSTAIN_DEPENDENCY_UNAVAILABLE	true	true	2.0.0	Exact family dependency is unavailable	topology_family_reason_dependency
+topology_family	reason	SEARCH_RESOURCE_LIMIT_REACHED	true	warning	ABSTAIN_RESOURCE_LIMIT	true	true	2.0.0	Node or state-space limit stopped family proof	topology_family_reason_resource
+topology_family	reason	DIFFERENTIAL_CHECK_FAILED	true	error	ABSTAIN_DIFFERENTIAL_MISMATCH	true	true	2.0.0	Oracle B-and-B or DP results differ	topology_family_reason_differential
+topology_ranking	status	RANKING_COMPLETE	false	info	FAMILY_COMPLETE	false	false	2.0.0	Complete family has a certified abundance tie class	topology_ranking_complete
+topology_ranking	status	RANKING_NOT_RUN_FAMILY_INCOMPLETE	true	warning	.	true	true	2.0.0	Abundance ranking is forbidden for an incomplete family	topology_ranking_family_incomplete
+topology_ranking	status	RANKING_NOT_RUN_OBJECTIVE_ABSTAIN	true	warning	.	true	true	2.0.0	Abundance ranking is forbidden without a certified objective	topology_ranking_objective_abstain
+topology_ranking	status	RANKING_ABSTAIN_NUMERICAL_CERTIFICATE	true	warning	FAMILY_COMPLETE	true	true	2.0.0	Numerical exclusion certificates are unavailable	topology_ranking_numerical
+topology_ranking	status	RANKING_NOT_REQUESTED	true	info	FAMILY_COMPLETE	true	true	2.0.0	Ranking endpoint was intentionally not requested	topology_ranking_not_requested
+topology_ranking	reason	NONE	false	info	RANKING_COMPLETE	false	false	2.0.0	Complete ranking has no failure reason	topology_ranking_reason_none
+topology_ranking	reason	FAMILY_NOT_COMPLETE	true	warning	RANKING_NOT_RUN_FAMILY_INCOMPLETE	true	true	2.0.0	Candidate family is incomplete	topology_ranking_reason_family
+topology_ranking	reason	OBJECTIVE_NOT_CERTIFIED	true	warning	RANKING_NOT_RUN_OBJECTIVE_ABSTAIN	true	true	2.0.0	Structural objective is not certified	topology_ranking_reason_objective
+topology_ranking	reason	NUMERICAL_CERTIFICATE_UNAVAILABLE	true	warning	RANKING_ABSTAIN_NUMERICAL_CERTIFICATE	true	true	2.0.0	Outward-rounded exclusion evidence is unavailable	topology_ranking_reason_numerical
+topology_ranking	reason	NOT_REQUESTED	true	info	RANKING_NOT_REQUESTED	true	true	2.0.0	Ranking endpoint was not requested	topology_ranking_reason_not_requested
+topology_edge	status	EDGE_COMPLETE	false	info	FAMILY_COMPLETE	false	false	2.0.0	Fixed-node parent edge endpoint completed	topology_edge_complete
+topology_edge	status	EDGE_NOT_RUN	true	info	.	true	true	2.0.0	Parent edge endpoint was not requested	topology_edge_not_run
+topology_edge	status	EDGE_ABSTAIN_EVIDENCE_MISSING	true	warning	.	true	true	2.0.0	Required parent-score evidence is unavailable	topology_edge_evidence_missing
+topology_edge	reason	NONE	false	info	EDGE_COMPLETE	false	false	2.0.0	Complete edge endpoint has no failure reason	topology_edge_reason_none
+topology_edge	reason	NOT_REQUESTED	true	info	EDGE_NOT_RUN	true	true	2.0.0	Parent edge endpoint was not requested	topology_edge_reason_not_requested
+topology_edge	reason	PARENT_SCORE_EVIDENCE_MISSING	true	warning	EDGE_ABSTAIN_EVIDENCE_MISSING	true	true	2.0.0	Independent parent-score sufficient statistics are absent	topology_edge_reason_evidence
 model	status	UNRESOLVED_NOT_IMPLEMENTED	true	warning	.	true	true	1.0.0	Declared sensitivity model is not implemented	model_not_implemented
 m1	status	EVALUABLE	false	info	.	false	false	1.0.0	Site passed read and complete-distance prerequisites	m1_evaluable
 m1	status	INSUFFICIENT_ALT_READS	true	info	.	true	true	1.0.0	Fewer than six joined focal ALT reads	m1_insufficient_alt
 m1	status	INCOMPLETE_DISTANCE_BELOW_MINIMUM	true	info	.	true	true	1.0.0	Fewer than six reads remain after complete-distance peel	m1_incomplete_distance
+m1	reason	NONE	false	info	EVALUABLE	false	false	1.0.0	Evaluable site has no M1 failure reason	m1_reason_none
 m1	reason	INSUFFICIENT_FOCAL_ALT_READS	true	info	INSUFFICIENT_ALT_READS	true	true	1.0.0	Fewer than six focal ALT reads were available	m1_reason_alt
 m1	reason	INSUFFICIENT_MATRIX_JOINED_FOCAL_ALT_READS	true	info	INSUFFICIENT_ALT_READS	true	true	1.0.0	Fewer than six ALT reads joined the frozen methylation matrix	m1_reason_matrix
 m1	reason	INCOMPLETE_DISTANCE_BELOW_MINIMUM	true	info	INCOMPLETE_DISTANCE_BELOW_MINIMUM	true	true	1.0.0	Complete-distance peel left fewer than six reads	m1_reason_distance

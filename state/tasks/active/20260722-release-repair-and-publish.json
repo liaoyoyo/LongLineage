@@ -1,0 +1,87 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260722-release-repair-and-publish",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {"path": ".github", "kind": "DIRECTORY_TREE"},
+    {"path": ".gitignore", "kind": "FILE"},
+    {"path": "CHANGELOG.md", "kind": "FILE"},
+    {"path": "CMakeLists.txt", "kind": "FILE"},
+    {"path": "ROADMAP.md", "kind": "FILE"},
+    {"path": "apps", "kind": "DIRECTORY_TREE"},
+    {"path": "cmake", "kind": "DIRECTORY_TREE"},
+    {"path": "contracts", "kind": "DIRECTORY_TREE"},
+    {"path": "docs", "kind": "DIRECTORY_TREE"},
+    {"path": "governance", "kind": "DIRECTORY_TREE"},
+    {"path": "include", "kind": "DIRECTORY_TREE"},
+    {"path": "oracle", "kind": "DIRECTORY_TREE"},
+    {"path": "presentation", "kind": "DIRECTORY_TREE"},
+    {"path": "provenance", "kind": "DIRECTORY_TREE"},
+    {"path": "schema", "kind": "DIRECTORY_TREE"},
+    {"path": "scripts", "kind": "DIRECTORY_TREE"},
+    {"path": "src", "kind": "DIRECTORY_TREE"},
+    {"path": "state/audits", "kind": "DIRECTORY_TREE"},
+    {"path": "state/benchmarks", "kind": "DIRECTORY_TREE"},
+    {"path": "state/phase_ledger.json", "kind": "FILE"},
+    {"path": "state/project_state.json", "kind": "FILE"},
+    {"path": "state/tasks/active/20260721-python-compatible-regional-all-datasets.json", "kind": "FILE"},
+    {"path": "state/tasks/active/20260722-release-repair-and-publish.json", "kind": "FILE"},
+    {"path": "state/tasks/archive", "kind": "DIRECTORY_TREE"},
+    {"path": "tests", "kind": "DIRECTORY_TREE"}
+  ],
+  "depends_on": [],
+  "lease_state": "ACTIVE",
+  "lease_expires_at": "2026-07-23T03:55:30+08:00",
+  "heartbeat_at": "2026-07-22T22:53:15+08:00",
+  "task_type": "C",
+  "goals": ["LL-G1", "LL-G4", "LL-G5"],
+  "status": "IN_PROGRESS",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Reconstruct the unpushed LongLineage feature work on current origin/main without forbidden history, repair current-head CI/governance/hygiene regressions, comprehensively validate the truthful non-production scope, and publish a private draft PR without promoting blocked scientific phases."
+  },
+  "assumptions": [
+    "The locked production input contract remains raw BAM plus exact latest HP/PS sidecar; no second persisted tagged BAM is required.",
+    "Complete means complete verification of this draft publication scope, not false promotion of P3-P8 or the production release attestation.",
+    "The source feature branch remains an immutable local recovery reference until the sanitized branch is independently verified.",
+    "The publishable branch follows the repository fix/* naming contract and Python cache files remain ignored."
+  ],
+  "inputs": [
+    {"role": "repository_governance", "path": "AGENTS.md", "sha256": null},
+    {"role": "phase_state", "path": "state/phase_ledger.json", "sha256": null},
+    {"role": "source_mapping", "path": "provenance/source_to_target_manifest.json", "sha256": null}
+  ],
+  "expected_outputs": [
+    {"role": "ci_regression_fix", "path": "scripts/testing/test_agent_task_negative.sh", "sha256": null},
+    {"role": "sanitized_task_state", "path": "state/tasks/active/20260721-python-compatible-regional-all-datasets.json", "sha256": null},
+    {"role": "implementation_record", "path": "docs/development/implementation-notes.md", "sha256": null},
+    {"role": "publication_task", "path": "state/tasks/active/20260722-release-repair-and-publish.json", "sha256": null},
+    {"role": "private_path_map_schema", "path": "schema/compat/regional_compat_input_paths.schema.json", "sha256": null},
+    {"role": "history_hygiene_gate", "path": "scripts/ci/check_history_hygiene.sh", "sha256": null},
+    {"role": "portable_report_qa", "path": "presentation/qa_static_report.py", "sha256": null}
+  ],
+  "step_verify": [
+    {
+      "step": "Reconstruct the feature tree from current origin/main and remove every forbidden current-tree and reachable-history payload.",
+      "verify": "Repository hygiene and an independent reachable-history scan both exit 0 with zero violations."
+    },
+    {
+      "step": "Repair the current-head governance and negative-test regressions without changing scientific decisions.",
+      "verify": "Compiled governance check-all and all 46 or later registered CTests exit 0 from a clean checkout."
+    },
+    {
+      "step": "Run the full applicable compiler, sanitizer, schema, determinism, presentation and foundation verification matrix.",
+      "verify": "Every applicable command has exit 0, immutable evidence, and blocked release-only gates remain explicitly blocked."
+    },
+    {
+      "step": "Commit the reviewed scope, push the sanitized branch and open a private draft pull request.",
+      "verify": "Remote head SHA equals local HEAD and the draft PR exposes successful current-branch Actions checks."
+    }
+  ],
+  "evidence": [],
+  "deviations": [],
+  "blockers": [],
+  "updated_at": "2026-07-22T22:53:15+08:00"
+}

@@ -109,6 +109,28 @@ using GroupKey = std::tuple<std::uint32_t, std::string, std::string>;
     return lhs + rhs;
 }
 
+[[nodiscard]] std::size_t saturating_multiply(std::size_t lhs, std::size_t rhs) noexcept {
+    if (lhs != 0 && rhs > std::numeric_limits<std::size_t>::max() / lhs) {
+        return std::numeric_limits<std::size_t>::max();
+    }
+    return lhs * rhs;
+}
+
+[[nodiscard]] std::size_t decoded_read_logical_bytes(const DecodedBlockRead& read) noexcept {
+    std::size_t bytes = sizeof(DecodedBlockRead);
+    bytes = saturating_add(bytes, read.identity.projection.qname.size());
+    bytes = saturating_add(bytes, read.identity.projection.contig.value().size());
+    bytes = saturating_add(bytes, read.identity.raw_qname.size());
+    bytes = saturating_add(bytes, read.identity.cigar.size());
+    bytes = saturating_add(bytes, read.identity.sam_core_sha256.size());
+    bytes = saturating_add(bytes, read.identity.typed_aux_canonical.size());
+    bytes = saturating_add(bytes, read.sequence_reference_orientation.size());
+    bytes = saturating_add(bytes, read.base_qualities.size());
+    bytes = saturating_add(bytes, read.mm_ml.mm.size());
+    bytes = saturating_add(bytes, read.mm_ml.ml.size());
+    return saturating_add(bytes, saturating_multiply(read.mm_ml.calls.size(), sizeof(MethylationCall)));
+}
+
 [[nodiscard]] ParseResult<bool> validate_block_contract(const AlignmentBlock& block) {
     if (block.focal_sites.empty()) {
         return ParseResult<bool>::failure(ParseReason::kMalformedValue, "alignment block has no focal sites");
@@ -290,17 +312,7 @@ ParseResult<std::vector<AlignmentBlock>> plan_alignment_blocks(const std::vector
 std::size_t BlockReadBatch::logical_retained_bytes() const noexcept {
     std::size_t bytes = sizeof(BlockReadBatch);
     for (const DecodedBlockRead& read : reads) {
-        bytes = saturating_add(bytes, sizeof(DecodedBlockRead));
-        bytes = saturating_add(bytes, read.identity.projection.qname.size());
-        bytes = saturating_add(bytes, read.identity.projection.contig.value().size());
-        bytes = saturating_add(bytes, read.identity.raw_qname.size());
-        bytes = saturating_add(bytes, read.identity.cigar.size());
-        bytes = saturating_add(bytes, read.identity.typed_aux_canonical.size());
-        bytes = saturating_add(bytes, read.sequence_reference_orientation.size());
-        bytes = saturating_add(bytes, read.base_qualities.size());
-        bytes = saturating_add(bytes, read.mm_ml.mm.size());
-        bytes = saturating_add(bytes, read.mm_ml.ml.size());
-        bytes = saturating_add(bytes, read.mm_ml.calls.size() * sizeof(MethylationCall));
+        bytes = saturating_add(bytes, decoded_read_logical_bytes(read));
     }
     return bytes;
 }
@@ -364,7 +376,8 @@ ParseResult<std::unique_ptr<IndexedBamBlockReader>> IndexedBamBlockReader::open(
 }
 
 ParseResult<BlockReadBatch> IndexedBamBlockReader::read_block(const AlignmentBlock& block,
-                                                              const BlockReadPolicy& policy) {
+                                                              const BlockReadPolicy& policy,
+                                                              const BlockReadResourceLimits& limits) {
     if (impl_ == nullptr || impl_->bam == nullptr || impl_->header == nullptr || impl_->index == nullptr) {
         return ParseResult<BlockReadBatch>::failure(ParseReason::kIoError, "BAM reader is not open");
     }
@@ -376,6 +389,14 @@ ParseResult<BlockReadBatch> IndexedBamBlockReader::read_block(const AlignmentBlo
         return ParseResult<BlockReadBatch>::failure(
             ParseReason::kUnsupportedValue,
             "v1 production block-read policy is fixed at MAPQ>=20, query length>=1000, and uppercase MM/ML required");
+    }
+    if (limits.maximum_filter_eligible_records == 0 ||
+        limits.maximum_filter_eligible_records > kMaximumRetainedRecordsPerBlock ||
+        limits.maximum_decoded_logical_bytes < sizeof(BlockReadBatch) ||
+        limits.maximum_decoded_logical_bytes > kMaximumBlockReadLogicalBytes) {
+        return ParseResult<BlockReadBatch>::failure(ParseReason::kUnsupportedValue,
+                                                    "block-read resource limits must be positive and cannot exceed "
+                                                    "250000 filter-eligible records or 512 MiB decoded logical bytes");
     }
     if (block.fetch_interval.end() > static_cast<std::uint64_t>(std::numeric_limits<hts_pos_t>::max())) {
         return ParseResult<BlockReadBatch>::failure(ParseReason::kUnsupportedValue,
@@ -409,8 +430,13 @@ ParseResult<BlockReadBatch> IndexedBamBlockReader::read_block(const AlignmentBlo
 
     BlockReadBatch batch;
     batch.block_sequence = block.sequence;
+    std::size_t retained_logical_bytes = sizeof(BlockReadBatch);
     int iterator_status = 0;
     while ((iterator_status = sam_itr_next(impl_->bam, iterator.get(), record.get())) >= 0) {
+        if (batch.counters.iterator_records == std::numeric_limits<std::uint64_t>::max()) {
+            return ParseResult<BlockReadBatch>::failure(ParseReason::kMalformedValue,
+                                                        "indexed BAM iterator record counter overflows uint64");
+        }
         ++batch.counters.iterator_records;
         if (record->core.tid != tid || record->core.pos < 0) {
             return ParseResult<BlockReadBatch>::failure(ParseReason::kMalformedValue,
@@ -459,6 +485,11 @@ ParseResult<BlockReadBatch> IndexedBamBlockReader::read_block(const AlignmentBlo
             ++batch.counters.excluded_missing_mm_ml;
             continue;
         }
+        if (batch.counters.retained_records >= limits.maximum_filter_eligible_records) {
+            return ParseResult<BlockReadBatch>::failure(
+                ParseReason::kUnsupportedValue,
+                "POSTFILTER_RECORD_LIMIT: filter-eligible BAM records exceed the configured per-block ceiling");
+        }
 
         auto query_consumption = validate_cigar_consumption(*record);
         if (!query_consumption.ok()) {
@@ -486,8 +517,16 @@ ParseResult<BlockReadBatch> IndexedBamBlockReader::read_block(const AlignmentBlo
             }
             std::copy(raw_qualities, raw_qualities + qualities.size(), qualities.begin());
         }
-        batch.reads.push_back(DecodedBlockRead{std::move(*identity.value), std::move(*sequence.value),
-                                               std::move(qualities), std::move(*mm_ml.value)});
+        DecodedBlockRead decoded{std::move(*identity.value), std::move(*sequence.value), std::move(qualities),
+                                 std::move(*mm_ml.value)};
+        const std::size_t read_logical_bytes = decoded_read_logical_bytes(decoded);
+        if (read_logical_bytes > limits.maximum_decoded_logical_bytes - retained_logical_bytes) {
+            return ParseResult<BlockReadBatch>::failure(ParseReason::kUnsupportedValue,
+                                                        "DECODED_LOGICAL_BYTE_LIMIT: decoded BAM evidence exceeds the "
+                                                        "configured per-block logical-byte ceiling");
+        }
+        retained_logical_bytes += read_logical_bytes;
+        batch.reads.push_back(std::move(decoded));
         ++batch.counters.retained_records;
     }
     if (iterator_status < -1) {

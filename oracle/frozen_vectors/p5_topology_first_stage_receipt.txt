@@ -1,0 +1,46 @@
+LONGLINEAGE P5 TOPOLOGY FIRST-STAGE RECOVERY RECEIPT
+receipt_schema=longlineage.recovery_receipt.v1
+historical_task_id=20260720-hcc1395-topology-inventory
+historical_task_status=VERIFIED
+historical_task_updated_at=2026-07-20T03:28:00+08:00
+receipt_reconstructed_at=2026-07-20T03:58:13+08:00
+
+RECOVERY SCOPE
+This immutable receipt was reconstructed only after the successor task
+20260720-hcc1395-topology-evidence-adapter began extending
+tests/unit/test_runtime_solver.cpp. It preserves the command, exit code and
+output excerpt that were already recorded by the released first-stage task.
+It does not assert that the successor-expanded test source is identical to the
+historical source, and it does not claim evidence for the unfinished adapter,
+BQ-aware ranker or topology serializer.
+
+HISTORICAL SOURCE SNAPSHOT
+source_path=tests/unit/test_runtime_solver.cpp
+source_sha256=1abb7b1358c3ffe0d6cb21c73d86b6466e40d03b23a31a885f9cbb53f03bc48b
+source_scope=bounded exact structural kernel tests before successor expansion
+
+RECORDED EVIDENCE 1
+evidence_id=topology-v2-schema-fixtures
+command=scripts/ci/check_json_schema_fixtures.sh
+exit_code=0
+output_excerpt=Three topology v2 positive fixtures PASS; three targeted negative fixtures reject; JSON SCHEMA FIXTURES RESULT: PASS.
+historical_evidence_sha256=02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03
+
+RECORDED EVIDENCE 2
+evidence_id=topology-exact-kernel-ctest
+command=cmake --build build-cpp-output-validation --target test_runtime_solver --parallel 8 && ctest --test-dir build-cpp-output-validation --output-on-failure -R '^(runtime_solver|determinism_contract|topology_no_incomplete_winner)$'
+exit_code=0
+output_excerpt=Warnings-as-errors build PASS; runtime_solver, determinism_contract and topology_no_incomplete_winner all PASS in 0.13 seconds.
+historical_source_sha256=1abb7b1358c3ffe0d6cb21c73d86b6466e40d03b23a31a885f9cbb53f03bc48b
+
+RECORDED EVIDENCE 3
+evidence_id=topology-status-registry
+command=./build-cpp-output-validation/bin/longlineage-governance check-status-codes --repo <REPO_ROOT>
+exit_code=0
+output_excerpt=status/reason registry passed 116 closed-vocabulary rows
+historical_evidence_sha256=7c3a36d5bf392f00a40742c619ae355c33a411869d13e2c41460e5c959e091c9
+
+AUTHORITY BOUNDARY
+This receipt is historical recovery evidence for the bounded first-stage P5
+kernel only. It does not update oracle authority, phase authority, production
+readiness, HCC1395 evidence, provenance, validator evidence or release status.

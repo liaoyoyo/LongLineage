@@ -9,7 +9,7 @@
     "genome": "chr1-22",
     "partial": false
   },
-  "active_milestone": "P2_RUNTIME_FOUNDATION",
+  "active_milestone": "P3_M1_PARITY",
   "goals": [
     "LL-G1",
     "LL-G2",
@@ -36,10 +36,13 @@
     "LINEAGE_COMPATIBLE_FAMILY_CLAIM_CEILING"
   ],
   "next_actions": [
-    "Implement the complete per-worker BAM/VCF/sidecar/FASTA handle bundle",
-    "Implement one-pass CIGAR multi-marker projection with exact latest-tag join",
-    "Prove a physical process-wide memory bound beyond logical sink accounting",
-    "Integrate staging with the independent validator and atomic freeze boundary"
+    "Use the summary 2.0.0 m1_representation binding to replay and explain the 2373-key legacy stable-membership difference",
+    "Route the validated dataset-gate implementation through the governed longlineage run entrypoint",
+    "Implement durable FAILED staging state, validator-aware FINAL_UNPUBLISHED recovery, independent HTS semantic-preflight replay, and race-free publication against non-cooperating same-UID writers before P6 verification",
+    "Exercise a real nonzero topology case and implement the direct HiGHS and active-bit completeness contracts",
+    "Record controlled cache condition, I/O operations, transient peak bytes and slowest-block identity before the next full comparison",
+    "Run all seven datasets at 24 and 40 workers only after P3-P6 blockers close",
+    "Push the history-safe private draft branch, require every current-head GitHub Actions job to pass, and keep public release blocked pending source-origin audit"
   ],
-  "last_verified_at": "2026-07-19T11:22:05+08:00"
+  "last_verified_at": "2026-07-22T22:53:15+08:00"
 }

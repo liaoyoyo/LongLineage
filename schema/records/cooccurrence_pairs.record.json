@@ -24,6 +24,7 @@
     "alt_n",
     "exact_state_count",
     "exact_status",
+    "family_status",
     "p_exact",
     "fdr_family_id",
     "fdr_family_size",
@@ -99,6 +100,11 @@
     {"name": "alt_n", "type": "uint32", "required": true},
     {"name": "exact_state_count", "type": "uint64", "required": true},
     {"name": "exact_status", "type": "status_code", "required": true},
+    {
+      "name": "family_status",
+      "type": "enum:INELIGIBLE_M2_SCREEN|ELIGIBLE_M2_ENDPOINT_A_NOT_TESTABLE|ELIGIBLE_M2_EXACT_NOT_IDENTIFIABLE|ELIGIBLE_M2_EXACT_FAMILY",
+      "required": true
+    },
     {"name": "p_exact", "type": "float64", "required": false, "null": "."},
     {"name": "fdr_family_id", "type": "string", "required": false, "null": "."},
     {"name": "fdr_family_size", "type": "uint64", "required": false, "null": "."},
@@ -189,6 +195,8 @@
   "invariants": [
     "abs(distance_bp) <= 5000 and focal position is included in the partner universe",
     "n_informative >= 10, every group >= 3, ref_n >= 3 and alt_n >= 3 before exact testing",
+    "family_status is INELIGIBLE_M2_SCREEN unless the focal M2 decision is PASS; only ELIGIBLE_M2_EXACT_FAMILY rows enter global exact BH/BY",
+    "descriptive exact p may be present outside the formal family, but fdr_family_id, fdr_family_size, q values and exact discoveries are null or false",
     "exact_state_count > 250000 yields NOT_IDENTIFIABLE and p/q fields are null",
     "conditional test requests exactly 999 permutations when its callability gate passes",
     "pair cells are row-major focal-call then partner-call over R,A,O,X",

@@ -1,0 +1,14 @@
+schema_name	schema_version	precedence	hp_token	hp_family	production_sidecar_token
+longlineage.hp_family	1.0.0	1	1	HP1-side	true
+longlineage.hp_family	1.0.0	2	HP1	HP1-side	false
+longlineage.hp_family	1.0.0	3	1-1	HP1-side	true
+longlineage.hp_family	1.0.0	4	1-2	HP1-side	true
+longlineage.hp_family	1.0.0	5	2	HP2-side	true
+longlineage.hp_family	1.0.0	6	HP2	HP2-side	false
+longlineage.hp_family	1.0.0	7	2-1	HP2-side	true
+longlineage.hp_family	1.0.0	8	2-2	HP2-side	true
+longlineage.hp_family	1.0.0	9	3	HP3-ambiguous	true
+longlineage.hp_family	1.0.0	10	4	HP4-both	true
+longlineage.hp_family	1.0.0	11	.	untagged	true
+longlineage.hp_family	1.0.0	12	0	untagged	true
+longlineage.hp_family	1.0.0	13	*	untagged	false

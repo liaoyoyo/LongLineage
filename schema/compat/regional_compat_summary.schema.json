@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_summary-2.0.0.json",
+  "title": "LongLineage dataset-bound Python-v2 descriptive regional compatibility summary",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "profile_id",
+    "state",
+    "dataset_id",
+    "dataset_order",
+    "source_authority_profile",
+    "source_authority_sha256",
+    "source_manifest_path",
+    "source_manifest_sha256",
+    "source_manifest_run_id",
+    "workers",
+    "first_region",
+    "requested_region_count",
+    "parameters",
+    "row_counts",
+    "census",
+    "input_verification",
+    "inputs",
+    "timing",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_summary"},
+    "schema_version": {"const": "2.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL"},
+    "state": {"const": "READY_FOR_VALIDATION"},
+    "dataset_id": {
+      "enum": ["HCC1395", "HCC1395_DORADO", "COLO829", "H1437", "H2009", "HCC1937", "HCC1954"]
+    },
+    "dataset_order": {"type": "integer", "minimum": 0, "maximum": 6},
+    "source_authority_profile": {"enum": ["PRODUCTION_7_DATASET", "HCC1395_DATASET_GATE"]},
+    "source_authority_sha256": {"$ref": "#/$defs/sha256"},
+    "source_manifest_path": {"type": "string", "pattern": "^/", "minLength": 2},
+    "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "source_manifest_run_id": {"type": "string", "minLength": 1},
+    "workers": {"type": "integer", "minimum": 1, "maximum": 64},
+    "first_region": {"const": 0},
+    "requested_region_count": {"const": 0},
+    "parameters": {
+      "type": "object",
+      "required": ["TIER_R", "MAX_SNV", "MINREAD", "MAPQ_MIN", "BASEQ_MIN", "EXTRA_NODE_CAP", "PER_LEVEL_BUDGET"],
+      "properties": {
+        "TIER_R": {"const": 50000},
+        "MAX_SNV": {"const": 8},
+        "MINREAD": {"const": 3},
+        "MAPQ_MIN": {"const": 20},
+        "BASEQ_MIN": {"const": 0},
+        "EXTRA_NODE_CAP": {"const": 4},
+        "PER_LEVEL_BUDGET": {"const": 150000}
+      },
+      "additionalProperties": false
+    },
+    "row_counts": {
+      "type": "object",
+      "required": ["regions", "units", "patterns"],
+      "properties": {
+        "regions": {"type": "integer", "minimum": 0},
+        "units": {"type": "integer", "minimum": 0},
+        "patterns": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "census": {
+      "type": "object",
+      "required": [
+        "scope_sites",
+        "positional_singletons",
+        "multi_regions_pre_read",
+        "multi_region_pre_cap_sites",
+        "capped_regions",
+        "cap_excluded_sites",
+        "retained_selected_sites"
+      ],
+      "properties": {
+        "scope_sites": {"$ref": "#/$defs/count"},
+        "positional_singletons": {"$ref": "#/$defs/count"},
+        "multi_regions_pre_read": {"$ref": "#/$defs/count"},
+        "multi_region_pre_cap_sites": {"$ref": "#/$defs/count"},
+        "capped_regions": {"$ref": "#/$defs/count"},
+        "cap_excluded_sites": {"$ref": "#/$defs/count"},
+        "retained_selected_sites": {"$ref": "#/$defs/count"},
+        "alignment_exposures": {"$ref": "#/$defs/count"},
+        "sidecar_exact_matches": {"$ref": "#/$defs/count"},
+        "alignment_identity_allele_conflicts": {"$ref": "#/$defs/count"},
+        "read_unsupported_regions": {"$ref": "#/$defs/count"},
+        "alignment_class_primary": {"$ref": "#/$defs/count"},
+        "alignment_class_supplementary": {"$ref": "#/$defs/count"},
+        "raw_hp_.": {"$ref": "#/$defs/count"},
+        "raw_hp_1": {"$ref": "#/$defs/count"},
+        "raw_hp_2": {"$ref": "#/$defs/count"},
+        "raw_hp_3": {"$ref": "#/$defs/count"},
+        "raw_hp_4": {"$ref": "#/$defs/count"},
+        "raw_hp_1-1": {"$ref": "#/$defs/count"},
+        "raw_hp_2-1": {"$ref": "#/$defs/count"},
+        "raw_hp_1-2": {"$ref": "#/$defs/count"},
+        "raw_hp_2-2": {"$ref": "#/$defs/count"},
+        "unit_class_ambiguous_order": {"$ref": "#/$defs/count"},
+        "unit_class_ambiguous_structure": {"$ref": "#/$defs/count"},
+        "unit_class_capped": {"$ref": "#/$defs/count"},
+        "unit_class_determined": {"$ref": "#/$defs/count"},
+        "unit_class_recurrence_required": {"$ref": "#/$defs/count"},
+        "unit_class_underdetermined": {"$ref": "#/$defs/count"},
+        "primary_class_ambiguous_order": {"$ref": "#/$defs/count"},
+        "primary_class_ambiguous_structure": {"$ref": "#/$defs/count"},
+        "primary_class_capped": {"$ref": "#/$defs/count"},
+        "primary_class_determined": {"$ref": "#/$defs/count"},
+        "primary_class_recurrence_required": {"$ref": "#/$defs/count"},
+        "primary_class_underdetermined": {"$ref": "#/$defs/count"},
+        "region_determinacy_all_determined": {"$ref": "#/$defs/count"},
+        "region_determinacy_has_ambiguous": {"$ref": "#/$defs/count"},
+        "region_determinacy_has_capped": {"$ref": "#/$defs/count"},
+        "region_determinacy_has_recurrence": {"$ref": "#/$defs/count"},
+        "region_determinacy_no_primary_lineage": {"$ref": "#/$defs/count"}
+      },
+      "additionalProperties": false
+    },
+    "input_verification": {
+      "type": "object",
+      "required": ["method", "role_count", "before_after_identity_stable", "truth_fields_seen", "embedded_hp_fallback_used"],
+      "properties": {
+        "method": {"const": "PHYSICAL_SHA256"},
+        "role_count": {"const": 8},
+        "before_after_identity_stable": {"const": true},
+        "truth_fields_seen": {"const": 0},
+        "embedded_hp_fallback_used": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "prefixItems": [
+        {"$ref": "#/$defs/raw_bam"},
+        {"$ref": "#/$defs/raw_bam_index"},
+        {"$ref": "#/$defs/pass_biallelic_ssnv_vcf"},
+        {"$ref": "#/$defs/pass_biallelic_ssnv_vcf_index"},
+        {"$ref": "#/$defs/latest_hp_ps_sidecar"},
+        {"$ref": "#/$defs/latest_hp_ps_sidecar_index"},
+        {"$ref": "#/$defs/reference_fasta"},
+        {"$ref": "#/$defs/reference_fai"}
+      ],
+      "items": false
+    },
+    "timing": {
+      "type": "object",
+      "required": ["total_wall_seconds", "input_sha256_seconds", "science_wall_seconds", "worker_open_seconds", "summed_input_seconds", "summed_solver_seconds"],
+      "properties": {
+        "total_wall_seconds": {"$ref": "#/$defs/seconds"},
+        "input_sha256_seconds": {"$ref": "#/$defs/seconds"},
+        "science_wall_seconds": {"$ref": "#/$defs/seconds"},
+        "worker_open_seconds": {"$ref": "#/$defs/seconds"},
+        "summed_input_seconds": {"$ref": "#/$defs/seconds"},
+        "summed_solver_seconds": {"$ref": "#/$defs/seconds"}
+      },
+      "additionalProperties": false
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "required": ["formal_m2_topology", "production_release", "clone_ancestor_time_order"],
+      "properties": {
+        "formal_m2_topology": {"const": false},
+        "production_release": {"const": false},
+        "clone_ancestor_time_order": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "source_authority_profile": {"const": "HCC1395_DATASET_GATE"},
+        "dataset_id": {"const": "HCC1395"},
+        "dataset_order": {"const": 0}
+      }
+    },
+    {
+      "properties": {"source_authority_profile": {"const": "PRODUCTION_7_DATASET"}},
+      "oneOf": [
+        {"properties": {"dataset_id": {"const": "HCC1395"}, "dataset_order": {"const": 0}}},
+        {"properties": {"dataset_id": {"const": "HCC1395_DORADO"}, "dataset_order": {"const": 1}}},
+        {"properties": {"dataset_id": {"const": "COLO829"}, "dataset_order": {"const": 2}}},
+        {"properties": {"dataset_id": {"const": "H1437"}, "dataset_order": {"const": 3}}},
+        {"properties": {"dataset_id": {"const": "H2009"}, "dataset_order": {"const": 4}}},
+        {"properties": {"dataset_id": {"const": "HCC1937"}, "dataset_order": {"const": 5}}},
+        {"properties": {"dataset_id": {"const": "HCC1954"}, "dataset_order": {"const": 6}}}
+      ]
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "count": {"type": "integer", "minimum": 0},
+    "seconds": {"type": "number", "exclusiveMinimum": 0},
+    "input": {
+      "type": "object",
+      "required": ["role", "path", "canonical_path", "size_bytes", "sha256", "full_sha256_verified"],
+      "properties": {
+        "role": {"type": "string"},
+        "path": {"type": "string", "pattern": "^/", "minLength": 2},
+        "canonical_path": {"type": "string", "pattern": "^/", "minLength": 2},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "full_sha256_verified": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "raw_bam": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "raw_bam"}}}]},
+    "raw_bam_index": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "raw_bam_index"}}}]},
+    "pass_biallelic_ssnv_vcf": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "pass_biallelic_ssnv_vcf"}}}]},
+    "pass_biallelic_ssnv_vcf_index": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "pass_biallelic_ssnv_vcf_index"}}}]},
+    "latest_hp_ps_sidecar": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "latest_hp_ps_sidecar"}}}]},
+    "latest_hp_ps_sidecar_index": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "latest_hp_ps_sidecar_index"}}}]},
+    "reference_fasta": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "reference_fasta"}}}]},
+    "reference_fai": {"allOf": [{"$ref": "#/$defs/input"}, {"properties": {"role": {"const": "reference_fai"}}}]}
+  },
+  "additionalProperties": false
+}

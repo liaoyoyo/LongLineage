@@ -47,7 +47,7 @@ while IFS= read -r -d '' path; do
     esac
 
     if grep -Iq . "$path"; then
-        if grep -En '/(big|bip)[0-9]+_disk/|/home/[^ /]+/|/Users/[^ /]+/' "$path" >/dev/null; then
+        if grep -En '/(big|bip)[0-9]+_disk(/|[^[:alnum:]_]|$)|/home/[^ /]+/|/Users/[^ /]+/' "$path" >/dev/null; then
             fail "absolute private path detected: $path"
         fi
         if grep -Ein \

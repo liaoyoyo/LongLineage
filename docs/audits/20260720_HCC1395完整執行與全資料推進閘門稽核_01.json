@@ -1,0 +1,612 @@
+{
+  "schema_name": "longlineage.hcc1395_fullspeed_readiness_timing_audit",
+  "schema_version": "1.1.0",
+  "report_id": "20260720-hcc1395-full-run-and-expansion-gate-001",
+  "created_at": "2026-07-20T00:45:00+08:00",
+  "display": {
+    "page_title": "HCC1395 完整執行與全資料推進閘門稽核 · LongLineage",
+    "hero_title": "HCC1395 完整執行與全資料推進閘門稽核",
+    "brand_subtitle": "input replay · co-occurrence · regional topology",
+    "scope_note": "Task B · 先以 HCC1395 作 gate；只有 VALIDATED_FROZEN 才能推進七資料集。",
+    "answer_heading": "輸入已恢復，但科學核心尚不存在：本輪不能產生完整時間或正確性結論",
+    "history_heading": "舊時間可定位成本，不能替代現行 C++/HTSlib 完整時間",
+    "baseline_heading": "sSNV 共現沒有正式成功基準；舊區域樹存在但不符合現行 production 契約",
+    "baseline_lead": "來源、時間、digest、truth 邊界與完成語意必須同時相容；execution PASS 不自動等於 scientific parity。",
+    "input_heading": "掛載、檔案、索引與三段 BAM 內容抽樣均已實讀通過",
+    "input_lead": "NFS mount 不再是 blocker。BAM 的 st_dev 因重新掛載由 59 變 60，但 realpath、size、inode、mtime 與三個凍結 1 MiB chunk 均一致；這仍不是 292 GB full-content SHA。"
+  },
+  "verdict": {
+    "state": "NO_GO",
+    "impact": "HIGH",
+    "confidence": "HIGH",
+    "summary": "HCC1395 八角色輸入已可讀，索引與凍結 BAM chunk replay 通過；但 current run 固定 exit 6、validator 固定 exit 7、P3/P4/P5/P7/P8 BLOCKED。沒有正式 sSNV co-occurrence authority，且舊 region-tree 方法與 truth boundary 不同，因此未啟動假裝完整的科學長跑，也不得推進七資料集。",
+    "scientific_output_count": 0,
+    "production_run_started": false,
+    "full_dataset_expansion_allowed": false
+  },
+  "task": {
+    "type": "B",
+    "name": "Comprehensive validation",
+    "gate_sequence": "HCC1395 -> independent validation -> HTML -> seven datasets",
+    "goals": [
+      "LL-G1",
+      "LL-G2",
+      "LL-G3",
+      "LL-G4",
+      "LL-G5"
+    ]
+  },
+  "path_aliases": {
+    "<LONG_LINEAGE_REPO>": "LongLineage repository root",
+    "<INTERSUBMOD_REPO>": "InterSubMod sibling repository root",
+    "<BIG7_OUTPUT>": "governed external output root",
+    "<BIG8_INPUT>": "mounted frozen raw-input root",
+    "<FASTA_SMOKE_INTERVAL>": "twenty-base first-autosome indexed-read smoke interval; exact coordinate omitted from repository payload by policy"
+  },
+  "source_snapshot": {
+    "longlineage_commit": "5162c86ca97f6ecd4f6c5b5c3b40982d3e3395a5",
+    "longlineage_branch": "docs/cpp-output-efficiency-validation",
+    "inter_sub_mod_authority_commit": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99",
+    "inter_sub_mod_worktree_note": "DIRTY; historical source files are read-only context and were not modified",
+    "authority_manifest_sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16",
+    "production_input_authority_sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557"
+  },
+  "scope_counts": {
+    "autosomal_chr1_22_sites": 79687,
+    "pass_vcf_all_records": 113061,
+    "excluded_chrX_records": 33371,
+    "excluded_chrY_records": 3,
+    "sidecar_mapped_alignments": 40859727,
+    "sidecar_unique_identities": 34265113,
+    "sidecar_exact_duplicates": 6594614,
+    "sidecar_conflicts": 0
+  },
+  "host": {
+    "logical_cpus": 48,
+    "memory_available_display": "約 495 GiB",
+    "big7_free_display": "714.8 GiB",
+    "big8_free_display": "844.2 GiB",
+    "big8_mount_state": "NFSv4.2 MOUNTED_READABLE",
+    "big8_mount_source": "sanitized NFS authority",
+    "active_longlineage_processes": 0
+  },
+  "time_answer": {
+    "production_total": "UNKNOWN / NOT_MEASURABLE。production entrypoint 在任何 BAM 科學讀取前由 release attestation fail closed；沒有完整 run receipt。",
+    "production_html": "UNKNOWN / NOT_MEASURABLE。現有 Python 只可呈現 audit JSON；不存在由 C++ validated chart-ready artifacts 產生的 P8 report bundle。",
+    "legacy_reference": "HCC1395 舊 extraction 約 1:57:41.98；六資料集 M1 約 11:57:49；M2 attempt 6 在 3:54:51 失敗；舊七資料集 layered reconstruction 約 3:30:16。四列方法、scope與成功狀態不同，禁止相加。"
+  },
+  "inputs": [
+    {
+      "role": "Raw HCC1395 BAM",
+      "size_display": "292,055,926,761 B",
+      "state": "READABLE_INDEXED_CHUNKS_MATCH",
+      "path": "<BIG8_INPUT>/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam"
+    },
+    {
+      "role": "BAM index",
+      "size_display": "119,741,784 B",
+      "state": "READABLE_IDXSTATS_PASS",
+      "path": "<BIG8_INPUT>/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam.bai"
+    },
+    {
+      "role": "Reference FASTA",
+      "size_display": "3,144,230,986 B",
+      "state": "READABLE_FAIDX_PASS",
+      "path": "<BIG8_INPUT>/ref/GRCh38_no_alt_analysis_set.fasta"
+    },
+    {
+      "role": "Reference FAI",
+      "size_display": "7,804 B",
+      "state": "READABLE",
+      "path": "<BIG8_INPUT>/ref/GRCh38_no_alt_analysis_set.fasta.fai"
+    },
+    {
+      "role": "Latest HP/PS sidecar",
+      "size_display": "1,433,423,193 B",
+      "state": "PRESENT_AUTHORITY_MATCH",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz"
+    },
+    {
+      "role": "Sidecar TBI",
+      "size_display": "910,475 B",
+      "state": "READABLE_TABIX_PASS",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz.tbi"
+    },
+    {
+      "role": "PASS biallelic sSNV VCF",
+      "size_display": "3,728,864 B",
+      "state": "PRESENT_AUTHORITY_MATCH",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz"
+    },
+    {
+      "role": "VCF CSI",
+      "size_display": "344,074 B",
+      "state": "READABLE_BCFTOOLS_PASS",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz.csi"
+    }
+  ],
+  "current_measurements": [
+    {
+      "measurement_id": "CURRENT-INPUT-SMOKE-20260720",
+      "stage": "Mounted input/index smoke",
+      "classification": "CURRENT_MEASURED_INPUT",
+      "wall_seconds": 1.16,
+      "wall_display": "約 1.16 秒",
+      "max_rss_kib": 134908,
+      "result": "BAM quickcheck、BAI idxstats、FASTA faidx、VCF index、sidecar tabix 全部 exit 0",
+      "exit_code": 0,
+      "scope": "Index/header-level readback only; not a 292 GB BAM scan."
+    },
+    {
+      "measurement_id": "CURRENT-BAM-CHUNK-REPLAY-20260720",
+      "stage": "Frozen BAM chunk replay",
+      "classification": "CURRENT_MEASURED_INPUT",
+      "wall_seconds": null,
+      "wall_display": "< 1 秒",
+      "max_rss_kib": null,
+      "result": "first/middle/last 1 MiB SHA-256 = 3/3 MATCH",
+      "exit_code": 0,
+      "scope": "storage_identity_v1 sampled content assurance; explicitly not a full BAM hash."
+    },
+    {
+      "measurement_id": "CURRENT-CTEST-20260720",
+      "stage": "C++ foundation CTest",
+      "classification": "CURRENT_MEASURED_FOUNDATION",
+      "wall_seconds": 27.89,
+      "wall_display": "27.89 秒",
+      "max_rss_kib": 27684,
+      "result": "33/33 PASS",
+      "exit_code": 0,
+      "scope": "Synthetic/foundation tests only; no HCC1395 scientific kernel."
+    },
+    {
+      "measurement_id": "CURRENT-CLI-GATES-20260720",
+      "stage": "Production CLI fail-closed suite",
+      "classification": "CURRENT_MEASURED_GATE",
+      "wall_seconds": 0.34,
+      "wall_display": "0.34 秒",
+      "max_rss_kib": 14180,
+      "result": "Harness PASS; internal run exit 6 release attestation NOT_READY",
+      "exit_code": 0,
+      "scope": "Negative gate verification; zero scientific output."
+    },
+    {
+      "measurement_id": "CURRENT-VALIDATOR-20260720",
+      "stage": "Independent validator entrypoint",
+      "classification": "CURRENT_MEASURED_GATE",
+      "wall_seconds": 0.0,
+      "wall_display": "< 0.01 秒",
+      "max_rss_kib": 5364,
+      "result": "exit 7; independent artifact replay is not implemented; no receipt",
+      "exit_code": 7,
+      "scope": "Expected fail-closed behavior."
+    },
+    {
+      "measurement_id": "CURRENT-STRICT-RELEASE-20260720",
+      "stage": "Strict release gate",
+      "classification": "CURRENT_MEASURED_GATE",
+      "wall_seconds": 45.31,
+      "wall_display": "45.31 秒",
+      "max_rss_kib": 27692,
+      "result": "exit 1; FAIL missing=12 executable negative gates",
+      "exit_code": 1,
+      "scope": "Foundation tests pass, release remains correctly blocked."
+    },
+    {
+      "measurement_id": "CURRENT-AUDIT-HTML-RENDER-20260720",
+      "stage": "Presentation-only HTML render",
+      "classification": "CURRENT_MEASURED_PRESENTATION",
+      "wall_seconds": 0.07,
+      "wall_display": "0.07 秒",
+      "max_rss_kib": 13120,
+      "result": "exit 0; standalone HTML written from frozen audit JSON",
+      "exit_code": 0,
+      "scope": "Presentation mapping only; zero scientific aggregation."
+    }
+  ],
+  "historical_context": [
+    {
+      "context_id": "LEGACY-HCC1395-EXTRACTION",
+      "stage": "舊 InterSubMod C++ extraction",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 7061.9845,
+      "wall_display": "1:57:41.98",
+      "bar_width_percent": 16.4,
+      "scope": "HCC1395 chr1–22，79,687 sites，6 threads",
+      "result": "PASS；reads/Bernoulli/methylation 各 79,687 files",
+      "limitation": "不同程式、輸出模型與thread model；不是LongLineage timing。"
+    },
+    {
+      "context_id": "LEGACY-M1-SIX-DATASET",
+      "stage": "舊 Python M1 screen",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 43069,
+      "wall_display": "11:57:49",
+      "bar_width_percent": 100,
+      "scope": "前六資料集合計447,449 sites，40 workers",
+      "result": "EXECUTION_PASS",
+      "limitation": "HCC1395時間不可拆；Python science不得作新production。"
+    },
+    {
+      "context_id": "LEGACY-M2-ATTEMPT6",
+      "stage": "舊 Python M2/co-occurrence attempt 6",
+      "classification": "FAILED_NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 14091,
+      "wall_display": "3:54:51",
+      "bar_width_percent": 32.7,
+      "scope": "102,842 selected rows，40 workers，999 permutations",
+      "result": "FAILED before publication；正式output與receipt皆不存在",
+      "limitation": "失敗時間不是完成時間，也不是科學結果。"
+    },
+    {
+      "context_id": "LEGACY-LAYERED-SEVEN-DATASET",
+      "stage": "舊 layered regional reconstruction",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "wall_seconds": 12616.17,
+      "wall_display": "約 3:30:16",
+      "bar_width_percent": 29.3,
+      "scope": "七資料集chr1–22，parallel samples=4",
+      "result": "7/7舊版verification PASS；HCC1395 8,222 regions / 20,119 units",
+      "limitation": "不同Python-led方法，且HCC1395 manifest使用SEQC2 CN；非現行truth-isolated P5。"
+    }
+  ],
+  "baseline_artifacts": [
+    {
+      "area": "HCC1395 extraction",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "source": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/all_ssnv_intersubmod_batch.v2_verification_fix.json",
+      "recorded_at": "2026-07-15 11:58:05 +08",
+      "time": "1:57:41.98",
+      "digest_status": "SHA 78247190… PRESENT",
+      "verdict": "79,687 autosomal sites PASS；只可作舊 extraction context。"
+    },
+    {
+      "area": "M1 six-dataset execution",
+      "classification": "EXECUTION_ONLY",
+      "source": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v9_first_six_thread_pinned_source_locked/run_manifest.json",
+      "recorded_at": "2026-07-16 20:01:23 +08",
+      "time": "11:57:49",
+      "digest_status": "SHA 3a462290… PRESENT",
+      "verdict": "447,449/447,449 processed；execution_integrity_only，不是C++ parity。"
+    },
+    {
+      "area": "M2 eligibility census",
+      "classification": "VALIDATED_INTEGRITY",
+      "source": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/independent_m2_gate_recount.v3.json",
+      "recorded_at": "2026-07-17 11:03:32 +08",
+      "time": "screen/recount only",
+      "digest_status": "SHA 4a0f411b… MATCH",
+      "verdict": "919 eligible、948 evaluable-ineligible、100,974 indeterminate、1 K>10；不是共現結果。"
+    },
+    {
+      "area": "M2/co-occurrence attempt 6",
+      "classification": "FAILED_NO_SCIENTIFIC_RESULT",
+      "source": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/cooccurrence_execution_incident.v3_attempt6_summary_totality.json",
+      "recorded_at": "2026-07-18 16:33:36 +08",
+      "time": "3:54:51 then exit 1",
+      "digest_status": "SHA af06b2df… PRESENT",
+      "verdict": "KeyError hp_exact；output dir absent；formal receipt absent。"
+    },
+    {
+      "area": "Co-occurrence source authority",
+      "classification": "SOURCE_DRIFT",
+      "source": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_methyl_ssnv_cooccurrence.py",
+      "recorded_at": "worktree mtime 2026-07-19 12:29:57 +08",
+      "time": "not applicable",
+      "digest_status": "EXPECTED 3d765098… / CURRENT 6dc673fa… MISMATCH",
+      "verdict": "凍結來源blob不可由authority commit回復；不得作parity基準。"
+    },
+    {
+      "area": "Old seven-dataset regional reconstruction",
+      "classification": "NON_COMPARABLE_CONTEXT",
+      "source": "<BIG7_OUTPUT>/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/verification_summary.json",
+      "recorded_at": "2026-07-13 05:09:40 +08",
+      "time": "約 3:30:16",
+      "digest_status": "SHA 9cdce65e… PRESENT",
+      "verdict": "7/7 verification PASS；方法與現行P5不同，不可升級production。"
+    },
+    {
+      "area": "Old HCC1395 region topology",
+      "classification": "HISTORICAL_RESULT_ONLY",
+      "source": "<BIG7_OUTPUT>/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/samples/HCC1395/output_manifest.json",
+      "recorded_at": "2026-07-13 03:04:11 +08",
+      "time": "包含在七資料集wall time",
+      "digest_status": "MANIFEST b208aa0b… / TREE 666d2d8a… / REGION 9e28d980… MATCH",
+      "verdict": "8,222 regions、20,119 units；2,019 all_determined、5,104 ambiguous、781 capped、28 recurrence、290 no-primary；含SEQC2 CN context。"
+    },
+    {
+      "area": "Current topology stress receipt",
+      "classification": "NO_GO",
+      "source": "<INTERSUBMOD_REPO>/research/20260718_solver_methyl_edge_probe/results/solver_stress_panel_v1/runs/authoritative_r3_primary_all_both_r1/receipt.json",
+      "recorded_at": "2026-07-19 12:10:04 +08",
+      "time": "component stress only",
+      "digest_status": "SHA 933a7776… MATCH",
+      "verdict": "objective 25/25；family complete 16/25；incomplete ranking不可發布。"
+    }
+  ],
+  "pipeline_stages": [
+    {
+      "order": 1,
+      "stage": "P0 input authority replay",
+      "implementation": "Mounted inputs and indexes are readable; frozen sampled BAM chunks replayed.",
+      "status": "PARTIAL_PASS",
+      "timing": "約 1–2 秒 smoke",
+      "bottleneck": "st_dev changed after legitimate NFS remount; no normalized remount identity contract."
+    },
+    {
+      "order": 2,
+      "stage": "P1 production manifest/preflight",
+      "implementation": "Typed parser exists; no HCC1395 or exact seven-dataset real manifest exists.",
+      "status": "BLOCKED",
+      "timing": "未執行",
+      "bottleneck": "run requires PRODUCTION_7_DATASET and exact seven datasets."
+    },
+    {
+      "order": 3,
+      "stage": "P2 HTS block reader/writer",
+      "implementation": "Synthetic indexed-BAM component only.",
+      "status": "IN_PROGRESS",
+      "timing": "無 real HCC timing",
+      "bottleneck": "No persistent VCF/sidecar/FASTA worker bundle, one-pass projection or process RSS cap."
+    },
+    {
+      "order": 4,
+      "stage": "P3 M1 methylation groups",
+      "implementation": "Historical Python authority; C++ source parity absent.",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "bottleneck": "PCG64/RNG/tie/relabel/HP-family frozen vectors incomplete."
+    },
+    {
+      "order": 5,
+      "stage": "P4 sSNV co-occurrence",
+      "implementation": "Eligibility schema exists; production kernel and formal authority absent.",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "bottleneck": "Attempt 6 failed with no output; current source SHA drifted from frozen authority."
+    },
+    {
+      "order": 6,
+      "stage": "P5 regional topology",
+      "implementation": "q<=4 small oracle only; production family/ranking path incomplete.",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "bottleneck": "Objective/family/ranking completion separated; 9/25 stress cases incomplete."
+    },
+    {
+      "order": 7,
+      "stage": "P6 independent validation",
+      "implementation": "Independent executable target exists but replay is scaffold.",
+      "status": "BLOCKED",
+      "timing": "< 0.01 秒 to reject",
+      "bottleneck": "Validator fixed exit 7; no receipt or fault-injection implementation."
+    },
+    {
+      "order": 8,
+      "stage": "Atomic freeze",
+      "implementation": "State guard/schema only.",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "bottleneck": "No actual staging→validate→same-filesystem rename→frozen receipt orchestrator."
+    },
+    {
+      "order": 9,
+      "stage": "P7 HCC gate then seven datasets",
+      "implementation": "No legal HCC-only run profile; exact seven-dataset production gate remains.",
+      "status": "BLOCKED",
+      "timing": "UNKNOWN",
+      "bottleneck": "P3–P6 prerequisites absent."
+    },
+    {
+      "order": 10,
+      "stage": "P8 chart-ready bundle and HTML",
+      "implementation": "Audit-only HTML exists; validated-run report bundle does not.",
+      "status": "BLOCKED",
+      "timing": "Production UNKNOWN",
+      "bottleneck": "No C++ chart-ready artifact, claim IDs or validated-only builder."
+    }
+  ],
+  "bottlenecks": [
+    {
+      "rank": 1,
+      "severity": "CRITICAL",
+      "title": "Production engine is intentionally disabled",
+      "detail": "release attestation is NOT_READY and the engine still returns KernelBlocked after preflight.",
+      "unblock": "Implement and independently verify P3 M1, P4 co-occurrence and P5 topology before changing attestation."
+    },
+    {
+      "rank": 2,
+      "severity": "CRITICAL",
+      "title": "No formal sSNV co-occurrence result authority",
+      "detail": "M2 attempt 6 failed before publication; requested output directory and run receipt are absent. The current Python source no longer matches the frozen SHA.",
+      "unblock": "Recover or explicitly supersede the frozen source, freeze logical vectors, implement C++ producer plus independent oracle, and publish a formal receipt."
+    },
+    {
+      "rank": 3,
+      "severity": "CRITICAL",
+      "title": "Regional topology baseline is method-incompatible",
+      "detail": "The old HCC1395 result is internally verified but uses an earlier Python-led contract and SEQC2 CN context; current LongLineage requires truth-isolated production and complete objective/family/ranking states.",
+      "unblock": "Freeze a truth-isolated topology parity corpus, implement complete-family/ranking certificates, and compare exact digests."
+    },
+    {
+      "rank": 4,
+      "severity": "HIGH",
+      "title": "Independent validator and atomic freeze are scaffolds",
+      "detail": "Validator exits 7 without replaying artifacts; there is no validated receipt or atomic freeze.",
+      "unblock": "Implement independent schema/digest/invariant replay, fault injection and same-filesystem atomic promotion."
+    },
+    {
+      "rank": 5,
+      "severity": "HIGH",
+      "title": "No HCC-only production profile or real manifest",
+      "detail": "run accepts only the exact seven-dataset production profile, while the requested decision sequence starts with HCC1395.",
+      "unblock": "Add a governed BOUNDED_REAL_DATA_HCC1395 gate profile that cannot be promoted to production, or execute all seven only after P3–P6 are verified."
+    }
+  ],
+  "planned_fullspeed_profile": {
+    "state": "BLOCKED_PLANNED_NOT_EXECUTED",
+    "compute_workers": 40,
+    "writer_threads": 4,
+    "coordinator_slots": 2,
+    "total_declared_threads": 46,
+    "bounded_buffer": "8 GiB",
+    "halo_bp": 5000,
+    "staging_root": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260720_longlineage_hcc1395_fullspeed_profile_v1/.staging/20260720_HCC1395_autosomes_w40_fullspeed_v1",
+    "final_root": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260720_longlineage_hcc1395_fullspeed_profile_v1/20260720_HCC1395_autosomes_w40_fullspeed_v1",
+    "storage_reservation": "first-run 200 GiB reservation; fail closed below 100 GiB free",
+    "storage_reservation_classification": "ESTIMATED_NOT_MEASURED"
+  },
+  "commands": [
+    {
+      "purpose": "確認 mounted BAM、reference、VCF與sidecar索引實際可讀",
+      "input": "<BIG8_INPUT>/data/HCC1395/.../HCC1395.bam + indexes + <BIG7_OUTPUT>/.../HCC1395 sidecar/VCF",
+      "command": "samtools quickcheck -v BAM; samtools idxstats BAM; samtools faidx FASTA '<FASTA_SMOKE_INTERVAL>'; bcftools index -n VCF; tabix -l SIDECAR",
+      "output": "stdout + /tmp timing receipts",
+      "exit_code": 0,
+      "output_snippet": "quickcheck exit=0; idxstats first-autosome mapped=4,411,427; faidx exit=0; VCF records=113,061; sidecar contigs begin with the first three autosomes"
+    },
+    {
+      "purpose": "重播 frozen storage_identity_v1 的三個 BAM sampled chunks",
+      "input": "<BIG8_INPUT>/data/HCC1395/.../HCC1395.bam",
+      "command": "dd if=BAM iflag=skip_bytes,count_bytes skip=OFFSET count=1048576 | sha256sum",
+      "output": "stdout",
+      "exit_code": 0,
+      "output_snippet": "first df999f92… PASS; middle 6866c24a… PASS; last d72a059e… PASS"
+    },
+    {
+      "purpose": "執行C++ foundation測試",
+      "input": "<LONG_LINEAGE_REPO>/build-cpp-output-validation",
+      "command": "ctest --test-dir build-cpp-output-validation --output-on-failure",
+      "output": "/tmp/ll_20260720_ctest.log + .time",
+      "exit_code": 0,
+      "output_snippet": "33/33 PASS; Total Test time=27.88 s; wall=27.89 s; RSS=27,684 KiB"
+    },
+    {
+      "purpose": "實際測試production CLI fail-closed邊界",
+      "input": "<LONG_LINEAGE_REPO>/state/release_attestation.json + synthetic authority fixtures",
+      "command": "scripts/testing/test_cli_gates.sh build-cpp-output-validation/bin/longlineage .",
+      "output": "/tmp/ll_20260720_cli.log + .time",
+      "exit_code": 0,
+      "output_snippet": "harness PASS; production run exit 6 release attestation is NOT_READY; synthetic HCC-like profile exit 3"
+    },
+    {
+      "purpose": "實際測試獨立validator",
+      "input": "/tmp/nonexistent-longlineage-run",
+      "command": "build-cpp-output-validation/bin/longlineage-validate --run-root /tmp/nonexistent-longlineage-run",
+      "output": "no receipt",
+      "exit_code": 7,
+      "output_snippet": "independent artifact replay is not implemented; no validation receipt was written"
+    },
+    {
+      "purpose": "執行strict release gate",
+      "input": "<LONG_LINEAGE_REPO>/build-cpp-output-validation",
+      "command": "scripts/ci/check_release_gate.sh build-cpp-output-validation",
+      "output": "/tmp/ll_20260720_release.log + .time",
+      "exit_code": 1,
+      "output_snippet": "GATE TEST COVERAGE RESULT: FAIL missing=12; validator_fault executable test absent; wall=45.31 s"
+    }
+  ],
+  "pre_decision_audit": {
+    "cynefin_domain": "COMPLICATED_FOR_READINESS; COMPLEX_FOR_NEW_SCIENTIFIC_IMPLEMENTATION",
+    "score": 20,
+    "dimensions": {
+      "theory": 20,
+      "observation": 0,
+      "mechanism": 0,
+      "counter_risk": 0,
+      "resource": 0
+    },
+    "falsifier_observable": "A current HCC1395 run exits 0, writes complete M1/M2/topology artifacts, independent validator writes a PASS receipt, atomic freeze reaches VALIDATED_FROZEN, and exact parity checks pass.",
+    "red_team_failure_modes": [
+      "The current executable is a scaffold and cannot perform the requested science.",
+      "M2 parity would be circular because no formal successful co-occurrence authority exists and the frozen source SHA has drifted.",
+      "The old regional tree result could appear reusable while silently importing a different method and SEQC2 CN context."
+    ],
+    "verdict": "NO_GO_EXECUTION_NOW",
+    "next_legal_action": "Implement P3–P6 with independent evidence, then run a governed HCC1395 probe; only a VALIDATED_FROZEN HCC result may gate seven-dataset expansion."
+  },
+  "multi_agent_review": {
+    "agents": [
+      "hcc1395_input_runroot",
+      "longlineage_run_readiness",
+      "profiling_html_chain"
+    ],
+    "agreement": "3/3",
+    "conclusion": "Mount restored and inputs readable; production science, validator/freeze and P8 report remain unavailable."
+  },
+  "claim_ceiling": {
+    "permitted": "Mounted-input readiness, fail-closed behavior, historical receipt descriptions and comparison limitations.",
+    "forbidden": "No current sSNV co-occurrence result, regional topology result, complete HCC1395 runtime, production speedup, biological clone, unique tree or seven-dataset validation claim."
+  },
+  "presentation_qa": {
+    "scope": "PRESENTATION_ONLY_NOT_P8_RELEASE_EVIDENCE",
+    "html_sha256": "bd5024ae675a536503542e67af606ea671dd9f529fffb18fcf649c72366f65b4",
+    "html_size_bytes": 39078,
+    "qa_wall_seconds": 5.47,
+    "qa_max_rss_kib": 164344,
+    "desktop": {
+      "pass": true,
+      "viewport_width": 1440,
+      "no_horizontal_document_overflow": true,
+      "external_request_count": 0,
+      "console_error_count": 0,
+      "screenshot_sha256": "eba7ad13feef509d6dce1a43ed90c54a9519936395a73c91d9279b2dfbe634a7"
+    },
+    "mobile": {
+      "pass": true,
+      "viewport_width": 390,
+      "no_horizontal_document_overflow": true,
+      "external_request_count": 0,
+      "console_error_count": 0,
+      "table_overflow_handling": "wide tables remain inside horizontally scrollable table-wrap containers",
+      "screenshot_sha256": "b6310205a13d1cf006b510b4f40e3d24046c7603280c7fb7afcebe70368f8df1"
+    },
+    "print_pdf_sha256": "721b67b9d8f28fabdb6f507f356684b14cde5dc2dbc9258beda0165c6127054e"
+  },
+  "sources": [
+    {
+      "label": "Current phase status",
+      "path": "<LONG_LINEAGE_REPO>/docs/CURRENT_FOCUS.md"
+    },
+    {
+      "label": "Machine phase ledger",
+      "path": "<LONG_LINEAGE_REPO>/state/phase_ledger.json"
+    },
+    {
+      "label": "Release attestation",
+      "path": "<LONG_LINEAGE_REPO>/state/release_attestation.json"
+    },
+    {
+      "label": "Production input authority",
+      "path": "<LONG_LINEAGE_REPO>/oracle/production_input_authority.json"
+    },
+    {
+      "label": "Historical authority manifest",
+      "path": "<LONG_LINEAGE_REPO>/oracle/authority_manifest.json"
+    },
+    {
+      "label": "Production CLI source",
+      "path": "<LONG_LINEAGE_REPO>/apps/longlineage_main.cpp"
+    },
+    {
+      "label": "Independent validator source",
+      "path": "<LONG_LINEAGE_REPO>/apps/validate_main.cpp"
+    },
+    {
+      "label": "Historical M1 run manifest",
+      "path": "<BIG7_OUTPUT>/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v9_first_six_thread_pinned_source_locked/run_manifest.json"
+    },
+    {
+      "label": "Historical M2 failure receipt",
+      "path": "<INTERSUBMOD_REPO>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/cooccurrence_execution_incident.v3_attempt6_summary_totality.json"
+    },
+    {
+      "label": "Historical topology verification",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/verification_summary.json"
+    },
+    {
+      "label": "Historical HCC1395 topology manifest",
+      "path": "<BIG7_OUTPUT>/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/samples/HCC1395/output_manifest.json"
+    }
+  ]
+}

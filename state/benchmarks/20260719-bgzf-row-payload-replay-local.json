@@ -1,0 +1,136 @@
+{
+  "schema_name": "longlineage.performance_benchmark",
+  "schema_version": "1.0.0",
+  "benchmark_id": "20260719-bgzf-row-payload-replay-local-001",
+  "task_id": "20260719-cpp-output-efficiency-validation",
+  "classification": "LOCAL_COMPONENT_MICROBENCHMARK",
+  "component": "Fresh source-level ABBA replay of the BgzfTsvWriter shared row payload optimization",
+  "production_claim_allowed": false,
+  "workload": {
+    "rows": 500000,
+    "columns": 5,
+    "logical_bytes": 71888972,
+    "physical_bytes": 1610593,
+    "writer_threads": 4,
+    "repetitions_per_variant": 8,
+    "cache_condition": "MIXED",
+    "output_filesystem": "ext4",
+    "output_root_role": "SCRATCH"
+  },
+  "environment": {
+    "operating_system": "Ubuntu 22.04",
+    "kernel": "Linux 5.15.0-173-generic",
+    "architecture": "x86_64",
+    "cpu_model": "AMD Opteron(tm) Processor 6344",
+    "compiler": "g++ 11.4.0",
+    "build_type": "Release",
+    "htslib_version": "1.18"
+  },
+  "source": {
+    "baseline_commit": "1d986806f4fe1d4c8617bfa7fa2915f9bafd513f",
+    "baseline_files": [
+      {
+        "path": "include/longlineage/artifact/bgzf_tsv_writer.hpp",
+        "sha256": "12926b21db102245ddf3a310dd239b8016bd6ae942ab4bdc3cb8095a0d9a6b59"
+      },
+      {
+        "path": "src/artifact/bgzf_tsv_writer.cpp",
+        "sha256": "59484d4dbb5e69813d5bbe49351b82329c2a72fd6837200d36fca59c2c6d25e0"
+      }
+    ],
+    "candidate_files": [
+      {
+        "path": "include/longlineage/artifact/bgzf_tsv_writer.hpp",
+        "sha256": "471c239eb4dc1f1f6d49d6bb2701546ae8f6063dc34c8c48b57bfef751d5b813"
+      },
+      {
+        "path": "src/artifact/bgzf_tsv_writer.cpp",
+        "sha256": "382ac57bcc9b383c3be601f2f3d1855dbe3218d236b359acd44ffb5f9b692acb"
+      }
+    ],
+    "harness_path": "benchmarks/bgzf_writer_microbenchmark.cpp",
+    "harness_sha256": "ad573638288e6befb5d4e264c225b4ce4dad13e8ef58e462a61248ebf9a67e0a",
+    "baseline_binary_sha256": "b566ebe8ebe62a601b7baa4e3e1216741d4c21b81bc1b3bbbd7b0e1905df60a0",
+    "candidate_binary_sha256": "12c8ee0a7d0a7a4b2e7a771bfa61110b5965f9f2c5eac7d1a03d1c13b2026fbb"
+  },
+  "commands": [
+    "git clone --quiet --shared . /tmp/ll-benchmark-replay-r3-baseline",
+    "git -C /tmp/ll-benchmark-replay-r3-baseline checkout --quiet 1d986806f4fe1d4c8617bfa7fa2915f9bafd513f",
+    "git clone --quiet --shared . /tmp/ll-benchmark-replay-r3-candidate",
+    "git -C /tmp/ll-benchmark-replay-r3-candidate checkout --quiet 3ef1f7f18db76f8213c72b2947713a2c73781d6f",
+    "/usr/bin/cmake -S /tmp/ll-benchmark-replay-r3-baseline -B /tmp/ll-benchmark-replay-r3-baseline/build -DCMAKE_BUILD_TYPE=Release -DLONGLINEAGE_BUILD_TESTS=OFF -DLONGLINEAGE_BUILD_BENCHMARKS=OFF -DLONGLINEAGE_REQUIRE_EXACT_HTSLIB=ON -DLONGLINEAGE_WARNINGS_AS_ERRORS=ON",
+    "/usr/bin/cmake --build /tmp/ll-benchmark-replay-r3-baseline/build --target longlineage_core --parallel 4",
+    "/usr/bin/cmake -S /tmp/ll-benchmark-replay-r3-candidate -B /tmp/ll-benchmark-replay-r3-candidate/build -DCMAKE_BUILD_TYPE=Release -DLONGLINEAGE_BUILD_TESTS=OFF -DLONGLINEAGE_BUILD_BENCHMARKS=OFF -DLONGLINEAGE_REQUIRE_EXACT_HTSLIB=ON -DLONGLINEAGE_WARNINGS_AS_ERRORS=ON",
+    "/usr/bin/cmake --build /tmp/ll-benchmark-replay-r3-candidate/build --target longlineage_core --parallel 4",
+    "g++ -std=c++17 -O3 -DNDEBUG -I/tmp/ll-benchmark-replay-r3-baseline/include -I/usr/local/include /tmp/ll-benchmark-replay-r3-candidate/benchmarks/bgzf_writer_microbenchmark.cpp /tmp/ll-benchmark-replay-r3-baseline/build/lib/liblonglineage_core.a -L/usr/local/lib -lhts -ljansson -lssl -lcrypto -lpthread -o /tmp/ll-benchmark-replay-r3-baseline-bin",
+    "g++ -std=c++17 -O3 -DNDEBUG -I/tmp/ll-benchmark-replay-r3-candidate/include -I/usr/local/include /tmp/ll-benchmark-replay-r3-candidate/benchmarks/bgzf_writer_microbenchmark.cpp /tmp/ll-benchmark-replay-r3-candidate/build/lib/liblonglineage_core.a -L/usr/local/lib -lhts -ljansson -lssl -lcrypto -lpthread -o /tmp/ll-benchmark-replay-r3-candidate-bin",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-1-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-2-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-3-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-4-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-5-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-6-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-7-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-8-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-9-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-10-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-11-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-12-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-13-baseline.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-14-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-candidate-bin /tmp/ll-benchmark-replay-r3-15-candidate.tsv.bgz 500000 4",
+    "/tmp/ll-benchmark-replay-r3-baseline-bin /tmp/ll-benchmark-replay-r3-16-baseline.tsv.bgz 500000 4",
+    "cmp /tmp/ll-benchmark-replay-r3-1-baseline.tsv.bgz /tmp/ll-benchmark-replay-r3-2-candidate.tsv.bgz",
+    "sha256sum /tmp/ll-benchmark-replay-r3-*.tsv.bgz"
+  ],
+  "trials": {
+    "before_seconds": [
+      0.842656,
+      0.840433,
+      0.844698,
+      0.854083,
+      0.850615,
+      0.841935,
+      0.841125,
+      0.844655
+    ],
+    "after_seconds": [
+      0.770398,
+      0.764146,
+      0.762341,
+      0.763657,
+      0.772920,
+      0.766103,
+      0.767397,
+      0.763298
+    ]
+  },
+  "result": {
+    "status": "COMPONENT_IMPROVEMENT_MEASURED",
+    "before_median_seconds": 0.8436555,
+    "after_median_seconds": 0.7651245,
+    "relative_wall_reduction_percent": 9.308420321
+  },
+  "semantic_invariants": {
+    "semantic_sha256": "e6db09aaae343569e5a74b2f4f44aa1f7aaa4df4d284c26bc1b2e2f91348f06b",
+    "same_semantic_sha256": true,
+    "same_logical_bytes": true,
+    "same_physical_bytes": true,
+    "verification_tests": [
+      "runtime_solver",
+      "determinism_contract",
+      "p2_determinism_matrix",
+      "performance_benchmark_records"
+    ]
+  },
+  "limitations": [
+    "This is a local source-level component replay with MIXED cache state and uncontrolled host load, not a pipeline or production comparison.",
+    "The candidate checkout is commit 3ef1f7f18db76f8213c72b2947713a2c73781d6f; its writer source is unchanged at the current validation HEAD.",
+    "The 16 outputs shared physical SHA-256 5a01bd93391e648bfd2ade8a98d18378848c1411dbd5a8dca28a3a20f6f36d64, but the version-1.0.0 benchmark schema does not machine-bind that field.",
+    "The version-1.0.0 benchmark checker validates source and harness digests but does not rebuild or revalidate the recorded binary digests.",
+    "The rebuilt binaries and raw outputs live only under scratch paths; this receipt preserves their exact commands, digests, trial times and limitations but is not a binary archive.",
+    "The independent 7.93 percent historical receipt remains a separate observation; the two local measurements support an approximately 8 to 10 percent component direction, not a fixed speedup.",
+    "No seven-dataset 24-worker or 40-worker comparison exists, so end-to-end and production speedup claims remain forbidden."
+  ],
+  "recorded_at": "2026-07-19T23:05:17+08:00"
+}

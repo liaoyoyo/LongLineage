@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://longlineage.local/schema/compat/catalog-1.0.0.json",
+  "title": "LongLineage descriptive compatibility schema catalog",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "profile_id",
+    "scope",
+    "production_catalog_member",
+    "unknown_schema_policy",
+    "schemas"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.compat_schema_catalog"},
+    "schema_version": {"const": "1.0.0"},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL_7_DATASET"},
+    "scope": {"const": "EVALUATION_DESCRIPTIVE_ONLY"},
+    "production_catalog_member": {"const": false},
+    "unknown_schema_policy": {"const": "FAIL_CLOSED"},
+    "schemas": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": [
+        {
+          "allOf": [
+            {"$ref": "#/definitions/schema_lock"},
+            {
+              "properties": {
+                "id": {"const": "https://longlineage.local/schema/compat/regional_compat_summary-2.0.0.json"},
+                "path": {"const": "schema/compat/regional_compat_summary.schema.json"}
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/definitions/schema_lock"},
+            {
+              "properties": {
+                "id": {"const": "https://longlineage.local/schema/compat/regional_compat_producer_receipt-2.0.0.json"},
+                "path": {"const": "schema/compat/regional_compat_producer_receipt.schema.json"}
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/definitions/schema_lock"},
+            {
+              "properties": {
+                "id": {"const": "https://longlineage.local/schema/compat/regional_compat_validation_receipt-2.0.0.json"},
+                "path": {"const": "schema/compat/regional_compat_validation_receipt.schema.json"}
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/definitions/schema_lock"},
+            {
+              "properties": {
+                "id": {"const": "https://longlineage.local/schema/compat/regional_compat_cohort_receipt-1.0.0.json"},
+                "path": {"const": "schema/compat/regional_compat_cohort_receipt.schema.json"}
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/definitions/schema_lock"},
+            {
+              "properties": {
+                "id": {"const": "https://longlineage.local/schema/compat/regional_compat_input_paths-1.0.0.json"},
+                "path": {"const": "schema/compat/regional_compat_input_paths.schema.json"}
+              }
+            }
+          ]
+        }
+      ],
+      "additionalItems": false
+    }
+  },
+  "definitions": {
+    "schema_lock": {
+      "type": "object",
+      "required": ["id", "path", "sha256"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^https://longlineage\\.local/schema/compat/"},
+        "path": {"type": "string", "pattern": "^schema/compat/[A-Za-z0-9_.-]+$"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

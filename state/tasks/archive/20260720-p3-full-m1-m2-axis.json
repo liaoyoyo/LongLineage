@@ -1,0 +1,161 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-p3-full-m1-m2-axis",
+  "owner_agent_id": "codex:root/hcc1395_input_runroot",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-p3-full-m1-m2-axis.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-p3-full-m1-m2-axis.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/m1",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "src/m1",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "include/longlineage/m2",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "src/m2",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p3_full_m1_m2_v1.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p3_full_m1_m2_receipt.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p3_p4_synthetic_v1.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p3_p4_first_stage_receipt.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_science_parity.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/parity",
+      "kind": "DIRECTORY_TREE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T15:36:00+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G4"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Complete the truth-isolated P3 scientific kernels for historical-compatible M1 recursive clustering and M2 eight-axis association decisions against synthetic/small frozen NumPy 1.23.5 and SciPy 1.13.1 oracles. This task excludes BAM/VCF/sidecar IO, CLI, CMake, validators, provenance manifests, production execution and scientific phase promotion."
+  },
+  "assumptions": [
+    "Historical raw M1 points materialize float32 ML_raw / 255.0F, while the frozen Python assignment authority reads RegionWriter fixed-setprecision(4) CSV values; both representations must remain explicit and SAM ML interval semantics remain a separate IO contract.",
+    "Python may generate only synthetic or bounded-small reference vectors and may never execute inside production C++.",
+    "SciPy 1.13.1 average linkage and fcluster(maxclust), NumPy 1.23.5 SeedSequence/PCG64/permutation, historical tie order and strict gate precedence are compatibility authorities.",
+    "All unsupported, malformed or non-finite states fail closed with explicit status; deterministic trace and digest equality are required across worker count and input order.",
+    "The bounded-real helper accepts only a pre-extracted historical matrix path supplied by the parent, replays historical round4 values and emits aggregate key/status/K/partition digest without coordinates or read names.",
+    "Selection of raw-point versus historical-round4 as a future production primary requires evidence outside this child task and must not be implicit."
+  ],
+  "inputs": [
+    {
+      "role": "source_port_lifecycle",
+      "path": "provenance/source_to_target_manifest.json",
+      "sha256": "8a8e8c6ebd260b12824381dd08f87c73a6d8d035343a2709058f637a7ae206ae"
+    },
+    {
+      "role": "first_stage_synthetic_oracle",
+      "path": "oracle/frozen_vectors/p3_p4_synthetic_v1.json",
+      "sha256": "00c00b4651e47ab2a43ecef92fd1c0c2f12c3fb1fc83660bdaf37b6ba8f2bbe9"
+    },
+    {
+      "role": "first_stage_replay_receipt",
+      "path": "oracle/frozen_vectors/p3_p4_first_stage_receipt.txt",
+      "sha256": "a4aaa7a037fd129d559f4d204c2a937d6ad53ac83594e79f7cfa29fad71e955a"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "full_m1_cpp_kernel",
+      "path": "src/m1",
+      "sha256": null
+    },
+    {
+      "role": "m2_eight_axis_cpp_kernel",
+      "path": "src/m2",
+      "sha256": null
+    },
+    {
+      "role": "full_synthetic_frozen_oracle",
+      "path": "oracle/frozen_vectors/p3_full_m1_m2_v1.json",
+      "sha256": null
+    },
+    {
+      "role": "science_parity_tests",
+      "path": "tests/parity",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Freeze historical-compatible full M1 and M2 eight-axis synthetic/small positive, negative and edge vectors.",
+      "verify": "Oracle records exact NumPy/SciPy versions, source SHA-256 values, parameters, canonical partitions, statuses, decisions and deterministic trace digests without production identifiers."
+    },
+    {
+      "step": "Implement full deterministic M1 recursive clustering and M2 association kernels in C++17.",
+      "verify": "Strict -Werror direct builds pass; existing 99 pinned, 2 independent and 5 negative cases do not regress; full clustering never returns ABSTAIN_NOT_IMPLEMENTED for supported input."
+    },
+    {
+      "step": "Validate label-renaming, input-order and worker-count invariance plus fail-closed boundaries.",
+      "verify": "Pinned oracle parity, canonical partition/ARI, status/K/decision equality and semantic trace digest equality all pass in Debug, Release and sanitizer builds."
+    },
+    {
+      "step": "Provide a read-only bounded-real parity helper.",
+      "verify": "The helper reads a caller-provided historical matrix, performs no source mutation, and emits only aggregate key/status/K/partition digest."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "P3_FULL_M1_M2_INDEPENDENT_RELEASE_REPLAY",
+      "evidence_path": "oracle/frozen_vectors/p3_full_m1_m2_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "/tmp/longlineage-p3-full-parity-release <REPO_ROOT>",
+      "exit_code": 0,
+      "output_excerpt": "p3_full_parity: PASS m1_fixtures=3 m1_trace_splits=6 m2_associations=8 m2_axes=24 invariance_cases=34 negative_cases=4 m1_full_clustering=IMPLEMENTED production_python_calls=0; independent binary sha256=6cbfd09c8c1dab5991fd61a7a1989b4b4fe54748308923f28ce068ea929230cc",
+      "evidence_sha256": "1a75bdb551272aecd620e399d7eb73b3dcda848518108965b6bee4a2902b8862",
+      "recorded_at": "2026-07-20T04:21:02+08:00"
+    }
+  ],
+  "deviations": [
+    "The first active-task claim covered the entire frozen-vector directory and overlapped another agent; it was narrowed to exact P3 files before shared work continued, after which governance check-state passed.",
+    "An initial M1 implementation reused one unrounded matrix for observed and null paths. Historical RegionWriter behavior instead requires observed BERNOULLI distance rounded to six decimals and null methylation rounded to four decimals. The implementation now exposes explicit historical replay and raw-point APIs rather than hiding the last-bit SciPy linkage/threshold discrepancy with a tolerance.",
+    "Two additional three-group M2 fixtures and integrated label-renaming invariance were added during final review, increasing the frozen association count from 6 to 8 and invariance count from 29 to 34.",
+    "The repository publication repair later replaced private absolute-path strings in the P3 receipts with portable tokens. Input and evidence SHA values now bind those sanitized projections; parity counters and verdict fields were not changed."
+  ],
+  "blockers": [
+    "CMake, CLI, BAM/VCF/sidecar IO, validators, provenance manifests, production HCC1395 execution and HTML generation remain outside this child write-set.",
+    "The bounded helper is read-only parity evidence, not production authority.",
+    "Selection of raw-point versus historical serialized values as a future production primary remains a separately gated decision."
+  ],
+  "heartbeat_at": "2026-07-20T04:21:02+08:00",
+  "updated_at": "2026-07-20T04:21:02+08:00"
+}

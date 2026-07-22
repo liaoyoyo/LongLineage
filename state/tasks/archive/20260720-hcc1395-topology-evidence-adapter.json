@@ -1,0 +1,172 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-topology-evidence-adapter",
+  "owner_agent_id": "codex:root/longlineage_run_readiness",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-topology-evidence-adapter.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-topology-evidence-adapter.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/evidence_builder.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/vertex_set_ranker.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/topology_record.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/evidence_builder.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/vertex_set_ranker.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/topology_record.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_runtime_solver.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p5_topology_first_stage_receipt.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p5_topology_adapter_receipt.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-topology-inventory.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T15:30:14+08:00",
+  "heartbeat_at": "2026-07-20T04:28:00+08:00",
+  "task_type": "B",
+  "goals": ["LL-G3", "LL-G4"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Implement a synthetic/frozen-oracle P5 production-facing evidence adapter, BQ-aware vertex-set ranker and topology_unit v2 serializer without changing production apps, validators, provenance, catalog or schema."
+  },
+  "assumptions": [
+    "Evo-M0 recurrence-allowed remains the primary structural model.",
+    "The abundance endpoint scores each complete-family vertex set exactly once and never chooses a parent mapping.",
+    "Incomplete, capped, deadline or abstaining families publish no abundance rank.",
+    "Historical Python is read-only contract evidence and is not a production implementation."
+  ],
+  "inputs": [
+    {
+      "role": "topology_router",
+      "path": "include/longlineage/solver/topology_router.hpp",
+      "sha256": "559399502bd717a897ecc9d2b21799bf1c85c30c856efd5445cad96db2d7050a"
+    },
+    {
+      "role": "topology_v2_contract",
+      "path": "schema/records/topology_unit.schema.json",
+      "sha256": "02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03"
+    },
+    {
+      "role": "historical_python_contract",
+      "path": "external://InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/build_m2_patterns_and_rank.py",
+      "sha256": "b28d494563bea70cbfea7b13853d99c0b3aeafed7ed4f0c0a6fff3b92c84f0a9"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "evidence_adapter_api",
+      "path": "include/longlineage/solver/evidence_builder.hpp",
+      "sha256": "957d960f97e0537bac436beb4ff6a55bb7f80b05560ab5ea6e32e89677d6fade"
+    },
+    {
+      "role": "evidence_adapter",
+      "path": "src/solver/evidence_builder.cpp",
+      "sha256": "c4fc31999365b3f3fd6e401640c1b5ddad47dcfaf7112b8621f705802e1ca3d3"
+    },
+    {
+      "role": "vertex_set_ranker_api",
+      "path": "include/longlineage/solver/vertex_set_ranker.hpp",
+      "sha256": "f7a2f378c3e62a0a3f97eed3b7281b81992249c7f62a8bb2ed6b289cc439c661"
+    },
+    {
+      "role": "vertex_set_ranker",
+      "path": "src/solver/vertex_set_ranker.cpp",
+      "sha256": "8018abd3d08cd8fdc0717326ff231a5b2dc7de0432a767cb532b66f97cb727ff"
+    },
+    {
+      "role": "topology_v2_serializer_api",
+      "path": "include/longlineage/solver/topology_record.hpp",
+      "sha256": "6c0387b7f617331b21a56ac614a742e6014d291d6b429b5ed7bb9427b36e1683"
+    },
+    {
+      "role": "topology_v2_serializer",
+      "path": "src/solver/topology_record.cpp",
+      "sha256": "c6ed85fad614197017711e58922dc1c835d549d10563126f6464ebd7068e661c"
+    },
+    {
+      "role": "bounded_oracle_tests",
+      "path": "tests/unit/test_runtime_solver.cpp",
+      "sha256": "273ab0171772fe532c526eb0136f9034a388f774fb4091f1f23314b55adc76df"
+    },
+    {
+      "role": "immutable_verification_receipt",
+      "path": "oracle/frozen_vectors/p5_topology_adapter_receipt.txt",
+      "sha256": "5fb84ae3ba4aec813fcded144fe0d9a11ebfba183becab80556d44062e006813"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Freeze R/A/O/X evidence semantics and active-bit compression.",
+      "verify": "Synthetic tests cover R/A/O/X parsing, deterministic q compression and BQ-derived read emissions under input permutation."
+    },
+    {
+      "step": "Rank every complete-family vertex set once under the BQ-aware likelihood endpoint.",
+      "verify": "A small-q brute-force likelihood oracle matches the ranker, including a complete deterministic tie class with no parent mapping."
+    },
+    {
+      "step": "Serialize a topology_unit v2 record without crossing structural, abundance, edge or unary-projection boundaries.",
+      "verify": "Complete family emits rank and optional post-family edge evidence; cap/deadline/incomplete states emit no rank; unary hidden chains remain unresolved projection-only."
+    },
+    {
+      "step": "Replay bounded deterministic validation.",
+      "verify": "Warnings-as-errors build, direct runtime test, targeted ctest, permutation/order invariance and negative incomplete/no-rank checks all exit zero."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "topology-adapter-immutable-verification",
+      "evidence_path": "oracle/frozen_vectors/p5_topology_adapter_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "/usr/bin/cmake --build build-cpp-output-validation --target test_runtime_solver --parallel 8 && ctest --test-dir build-cpp-output-validation --output-on-failure -R '^(runtime_solver|determinism_contract|topology_no_incomplete_winner)$' && validate five generated topology_unit v2 records && replay locale/order determinism and ASan/UBSan",
+      "exit_code": 0,
+      "output_excerpt": "Warnings-as-errors build PASS; 3/3 targeted CTests PASS; dense small-q likelihood oracle, full tie class, fail-closed negatives, five schema-v2 records, locale/order determinism and ASan/UBSan all PASS.",
+      "evidence_sha256": "5fb84ae3ba4aec813fcded144fe0d9a11ebfba183becab80556d44062e006813",
+      "recorded_at": "2026-07-20T04:28:00+08:00"
+    }
+  ],
+  "deviations": [
+    "The first sanitizer configure resolved the PATH-preferred /usr/local/bin/cmake 3.14.4 and exited 1 before compilation because the project requires CMake 3.22. The corrected /usr/bin/cmake 3.22.1 configure, warnings-as-errors build and ASan/UBSan runtime test exited 0.",
+    "clang-format and cppcheck were unavailable. No unapproved installation was attempted; compiler policy, git diff --check, schema validation and sanitizer replay passed.",
+    "During successor work, governance exposed stale evidence bindings in the released first-stage topology archive. An immutable p5_topology_first_stage_receipt.txt was reconstructed from its already-recorded command/exit/output and historical source hashes; the old ctest and status-registry evidence now bind that receipt and do not claim adapter evidence.",
+    "This task used only synthetic/frozen small oracles. It did not read HCC1395 data or modify CMake sources, apps, validators, provenance, schema, catalog or production authority.",
+    "The repository publication repair later replaced private absolute-path strings in the receipt with portable tokens. The input and evidence SHA values now bind that sanitized projection; solver counts and verdict fields were not changed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T04:28:00+08:00"
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_validation_receipt-1.0.0.json",
+  "title": "LongLineage regional compatibility validation receipt (legacy)",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "profile_id",
+    "state",
+    "producer_receipt_sha256",
+    "semantic_sha256",
+    "validator_executable_sha256",
+    "row_counts",
+    "checks"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_validation_receipt"},
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL"},
+    "state": {"const": "VALIDATED_FROZEN"},
+    "producer_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "semantic_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validator_executable_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "row_counts": {
+      "type": "object",
+      "required": ["regions", "units", "patterns"],
+      "additionalProperties": false,
+      "properties": {
+        "regions": {"type": "integer", "minimum": 0},
+        "units": {"type": "integer", "minimum": 0},
+        "patterns": {"type": "integer", "minimum": 0}
+      }
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "prefixItems": [
+        {"$ref": "#/$defs/root_layout"},
+        {"$ref": "#/$defs/required_files"},
+        {"$ref": "#/$defs/no_extra_files"},
+        {"$ref": "#/$defs/validator_provenance"},
+        {"$ref": "#/$defs/checksum_manifest"},
+        {"$ref": "#/$defs/summary_contract"},
+        {"$ref": "#/$defs/producer_receipt"},
+        {"$ref": "#/$defs/regions_tsv"},
+        {"$ref": "#/$defs/units_tsv"},
+        {"$ref": "#/$defs/patterns_tsv"},
+        {"$ref": "#/$defs/row_counts"},
+        {"$ref": "#/$defs/foreign_keys"},
+        {"$ref": "#/$defs/toctou_stable"}
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "pass": {
+      "type": "object",
+      "required": ["check_id", "status", "detail"],
+      "additionalProperties": false,
+      "properties": {
+        "check_id": {"type": "string"},
+        "status": {"const": "PASS"},
+        "detail": {"type": "string", "minLength": 1}
+      }
+    },
+    "root_layout": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "ROOT_LAYOUT"}}}]},
+    "required_files": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "REQUIRED_FILES"}}}]},
+    "no_extra_files": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "NO_EXTRA_FILES"}}}]},
+    "validator_provenance": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "VALIDATOR_PROVENANCE"}}}]},
+    "checksum_manifest": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "CHECKSUM_MANIFEST"}}}]},
+    "summary_contract": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "SUMMARY_CONTRACT"}}}]},
+    "producer_receipt": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "PRODUCER_RECEIPT"}}}]},
+    "regions_tsv": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "REGIONS_TSV"}}}]},
+    "units_tsv": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "UNITS_TSV"}}}]},
+    "patterns_tsv": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "PATTERNS_TSV"}}}]},
+    "row_counts": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "ROW_COUNTS"}}}]},
+    "foreign_keys": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "FOREIGN_KEYS"}}}]},
+    "toctou_stable": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "TOCTOU_STABLE"}}}]}
+  },
+  "additionalProperties": false
+}

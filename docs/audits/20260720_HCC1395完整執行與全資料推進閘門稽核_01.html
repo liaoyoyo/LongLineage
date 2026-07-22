@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-Hant" data-partial="true" data-report-id="20260720-hcc1395-full-run-and-expansion-gate-001">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>HCC1395 完整執行與全資料推進閘門稽核 · LongLineage</title>
+  <style>
+    :root {
+      --paper:#f3f0e8; --surface:#fffdf8; --ink:#17202a; --muted:#5f6b76;
+      --navy:#17324d; --navy2:#244b6f; --line:#d8d2c5; --red:#b42318;
+      --red-bg:#fef3f2; --amber:#b54708; --amber-bg:#fffaeb; --green:#027a48;
+      --green-bg:#ecfdf3; --blue:#175cd3; --blue-bg:#eff8ff;
+      --shadow:0 12px 32px rgba(23,50,77,.10);
+    }
+    * { box-sizing:border-box; }
+    html { max-width:100%; scroll-behavior:smooth; overflow-x:clip; }
+    body {
+      margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height:1.62; overflow-x:clip;
+    }
+    a { color:inherit; }
+    code, pre { font-family:"SFMono-Regular", Consolas, monospace; }
+    .partial-ribbon {
+      background:var(--red); color:white; text-align:center; padding:.5rem 1rem;
+      font-weight:800; letter-spacing:.06em; font-size:.78rem;
+    }
+    .layout { width:100%; max-width:1480px; margin:0 auto; display:grid; grid-template-columns:250px 1fr; }
+    aside {
+      position:sticky; top:0; height:100vh; padding:2rem 1.3rem; border-right:1px solid var(--line);
+      background:#ebe6dc;
+    }
+    .brand { font-weight:900; color:var(--navy); letter-spacing:.03em; }
+    .brand small { display:block; color:var(--muted); font-weight:650; letter-spacing:0; }
+    nav { min-width:0; max-width:100%; margin-top:2rem; display:grid; gap:.35rem; }
+    nav a { text-decoration:none; padding:.52rem .65rem; border-left:3px solid transparent; color:#44515d; }
+    nav a:hover, nav a:focus-visible { color:var(--navy); border-color:var(--red); background:rgba(255,255,255,.55); }
+    aside .scope-note { margin-top:2rem; font-size:.82rem; color:var(--muted); }
+    main { min-width:0; padding:2.2rem clamp(1.2rem,4vw,4.5rem) 5rem; }
+    .hero {
+      background:var(--navy); color:white; padding:clamp(2rem,5vw,4.5rem);
+      border-top:8px solid var(--red); box-shadow:var(--shadow);
+    }
+    .eyebrow { text-transform:uppercase; letter-spacing:.13em; font-weight:800; font-size:.78rem; color:#b9d4eb; }
+    h1 { max-width:980px; margin:.55rem 0 1rem; font-size:clamp(2.1rem,5vw,4.6rem); line-height:1.02; letter-spacing:-.045em; }
+    .hero-lead { max-width:850px; font-size:clamp(1.02rem,2vw,1.25rem); color:#e8f0f7; }
+    .verdict-line { display:flex; flex-wrap:wrap; gap:.65rem; align-items:center; margin-top:1.6rem; }
+    .verdict { background:white; color:var(--red); font-weight:950; font-size:1.45rem; padding:.42rem .8rem; }
+    .hero-meta { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin-top:2.2rem; background:#55738e; }
+    .hero-meta div { background:var(--navy2); padding:1rem; }
+    .hero-meta span { display:block; color:#b9d4eb; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; }
+    .hero-meta strong { font-size:1.05rem; }
+    section { min-width:0; max-width:100%; scroll-margin-top:1rem; padding:4.2rem 0 0; }
+    .section-kicker { color:var(--red); font-weight:900; letter-spacing:.12em; text-transform:uppercase; font-size:.75rem; }
+    h2 { margin:.25rem 0 .8rem; color:var(--navy); font-size:clamp(1.6rem,3vw,2.6rem); letter-spacing:-.025em; line-height:1.14; }
+    h3 { margin:.3rem 0 .35rem; line-height:1.25; }
+    .section-lead { max-width:900px; color:var(--muted); font-size:1.03rem; }
+    .answer-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:1rem; margin-top:1.4rem; }
+    .answer-primary { background:var(--red-bg); border-left:6px solid var(--red); padding:1.4rem; }
+    .answer-primary strong { display:block; color:var(--red); font-size:1.45rem; }
+    .answer-secondary { background:var(--surface); border:1px solid var(--line); padding:1.4rem; }
+    .note { padding:1rem 1.15rem; border:1px solid #e6b8b4; background:#fff8f7; margin-top:1rem; }
+    .measure-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.35rem; }
+    .measurement { background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--navy); padding:1.15rem; }
+    .measurement .measure-value { color:var(--navy); font-size:1.65rem; font-weight:900; margin:.25rem 0; }
+    .measurement small, td small { display:block; color:var(--muted); margin-top:.45rem; }
+    .badge { display:inline-block; padding:.18rem .45rem; border-radius:3px; font-size:.68rem; font-weight:850; letter-spacing:.035em; overflow-wrap:anywhere; }
+    .badge.ok { color:var(--green); background:var(--green-bg); }
+    .badge.bad { color:var(--red); background:var(--red-bg); }
+    .badge.warn { color:var(--amber); background:var(--amber-bg); }
+    .badge.neutral { color:var(--blue); background:var(--blue-bg); }
+    .table-wrap { width:100%; min-width:0; max-width:100%; overflow-x:auto; contain:inline-size; margin-top:1.3rem; border:1px solid var(--line); background:var(--surface); }
+    table { width:100%; border-collapse:collapse; min-width:820px; }
+    th { text-align:left; background:#e8edf1; color:var(--navy); font-size:.74rem; letter-spacing:.05em; text-transform:uppercase; }
+    th, td { padding:.82rem .9rem; border-bottom:1px solid var(--line); vertical-align:top; }
+    tbody tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:#fbf8f1; }
+    .stage-num { font-weight:900; color:#8b98a3; width:3rem; }
+    .path { display:block; white-space:normal; overflow-wrap:anywhere; color:#415266; font-size:.76rem; background:#f0ede6; padding:.35rem .45rem; margin-top:.2rem; }
+    .history { margin-top:1.5rem; display:grid; gap:.8rem; }
+    .history-row { display:grid; grid-template-columns:230px 1fr 210px; gap:1rem; align-items:center; background:var(--surface); border:1px solid var(--line); padding:1rem; }
+    .history-row p { grid-column:1/-1; margin:0; color:var(--muted); font-size:.88rem; }
+    .history-label span, .history-value span { display:block; color:var(--muted); font-size:.78rem; }
+    .history-track { height:14px; background:#e6e1d7; overflow:hidden; }
+    .history-bar { height:100%; background:var(--navy2); min-width:4px; }
+    .history-bar.bad { background:var(--red); }
+    .history-bar.warn { background:var(--amber); }
+    .history-value { text-align:right; }
+    .bottleneck-list { display:grid; gap:.7rem; margin-top:1.4rem; }
+    .bottleneck { display:grid; grid-template-columns:54px 1fr; gap:1rem; background:var(--surface); border:1px solid var(--line); padding:1.15rem; }
+    .rank { color:#a7afb7; font-size:1.5rem; font-weight:950; }
+    .bottleneck p { margin:.3rem 0; }
+    .unblock { color:#3c4d5c; }
+    .profile { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid var(--line); margin-top:1.3rem; background:var(--surface); }
+    .profile div { padding:1rem; border-right:1px solid var(--line); }
+    .profile div:last-child { border:0; }
+    .profile span { color:var(--muted); display:block; font-size:.75rem; text-transform:uppercase; }
+    .profile strong { color:var(--navy); font-size:1.2rem; }
+    details { background:var(--surface); border:1px solid var(--line); margin:.65rem 0; }
+    summary { cursor:pointer; padding:.9rem 1rem; font-weight:800; color:var(--navy); }
+    .detail-body { padding:0 1rem 1rem; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#162535; color:#f4f7fa; padding:1rem; overflow:auto; }
+    .sources { padding-left:1.3rem; }
+    .sources li { margin:.8rem 0; }
+    .footer { margin-top:4rem; padding-top:1.5rem; border-top:1px solid var(--line); color:var(--muted); font-size:.83rem; }
+    @media (max-width:980px) {
+      .layout { display:block; }
+      aside { position:static; height:auto; border-right:0; border-bottom:1px solid var(--line); padding:1rem; }
+      nav { display:flex; overflow-x:auto; margin-top:.8rem; }
+      nav a { white-space:nowrap; border-left:0; border-bottom:3px solid transparent; }
+      aside .scope-note { display:none; }
+      .measure-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .history-row { grid-template-columns:1fr; }
+      .history-row p { grid-column:auto; }
+      .history-value { text-align:left; }
+      .profile { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:620px) {
+      main { padding:1rem 1rem 3rem; }
+      .hero { padding:1.5rem; }
+      h1 { font-size:2.35rem; }
+      nav { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); overflow:visible; }
+      nav a { white-space:normal; text-align:center; padding:.45rem .25rem; }
+      .hero-meta, .answer-grid, .measure-grid { grid-template-columns:1fr; }
+      .profile { grid-template-columns:1fr; }
+      .profile div { border-right:0; border-bottom:1px solid var(--line); }
+      .bottleneck { grid-template-columns:40px 1fr; }
+    }
+    @media print {
+      body { background:white; font-size:10pt; }
+      .partial-ribbon { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+      .layout { display:block; max-width:none; }
+      aside { display:none; }
+      main { padding:0; }
+      .hero { box-shadow:none; break-after:avoid; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+      section { padding-top:1.6rem; break-inside:auto; }
+      .measurement, .bottleneck, .history-row, table { break-inside:avoid; }
+      details { break-inside:avoid; }
+      details > * { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="partial-ribbon">PARTIAL / READINESS AUDIT — 非 production run、非 P8 release evidence</div>
+  <div class="layout">
+    <aside>
+      <div class="brand">LongLineage<small>input replay · co-occurrence · regional topology</small></div>
+      <nav aria-label="報告章節">
+        <a href="#answer">時間答案</a>
+        <a href="#measured">本輪實測</a>
+        <a href="#pipeline">全流程狀態</a>
+        <a href="#history">歷史脈絡</a>
+        <a href="#baselines">基準與結果</a>
+        <a href="#inputs">輸入</a>
+        <a href="#bottlenecks">瓶頸</a>
+        <a href="#profile">全速設定</a>
+        <a href="#commands">命令證據</a>
+        <a href="#sources">來源</a>
+      </nav>
+      <p class="scope-note">Task B · 先以 HCC1395 作 gate；只有 VALIDATED_FROZEN 才能推進七資料集。</p>
+    </aside>
+    <main>
+      <header class="hero">
+        <div class="eyebrow">Evidence → Gate → Timing · 2026-07-20T00:45:00+08:00</div>
+        <h1>HCC1395 完整執行與全資料推進閘門稽核</h1>
+        <p class="hero-lead">HCC1395 八角色輸入已可讀，索引與凍結 BAM chunk replay 通過；但 current run 固定 exit 6、validator 固定 exit 7、P3/P4/P5/P7/P8 BLOCKED。沒有正式 sSNV co-occurrence authority，且舊 region-tree 方法與 truth boundary 不同，因此未啟動假裝完整的科學長跑，也不得推進七資料集。</p>
+        <div class="verdict-line">
+          <span class="verdict">NO-GO</span>
+          <span class="badge neutral">影響 HIGH</span>
+          <span class="badge neutral">信心 HIGH</span>
+          <span class="badge neutral">科學輸出 0</span>
+        </div>
+        <div class="hero-meta">
+          <div><span>Scope</span><strong>HCC1395 · chr1–22 · 79,687 sites</strong></div>
+          <div><span>Host</span><strong>48 CPUs · 約 495 GiB available</strong></div>
+          <div><span>Storage</span><strong>big7 714.8 GiB free · big8 NFSv4.2 MOUNTED_READABLE</strong></div>
+        </div>
+      </header>
+
+      <section id="answer">
+        <div class="section-kicker">01 · Direct answer</div>
+        <h2>輸入已恢復，但科學核心尚不存在：本輪不能產生完整時間或正確性結論</h2>
+        <div class="answer-grid">
+          <div class="answer-primary">
+            <strong>Production total：不可量測</strong>
+            UNKNOWN / NOT_MEASURABLE。production entrypoint 在任何 BAM 科學讀取前由 release attestation fail closed；沒有完整 run receipt。
+          </div>
+          <div class="answer-secondary">
+            <strong>Production HTML：不可量測</strong>
+            <p>UNKNOWN / NOT_MEASURABLE。現有 Python 只可呈現 audit JSON；不存在由 C++ validated chart-ready artifacts 產生的 P8 report bundle。</p>
+          </div>
+        </div>
+        <div class="note"><strong>不能相加：</strong>下方歷史時間來自不同程式、資料集範圍、成功狀態與演算法。HCC1395 舊 extraction 約 1:57:41.98；六資料集 M1 約 11:57:49；M2 attempt 6 在 3:54:51 失敗；舊七資料集 layered reconstruction 約 3:30:16。四列方法、scope與成功狀態不同，禁止相加。</div>
+      </section>
+
+      <section id="measured">
+        <div class="section-kicker">02 · Current measurements</div>
+        <h2>本輪真正量到的只有 foundation 與 fail-closed 邊界</h2>
+        <p class="section-lead">這些數字驗證 repository 能建置、測試與正確拒絕未就緒 production；它們不含 HCC1395 BAM 科學運算。</p>
+        <div class="measure-grid"><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_INPUT</span></div><h3>Mounted input/index smoke</h3><p class="measure-value">約 1.16 秒</p><p>BAM quickcheck、BAI idxstats、FASTA faidx、VCF index、sidecar tabix 全部 exit 0</p><small>Index/header-level readback only; not a 292 GB BAM scan.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_INPUT</span></div><h3>Frozen BAM chunk replay</h3><p class="measure-value">&lt; 1 秒</p><p>first/middle/last 1 MiB SHA-256 = 3/3 MATCH</p><small>storage_identity_v1 sampled content assurance; explicitly not a full BAM hash.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_FOUNDATION</span></div><h3>C++ foundation CTest</h3><p class="measure-value">27.89 秒</p><p>33/33 PASS</p><small>Synthetic/foundation tests only; no HCC1395 scientific kernel.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_GATE</span></div><h3>Production CLI fail-closed suite</h3><p class="measure-value">0.34 秒</p><p>Harness PASS; internal run exit 6 release attestation NOT_READY</p><small>Negative gate verification; zero scientific output.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_GATE</span></div><h3>Independent validator entrypoint</h3><p class="measure-value">&lt; 0.01 秒</p><p>exit 7; independent artifact replay is not implemented; no receipt</p><small>Expected fail-closed behavior.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_GATE</span></div><h3>Strict release gate</h3><p class="measure-value">45.31 秒</p><p>exit 1; FAIL missing=12 executable negative gates</p><small>Foundation tests pass, release remains correctly blocked.</small></article><article class="measurement"><div><span class="badge ok">CURRENT_MEASURED_PRESENTATION</span></div><h3>Presentation-only HTML render</h3><p class="measure-value">0.07 秒</p><p>exit 0; standalone HTML written from frozen audit JSON</p><small>Presentation mapping only; zero scientific aggregation.</small></article></div>
+      </section>
+
+      <section id="pipeline">
+        <div class="section-kicker">03 · Stage-by-stage</div>
+        <h2>P0–P8 實際可執行度與時間缺口</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Stage / implementation</th><th>Status</th><th>Timing</th><th>Current bottleneck</th></tr></thead>
+            <tbody><tr><td class="stage-num">01</td><td><strong>P0 input authority replay</strong><small>Mounted inputs and indexes are readable; frozen sampled BAM chunks replayed.</small></td><td><span class="badge ok">PARTIAL_PASS</span></td><td>約 1–2 秒 smoke</td><td>st_dev changed after legitimate NFS remount; no normalized remount identity contract.</td></tr><tr><td class="stage-num">02</td><td><strong>P1 production manifest/preflight</strong><small>Typed parser exists; no HCC1395 or exact seven-dataset real manifest exists.</small></td><td><span class="badge bad">BLOCKED</span></td><td>未執行</td><td>run requires PRODUCTION_7_DATASET and exact seven datasets.</td></tr><tr><td class="stage-num">03</td><td><strong>P2 HTS block reader/writer</strong><small>Synthetic indexed-BAM component only.</small></td><td><span class="badge neutral">IN_PROGRESS</span></td><td>無 real HCC timing</td><td>No persistent VCF/sidecar/FASTA worker bundle, one-pass projection or process RSS cap.</td></tr><tr><td class="stage-num">04</td><td><strong>P3 M1 methylation groups</strong><small>Historical Python authority; C++ source parity absent.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>PCG64/RNG/tie/relabel/HP-family frozen vectors incomplete.</td></tr><tr><td class="stage-num">05</td><td><strong>P4 sSNV co-occurrence</strong><small>Eligibility schema exists; production kernel and formal authority absent.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>Attempt 6 failed with no output; current source SHA drifted from frozen authority.</td></tr><tr><td class="stage-num">06</td><td><strong>P5 regional topology</strong><small>q&lt;=4 small oracle only; production family/ranking path incomplete.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>Objective/family/ranking completion separated; 9/25 stress cases incomplete.</td></tr><tr><td class="stage-num">07</td><td><strong>P6 independent validation</strong><small>Independent executable target exists but replay is scaffold.</small></td><td><span class="badge bad">BLOCKED</span></td><td>&lt; 0.01 秒 to reject</td><td>Validator fixed exit 7; no receipt or fault-injection implementation.</td></tr><tr><td class="stage-num">08</td><td><strong>Atomic freeze</strong><small>State guard/schema only.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>No actual staging→validate→same-filesystem rename→frozen receipt orchestrator.</td></tr><tr><td class="stage-num">09</td><td><strong>P7 HCC gate then seven datasets</strong><small>No legal HCC-only run profile; exact seven-dataset production gate remains.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>P3–P6 prerequisites absent.</td></tr><tr><td class="stage-num">10</td><td><strong>P8 chart-ready bundle and HTML</strong><small>Audit-only HTML exists; validated-run report bundle does not.</small></td><td><span class="badge bad">BLOCKED</span></td><td>Production UNKNOWN</td><td>No C++ chart-ready artifact, claim IDs or validated-only builder.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="history">
+        <div class="section-kicker">04 · Non-comparable context</div>
+        <h2>舊時間可定位成本，不能替代現行 C++/HTSlib 完整時間</h2>
+        <p class="section-lead">長條以歷史最長 wall time 正規化；0.4% 是顯示下限。每列獨立，禁止相加或外推。</p>
+        <div class="history"><div class="history-row"><div class="history-label"><strong>舊 InterSubMod C++ extraction</strong><span>HCC1395 chr1–22，79,687 sites，6 threads</span></div><div class="history-track" aria-hidden="true"><div class="history-bar neutral" style="width:16.4%"></div></div><div class="history-value"><strong>1:57:41.98</strong><span>NON_COMPARABLE_CONTEXT</span></div><p>PASS；reads/Bernoulli/methylation 各 79,687 files；不同程式、輸出模型與thread model；不是LongLineage timing。</p></div><div class="history-row"><div class="history-label"><strong>舊 Python M1 screen</strong><span>前六資料集合計447,449 sites，40 workers</span></div><div class="history-track" aria-hidden="true"><div class="history-bar neutral" style="width:100.0%"></div></div><div class="history-value"><strong>11:57:49</strong><span>NON_COMPARABLE_CONTEXT</span></div><p>EXECUTION_PASS；HCC1395時間不可拆；Python science不得作新production。</p></div><div class="history-row"><div class="history-label"><strong>舊 Python M2/co-occurrence attempt 6</strong><span>102,842 selected rows，40 workers，999 permutations</span></div><div class="history-track" aria-hidden="true"><div class="history-bar bad" style="width:32.7%"></div></div><div class="history-value"><strong>3:54:51</strong><span>FAILED_NON_COMPARABLE_CONTEXT</span></div><p>FAILED before publication；正式output與receipt皆不存在；失敗時間不是完成時間，也不是科學結果。</p></div><div class="history-row"><div class="history-label"><strong>舊 layered regional reconstruction</strong><span>七資料集chr1–22，parallel samples=4</span></div><div class="history-track" aria-hidden="true"><div class="history-bar neutral" style="width:29.3%"></div></div><div class="history-value"><strong>約 3:30:16</strong><span>NON_COMPARABLE_CONTEXT</span></div><p>7/7舊版verification PASS；HCC1395 8,222 regions / 20,119 units；不同Python-led方法，且HCC1395 manifest使用SEQC2 CN；非現行truth-isolated P5。</p></div></div>
+      </section>
+
+      <section id="baselines">
+        <div class="section-kicker">04B · Baseline and result authority</div>
+        <h2>sSNV 共現沒有正式成功基準；舊區域樹存在但不符合現行 production 契約</h2>
+        <p class="section-lead">來源、時間、digest、truth 邊界與完成語意必須同時相容；execution PASS 不自動等於 scientific parity。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Area</th><th>Source</th><th>Recorded</th><th>Time</th><th>Digest</th><th>Current verdict</th></tr></thead>
+            <tbody><tr><td><strong>HCC1395 extraction</strong><small>NON_COMPARABLE_CONTEXT</small></td><td><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/all_ssnv_intersubmod_batch.v2_verification_fix.json</code></td><td>2026-07-15 11:58:05 +08</td><td>1:57:41.98</td><td><span class="badge ok">SHA 78247190… PRESENT</span></td><td>79,687 autosomal sites PASS；只可作舊 extraction context。</td></tr><tr><td><strong>M1 six-dataset execution</strong><small>EXECUTION_ONLY</small></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v9_first_six_thread_pinned_source_locked/run_manifest.json</code></td><td>2026-07-16 20:01:23 +08</td><td>11:57:49</td><td><span class="badge ok">SHA 3a462290… PRESENT</span></td><td>447,449/447,449 processed；execution_integrity_only，不是C++ parity。</td></tr><tr><td><strong>M2 eligibility census</strong><small>VALIDATED_INTEGRITY</small></td><td><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/independent_m2_gate_recount.v3.json</code></td><td>2026-07-17 11:03:32 +08</td><td>screen/recount only</td><td><span class="badge neutral">SHA 4a0f411b… MATCH</span></td><td>919 eligible、948 evaluable-ineligible、100,974 indeterminate、1 K&gt;10；不是共現結果。</td></tr><tr><td><strong>M2/co-occurrence attempt 6</strong><small>FAILED_NO_SCIENTIFIC_RESULT</small></td><td><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/cooccurrence_execution_incident.v3_attempt6_summary_totality.json</code></td><td>2026-07-18 16:33:36 +08</td><td>3:54:51 then exit 1</td><td><span class="badge ok">SHA af06b2df… PRESENT</span></td><td>KeyError hp_exact；output dir absent；formal receipt absent。</td></tr><tr><td><strong>Co-occurrence source authority</strong><small>SOURCE_DRIFT</small></td><td><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_methyl_ssnv_cooccurrence.py</code></td><td>worktree mtime 2026-07-19 12:29:57 +08</td><td>not applicable</td><td><span class="badge neutral">EXPECTED 3d765098… / CURRENT 6dc673fa… MISMATCH</span></td><td>凍結來源blob不可由authority commit回復；不得作parity基準。</td></tr><tr><td><strong>Old seven-dataset regional reconstruction</strong><small>NON_COMPARABLE_CONTEXT</small></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/verification_summary.json</code></td><td>2026-07-13 05:09:40 +08</td><td>約 3:30:16</td><td><span class="badge ok">SHA 9cdce65e… PRESENT</span></td><td>7/7 verification PASS；方法與現行P5不同，不可升級production。</td></tr><tr><td><strong>Old HCC1395 region topology</strong><small>HISTORICAL_RESULT_ONLY</small></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/samples/HCC1395/output_manifest.json</code></td><td>2026-07-13 03:04:11 +08</td><td>包含在七資料集wall time</td><td><span class="badge neutral">MANIFEST b208aa0b… / TREE 666d2d8a… / REGION 9e28d980… MATCH</span></td><td>8,222 regions、20,119 units；2,019 all_determined、5,104 ambiguous、781 capped、28 recurrence、290 no-primary；含SEQC2 CN context。</td></tr><tr><td><strong>Current topology stress receipt</strong><small>NO_GO</small></td><td><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260718_solver_methyl_edge_probe/results/solver_stress_panel_v1/runs/authoritative_r3_primary_all_both_r1/receipt.json</code></td><td>2026-07-19 12:10:04 +08</td><td>component stress only</td><td><span class="badge neutral">SHA 933a7776… MATCH</span></td><td>objective 25/25；family complete 16/25；incomplete ranking不可發布。</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="inputs">
+        <div class="section-kicker">05 · Input readiness</div>
+        <h2>掛載、檔案、索引與三段 BAM 內容抽樣均已實讀通過</h2>
+        <p class="section-lead">NFS mount 不再是 blocker。BAM 的 st_dev 因重新掛載由 59 變 60，但 realpath、size、inode、mtime 與三個凍結 1 MiB chunk 均一致；這仍不是 292 GB full-content SHA。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Recorded size</th><th>Current state</th><th>Path</th></tr></thead>
+            <tbody><tr><td><strong>Raw HCC1395 BAM</strong></td><td>292,055,926,761 B</td><td><span class="badge ok">READABLE_INDEXED_CHUNKS_MATCH</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam</code></td></tr><tr><td><strong>BAM index</strong></td><td>119,741,784 B</td><td><span class="badge ok">READABLE_IDXSTATS_PASS</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam.bai</code></td></tr><tr><td><strong>Reference FASTA</strong></td><td>3,144,230,986 B</td><td><span class="badge ok">READABLE_FAIDX_PASS</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/ref/GRCh38_no_alt_analysis_set.fasta</code></td></tr><tr><td><strong>Reference FAI</strong></td><td>7,804 B</td><td><span class="badge ok">READABLE</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/ref/GRCh38_no_alt_analysis_set.fasta.fai</code></td></tr><tr><td><strong>Latest HP/PS sidecar</strong></td><td>1,433,423,193 B</td><td><span class="badge ok">PRESENT_AUTHORITY_MATCH</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz</code></td></tr><tr><td><strong>Sidecar TBI</strong></td><td>910,475 B</td><td><span class="badge ok">READABLE_TABIX_PASS</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz.tbi</code></td></tr><tr><td><strong>PASS biallelic sSNV VCF</strong></td><td>3,728,864 B</td><td><span class="badge ok">PRESENT_AUTHORITY_MATCH</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz</code></td></tr><tr><td><strong>VCF CSI</strong></td><td>344,074 B</td><td><span class="badge ok">READABLE_BCFTOOLS_PASS</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz.csi</code></td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="bottlenecks">
+        <div class="section-kicker">06 · Bottleneck ranking</div>
+        <h2>先解鎖正確性與可執行性，再談 CPU 加速</h2>
+        <div class="bottleneck-list"><article class="bottleneck"><span class="rank">01</span><div><div><span class="badge neutral">CRITICAL</span></div><h3>Production engine is intentionally disabled</h3><p>release attestation is NOT_READY and the engine still returns KernelBlocked after preflight.</p><p class="unblock"><strong>解鎖：</strong>Implement and independently verify P3 M1, P4 co-occurrence and P5 topology before changing attestation.</p></div></article><article class="bottleneck"><span class="rank">02</span><div><div><span class="badge neutral">CRITICAL</span></div><h3>No formal sSNV co-occurrence result authority</h3><p>M2 attempt 6 failed before publication; requested output directory and run receipt are absent. The current Python source no longer matches the frozen SHA.</p><p class="unblock"><strong>解鎖：</strong>Recover or explicitly supersede the frozen source, freeze logical vectors, implement C++ producer plus independent oracle, and publish a formal receipt.</p></div></article><article class="bottleneck"><span class="rank">03</span><div><div><span class="badge neutral">CRITICAL</span></div><h3>Regional topology baseline is method-incompatible</h3><p>The old HCC1395 result is internally verified but uses an earlier Python-led contract and SEQC2 CN context; current LongLineage requires truth-isolated production and complete objective/family/ranking states.</p><p class="unblock"><strong>解鎖：</strong>Freeze a truth-isolated topology parity corpus, implement complete-family/ranking certificates, and compare exact digests.</p></div></article><article class="bottleneck"><span class="rank">04</span><div><div><span class="badge neutral">HIGH</span></div><h3>Independent validator and atomic freeze are scaffolds</h3><p>Validator exits 7 without replaying artifacts; there is no validated receipt or atomic freeze.</p><p class="unblock"><strong>解鎖：</strong>Implement independent schema/digest/invariant replay, fault injection and same-filesystem atomic promotion.</p></div></article><article class="bottleneck"><span class="rank">05</span><div><div><span class="badge neutral">HIGH</span></div><h3>No HCC-only production profile or real manifest</h3><p>run accepts only the exact seven-dataset production profile, while the requested decision sequence starts with HCC1395.</p><p class="unblock"><strong>解鎖：</strong>Add a governed BOUNDED_REAL_DATA_HCC1395 gate profile that cannot be promoted to production, or execute all seven only after P3–P6 are verified.</p></div></article></div>
+      </section>
+
+      <section id="profile">
+        <div class="section-kicker">07 · Planned full-speed profile</div>
+        <h2>解鎖後的單樣本 profiling 設定</h2>
+        <p class="section-lead"><span class="badge bad">BLOCKED_PLANNED_NOT_EXECUTED</span> 這是 proposed PARTIAL benchmark profile，不可取代 exact seven-dataset production authority。</p>
+        <div class="profile">
+          <div><span>Compute</span><strong>40 workers</strong></div>
+          <div><span>Writers</span><strong>4 threads</strong></div>
+          <div><span>Coordinator</span><strong>2 slots</strong></div>
+          <div><span>Total ceiling</span><strong>46 / 48</strong></div>
+        </div>
+        <div class="note"><strong>Staging</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260720_longlineage_hcc1395_fullspeed_profile_v1/.staging/20260720_HCC1395_autosomes_w40_fullspeed_v1</code><strong>Final</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260720_longlineage_hcc1395_fullspeed_profile_v1/20260720_HCC1395_autosomes_w40_fullspeed_v1</code><strong>Storage policy</strong> first-run 200 GiB reservation; fail closed below 100 GiB free（ESTIMATED_NOT_MEASURED）</div>
+      </section>
+
+      <section id="commands">
+        <div class="section-kicker">08 · Reproducible evidence</div>
+        <h2>本輪輸入、命令、輸出與實際片段</h2>
+        <details><summary>確認 mounted BAM、reference、VCF與sidecar索引實際可讀 · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;BIG8_INPUT&gt;/data/HCC1395/.../HCC1395.bam + indexes + &lt;BIG7_OUTPUT&gt;/.../HCC1395 sidecar/VCF</code></p><pre><code>samtools quickcheck -v BAM; samtools idxstats BAM; samtools faidx FASTA &#x27;&lt;FASTA_SMOKE_INTERVAL&gt;&#x27;; bcftools index -n VCF; tabix -l SIDECAR</code></pre><p><strong>Output</strong> <code class="path">stdout + /tmp timing receipts</code></p><pre><code>quickcheck exit=0; idxstats first-autosome mapped=4,411,427; faidx exit=0; VCF records=113,061; sidecar contigs begin with the first three autosomes</code></pre></div></details><details><summary>重播 frozen storage_identity_v1 的三個 BAM sampled chunks · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;BIG8_INPUT&gt;/data/HCC1395/.../HCC1395.bam</code></p><pre><code>dd if=BAM iflag=skip_bytes,count_bytes skip=OFFSET count=1048576 | sha256sum</code></pre><p><strong>Output</strong> <code class="path">stdout</code></p><pre><code>first df999f92… PASS; middle 6866c24a… PASS; last d72a059e… PASS</code></pre></div></details><details><summary>執行C++ foundation測試 · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation</code></p><pre><code>ctest --test-dir build-cpp-output-validation --output-on-failure</code></pre><p><strong>Output</strong> <code class="path">/tmp/ll_20260720_ctest.log + .time</code></p><pre><code>33/33 PASS; Total Test time=27.88 s; wall=27.89 s; RSS=27,684 KiB</code></pre></div></details><details><summary>實際測試production CLI fail-closed邊界 · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt;/state/release_attestation.json + synthetic authority fixtures</code></p><pre><code>scripts/testing/test_cli_gates.sh build-cpp-output-validation/bin/longlineage .</code></pre><p><strong>Output</strong> <code class="path">/tmp/ll_20260720_cli.log + .time</code></p><pre><code>harness PASS; production run exit 6 release attestation is NOT_READY; synthetic HCC-like profile exit 3</code></pre></div></details><details><summary>實際測試獨立validator · exit 7</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">/tmp/nonexistent-longlineage-run</code></p><pre><code>build-cpp-output-validation/bin/longlineage-validate --run-root /tmp/nonexistent-longlineage-run</code></pre><p><strong>Output</strong> <code class="path">no receipt</code></p><pre><code>independent artifact replay is not implemented; no validation receipt was written</code></pre></div></details><details><summary>執行strict release gate · exit 1</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation</code></p><pre><code>scripts/ci/check_release_gate.sh build-cpp-output-validation</code></pre><p><strong>Output</strong> <code class="path">/tmp/ll_20260720_release.log + .time</code></p><pre><code>GATE TEST COVERAGE RESULT: FAIL missing=12; validator_fault executable test absent; wall=45.31 s</code></pre></div></details>
+      </section>
+
+      <section id="sources">
+        <div class="section-kicker">09 · Provenance</div>
+        <h2>可追溯來源</h2>
+        <ul class="sources"><li><strong>Current phase status</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/docs/CURRENT_FOCUS.md</code></li><li><strong>Machine phase ledger</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/state/phase_ledger.json</code></li><li><strong>Release attestation</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/state/release_attestation.json</code></li><li><strong>Production input authority</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/oracle/production_input_authority.json</code></li><li><strong>Historical authority manifest</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/oracle/authority_manifest.json</code></li><li><strong>Production CLI source</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/apps/longlineage_main.cpp</code></li><li><strong>Independent validator source</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/apps/validate_main.cpp</code></li><li><strong>Historical M1 run manifest</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v9_first_six_thread_pinned_source_locked/run_manifest.json</code></li><li><strong>Historical M2 failure receipt</strong><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/cooccurrence_execution_incident.v3_attempt6_summary_totality.json</code></li><li><strong>Historical topology verification</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/verification_summary.json</code></li><li><strong>Historical HCC1395 topology manifest</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/samples/HCC1395/output_manifest.json</code></li></ul>
+      </section>
+
+      <footer class="footer">
+        <strong>20260720-hcc1395-full-run-and-expansion-gate-001</strong> · schema 1.1.0<br>
+        No current sSNV co-occurrence result, regional topology result, complete HCC1395 runtime, production speedup, biological clone, unique tree or seven-dataset validation claim.<br>
+        本頁由 Python presentation-only renderer 產生；所有科學與時間欄位皆來自凍結 audit JSON，renderer 不讀 BAM/VCF、不聚合 scientific tables。
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

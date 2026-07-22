@@ -25,8 +25,6 @@ namespace {
 
 constexpr std::uint16_t kExcludedFlags = BAM_FUNMAP | BAM_FSECONDARY | BAM_FSUPPLEMENTARY | BAM_FDUP;
 
-using HtsFilePointer = std::unique_ptr<htsFile, decltype(&hts_close)>;
-using TabixPointer = std::unique_ptr<tbx_t, decltype(&tbx_destroy)>;
 using IteratorPointer = std::unique_ptr<hts_itr_t, decltype(&hts_itr_destroy)>;
 
 [[nodiscard]] std::vector<std::string_view> split_tabs(std::string_view line) {
@@ -192,32 +190,68 @@ SidecarFullIdentity sidecar_identity_from_alignment(const FullAlignmentIdentity&
                                identity.flag, blake2b_64_hex(identity.cigar)};
 }
 
-ParseResult<SidecarLookup> fetch_sidecar_lookup(const std::string& sidecar_path, const std::string& index_path,
-                                                const ContigId& contig, Interval0 interval) {
+struct IndexedSidecarReader::Impl {
+    htsFile* file = nullptr;
+    tbx_t* index = nullptr;
+    std::uint64_t fetch_invocations = 0;
+
+    ~Impl() {
+        if (index != nullptr) {
+            tbx_destroy(index);
+        }
+        if (file != nullptr) {
+            hts_close(file);
+        }
+    }
+};
+
+IndexedSidecarReader::IndexedSidecarReader(std::unique_ptr<Impl> impl) : impl_(std::move(impl)) {}
+IndexedSidecarReader::~IndexedSidecarReader() = default;
+IndexedSidecarReader::IndexedSidecarReader(IndexedSidecarReader&&) noexcept = default;
+IndexedSidecarReader& IndexedSidecarReader::operator=(IndexedSidecarReader&&) noexcept = default;
+
+ParseResult<std::unique_ptr<IndexedSidecarReader>> IndexedSidecarReader::open(
+    const std::filesystem::path& sidecar_path, const std::filesystem::path& explicit_index_path) {
+    const std::string sidecar_name = sidecar_path.string();
+    const std::string index_name = explicit_index_path.string();
+    if (sidecar_name.empty() || index_name.empty()) {
+        return ParseResult<std::unique_ptr<IndexedSidecarReader>>::failure(
+            ParseReason::kMissingRequiredField, "Sidecar and explicit Tabix index paths must both be non-empty");
+    }
+    auto impl = std::make_unique<Impl>();
+    impl->file = hts_open(sidecar_name.c_str(), "r");
+    if (impl->file == nullptr) {
+        return ParseResult<std::unique_ptr<IndexedSidecarReader>>::failure(
+            ParseReason::kIoError, "Cannot open authoritative latest HP/PS sidecar");
+    }
+    impl->index = tbx_index_load3(sidecar_name.c_str(), index_name.c_str(), 0);
+    if (impl->index == nullptr) {
+        return ParseResult<std::unique_ptr<IndexedSidecarReader>>::failure(
+            ParseReason::kIndexError, "Cannot open explicit latest HP/PS sidecar Tabix index");
+    }
+    return ParseResult<std::unique_ptr<IndexedSidecarReader>>::success(
+        std::unique_ptr<IndexedSidecarReader>(new IndexedSidecarReader(std::move(impl))));
+}
+
+ParseResult<SidecarLookup> IndexedSidecarReader::fetch(const ContigId& contig, Interval0 interval) {
+    if (impl_ == nullptr || impl_->file == nullptr || impl_->index == nullptr) {
+        return ParseResult<SidecarLookup>::failure(ParseReason::kIoError, "Sidecar reader is not open");
+    }
     if (interval.begin() > static_cast<std::uint64_t>(HTS_POS_MAX) ||
         interval.end() > static_cast<std::uint64_t>(HTS_POS_MAX)) {
         return ParseResult<SidecarLookup>::failure(ParseReason::kUnsupportedValue,
                                                    "Sidecar query interval exceeds HTSlib coordinate range");
     }
-    HtsFilePointer file(hts_open(sidecar_path.c_str(), "r"), &hts_close);
-    if (!file) {
-        return ParseResult<SidecarLookup>::failure(ParseReason::kIoError,
-                                                   "Cannot open authoritative latest HP/PS sidecar");
-    }
-    TabixPointer index(tbx_index_load3(sidecar_path.c_str(), index_path.c_str(), 0), &tbx_destroy);
-    if (!index) {
-        return ParseResult<SidecarLookup>::failure(ParseReason::kIndexError,
-                                                   "Cannot open explicit latest HP/PS sidecar Tabix index");
-    }
-    const int tid = tbx_name2id(index.get(), contig.value().c_str());
+    const int tid = tbx_name2id(impl_->index, contig.value().c_str());
     SidecarLookup lookup;
     if (tid < 0) {
         return ParseResult<SidecarLookup>::failure(ParseReason::kIndexError,
                                                    "Sidecar Tabix index does not contain requested contig");
     }
-    IteratorPointer iterator(tbx_itr_queryi(index.get(), tid, static_cast<hts_pos_t>(interval.begin()),
+    IteratorPointer iterator(tbx_itr_queryi(impl_->index, tid, static_cast<hts_pos_t>(interval.begin()),
                                             static_cast<hts_pos_t>(interval.end())),
                              &hts_itr_destroy);
+    ++impl_->fetch_invocations;
     if (!iterator) {
         return ParseResult<SidecarLookup>::failure(ParseReason::kIndexError,
                                                    "Cannot construct sidecar Tabix interval iterator");
@@ -225,7 +259,7 @@ ParseResult<SidecarLookup> fetch_sidecar_lookup(const std::string& sidecar_path,
 
     kstring_t line{0, 0, nullptr};
     int result = 0;
-    while ((result = tbx_itr_next(file.get(), index.get(), iterator.get(), &line)) >= 0) {
+    while ((result = tbx_itr_next(impl_->file, impl_->index, iterator.get(), &line)) >= 0) {
         const auto parsed = parse_sidecar_row(std::string_view(line.s, line.l));
         if (!parsed.ok()) {
             std::free(line.s);
@@ -244,6 +278,19 @@ ParseResult<SidecarLookup> fetch_sidecar_lookup(const std::string& sidecar_path,
     }
     return lookup.rows_fetched() == 0 ? ParseResult<SidecarLookup>::success_empty(std::move(lookup))
                                       : ParseResult<SidecarLookup>::success(std::move(lookup));
+}
+
+std::uint64_t IndexedSidecarReader::fetch_invocations() const noexcept {
+    return impl_ == nullptr ? 0 : impl_->fetch_invocations;
+}
+
+ParseResult<SidecarLookup> fetch_sidecar_lookup(const std::string& sidecar_path, const std::string& index_path,
+                                                const ContigId& contig, Interval0 interval) {
+    auto reader = IndexedSidecarReader::open(sidecar_path, index_path);
+    if (!reader.ok()) {
+        return ParseResult<SidecarLookup>::failure(reader.reason, std::move(reader.detail));
+    }
+    return (*reader.value)->fetch(contig, interval);
 }
 
 }  // namespace longlineage

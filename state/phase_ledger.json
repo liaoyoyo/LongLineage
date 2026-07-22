@@ -1,7 +1,7 @@
 {
   "schema_name": "longlineage.phase_ledger",
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-19T12:49:47+08:00",
+  "updated_at": "2026-07-22T22:43:34+08:00",
   "phases": [
     {
       "id": "P0",
@@ -32,7 +32,7 @@
       }
       ],
       "blockers": [
-        "PRIVATE_REMOTE_NOT_YET_VERIFIED"
+        "LICENSE_SOURCE_ORIGIN_AUDIT_PENDING"
       ]
     },
     {
@@ -51,7 +51,9 @@
         "exit_code": 0
       }
     ],
-      "blockers": []
+      "blockers": [
+        "P0_PREDECESSOR_NOT_VERIFIED"
+      ]
     },
     {
       "id": "P2",
@@ -82,20 +84,26 @@
         "command": null,
         "exit_code": null
       },
-      {
-        "role": "AUDIT",
-        "path": "state/audits/20260719-p2-block-pipeline-002.json",
+        {
+          "role": "AUDIT",
+          "path": "state/audits/20260719-p2-block-pipeline-002.json",
         "sha256": "2fbb240e5fec9a8dc340d241a768490af4687a7186f0d0df00f094c12ede4cde",
-        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-002.json",
-        "exit_code": 0
-      }
+          "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-p2-block-pipeline-002.json",
+          "exit_code": 0
+        },
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        }
       ],
       "blockers": [
         "P1_PREDECESSOR_NOT_VERIFIED",
-        "PRODUCTION_WORKER_INPUT_BUNDLE_VCF_SIDECAR_FASTA_NOT_IMPLEMENTED",
-        "ONE_PASS_CIGAR_MULTI_MARKER_PROJECTION_NOT_IMPLEMENTED",
-        "PRODUCTION_STAGING_VALIDATOR_FREEZE_NOT_INTEGRATED",
+        "PRODUCTION_RUN_ENTRYPOINT_SCAFFOLD",
         "PHYSICAL_GLOBAL_MEMORY_BOUND_NOT_PROVEN",
+        "DURABLE_FAILED_STAGING_RECEIPT_NOT_IMPLEMENTED",
         "FULL_DATA_WORKER_MATRIX_DEFERRED_TO_P7"
       ]
     },
@@ -106,9 +114,19 @@
       "predecessors": [
         "P2"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        }
+      ],
       "blockers": [
-        "M1_LOGICAL_DIGEST_AND_RNG_VECTORS_NOT_FROZEN",
+        "P2_PREDECESSOR_NOT_VERIFIED",
+        "LEGACY_M1_STABLE_MEMBERSHIP_MISMATCH",
+        "SUMMARY_V2_M1_REPRESENTATION_FULL_PARITY_REPLAY_NOT_EXECUTED",
         "HP_FAMILY_VERSIONED_MAPPING_REGISTRY_NOT_FROZEN"
       ]
     },
@@ -119,9 +137,32 @@
       "predecessors": [
         "P3"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        },
+        {
+          "role": "CONTRACT",
+          "path": "docs/decisions/ADR-0009-summary-phase-scope-and-validator-publication-replay.md",
+          "sha256": "a018e27ec8d3e9f9d0815f8b4487d0366f91b8987a0724dc4ac764ee45994897",
+          "command": "sha256sum docs/decisions/ADR-0009-summary-phase-scope-and-validator-publication-replay.md",
+          "exit_code": 0
+        },
+        {
+          "role": "TEST_LOG",
+          "path": "tests/integration/test_validator_dataset_gate.cpp",
+          "sha256": "bd038aab5e30ffe010eec879c8fdbadedde5aced2e1879ff43398f04ede61fad",
+          "command": "ctest --test-dir <BUILD_ROOT> --output-on-failure -R 'validator_dataset_gate|dataset_producer_integration'",
+          "exit_code": 0
+        }
+      ],
       "blockers": [
-        "FORMAL_FULL_COOCCURRENCE_AUTHORITY_ABSENT",
+        "P3_PREDECESSOR_NOT_VERIFIED",
+        "SEVEN_DATASET_COOCCURRENCE_AUTHORITY_NOT_ESTABLISHED",
         "ENDPOINT_B_O_X_CALLABILITY_PRECEDENCE_VECTORS_NOT_FROZEN",
         "HP_FAMILY_VERSIONED_MAPPING_REGISTRY_NOT_FROZEN"
       ]
@@ -133,14 +174,20 @@
       "predecessors": [
         "P4"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        }
+      ],
       "blockers": [
-        "CURRENT_REAL_DUAL_PILOT_ABSENT",
+        "P4_PREDECESSOR_NOT_VERIFIED",
+        "REAL_NONZERO_TOPOLOGY_UNEXERCISED",
         "DIRECT_HIGHS_DEPENDENCY_UNAVAILABLE",
-        "TOPOLOGY_WINNER_TIE_PARITY_VECTORS_NOT_FROZEN",
-        "TOPOLOGY_UNIT_EVIDENCE_MEMBERSHIP_VECTORS_NOT_FROZEN",
-        "TOPOLOGY_RANKING_STATE_SCHEMA_NOT_MIGRATED",
-        "RECURRENCE_AWARE_FAMILY_NOT_VERIFIED",
+        "ACTIVE_BITS_GE_13_EXACT_FAMILY_NOT_IMPLEMENTED",
         "OUTWARD_ROUNDED_RANKING_CERTIFICATE_NOT_VERIFIED"
       ]
     },
@@ -173,19 +220,37 @@
         "command": null,
         "exit_code": null
       },
-      {
-        "role": "AUDIT",
-        "path": "state/audits/20260719-foundation-verification-002.json",
+        {
+          "role": "AUDIT",
+          "path": "state/audits/20260719-foundation-verification-002.json",
         "sha256": "414b949c3ec04641ad05a158235e85404c2ab1e1ac773c1c9c76f33f569a697b",
-        "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
-        "exit_code": 0
-      }
+          "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260719-foundation-verification-002.json",
+          "exit_code": 0
+        },
+        {
+          "role": "RECEIPT",
+          "path": "tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+          "sha256": "39cdd5d6a90c09c5fcb6233b5ba02d22cd2aac165a4e895d52d06c4a0c98b882",
+          "command": "sha256sum tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+          "exit_code": 0
+        },
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        }
       ],
       "blockers": [
-        "INDEPENDENT_ARTIFACT_REPLAY_NOT_IMPLEMENTED",
-        "VALIDATOR_FAULT_INJECTION_NOT_IMPLEMENTED",
+        "P5_PREDECESSOR_NOT_VERIFIED",
         "QUERY_EXECUTABLE_AST_AND_INDEX_BINDING_NOT_IMPLEMENTED",
-        "LEGACY_LOGICAL_ROW_PARITY_NOT_IMPLEMENTED"
+        "LEGACY_LOGICAL_ROW_PARITY_NOT_IMPLEMENTED",
+        "POSTHOC_EVALUATE_ENGINE_NOT_IMPLEMENTED",
+        "VALIDATOR_FAULT_NEGATIVE_BINDING_FIXTURE_ONLY",
+        "VALIDATOR_AWARE_FINAL_UNPUBLISHED_RECOVERY_NOT_IMPLEMENTED",
+        "HTS_SEMANTIC_PREFLIGHT_NOT_REPLAYED_BY_INDEPENDENT_VALIDATOR",
+        "NONCOOPERATING_SAME_UID_PUBLICATION_RACE_NOT_ELIMINATED"
       ]
     },
     {
@@ -195,9 +260,19 @@
       "predecessors": [
         "P6"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        }
+      ],
       "blockers": [
-        "P3_P4_P5_NOT_VERIFIED"
+        "P3_P4_P5_NOT_VERIFIED",
+        "SEVEN_DATASET_W24_W40_RUNS_NOT_EXECUTED",
+        "PRODUCTION_RUN_ENTRYPOINT_SCAFFOLD"
       ]
     },
     {
@@ -207,10 +282,31 @@
       "predecessors": [
         "P7"
       ],
-      "evidence": [],
+      "evidence": [
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+          "exit_code": 0
+        },
+        {
+          "role": "REPORT",
+          "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+          "sha256": "9cd86244b388f9d4b58ef844517c6cb73f55543fd4b106417b3ecccc389d5fda",
+          "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+          "exit_code": 0
+        }
+      ],
       "blockers": [
         "P7_NOT_VERIFIED",
-        "LICENSE_AUDIT_PENDING"
+        "LICENSE_AUDIT_PENDING",
+        "PRESENTATION_SCOPE_HCC1395_ONLY",
+        "REPORT_IMPORTANT_CLAIM_IDS_ABSENT",
+        "REPORT_MACHINE_SCHEMA_UNREGISTERED",
+        "PRINT_PDF_ACCESSIBILITY_TAGS_ABSENT",
+        "STRICT_GATE_FIXTURE_ONLY_BINDINGS_REMAIN",
+        "RELEASE_HISTORY_HYGIENE_NOT_PASSING"
       ]
     }
   ]

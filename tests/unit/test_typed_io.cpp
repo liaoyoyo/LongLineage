@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#include <htslib/faidx.h>
 #include <htslib/hts_endian.h>
 #include <htslib/sam.h>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -18,8 +22,10 @@
 #include "longlineage/common/digest.hpp"
 #include "longlineage/common/types.hpp"
 #include "longlineage/io/alignment.hpp"
+#include "longlineage/io/cigar_projection.hpp"
 #include "longlineage/io/hts_preflight.hpp"
 #include "longlineage/io/mm_ml.hpp"
+#include "longlineage/io/reference_reader.hpp"
 #include "longlineage/io/sidecar.hpp"
 #include "longlineage/manifest/production_manifest.hpp"
 
@@ -129,12 +135,33 @@ void test_types_and_digests() {
 }
 
 void test_manifest() {
-    const auto manifest = longlineage::parse_production_manifest_json(valid_manifest_json());
+    const std::string valid_bytes = valid_manifest_json();
+    const auto manifest = longlineage::parse_production_manifest_json(valid_bytes);
     CHECK(manifest.ok());
     CHECK(manifest.value->datasets.size() == 1);
     CHECK(manifest.value->datasets[0].files.size() == 8);
     CHECK(manifest.value->authority_profile == longlineage::AuthorityProfile::kSynthetic);
     CHECK(manifest.value->contract_bindings.schema_catalog_sha256 == std::string(64, '2'));
+
+    const auto nonce = std::chrono::steady_clock::now().time_since_epoch().count();
+    const std::filesystem::path snapshot_path =
+        std::filesystem::temp_directory_path() /
+        ("longlineage_manifest_snapshot_" + std::to_string(static_cast<long long>(nonce)) + ".json");
+    {
+        std::ofstream output(snapshot_path, std::ios::binary | std::ios::trunc);
+        CHECK(output);
+        output.write(valid_bytes.data(), static_cast<std::streamsize>(valid_bytes.size()));
+        output.close();
+        CHECK(output);
+    }
+    const auto snapshot = longlineage::load_production_manifest_snapshot(snapshot_path);
+    const auto expected_snapshot_sha256 = longlineage::sha256_hex(valid_bytes);
+    CHECK(snapshot.ok() && snapshot.value.has_value());
+    CHECK(expected_snapshot_sha256.ok() && expected_snapshot_sha256.value.has_value());
+    CHECK(snapshot.value->physical_sha256 == *expected_snapshot_sha256.value);
+    CHECK(snapshot.value->manifest.run_id == manifest.value->run_id);
+    std::error_code remove_error;
+    CHECK(std::filesystem::remove(snapshot_path, remove_error) && !remove_error);
 
     const auto duplicate = longlineage::parse_production_manifest_json(R"({"schema_name":"a","schema_name":"b"})");
     CHECK(!duplicate.ok());
@@ -178,6 +205,29 @@ void test_manifest() {
     std::string invalid_profile = valid_manifest_json();
     invalid_profile.replace(invalid_profile.find("\"SYNTHETIC\""), std::string("\"SYNTHETIC\"").size(), "\"UNKNOWN\"");
     CHECK(!longlineage::parse_production_manifest_json(invalid_profile).ok());
+
+    std::string hcc_profile = valid_manifest_json();
+    hcc_profile.replace(hcc_profile.find("\"1.0.0\""), std::string("\"1.0.0\"").size(), "\"1.1.0\"");
+    hcc_profile.replace(hcc_profile.find("\"SYNTHETIC\""), std::string("\"SYNTHETIC\"").size(),
+                        "\"HCC1395_DATASET_GATE\"");
+    const std::string registry_field = "\"schema_id_registry_sha256\"";
+    hcc_profile.insert(hcc_profile.find(registry_field),
+                       "\"dataset_gate_input_authority_sha256\":\"" + std::string(64, 'b') + "\",");
+    const auto hcc_manifest = longlineage::parse_production_manifest_json(hcc_profile);
+    CHECK(hcc_manifest.ok());
+    CHECK(hcc_manifest.value->authority_profile == longlineage::AuthorityProfile::kHcc1395DatasetGate);
+    CHECK(hcc_manifest.value->contract_bindings.dataset_gate_input_authority_sha256 == std::string(64, 'b'));
+
+    std::string hcc_missing_binding = valid_manifest_json();
+    hcc_missing_binding.replace(hcc_missing_binding.find("\"1.0.0\""), std::string("\"1.0.0\"").size(), "\"1.1.0\"");
+    hcc_missing_binding.replace(hcc_missing_binding.find("\"SYNTHETIC\""), std::string("\"SYNTHETIC\"").size(),
+                                "\"HCC1395_DATASET_GATE\"");
+    CHECK(!longlineage::parse_production_manifest_json(hcc_missing_binding).ok());
+
+    std::string synthetic_with_hcc_binding = valid_manifest_json();
+    synthetic_with_hcc_binding.insert(synthetic_with_hcc_binding.find(registry_field),
+                                      "\"dataset_gate_input_authority_sha256\":\"" + std::string(64, 'b') + "\",");
+    CHECK(!longlineage::parse_production_manifest_json(synthetic_with_hcc_binding).ok());
 }
 
 void test_mm_ml_and_typed_aux() {
@@ -254,6 +304,119 @@ void test_mm_ml_and_typed_aux() {
     const auto first_occurrence = duplicate_aux.value->find("ZZ:");
     CHECK(first_occurrence != std::string::npos);
     CHECK(duplicate_aux.value->find("ZZ:", first_occurrence + 1) != std::string::npos);
+
+    const std::string header_text =
+        "@HD\tVN:1.6\tSO:coordinate\n"
+        "@SQ\tSN:synchr1\tLN:1000\n";
+    HeaderPointer header(sam_hdr_parse(header_text.size(), header_text.c_str()), &sam_hdr_destroy);
+    CHECK(header != nullptr);
+    auto first_identity_record = build_synthetic_alignment();
+    auto rg_only_duplicate = build_synthetic_alignment();
+    CHECK(bam_aux_update_str(rg_only_duplicate.get(), "RG", 6, "other") == 0);
+    const auto first_identity = longlineage::build_full_alignment_identity(*first_identity_record, *header);
+    const auto rg_only_identity = longlineage::build_full_alignment_identity(*rg_only_duplicate, *header);
+    CHECK(first_identity.ok() && rg_only_identity.ok());
+    CHECK(*first_identity.value == *rg_only_identity.value);
+    CHECK(first_identity.value->sam_core_sha256.size() == 64);
+    const auto canonical_core = longlineage::canonicalize_sam_core(*first_identity_record, *header);
+    CHECK(canonical_core.ok());
+    CHECK(canonical_core.value->find("SEQ:") != std::string::npos);
+    CHECK(canonical_core.value->find("QUAL:") != std::string::npos);
+
+    auto sequence_conflict = build_synthetic_alignment('c', true, 0, "ACCCGTCA");
+    const auto sequence_conflict_identity = longlineage::build_full_alignment_identity(*sequence_conflict, *header);
+    CHECK(sequence_conflict_identity.ok());
+    CHECK(*first_identity.value != *sequence_conflict_identity.value);
+
+    auto mate_conflict = build_synthetic_alignment();
+    mate_conflict->core.mtid = 0;
+    mate_conflict->core.mpos = 400;
+    mate_conflict->core.isize = 8;
+    const auto mate_conflict_identity = longlineage::build_full_alignment_identity(*mate_conflict, *header);
+    CHECK(mate_conflict_identity.ok());
+    CHECK(*first_identity.value != *mate_conflict_identity.value);
+
+    auto quality_conflict = build_synthetic_alignment();
+    CHECK(bam_get_qual(quality_conflict.get()) != nullptr);
+    bam_get_qual(quality_conflict.get())[0] = 20;
+    const auto quality_conflict_identity = longlineage::build_full_alignment_identity(*quality_conflict, *header);
+    CHECK(quality_conflict_identity.ok());
+    CHECK(*first_identity.value != *quality_conflict_identity.value);
+}
+
+void test_one_pass_cigar_projection() {
+    const auto interval = longlineage::Interval0::from_bounds(100, 112);
+    CHECK(interval.ok());
+    const auto marker = [](std::uint64_t order, std::uint64_t position1, char reference, char alternate) {
+        const auto position = longlineage::Position1::from_value(position1);
+        CHECK(position.ok());
+        return longlineage::SsnvMarker{order, *position.value, reference, alternate};
+    };
+    const std::vector<longlineage::SsnvMarker> markers = {
+        marker(0, 100, 'A', 'C'), marker(1, 101, 'A', 'C'), marker(2, 104, 'A', 'C'), marker(3, 106, 'A', 'C'),
+        marker(4, 109, 'A', 'C'), marker(5, 110, 'A', 'C'), marker(6, 112, 'A', 'C'), marker(7, 113, 'A', 'C'),
+    };
+    std::string sequence(13, 'A');
+    sequence[6] = 'C';
+    sequence[10] = 'G';
+    sequence[12] = 'T';
+    std::vector<std::uint8_t> qualities(sequence.size(), 30);
+    qualities[10] = 20;
+    qualities[12] = 19;
+    longlineage::MmMlMnTags tags;
+    tags.calls = {
+        longlineage::MethylationCall{0, 0, 0, 17, 17.0 / 256.0, 18.0 / 256.0, longlineage::MmSkipSemantics::kUnknown},
+        longlineage::MethylationCall{2, 0, 1, 255, 255.0 / 256.0, 1.0, longlineage::MmSkipSemantics::kUnknown},
+        longlineage::MethylationCall{5, 0, 2, 1, 1.0 / 256.0, 2.0 / 256.0, longlineage::MmSkipSemantics::kUnknown},
+        longlineage::MethylationCall{8, 0, 3, 254, 254.0 / 256.0, 255.0 / 256.0,
+                                     longlineage::MmSkipSemantics::kUnknown},
+    };
+    const auto projected = longlineage::project_read_evidence(
+        *interval.value, longlineage::Strand::kForward, "2S3M1I2M1D2M1N2=1X1H", sequence, qualities, tags, markers);
+    CHECK(projected.ok());
+    CHECK(projected.value->allele_calls.size() == markers.size());
+    CHECK(projected.value->allele_calls[0].call == longlineage::AlleleCall::kUnobservable);
+    CHECK(projected.value->allele_calls[1].call == longlineage::AlleleCall::kReference);
+    CHECK(projected.value->allele_calls[2].call == longlineage::AlleleCall::kAlternate);
+    CHECK(projected.value->allele_calls[3].call == longlineage::AlleleCall::kUnobservable);
+    CHECK(projected.value->allele_calls[4].call == longlineage::AlleleCall::kUnobservable);
+    CHECK(projected.value->allele_calls[5].call == longlineage::AlleleCall::kOther);
+    CHECK(projected.value->allele_calls[5].base_quality == 20);
+    CHECK(projected.value->allele_calls[6].call == longlineage::AlleleCall::kUnobservable);
+    CHECK(projected.value->allele_calls[7].call == longlineage::AlleleCall::kUnobservable);
+    CHECK(projected.value->methylation_calls.size() == 2);
+    CHECK(projected.value->methylation_calls[0].candidate_cpg_position.value() == 101);
+    CHECK(projected.value->methylation_calls[0].ml_raw == 255);
+    CHECK(std::abs(projected.value->methylation_calls[0].point_probability_raw_div_255 - 1.0) < 1e-15);
+    CHECK(projected.value->methylation_calls[1].candidate_cpg_position.value() == 107);
+    CHECK(projected.value->methylation_calls[1].ml_raw == 254);
+    CHECK(std::abs(projected.value->methylation_calls[1].point_probability_raw_div_255 - 254.0 / 255.0) < 1e-15);
+
+    const auto reverse_interval = longlineage::Interval0::from_bounds(100, 104);
+    CHECK(reverse_interval.ok());
+    longlineage::MmMlMnTags reverse_tags;
+    reverse_tags.calls = {
+        longlineage::MethylationCall{0, 0, 0, 1, 1.0 / 256.0, 2.0 / 256.0, longlineage::MmSkipSemantics::kUnknown},
+    };
+    const auto reverse =
+        longlineage::project_read_evidence(*reverse_interval.value, longlineage::Strand::kReverse, "4M", "GGGG",
+                                           std::vector<std::uint8_t>(4, 30), reverse_tags, {});
+    CHECK(reverse.ok());
+    CHECK(reverse.value->methylation_calls.size() == 1);
+    CHECK(reverse.value->methylation_calls[0].query_pos0_reference_orientation == 3);
+    CHECK(reverse.value->methylation_calls[0].candidate_cpg_position.value() == 103);
+    CHECK(std::abs(reverse.value->methylation_calls[0].point_probability_raw_div_255 - 1.0 / 255.0) < 1e-15);
+
+    CHECK(!longlineage::project_read_evidence(*interval.value, longlineage::Strand::kForward, "13M", sequence,
+                                              qualities, tags, markers)
+               .ok());
+    const std::vector<longlineage::SsnvMarker> duplicate_markers = {
+        marker(0, 101, 'A', 'C'),
+        marker(1, 101, 'A', 'C'),
+    };
+    CHECK(!longlineage::project_read_evidence(*interval.value, longlineage::Strand::kForward, "2S3M1I2M1D2M1N2=1X1H",
+                                              sequence, qualities, tags, duplicate_markers)
+               .ok());
 }
 
 void test_sidecar_exact_join() {
@@ -336,14 +499,98 @@ void test_alignment_identity_and_version() {
     CHECK(missing_reference_index.reason == longlineage::ParseReason::kIndexError);
 }
 
+void test_reference_iupac_contract() {
+    const auto nonce = std::chrono::steady_clock::now().time_since_epoch().count();
+    const std::filesystem::path root =
+        std::filesystem::temp_directory_path() / ("longlineage-reference-iupac-" + std::to_string(nonce));
+    std::filesystem::create_directories(root);
+    const std::filesystem::path fasta = root / "reference.fa";
+    const std::filesystem::path fai = root / "reference.fa.fai";
+    {
+        std::ofstream output(fasta, std::ios::binary);
+        output << ">valid\n"
+               << "acgtryswkmbdhvnACGTRYSWKMBDHVN\n"
+               << ">invalid\n"
+               << "ACGTZ\n";
+    }
+    CHECK(fai_build3(fasta.c_str(), fai.c_str(), nullptr) == 0);
+    auto reader = longlineage::IndexedReferenceReader::open(fasta, fai);
+    CHECK(reader.ok());
+
+    const auto valid_contig = longlineage::ContigId::from_string("valid");
+    const auto valid_interval = longlineage::Interval0::from_bounds(0, 30);
+    CHECK(valid_contig.ok() && valid_interval.ok());
+    const auto valid = (*reader.value)->fetch(*valid_contig.value, *valid_interval.value);
+    CHECK(valid.ok());
+    CHECK(*valid.value == "ACGTRYSWKMBDHVNACGTRYSWKMBDHVN");
+    const auto position_m = longlineage::Position1::from_value(10);
+    const auto position_r = longlineage::Position1::from_value(5);
+    CHECK(position_m.ok() && position_r.ok());
+    const auto base_m = (*reader.value)->base(*valid_contig.value, *position_m.value);
+    const auto base_r = (*reader.value)->base(*valid_contig.value, *position_r.value);
+    CHECK(base_m.ok() && *base_m.value == 'M');
+    CHECK(base_r.ok() && *base_r.value == 'R');
+
+    const auto invalid_contig = longlineage::ContigId::from_string("invalid");
+    const auto invalid_interval = longlineage::Interval0::from_bounds(0, 5);
+    CHECK(invalid_contig.ok() && invalid_interval.ok());
+    const auto invalid = (*reader.value)->fetch(*invalid_contig.value, *invalid_interval.value);
+    CHECK(!invalid.ok());
+    CHECK(invalid.reason == longlineage::ParseReason::kUnsupportedValue);
+    CHECK(invalid.detail.find("invalid:5") != std::string::npos);
+    CHECK(invalid.detail.find("byte_decimal=90") != std::string::npos);
+    std::filesystem::remove_all(root);
+}
+
+void test_locked_file_identity_binds_hash_to_inode() {
+    const auto nonce = std::chrono::steady_clock::now().time_since_epoch().count();
+    const std::filesystem::path root =
+        std::filesystem::temp_directory_path() / ("longlineage-lock-identity-" + std::to_string(nonce));
+    std::filesystem::create_directories(root);
+    const std::filesystem::path input = root / "input.bin";
+    const std::filesystem::path original = root / "original.bin";
+    const std::filesystem::path replacement = root / "replacement.bin";
+    {
+        std::ofstream output(input, std::ios::binary);
+        output << "AAAA";
+    }
+    const auto digest = longlineage::sha256_file(input);
+    CHECK(digest.ok() && digest.value.has_value());
+    const longlineage::LockedFile locked{longlineage::FileRole::kRawBam, input, 4U, *digest.value};
+    const auto first = longlineage::verify_locked_file(locked);
+    CHECK(first.ok() && first.value.has_value());
+
+    {
+        std::ofstream output(replacement, std::ios::binary);
+        output << "AAAA";
+    }
+    std::filesystem::rename(input, original);
+    std::filesystem::rename(replacement, input);
+    const auto second = longlineage::verify_locked_file(locked);
+    CHECK(second.ok() && second.value.has_value());
+    CHECK(first.value->observed_sha256 == second.value->observed_sha256);
+    CHECK(first.value->canonical_path == second.value->canonical_path);
+    CHECK(first.value->device != second.value->device || first.value->inode != second.value->inode);
+
+    {
+        std::ofstream output(input, std::ios::binary | std::ios::trunc);
+        output << "BBBB";
+    }
+    CHECK(!longlineage::verify_locked_file(locked).ok());
+    std::filesystem::remove_all(root);
+}
+
 }  // namespace
 
 int main() {
     test_types_and_digests();
     test_manifest();
     test_mm_ml_and_typed_aux();
+    test_one_pass_cigar_projection();
     test_sidecar_exact_join();
     test_alignment_identity_and_version();
+    test_reference_iupac_contract();
+    test_locked_file_identity_binds_hash_to_inode();
     std::cout << "typed_io: PASS\n";
     return 0;
 }

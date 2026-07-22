@@ -32,6 +32,50 @@ set_tests_properties(
     runtime_solver determinism_contract topology_no_incomplete_winner
     PROPERTIES LABELS "unit;runtime;solver;synthetic" RUN_SERIAL TRUE)
 
+longlineage_add_standalone_test(test_science_parity
+    unit/test_science_parity.cpp)
+add_test(
+    NAME science_parity
+    COMMAND test_science_parity "${CMAKE_CURRENT_SOURCE_DIR}/..")
+set_tests_properties(
+    science_parity
+    PROPERTIES LABELS "unit;p3;p4;parity;synthetic" RUN_SERIAL TRUE)
+
+longlineage_add_standalone_test(test_cooccurrence_full
+    unit/test_cooccurrence_full.cpp)
+add_test(NAME cooccurrence_full COMMAND test_cooccurrence_full)
+set_tests_properties(
+    cooccurrence_full
+    PROPERTIES LABELS "unit;p4;cooccurrence;synthetic" RUN_SERIAL TRUE)
+
+longlineage_add_standalone_test(test_joint_signature
+    unit/test_joint_signature.cpp)
+add_test(NAME joint_signature COMMAND test_joint_signature)
+set_tests_properties(
+    joint_signature
+    PROPERTIES LABELS "unit;p4;cooccurrence;synthetic" RUN_SERIAL TRUE)
+
+longlineage_add_standalone_test(test_topology_membership
+    unit/test_topology_membership.cpp)
+add_test(NAME topology_membership COMMAND test_topology_membership)
+set_tests_properties(
+    topology_membership
+    PROPERTIES LABELS "unit;p5;topology;synthetic" RUN_SERIAL TRUE)
+
+longlineage_add_standalone_test(test_regional_compat
+    unit/test_regional_compat.cpp)
+add_test(NAME regional_compat COMMAND test_regional_compat)
+set_tests_properties(
+    regional_compat
+    PROPERTIES LABELS "unit;compat;regional;synthetic" RUN_SERIAL TRUE)
+
+longlineage_add_standalone_test(test_dataset_engine
+    unit/test_dataset_engine.cpp)
+add_test(NAME dataset_engine COMMAND test_dataset_engine)
+set_tests_properties(
+    dataset_engine
+    PROPERTIES LABELS "unit;integration;p2;p3;synthetic" RUN_SERIAL TRUE)
+
 longlineage_add_standalone_test(test_block_pipeline unit/test_block_pipeline.cpp)
 add_test(NAME p2_block_plan_boundaries COMMAND test_block_pipeline block-plan)
 add_test(NAME p2_block_reader_indexed COMMAND test_block_pipeline block-reader)
@@ -42,6 +86,108 @@ set_tests_properties(
     p2_block_plan_boundaries p2_block_reader_indexed p2_reorder_sink_adversarial
     p2_determinism_matrix p2_worker_failure_cancellation
     PROPERTIES LABELS "unit;integration;p2;synthetic" RUN_SERIAL TRUE TIMEOUT 120)
+
+add_executable(test_run_root unit/test_run_root.cpp)
+target_link_libraries(test_run_root PRIVATE longlineage_validation longlineage_build_options)
+add_test(NAME run_root_transaction COMMAND test_run_root)
+set_tests_properties(
+    run_root_transaction
+    PROPERTIES LABELS "unit;artifact;p6;synthetic" RUN_SERIAL TRUE)
+
+add_executable(test_validator_fault integration/test_validator_fault.cpp)
+target_link_libraries(
+    test_validator_fault
+    PRIVATE
+        longlineage_build_options
+        PkgConfig::HTSLIB
+        PkgConfig::JANSSON
+        OpenSSL::Crypto)
+add_test(
+    NAME validator_fault
+    COMMAND test_validator_fault "$<TARGET_FILE:longlineage_validator>")
+set_tests_properties(
+    validator_fault
+    PROPERTIES LABELS "integration;boundary;p6;negative;synthetic" RUN_SERIAL TRUE TIMEOUT 120)
+
+add_executable(test_validator_dataset_gate
+    integration/test_validator_dataset_gate.cpp)
+target_link_libraries(
+    test_validator_dataset_gate
+    PRIVATE
+        longlineage_validation
+        longlineage_build_options
+        PkgConfig::HTSLIB
+        PkgConfig::JANSSON
+        OpenSSL::Crypto)
+target_compile_definitions(
+    test_validator_dataset_gate
+    PRIVATE LONGLINEAGE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/..")
+add_test(NAME validator_dataset_gate COMMAND test_validator_dataset_gate)
+set_tests_properties(
+    validator_dataset_gate
+    PROPERTIES LABELS "integration;boundary;p6;negative;synthetic" RUN_SERIAL TRUE TIMEOUT 120)
+
+add_executable(test_regional_compat_validator
+    integration/test_regional_compat_validator.cpp)
+target_link_libraries(
+    test_regional_compat_validator
+    PRIVATE
+        longlineage_regional_validation
+        longlineage_build_options
+        PkgConfig::JANSSON
+        OpenSSL::Crypto)
+add_test(NAME regional_compat_validator COMMAND test_regional_compat_validator)
+set_tests_properties(
+    regional_compat_validator
+    PROPERTIES LABELS "integration;boundary;compat;negative;synthetic"
+               RUN_SERIAL TRUE TIMEOUT 120)
+
+add_executable(test_dataset_producer_integration
+    integration/test_dataset_producer.cpp)
+target_link_libraries(
+    test_dataset_producer_integration
+    PRIVATE longlineage_core longlineage_build_options)
+add_dependencies(
+    test_dataset_producer_integration
+    longlineage_validator)
+add_test(
+    NAME dataset_producer_integration
+    COMMAND test_dataset_producer_integration
+            "$<TARGET_FILE:longlineage_validator>"
+            "${CMAKE_CURRENT_SOURCE_DIR}/..")
+set_tests_properties(
+    dataset_producer_integration
+    PROPERTIES LABELS "integration;boundary;p2;p3;p4;p5;p6;synthetic"
+               RUN_SERIAL TRUE TIMEOUT 120)
+
+add_executable(test_hcc1395_audit
+    unit/test_hcc1395_audit.cpp)
+target_link_libraries(
+    test_hcc1395_audit
+    PRIVATE longlineage_hcc1395_audit longlineage_build_options ZLIB::ZLIB)
+target_compile_definitions(
+    test_hcc1395_audit
+    PRIVATE LONGLINEAGE_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/..")
+add_test(NAME hcc1395_determinism_audit COMMAND test_hcc1395_audit)
+set_tests_properties(
+    hcc1395_determinism_audit
+    PROPERTIES LABELS "unit;integration;p7;negative;synthetic"
+               RUN_SERIAL TRUE TIMEOUT 120)
+
+find_program(LONGLINEAGE_PYTHON3_EXECUTABLE NAMES python3 REQUIRED)
+add_test(
+    NAME hcc1395_report_builder_self_test
+    COMMAND
+        "${LONGLINEAGE_PYTHON3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../presentation/build_hcc1395_validated_report.py"
+        --self-test)
+set_tests_properties(
+    hcc1395_report_builder_self_test
+    PROPERTIES
+        ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1"
+        LABELS "unit;presentation;p8;negative;synthetic"
+        RUN_SERIAL TRUE
+        TIMEOUT 120)
 
 add_test(
     NAME cli_production_gates
@@ -99,6 +245,12 @@ if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
         COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_hygiene_untracked.sh")
     set_tests_properties(
         hygiene_untracked_forbidden_negative
+        PROPERTIES LABELS "governance;negative;synthetic;repository-context")
+    add_test(
+        NAME history_hygiene_private_root_negative
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_history_hygiene_negative.sh")
+    set_tests_properties(
+        history_hygiene_private_root_negative
         PROPERTIES LABELS "governance;negative;synthetic;repository-context")
 endif()
 
@@ -162,6 +314,7 @@ add_custom_target(
     DEPENDS
         longlineage_producer
         longlineage_validator
+        longlineage_audit
         longlineage_query
         longlineage_legacy_exporter
         longlineage_evaluator
@@ -169,5 +322,15 @@ add_custom_target(
         test_dependency_smoke
         test_typed_io
         test_runtime_solver
+        test_science_parity
+        test_cooccurrence_full
+        test_joint_signature
+        test_topology_membership
+        test_dataset_engine
         test_block_pipeline
+        test_run_root
+        test_validator_fault
+        test_validator_dataset_gate
+        test_dataset_producer_integration
+        test_hcc1395_audit
     USES_TERMINAL)

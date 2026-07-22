@@ -1,0 +1,338 @@
+{
+  "schema_name": "longlineage.regional_compat_all_datasets_input_authority",
+  "schema_version": "1.0.0",
+  "profile_id": "PYTHON_V2_DESCRIPTIVE_REGIONAL_7_DATASET",
+  "base_production_input_authority_sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557",
+  "hcc1395_dataset_gate_input_authority_sha256": "b74988abfa014ece749098e823c2c6d34e8b239a6681c34d2e8d5f617c59d39a",
+  "constraints": {
+    "latest_tag_join": "EXACT_PROJECTION_NO_FALLBACK",
+    "truth_fields": 0,
+    "persisted_tagged_bam_allowed": false,
+    "all_physical_sha256_verified": true,
+    "private_source_paths_stored": false
+  },
+  "datasets": [
+    {
+      "dataset_id": "HCC1395",
+      "dataset_order": 0,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 292055926761,
+          "sha256": "77e9bb6185f1e922f1b0cd311dde42d6b5721ac91bd017cea29dac34691b6308"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 119741784,
+          "sha256": "f7a23610899ff535de17ccb324f99fc8bede402f65b992d5601d34ffb62c49d3"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 3728864,
+          "sha256": "bc393dda8eb549d46e9993eccebd4b7c4cd7bf809cde20e071b8fdd8ff6437e6"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 344074,
+          "sha256": "d66ecf3dbfbcf3f2b39d9b1e221954aee77a4cbda6f00f0b64021c57ded81fd3"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 1433423193,
+          "sha256": "8e79e89cb668e65b22a8c02aee9dcb9fea81fc8903962c094839d317ebd93dfb"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 910475,
+          "sha256": "f972c1538c91be36d504b516358faa86a44a36e2e452f0c0e0066e35d88b0d76"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "HCC1395_DORADO",
+      "dataset_order": 1,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 250150882482,
+          "sha256": "cfb50ccb8ba23b8b441110ad775744129ad4d8e8c95433b776fc4d56175a1bdb"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 78648520,
+          "sha256": "8877901e5db04f60a5a38654c587928d46dd7c7be054df3ec47eee3da58a484b"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 3676401,
+          "sha256": "99bd353169d8bef10c408cfca63be85d32ad0230d215f4201a7540560c226816"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 347516,
+          "sha256": "57ee34d5386652248f9b92b87a3af2ff018f1066e49b3fbcbbc0c03dbcc8dd0e"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 1646911913,
+          "sha256": "319b6e88c43fb4163888589b43aed7fd8214bec48e0dff31b589514af6817b73"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 886124,
+          "sha256": "8df6c9a1f8cae2a3192f28685aef517c33d7b32061bfefd516b02c487b970321"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "COLO829",
+      "dataset_order": 2,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 100423632767,
+          "sha256": "ef940b7df33cd5b423e74a44b27958d5697e44dc402301ca1a50e320eafc5c9a"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 38729440,
+          "sha256": "a838f4c683054de799a37017a9a9e9c18233d04c8a5d3cf27c65587dfa278bb6"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 1228677,
+          "sha256": "b43a6d06e70172dd50fb98cd735c56fe6e2c9916854c01eb0109736ae05fd136"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 282844,
+          "sha256": "061e57bc99124be358b9b3a903472bc96e5b3a849a5443db2fec19f8e2f192ec"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 339540321,
+          "sha256": "7210bb574b298abec189eb1a9bcc5e33ffcb5915652b6287612c2d6a20f48035"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 513448,
+          "sha256": "9752e711a768b33082127d9f07ce4842eccd918ec8d86b0943719d6e4db378aa"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "H1437",
+      "dataset_order": 3,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 243719059370,
+          "sha256": "1d2361303276a8df168b32fa73cf9102a61c1c6ce0bb07f8beb72d151eb8f778"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 72765408,
+          "sha256": "15173ee4a3ac2a2c3c89413321d28d76604c9a987e9e20ef4d6f5efb64e688d5"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 2819292,
+          "sha256": "d000ef0c3118a24d2c4535cbaadae7397a80b72da4c880b69ba928bdcd912b96"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 389362,
+          "sha256": "4948d48446f8bf7555a53d4ad0b0ae6bf2c7bc106cf08ba9fb0fa851886401d7"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 585465558,
+          "sha256": "55894ef8ea3c4a5eb156961178be17d5566b5f1bff8db37c588facfab1580ff4"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 588828,
+          "sha256": "664e15748e7d16f50612764b46f7375dc293ea207e157491c1b0d7e4ffc0e72e"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "H2009",
+      "dataset_order": 4,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 327679299934,
+          "sha256": "45ccc8471ff6ee4a611b0e9f7bcc62afbbda3f464816f9ed4c0b530c38c8d10d"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 84724768,
+          "sha256": "f73cc93d6c7db63a3c7ac1aa4f0868b3714b2fe230efd0fce22ebeb0896392f6"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 5714326,
+          "sha256": "7a9be1fc4b7c919953f8042ad7a089a0ea98156c2173acbe384a01bbdd483d62"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 696832,
+          "sha256": "f00ccdde4056c948bad70e1eb0fec57ed575e088a3c1c8234e47e967ee839e41"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 886667909,
+          "sha256": "547211ed99a3f366149344e41bb985a0f7bdd6135cd07665b4a36fd9caca2b0d"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 658522,
+          "sha256": "a3d0cb7297090a62ba27de2b20a441a8aec00239fe8e067021c32ebe474027e7"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "HCC1937",
+      "dataset_order": 5,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 472119759082,
+          "sha256": "208aace3ce3101b47b767c55fde3ea2459684ea22ab2a015586a96bd5091e162"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 77976848,
+          "sha256": "0883391f7c5e97fb3b33a62ee4ead26f86f098b3dfefaded4c9873dbc6515e5a"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 1758615,
+          "sha256": "4e9bf480c169294e872322c9a5eb0a881802e1f825eac2a1c330a33df598d30d"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 188106,
+          "sha256": "d45c8d655cf2ddfcc8ab163290742b65b8fce87134bb824dc556172ea683023d"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 728870441,
+          "sha256": "8a2cd1c3684ad11e94a3faa5a6c362c721a61bc624fa02cb1270fd3ad16eae1e"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 662191,
+          "sha256": "69618ad4f9b20e1ac0abb1bd0de119018ac120be48e7182fbfa3957a7c151a88"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    },
+    {
+      "dataset_id": "HCC1954",
+      "dataset_order": 6,
+      "files": [
+        {
+          "role": "raw_bam",
+          "size_bytes": 253211723892,
+          "sha256": "77b59276023fa6f07198a507cedc4831ab05fbb552ff437385cd074a89b00c65"
+        },
+        {
+          "role": "raw_bam_index",
+          "size_bytes": 64597320,
+          "sha256": "efa6f5bfb164b3a33e4ca913a10428c61672b8107fe43f609501258bbab60125"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf",
+          "size_bytes": 879096,
+          "sha256": "4e9af1e293cfb34efc91830d35e9047b6b95c9a577e0d84f8e4de9542dacb338"
+        },
+        {
+          "role": "pass_biallelic_ssnv_vcf_index",
+          "size_bytes": 182035,
+          "sha256": "c22223ca30254d26ca03aefeb05f1f65e0e23ba9132f7be09fc0401834fa5dc6"
+        },
+        {
+          "role": "latest_hp_ps_sidecar",
+          "size_bytes": 635288829,
+          "sha256": "72f60651b82abbafa3e2b50f7d76f8946a198c9fd66c58974f9b676b38189a88"
+        },
+        {
+          "role": "latest_hp_ps_sidecar_index",
+          "size_bytes": 607114,
+          "sha256": "bfa2505d788d4c9c605d218728e0ba894ab80fc12bfe5649580311a8ad72b989"
+        },
+        {
+          "role": "reference_fasta",
+          "size_bytes": 3144230986,
+          "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+        },
+        {
+          "role": "reference_fai",
+          "size_bytes": 7804,
+          "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+        }
+      ]
+    }
+  ]
+}

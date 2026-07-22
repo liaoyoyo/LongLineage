@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://longlineage.local/schema/group_allele_counts-1.0.1.json",
+  "title": "LongLineage group-by-allele counts embedded value",
+  "description": "Zero to ten rows in canonical M1 group order; an empty array is required when no R/A group is informative, and every non-empty row is [REF_count, ALT_count].",
+  "type": "array",
+  "maxItems": 10,
+  "items": {
+    "type": "array",
+    "minItems": 2,
+    "maxItems": 2,
+    "items": [
+      {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      },
+      {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      }
+    ],
+    "additionalItems": false
+  }
+}

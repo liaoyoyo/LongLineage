@@ -1,0 +1,40 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260722-validation-matrix-audit",
+  "owner_agent_id": "codex:root/validation-audit",
+  "parent_task_id": "20260722-release-repair-and-publish",
+  "allowed_paths": [
+    {"path": "state/tasks/active/20260722-validation-matrix-audit.json", "kind": "FILE"}
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-22T23:56:37+08:00",
+  "heartbeat_at": "2026-07-22T20:04:04+08:00",
+  "task_type": "B",
+  "goals": ["LL-G4", "LL-G5"],
+  "status": "BLOCKED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Read-only review of the complete applicable build, compiler, sanitizer, schema, determinism, HTML and GitHub verification matrix for a truthful draft publication."
+  },
+  "assumptions": ["Release-only P3-P8 blockers remain blockers and are not draft-publication failures when represented truthfully."],
+  "inputs": [
+    {"role": "development_workflow", "path": "docs/development/WORKFLOW.md", "sha256": null},
+    {"role": "release_gates", "path": "docs/release/RELEASE_GATES.md", "sha256": null},
+    {"role": "ci_workflow", "path": ".github/workflows/ci.yml", "sha256": null}
+  ],
+  "expected_outputs": [
+    {"role": "child_task_record", "path": "state/tasks/active/20260722-validation-matrix-audit.json", "sha256": null}
+  ],
+  "step_verify": [
+    {
+      "step": "Map every applicable validation command, expected evidence and legitimate blocker.",
+      "verify": "Handoff provides a no-gap command matrix and distinguishes draft CI from release attestation."
+    }
+  ],
+  "evidence": [],
+  "deviations": [],
+  "blockers": ["READ_ONLY_AUDIT_DELIVERED_PARENT_INTEGRATION_PENDING"],
+  "updated_at": "2026-07-22T20:04:04+08:00"
+}

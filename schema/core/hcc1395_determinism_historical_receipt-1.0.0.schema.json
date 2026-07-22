@@ -1,0 +1,616 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/hcc1395_determinism_historical_receipt-1.0.0.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "overall_status",
+    "production_claim_allowed",
+    "generator",
+    "runs",
+    "determinism",
+    "historical",
+    "checks"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.hcc1395_determinism_historical_receipt"
+    },
+    "schema_version": {"const": "1.0.0"},
+    "overall_status": {"const": "PASS"},
+    "production_claim_allowed": {"const": false},
+    "generator": {"$ref": "#/$defs/generator"},
+    "runs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["w24", "w40"],
+      "properties": {
+        "w24": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"compute_workers": {"const": 24}}}
+          ]
+        },
+        "w40": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"compute_workers": {"const": 40}}}
+          ]
+        }
+      }
+    },
+    "determinism": {"$ref": "#/$defs/determinism"},
+    "historical": {"$ref": "#/$defs/historical"},
+    "checks": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/check"}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^/(?!.*(?:/\\.\\./|/\\.\\.$|/\\./|/\\.$)).+$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pass": {"const": "PASS"},
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "language",
+        "executable_sha256",
+        "git_commit",
+        "independent_of_producer_kernels",
+        "reads_alignment_inputs"
+      ],
+      "properties": {
+        "language": {"const": "C++17"},
+        "executable_sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {
+          "type": "string",
+          "pattern": "^(?!0{40}$)[0-9a-f]{40}$"
+        },
+        "independent_of_producer_kernels": {"const": true},
+        "reads_alignment_inputs": {"const": false}
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "compute_workers",
+        "run_root",
+        "manifest_path",
+        "manifest_sha256",
+        "run_receipt_sha256",
+        "validation_receipt_sha256"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "compute_workers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40
+        },
+        "run_root": {"$ref": "#/$defs/path"},
+        "manifest_path": {"$ref": "#/$defs/path"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "run_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "validation_receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "determinism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "manifest_comparison",
+        "artifacts",
+        "summary_projection",
+        "m2_conservation"
+      ],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "manifest_comparison": {"$ref": "#/$defs/manifest_comparison"},
+        "artifacts": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/artifact_comparison"}
+        },
+        "summary_projection": {"$ref": "#/$defs/summary_projection"},
+        "m2_conservation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "w24", "w40"],
+          "properties": {
+            "status": {"$ref": "#/$defs/pass"},
+            "w24": {"$ref": "#/$defs/m2_replay"},
+            "w40": {"$ref": "#/$defs/m2_replay"}
+          }
+        }
+      }
+    },
+    "manifest_comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "allowed_differences",
+        "normalized_sha256",
+        "w24_compute_workers",
+        "w40_compute_workers"
+      ],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "allowed_differences": {
+          "const": ["run_id", "output_root", "runtime.compute_workers"]
+        },
+        "normalized_sha256": {"$ref": "#/$defs/sha256"},
+        "w24_compute_workers": {"const": 24},
+        "w40_compute_workers": {"const": 40}
+      }
+    },
+    "artifact_comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "schema_name",
+        "schema_version",
+        "w24_logical_rows",
+        "w40_logical_rows",
+        "semantic_sha256",
+        "semantic_equal",
+        "physical_equal",
+        "physical_comparison"
+      ],
+      "properties": {
+        "artifact_id": {
+          "enum": [
+            "site_reads",
+            "methyl_calls",
+            "bernoulli_upper",
+            "m1_sites",
+            "m1_assignments",
+            "cooccurrence_pairs",
+            "cooccurrence_sites",
+            "topology_units"
+          ]
+        },
+        "schema_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "w24_logical_rows": {"$ref": "#/$defs/count"},
+        "w40_logical_rows": {"$ref": "#/$defs/count"},
+        "semantic_sha256": {"$ref": "#/$defs/sha256"},
+        "semantic_equal": {"const": true},
+        "physical_equal": {"type": "boolean"},
+        "physical_comparison": {"const": "DIAGNOSTIC_ONLY"}
+      }
+    },
+    "summary_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "semantic_equal",
+        "semantic_sha256",
+        "canonicalization",
+        "scope",
+        "counts",
+        "phase_status"
+      ],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "semantic_equal": {"const": true},
+        "semantic_sha256": {"$ref": "#/$defs/sha256"},
+        "canonicalization": {
+          "const": "COMPACT_SORTED_JSON_NO_LF over {counts,phase_status,scope}"
+        },
+        "scope": {"$ref": "#/$defs/scope"},
+        "counts": {"$ref": "#/$defs/summary_counts"},
+        "phase_status": {"$ref": "#/$defs/phase_status"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_type",
+        "completeness",
+        "dataset_count",
+        "dataset_ids",
+        "site_population"
+      ],
+      "properties": {
+        "task_type": {"const": "B"},
+        "completeness": {"const": "FULL"},
+        "dataset_count": {"const": 1},
+        "dataset_ids": {"const": ["HCC1395"]},
+        "site_population": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "summary_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "site_keys",
+        "site_keys_missing",
+        "site_keys_extra",
+        "site_keys_duplicate",
+        "m1_evaluable",
+        "m1_insufficient_alt_reads",
+        "m1_incomplete_distance",
+        "m1_stable_assignments",
+        "latest_tag_exact_joins",
+        "latest_tag_missing",
+        "latest_tag_conflict",
+        "latest_tag_multimatch",
+        "m2_eligible",
+        "m2_evaluable_ineligible",
+        "m2_axis_indeterminate",
+        "m2_group_count_gt10",
+        "raw_expected",
+        "raw_matched",
+        "raw_rg_only_duplicate_occurrences",
+        "topology_primary_hp_units",
+        "topology_regions",
+        "topology_fully_complete_regions",
+        "topology_incomplete_regions",
+        "topology_incomplete_units_with_winner"
+      ],
+      "properties": {
+        "site_keys": {"$ref": "#/$defs/count"},
+        "site_keys_missing": {"const": 0},
+        "site_keys_extra": {"const": 0},
+        "site_keys_duplicate": {"const": 0},
+        "m1_evaluable": {"$ref": "#/$defs/count"},
+        "m1_insufficient_alt_reads": {"$ref": "#/$defs/count"},
+        "m1_incomplete_distance": {"$ref": "#/$defs/count"},
+        "m1_stable_assignments": {"$ref": "#/$defs/count"},
+        "latest_tag_exact_joins": {"$ref": "#/$defs/count"},
+        "latest_tag_missing": {"const": 0},
+        "latest_tag_conflict": {"const": 0},
+        "latest_tag_multimatch": {"const": 0},
+        "m2_eligible": {"$ref": "#/$defs/count"},
+        "m2_evaluable_ineligible": {"$ref": "#/$defs/count"},
+        "m2_axis_indeterminate": {"$ref": "#/$defs/count"},
+        "m2_group_count_gt10": {"$ref": "#/$defs/count"},
+        "raw_expected": {"$ref": "#/$defs/count"},
+        "raw_matched": {"$ref": "#/$defs/count"},
+        "raw_rg_only_duplicate_occurrences": {"$ref": "#/$defs/count"},
+        "topology_primary_hp_units": {"$ref": "#/$defs/count"},
+        "topology_regions": {"$ref": "#/$defs/count"},
+        "topology_fully_complete_regions": {"$ref": "#/$defs/count"},
+        "topology_incomplete_regions": {"$ref": "#/$defs/count"},
+        "topology_incomplete_units_with_winner": {"const": 0}
+      }
+    },
+    "phase_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P0", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"],
+      "properties": {
+        "P0": {"$ref": "#/$defs/phase"},
+        "P1": {"$ref": "#/$defs/phase"},
+        "P2": {"$ref": "#/$defs/phase"},
+        "P3": {"$ref": "#/$defs/phase"},
+        "P4": {"$ref": "#/$defs/phase"},
+        "P5": {"$ref": "#/$defs/phase"},
+        "P6": {"$ref": "#/$defs/phase"},
+        "P7": {"$ref": "#/$defs/phase"},
+        "P8": {"$ref": "#/$defs/phase"}
+      }
+    },
+    "phase": {
+      "enum": ["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "FAILED", "VERIFIED"]
+    },
+    "m2_replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "m1_site_rows",
+        "m1_stable_assignments",
+        "cooccurrence_site_rows",
+        "unstable_not_run",
+        "m2_eligible",
+        "m2_evaluable_ineligible",
+        "m2_axis_indeterminate",
+        "m2_group_count_gt10",
+        "partition_total"
+      ],
+      "properties": {
+        "m1_site_rows": {"$ref": "#/$defs/count"},
+        "m1_stable_assignments": {"$ref": "#/$defs/count"},
+        "cooccurrence_site_rows": {"$ref": "#/$defs/count"},
+        "unstable_not_run": {"$ref": "#/$defs/count"},
+        "m2_eligible": {"$ref": "#/$defs/count"},
+        "m2_evaluable_ineligible": {"$ref": "#/$defs/count"},
+        "m2_axis_indeterminate": {"$ref": "#/$defs/count"},
+        "m2_group_count_gt10": {"$ref": "#/$defs/count"},
+        "partition_total": {"$ref": "#/$defs/count"}
+      }
+    },
+    "historical": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "site_keys",
+        "m1",
+        "m2",
+        "cooccurrence",
+        "regional_topology",
+        "runtime"
+      ],
+      "properties": {
+        "source": {"$ref": "#/$defs/historical_source"},
+        "site_keys": {"$ref": "#/$defs/site_keys"},
+        "m1": {"$ref": "#/$defs/historical_m1"},
+        "m2": {"$ref": "#/$defs/not_comparable"},
+        "cooccurrence": {"$ref": "#/$defs/cooccurrence_boundary"},
+        "regional_topology": {"$ref": "#/$defs/not_comparable"},
+        "runtime": {"$ref": "#/$defs/not_comparable"}
+      }
+    },
+    "historical_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "physical_sha256",
+        "authority_profile",
+        "selected_dataset",
+        "selected_columns",
+        "truth_derived_fields_consumed"
+      ],
+      "properties": {
+        "path": {"$ref": "#/$defs/path"},
+        "physical_sha256": {"$ref": "#/$defs/sha256"},
+        "authority_profile": {
+          "enum": ["FROZEN_HCC1395_AUTHORITY", "SYNTHETIC_TEST_ONLY"]
+        },
+        "selected_dataset": {"const": "HCC1395"},
+        "selected_columns": {
+          "const": [
+            "dataset",
+            "chrom",
+            "pos",
+            "ref",
+            "alt",
+            "analysis_status",
+            "stable_null_multigroup"
+          ]
+        },
+        "truth_derived_fields_consumed": {"const": 0}
+      }
+    },
+    "site_keys": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "verdict",
+        "canonical_rule",
+        "old_count",
+        "new_count",
+        "old_ordered_sha256",
+        "new_ordered_sha256",
+        "old_sorted_set_sha256",
+        "new_sorted_set_sha256",
+        "missing",
+        "extra",
+        "old_duplicates",
+        "new_duplicates"
+      ],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "verdict": {"const": "EXACT"},
+        "canonical_rule": {
+          "const": "UTF-8 dataset\\tchrom\\tpos\\tref\\talt\\n; no header; LF; original row order"
+        },
+        "old_count": {"$ref": "#/$defs/count"},
+        "new_count": {"$ref": "#/$defs/count"},
+        "old_ordered_sha256": {"$ref": "#/$defs/sha256"},
+        "new_ordered_sha256": {"$ref": "#/$defs/sha256"},
+        "old_sorted_set_sha256": {"$ref": "#/$defs/sha256"},
+        "new_sorted_set_sha256": {"$ref": "#/$defs/sha256"},
+        "missing": {"const": 0},
+        "extra": {"const": 0},
+        "old_duplicates": {"const": 0},
+        "new_duplicates": {"const": 0}
+      }
+    },
+    "historical_m1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "verdict",
+        "old_counts",
+        "new_counts",
+        "status_mismatches",
+        "status_transitions",
+        "stable_transition"
+      ],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "verdict": {"enum": ["EXACT", "COMPARABLE_DIFFERENT"]},
+        "old_counts": {"$ref": "#/$defs/m1_counts"},
+        "new_counts": {"$ref": "#/$defs/m1_counts"},
+        "status_mismatches": {"const": 0},
+        "status_transitions": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "items": {"$ref": "#/$defs/status_transition"}
+        },
+        "stable_transition": {"$ref": "#/$defs/stable_transition"}
+      }
+    },
+    "m1_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluable",
+        "insufficient_alt_reads",
+        "incomplete_distance_below_minimum",
+        "stable"
+      ],
+      "properties": {
+        "evaluable": {"$ref": "#/$defs/count"},
+        "insufficient_alt_reads": {"$ref": "#/$defs/count"},
+        "incomplete_distance_below_minimum": {"$ref": "#/$defs/count"},
+        "stable": {"$ref": "#/$defs/count"}
+      }
+    },
+    "m1_status": {
+      "enum": [
+        "EVALUABLE",
+        "INSUFFICIENT_ALT_READS",
+        "INCOMPLETE_DISTANCE_BELOW_MINIMUM"
+      ]
+    },
+    "status_transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "count"],
+      "properties": {
+        "from": {"$ref": "#/$defs/m1_status"},
+        "to": {"$ref": "#/$defs/m1_status"},
+        "count": {"$ref": "#/$defs/count"}
+      }
+    },
+    "stable_transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "true_to_true",
+        "true_to_false",
+        "false_to_true",
+        "false_to_false",
+        "symmetric_difference",
+        "jaccard"
+      ],
+      "properties": {
+        "true_to_true": {"$ref": "#/$defs/count"},
+        "true_to_false": {"$ref": "#/$defs/count"},
+        "false_to_true": {"$ref": "#/$defs/count"},
+        "false_to_false": {"$ref": "#/$defs/count"},
+        "symmetric_difference": {"$ref": "#/$defs/count"},
+        "jaccard": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["intersection", "union"],
+          "properties": {
+            "intersection": {"$ref": "#/$defs/count"},
+            "union": {"$ref": "#/$defs/count"}
+          }
+        }
+      }
+    },
+    "not_comparable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "verdict", "reason_code", "explanation"],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "verdict": {
+          "type": "string",
+          "pattern": "^NOT_COMPARABLE"
+        },
+        "reason_code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "cooccurrence_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "verdict",
+        "reason_code",
+        "explanation",
+        "old_formal_result_exists",
+        "new_pair_rows"
+      ],
+      "properties": {
+        "status": {"$ref": "#/$defs/pass"},
+        "verdict": {"const": "NOT_COMPARABLE_NO_FORMAL_OLD_RESULT"},
+        "reason_code": {
+          "const": "NO_SUCCESSFUL_FORMAL_HISTORICAL_AUTHORITY"
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "old_formal_result_exists": {"const": false},
+        "new_pair_rows": {"$ref": "#/$defs/count"}
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "status", "evidence_sha256"],
+      "properties": {
+        "check_id": {
+          "enum": [
+            "FROZEN_W24",
+            "FROZEN_W40",
+            "MANIFEST_WHITELIST",
+            "SCIENCE_ARTIFACT_DETERMINISM",
+            "SUMMARY_PROJECTION",
+            "M2_MUTUALLY_EXCLUSIVE_CONSERVATION",
+            "HISTORICAL_SITE_KEY_M1"
+          ]
+        },
+        "status": {"$ref": "#/$defs/pass"},
+        "evidence_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "x-longlineage-invariants": [
+    "Both run roots are independently validated VALIDATED_FROZEN_DATASET_GATE roots with truth_fields_seen equal to zero.",
+    "The manifests differ only in run_id, output_root and runtime.compute_workers; worker counts are exactly 24 and 40.",
+    "All eight science artifacts have identical schema name, schema version, logical rows and semantic SHA-256; physical equality is diagnostic only.",
+    "The summary projection canonicalization is compact JSON with UTF-8 byte-sorted object keys and no trailing LF.",
+    "For each run, the four M2 bins are mutually exclusive and sum exactly to m1_stable_assignments.",
+    "Historical HCC1395 keys are read in original file order and hash UTF-8 dataset, chrom, pos, ref and alt fields separated by TAB with one LF per row and no header.",
+    "Historical status mismatch, missing, extra or duplicate keys fail; stable membership churn is reported as COMPARABLE_DIFFERENT.",
+    "Historical co-occurrence, regional topology and runtime remain explicit NOT_COMPARABLE boundaries.",
+    "The audit executable does not read BAM, VCF, sidecar or reference inputs and does not link producer statistical or solver kernels."
+  ]
+}

@@ -1,0 +1,44 @@
+scope=PARTIAL_SYNTHETIC_ONLY
+task_id=20260720-hcc1395-m1-m2-inventory
+owner=codex:root/hcc1395_input_runroot
+production_python_calls=0
+
+input_frozen_vector=LongLineage/oracle/frozen_vectors/p3_p4_synthetic_v1.json
+input_science_contract=LongLineage/contracts/v1/science_parameters.json
+test_source=LongLineage/tests/unit/test_science_parity.cpp
+
+debug_command=/usr/bin/g++ -std=c++17 -O0 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -Iinclude tests/unit/test_science_parity.cpp src/m1/science.cpp src/m1/hp_family.cpp src/m2/eligibility.cpp src/cooccurrence/statistics.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-science-parity-debug
+debug_run=/tmp/longlineage-science-parity-debug <REPO_ROOT>
+debug_exit=0
+debug_output=science_parity: PASS pinned_cases=99 independent_cases=2 negative_cases=5 m1_full_clustering=ABSTAIN_NOT_IMPLEMENTED production_python_calls=0
+
+release_command=/usr/bin/g++ -std=c++17 -O2 -DNDEBUG -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -Iinclude tests/unit/test_science_parity.cpp src/m1/science.cpp src/m1/hp_family.cpp src/m2/eligibility.cpp src/cooccurrence/statistics.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-science-parity-release
+release_run=/tmp/longlineage-science-parity-release <REPO_ROOT>
+release_exit=0
+release_output=science_parity: PASS pinned_cases=99 independent_cases=2 negative_cases=5 m1_full_clustering=ABSTAIN_NOT_IMPLEMENTED production_python_calls=0
+
+sanitizer_command=/usr/bin/g++ -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer -Iinclude tests/unit/test_science_parity.cpp src/m1/science.cpp src/m1/hp_family.cpp src/m2/eligibility.cpp src/cooccurrence/statistics.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-science-parity-asan-ubsan
+sanitizer_run=ASAN_OPTIONS=detect_leaks=1 /tmp/longlineage-science-parity-asan-ubsan <REPO_ROOT>
+sanitizer_exit=0
+sanitizer_output=science_parity: PASS pinned_cases=99 independent_cases=2 negative_cases=5 m1_full_clustering=ABSTAIN_NOT_IMPLEMENTED production_python_calls=0
+
+format_command=/tmp/clang-format-14-root/usr/bin/clang-format-14 --dry-run --Werror include/longlineage/m1/science.hpp include/longlineage/m1/hp_family.hpp include/longlineage/m2/eligibility.hpp include/longlineage/cooccurrence/statistics.hpp src/m1/science.cpp src/m1/hp_family.cpp src/m2/eligibility.cpp src/cooccurrence/statistics.cpp tests/unit/test_science_parity.cpp
+format_exit=0
+
+governance_state_command=LongLineage/build-cpp-output-validation/bin/longlineage-governance check-state --repo <REPO_ROOT>
+governance_state_exit=0
+governance_state_output=project state, P0-P8 ledger and 9 active AI task records, owner leases and non-overlapping write sets are internally consistent
+
+truth_boundary_command=LongLineage/build-cpp-output-validation/bin/longlineage-governance check-truth-boundary --repo <REPO_ROOT>
+truth_boundary_exit=0
+truth_boundary_output=production schema is closed and truth-isolated
+
+hygiene_command=LongLineage/scripts/ci/check_repo_hygiene.sh
+hygiene_exit=0
+hygiene_output=HYGIENE RESULT: PASS maximum_bytes=1048576
+
+known_fixture_correction=The initial equal-percentile synthetic split used 1.2945, which was below the prior 1.3 separation gate. It correctly failed at separation precedence. The null vector was shifted to make the equal-percentile value 1.3945, preserving the intended strict-threshold falsifier.
+known_implementation_correction=Final handoff uses historical binary32 ML_raw/255.0F before conversion to double; raw 1 and 254 goldens differ from both double ML_raw/255.0 and P2 probability_lower.
+remaining_blocker=M1 recursive null generation, recursive labels, ten coarse runs, fine run, ARI and complete assignment parity remain ABSTAIN_NOT_IMPLEMENTED.
+remaining_blocker=The modules are intentionally not wired into CMake or CLI because those files are outside this child write-set.
+remaining_blocker=Formal production co-occurrence authority, independent validator and HCC1395 full-run evidence do not exist in this receipt.

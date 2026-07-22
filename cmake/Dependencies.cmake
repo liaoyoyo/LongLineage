@@ -3,6 +3,7 @@
 find_package(PkgConfig REQUIRED)
 find_package(OpenSSL 3.0 REQUIRED COMPONENTS Crypto)
 find_package(Threads REQUIRED)
+find_package(ZLIB REQUIRED)
 
 pkg_check_modules(HTSLIB REQUIRED IMPORTED_TARGET htslib)
 pkg_check_modules(JANSSON REQUIRED IMPORTED_TARGET jansson)
@@ -28,3 +29,4 @@ message(STATUS "  HTSlib: ${HTSLIB_VERSION} (production pin: ${LONGLINEAGE_PINNE
 message(STATUS "  Jansson: ${JANSSON_VERSION}")
 message(STATUS "  OpenSSL: ${OPENSSL_VERSION}")
 message(STATUS "  Threads: ${CMAKE_THREAD_LIBS_INIT}")
+message(STATUS "  ZLIB: ${ZLIB_VERSION_STRING}")

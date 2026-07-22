@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://longlineage.local/schema/summary-1.0.0.json",
+  "$id": "https://longlineage.local/schema/summary-2.0.0.json",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -9,6 +9,7 @@
     "run_id",
     "scope",
     "counts",
+    "phase_status_scope",
     "phase_status"
   ],
   "properties": {
@@ -16,7 +17,7 @@
       "const": "longlineage.summary"
     },
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "run_id": {
       "type": "string"
@@ -24,13 +25,23 @@
     "scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["task_type", "completeness", "dataset_count", "dataset_ids", "site_population"],
+      "required": [
+        "task_type",
+        "completeness",
+        "dataset_count",
+        "dataset_ids",
+        "site_population",
+        "m1_representation"
+      ],
       "properties": {
         "task_type": {"enum": ["A", "B", "C", "D", "E", "F"]},
         "completeness": {"enum": ["PARTIAL", "FULL"]},
         "dataset_count": {"type": "integer", "minimum": 1},
         "dataset_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
-        "site_population": {"type": "string", "minLength": 1}
+        "site_population": {"type": "string", "minLength": 1},
+        "m1_representation": {
+          "enum": ["RAW_BINARY32_POINT", "HISTORICAL_OBSERVED_ROUND6_NULL_ROUND4"]
+        }
       }
     },
     "counts": {
@@ -88,6 +99,9 @@
         "topology_incomplete_regions": {"$ref": "#/$defs/count"},
         "topology_incomplete_units_with_winner": {"$ref": "#/$defs/count"}
       }
+    },
+    "phase_status_scope": {
+      "const": "RUN_LOCAL_DATASET_GATE_CLOSEOUT_NOT_PROJECT_PHASE_LEDGER"
     },
     "phase_status": {
       "type": "object",

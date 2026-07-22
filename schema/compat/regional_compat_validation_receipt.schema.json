@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_validation_receipt-2.0.0.json",
+  "title": "LongLineage dataset-bound regional compatibility validation receipt",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "profile_id",
+    "dataset_id",
+    "dataset_order",
+    "source_authority_profile",
+    "source_authority_sha256",
+    "state",
+    "producer_receipt_sha256",
+    "semantic_sha256",
+    "validator_executable_sha256",
+    "row_counts",
+    "checks"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_validation_receipt"},
+    "schema_version": {"const": "2.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL"},
+    "dataset_id": {
+      "enum": ["HCC1395", "HCC1395_DORADO", "COLO829", "H1437", "H2009", "HCC1937", "HCC1954"]
+    },
+    "dataset_order": {"type": "integer", "minimum": 0, "maximum": 6},
+    "source_authority_profile": {"enum": ["PRODUCTION_7_DATASET", "HCC1395_DATASET_GATE"]},
+    "source_authority_sha256": {"$ref": "#/$defs/sha256"},
+    "state": {"const": "VALIDATED_FROZEN"},
+    "producer_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_sha256": {"$ref": "#/$defs/sha256"},
+    "validator_executable_sha256": {"$ref": "#/$defs/sha256"},
+    "row_counts": {
+      "type": "object",
+      "required": ["regions", "units", "patterns"],
+      "properties": {
+        "regions": {"type": "integer", "minimum": 0},
+        "units": {"type": "integer", "minimum": 0},
+        "patterns": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 18,
+      "maxItems": 18,
+      "prefixItems": [
+        {"$ref": "#/$defs/root_layout"},
+        {"$ref": "#/$defs/required_files"},
+        {"$ref": "#/$defs/no_extra_files"},
+        {"$ref": "#/$defs/validator_provenance"},
+        {"$ref": "#/$defs/checksum_manifest"},
+        {"$ref": "#/$defs/summary_contract"},
+        {"$ref": "#/$defs/source_authority"},
+        {"$ref": "#/$defs/source_manifest"},
+        {"$ref": "#/$defs/producer_receipt"},
+        {"$ref": "#/$defs/regions_tsv"},
+        {"$ref": "#/$defs/units_tsv"},
+        {"$ref": "#/$defs/output_census"},
+        {"$ref": "#/$defs/patterns_tsv"},
+        {"$ref": "#/$defs/row_counts"},
+        {"$ref": "#/$defs/foreign_keys"},
+        {"$ref": "#/$defs/source_authority_stable"},
+        {"$ref": "#/$defs/source_manifest_stable"},
+        {"$ref": "#/$defs/toctou_stable"}
+      ],
+      "items": false
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "source_authority_profile": {"const": "HCC1395_DATASET_GATE"},
+        "dataset_id": {"const": "HCC1395"},
+        "dataset_order": {"const": 0}
+      }
+    },
+    {
+      "properties": {"source_authority_profile": {"const": "PRODUCTION_7_DATASET"}},
+      "oneOf": [
+        {"properties": {"dataset_id": {"const": "HCC1395"}, "dataset_order": {"const": 0}}},
+        {"properties": {"dataset_id": {"const": "HCC1395_DORADO"}, "dataset_order": {"const": 1}}},
+        {"properties": {"dataset_id": {"const": "COLO829"}, "dataset_order": {"const": 2}}},
+        {"properties": {"dataset_id": {"const": "H1437"}, "dataset_order": {"const": 3}}},
+        {"properties": {"dataset_id": {"const": "H2009"}, "dataset_order": {"const": 4}}},
+        {"properties": {"dataset_id": {"const": "HCC1937"}, "dataset_order": {"const": 5}}},
+        {"properties": {"dataset_id": {"const": "HCC1954"}, "dataset_order": {"const": 6}}}
+      ]
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "pass": {
+      "type": "object",
+      "required": ["check_id", "status", "detail"],
+      "properties": {
+        "check_id": {"type": "string"},
+        "status": {"const": "PASS"},
+        "detail": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "root_layout": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "ROOT_LAYOUT"}}}]},
+    "required_files": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "REQUIRED_FILES"}}}]},
+    "no_extra_files": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "NO_EXTRA_FILES"}}}]},
+    "validator_provenance": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "VALIDATOR_PROVENANCE"}}}]},
+    "checksum_manifest": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "CHECKSUM_MANIFEST"}}}]},
+    "summary_contract": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "SUMMARY_CONTRACT"}}}]},
+    "source_authority": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "SOURCE_AUTHORITY"}}}]},
+    "source_manifest": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "SOURCE_MANIFEST"}}}]},
+    "producer_receipt": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "PRODUCER_RECEIPT"}}}]},
+    "regions_tsv": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "REGIONS_TSV"}}}]},
+    "units_tsv": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "UNITS_TSV"}}}]},
+    "output_census": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "OUTPUT_CENSUS"}}}]},
+    "patterns_tsv": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "PATTERNS_TSV"}}}]},
+    "row_counts": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "ROW_COUNTS"}}}]},
+    "foreign_keys": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "FOREIGN_KEYS"}}}]},
+    "source_authority_stable": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "SOURCE_AUTHORITY_STABLE"}}}]},
+    "source_manifest_stable": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "SOURCE_MANIFEST_STABLE"}}}]},
+    "toctou_stable": {"allOf": [{"$ref": "#/$defs/pass"}, {"properties": {"check_id": {"const": "TOCTOU_STABLE"}}}]}
+  },
+  "additionalProperties": false
+}

@@ -46,18 +46,24 @@ struct FullAlignmentIdentity {
     std::string raw_qname;
     std::uint16_t flag;
     std::string cigar;
+    // SHA-256 of the canonical serialization of every SAM core field used by
+    // the frozen duplicate-equivalence contract. This includes mate fields,
+    // SEQ and QUAL; projection identity alone is intentionally insufficient.
+    std::string sam_core_sha256;
     std::string typed_aux_canonical;
 
     friend bool operator==(const FullAlignmentIdentity& lhs, const FullAlignmentIdentity& rhs) noexcept {
-        return std::tie(lhs.projection, lhs.raw_qname, lhs.flag, lhs.cigar, lhs.typed_aux_canonical) ==
-               std::tie(rhs.projection, rhs.raw_qname, rhs.flag, rhs.cigar, rhs.typed_aux_canonical);
+        return std::tie(lhs.projection, lhs.raw_qname, lhs.flag, lhs.cigar, lhs.sam_core_sha256,
+                        lhs.typed_aux_canonical) == std::tie(rhs.projection, rhs.raw_qname, rhs.flag, rhs.cigar,
+                                                             rhs.sam_core_sha256, rhs.typed_aux_canonical);
     }
     friend bool operator!=(const FullAlignmentIdentity& lhs, const FullAlignmentIdentity& rhs) noexcept {
         return !(lhs == rhs);
     }
     friend bool operator<(const FullAlignmentIdentity& lhs, const FullAlignmentIdentity& rhs) noexcept {
-        return std::tie(lhs.projection, lhs.raw_qname, lhs.flag, lhs.cigar, lhs.typed_aux_canonical) <
-               std::tie(rhs.projection, rhs.raw_qname, rhs.flag, rhs.cigar, rhs.typed_aux_canonical);
+        return std::tie(lhs.projection, lhs.raw_qname, lhs.flag, lhs.cigar, lhs.sam_core_sha256,
+                        lhs.typed_aux_canonical) < std::tie(rhs.projection, rhs.raw_qname, rhs.flag, rhs.cigar,
+                                                            rhs.sam_core_sha256, rhs.typed_aux_canonical);
     }
 };
 
@@ -69,6 +75,11 @@ struct FullAlignmentIdentity {
 // so RG-only duplicate occurrences can collapse.
 [[nodiscard]] ParseResult<std::string> canonicalize_typed_aux(const bam1_t& alignment,
                                                               const std::vector<std::string>& excluded_tags = {"RG"});
+
+// Canonicalizes every field in the SAM core duplicate-equivalence contract:
+// QNAME, FLAG, RNAME/TID, POS/END, MAPQ, CIGAR, RNEXT/PNEXT, TLEN, SEQ and QUAL.
+// Missing QUAL is represented distinctly from a byte vector.
+[[nodiscard]] ParseResult<std::string> canonicalize_sam_core(const bam1_t& alignment, const sam_hdr_t& header);
 
 [[nodiscard]] ParseResult<FullAlignmentIdentity> build_full_alignment_identity(
     const bam1_t& alignment, const sam_hdr_t& header, const std::vector<std::string>& excluded_tags = {"RG"});
