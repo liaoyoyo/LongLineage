@@ -1,6 +1,6 @@
 # Current Focus
 
-Last updated: 2026-07-22
+Last updated: 2026-07-23
 
 ## Active phase
 
@@ -139,7 +139,8 @@ independent source for changing phase state.
   publication消除，並持續阻止P6升級。
 - Strict release gate仍有12個`fixture_only` negative bindings（包含forged
   validator receipt）；最新GCC Debug/Release各47/47 synthetic repository tests不能
-  取代這些可執行負例。
+  取代這些可執行負例。Strict模式預期exit 1並逐項列出12個blockers；只有明示
+  `--allow-declared-blocked`時才exit 0，兩者都不代表P8完成。
 - final receipts尚未保存slowest-block identity、edge taxonomy、transient peak
   bytes與I/O operation counts；cache condition仍unknown。
 - Report percentage hotfix已重生並重驗：14/79,687文字顯示0.02%，CSS最小
@@ -153,11 +154,13 @@ independent source for changing phase state.
 - Print PDF是A4、17頁且無JavaScript，但`Tagged: no`；屬低嚴重度P8
   accessibility缺口。
 - 發布候選已由`origin/main`建立分支`fix/release-repair-verify`並建立private draft
-  PR #4。遠端目前head為`b170712ccddbc034bf1347c0c5e878288971de2c`；introduced-history
-  scan、GCC/Clang Debug/Release、GCC TSan與browser QA已PASS，但兩輪hosted CI揭露並
-  保留為negative evidence的LeakSanitizer與pinned-container provenance問題。本機hotfix
-  已以Release 47/47與GCC ASan+UBSan（`detect_leaks=1`）47/47驗證，仍須commit、push並
-  取得新head全部hosted jobs成功後，才可結束本次private-draft publication task。含
+  PR #4。實作commit為`fa1249b9b8873c0b6bc099d8662bd87a62021e8c`，canonical tree
+  SHA-256為`689842dc2b64d0e929454e0950d4917729e7e3619073d326f5f19059b22c2e2c`；
+  本機fresh Release與GCC ASan+UBSan（`detect_leaks=1`）皆47/47 PASS。Hosted push run
+  29938942025與PR run 29938944740 attempt 2皆9/9 PASS，涵蓋history、browser QA、
+  GCC/Clang Debug/Release、Clang ASan/UBSan、GCC TSan及pinned container。PR attempt 1
+  只有Ubuntu archive mirror timeout，重跑成功；原失敗保留為外部依賴negative evidence。
+  Repository與PR仍為PRIVATE/DRAFT，未merge、未tag、未公開。含
   private path/coordinate-shaped blob的舊feature branch只保留為本機recovery reference，
   不可合併或push。
 - Restricted HCC performance authority v3仍可由歷史`a3e41c...`snapshot重現，但對目前
@@ -176,8 +179,8 @@ independent source for changing phase state.
    >=13 active-bit exact/abstain contract；不完整family不得排名。
 4. 對下一次full run先補cache protocol、slowest-block ID、I/O ops與transient
    peak bytes，使用w24作目前預設。
-5. Commit並推送目前history-safe hotfix，要求private draft PR #4的current-head
-   GCC/Clang/sanitizer/container CI全部成功；舊feature history不得推送或合併。
+5. Private draft PR #4維持不merge、不公開；任何下一個head仍須通過完整
+   GCC/Clang/sanitizer/container/history/browser矩陣，舊feature history不得推送或合併。
 6. 把12個fixture-only release bindings升級為可執行negative tests，再重跑strict
    gate。
 7. P3-P5與P7-P8維持BLOCKED，直到七資料集w24/w40、semantic SHA與獨立validator

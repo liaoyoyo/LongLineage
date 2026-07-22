@@ -1,7 +1,7 @@
 {
   "schema_name": "longlineage.phase_ledger",
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-22T22:43:34+08:00",
+  "updated_at": "2026-07-23T01:19:01+08:00",
   "phases": [
     {
       "id": "P0",
@@ -296,6 +296,13 @@
           "sha256": "9cd86244b388f9d4b58ef844517c6cb73f55543fd4b106417b3ecccc389d5fda",
           "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
           "exit_code": 0
+        },
+        {
+          "role": "AUDIT",
+          "path": "state/audits/20260722-release-repair-and-publish-001.json",
+          "sha256": "7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac",
+          "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260722-release-repair-and-publish-001.json",
+          "exit_code": 0
         }
       ],
       "blockers": [
@@ -305,8 +312,7 @@
         "REPORT_IMPORTANT_CLAIM_IDS_ABSENT",
         "REPORT_MACHINE_SCHEMA_UNREGISTERED",
         "PRINT_PDF_ACCESSIBILITY_TAGS_ABSENT",
-        "STRICT_GATE_FIXTURE_ONLY_BINDINGS_REMAIN",
-        "RELEASE_HISTORY_HYGIENE_NOT_PASSING"
+        "STRICT_GATE_FIXTURE_ONLY_BINDINGS_REMAIN"
       ]
     }
   ]

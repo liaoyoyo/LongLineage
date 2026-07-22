@@ -1,6 +1,6 @@
 # Implementation Notes
 
-Status: in_progress · PARTIAL — private draft publication scope; not P8 or a production release
+Status: verified · PARTIAL — history-safe private draft publication scope closed; not P8 or a production release
 
 ## Decisions
 
@@ -1060,3 +1060,33 @@ Status: in_progress · PARTIAL — private draft publication scope; not P8 or a 
   前後各重播HEAD equality、commit object與clean-tree三項；dependency checker驗證兩次
   呼叫必須依序包住docker build，negative suite會移除equality、cat-file、post-call及把
   ARG移回dependency前，四種mutation均須fail closed。
+- [驗證 2026-07-23] 最終實作commit
+  `fa1249b9b8873c0b6bc099d8662bd87a62021e8c`（canonical tree SHA-256
+  `689842dc2b64d0e929454e0950d4917729e7e3619073d326f5f19059b22c2e2c`）已從fresh
+  source完成Release `check_all.sh` 47/47、103.59秒、no-network PASS及
+  `FOUNDATION_PASS`；另以GCC ASan+UBSan、
+  `ASAN_OPTIONS=detect_leaks=1:halt_on_error=1`與
+  `UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1`完成47/47、447.43秒，未見leak或UB。
+- [驗證 2026-07-23] Hosted push run 29938942025與PR run 29938944740 attempt 2皆
+  9/9 PASS；jobs涵蓋introduced-history、browser QA、GCC/Clang Debug/Release、Clang
+  ASan/UBSan、GCC TSan及pinned container。PR attempt 1的pinned-container job只有
+  Ubuntu `archive.ubuntu.com:80` mirror timeout，原失敗不列completion evidence，重跑後
+  成功。PR #4 head與remote branch皆為`fa1249b...e8c`，repository為PRIVATE、PR為
+  DRAFT/CLEAN/OPEN，沒有merge、tag或公開。
+- [封版 2026-07-23] Private-draft publication scope的immutable audit為
+  `state/audits/20260722-release-repair-and-publish-001.json`，實體SHA-256
+  `7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac`。此scope完整封閉
+  history-safe draft publication，但不提升任何project phase：P0–P8仍0/9 VERIFIED，
+  strict gate仍有12項fixture-only blockers；P3 2,373-key差異、P4七資料集co-occurrence、
+  P5 real topology、P6完整validator/query/export/evaluate、P7 w24/w40與P8 final HTML／
+  claim IDs／schema／Tagged PDF仍未完成。Restricted performance v3對current checkout仍
+  只有40/41 source bindings，因此不存在完整且受控的C++對Python production speedup結論。
+- [偏離 2026-07-23] 預設conda Python缺少`jsonschema` module，故該環境的schema命令
+  以import error失敗且不作證據；apt-managed `/usr/bin/python3 -m jsonschema`對同一audit
+  schema與instance exit 0。Hosted PR首次container嘗試亦因Ubuntu mirror暫時timeout失敗，
+  attempt 2完整9/9成功；兩者都保留為環境偏離，不重寫成首次成功。
+- [偏離 2026-07-23] Publication task先被移至archive，之後強化remote assertion使audit
+  實體SHA改變；root在原lease已`RELEASED`後才同步SHA與timestamp，屬治理時序錯誤，不是
+  資料或科學內容錯誤。沒有倒填或重新啟動原lease；後續修改前另建立
+  `20260723-private-draft-closure`精確write-set task，重跑schema、audit replay、compiled
+  governance與foundation gate後再封存。

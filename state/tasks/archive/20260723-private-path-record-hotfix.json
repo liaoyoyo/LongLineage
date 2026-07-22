@@ -1,0 +1,67 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260723-private-path-record-hotfix",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": "20260723-private-draft-closure",
+  "allowed_paths": [
+    {"path": "state/tasks/archive/20260723-private-draft-closure.json", "kind": "FILE"},
+    {"path": "state/tasks/active/20260723-private-path-record-hotfix.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260723-private-path-record-hotfix.json", "kind": "FILE"}
+  ],
+  "depends_on": ["20260723-private-draft-closure"],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-23T03:32:06+08:00",
+  "heartbeat_at": "2026-07-23T01:35:18+08:00",
+  "task_type": "E",
+  "goals": ["LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Remove the machine-private absolute build and repository paths introduced in the archived closure task evidence command, preserve the failed hygiene check as negative evidence, and revalidate the exact repository tree. No scientific or implementation source is in scope."
+  },
+  "assumptions": [
+    "Repository evidence commands use <BUILD_ROOT> and <REPO_ROOT> placeholders rather than storing machine-private absolute paths.",
+    "The immutable implementation audit and all P0-P8 states remain unchanged."
+  ],
+  "inputs": [
+    {"role": "rejected_record", "path": "state/tasks/archive/20260723-private-draft-closure.json", "sha256": null},
+    {"role": "implementation_audit", "path": "state/audits/20260722-release-repair-and-publish-001.json", "sha256": "7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac"}
+  ],
+  "expected_outputs": [
+    {"role": "sanitized_record", "path": "state/tasks/archive/20260723-private-draft-closure.json", "sha256": null},
+    {"role": "hotfix_task", "path": "state/tasks/archive/20260723-private-path-record-hotfix.json", "sha256": null}
+  ],
+  "step_verify": [
+    {
+      "step": "Replace machine-private evidence paths with governed placeholders.",
+      "verify": "Repository hygiene reports zero private-path violations and git diff contains no /big*_disk or /bip*_disk payload."
+    },
+    {
+      "step": "Revalidate task schemas, compiled governance and the complete foundation gate.",
+      "verify": "Schemas, check-state and check_all exit 0; check_all reports 47/47 and FOUNDATION_PASS."
+    },
+    {
+      "step": "Archive this hotfix as the final worktree write.",
+      "verify": "The task is VERIFIED/RELEASED with no blockers and all later pre-commit checks are read-only."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "PRIVATE_PATH_RECORD_HOTFIX",
+      "evidence_path": "state/audits/20260722-release-repair-and-publish-001.json",
+      "evidence_kind": "AUDIT",
+      "command": "scripts/ci/check_repo_hygiene.sh && <BUILD_ROOT>/bin/longlineage-governance check-state --repo <REPO_ROOT> && scripts/ci/check_all.sh <BUILD_ROOT>",
+      "exit_code": 0,
+      "output_excerpt": "Repository hygiene PASS with no changed-file private paths; task schemas and compiled governance PASS; check_all 47/47 in 106.04 seconds, no-network PASS and FOUNDATION_PASS; implementation audit SHA remains 7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac.",
+      "evidence_sha256": "7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac",
+      "recorded_at": "2026-07-23T01:35:18+08:00"
+    }
+  ],
+  "deviations": [
+    "The first final-tree check_all correctly failed before tests because the newly archived closure task stored machine-private absolute paths in its command field. That failed run is negative evidence and is not rewritten as a pass.",
+    "An additional ad hoc repository-wide regex scan matched the forbidden-pattern literals in the hygiene checker and report sanitizer themselves. The governed hygiene script passed, and a changed/untracked-file-only scan then passed; the overly broad diagnostic is not completion evidence."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-23T01:35:18+08:00"
+}
