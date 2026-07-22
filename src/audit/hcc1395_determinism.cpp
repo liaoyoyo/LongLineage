@@ -564,10 +564,6 @@ struct RunData {
     SummaryProjection summary;
 };
 
-constexpr std::array<std::string_view, 8> kScienceArtifactIds = {
-    "site_reads",     "methyl_calls",       "bernoulli_upper",    "m1_sites",
-    "m1_assignments", "cooccurrence_pairs", "cooccurrence_sites", "topology_units"};
-
 struct ExpectedArtifact {
     std::string_view artifact_id;
     std::string_view relative_path;
