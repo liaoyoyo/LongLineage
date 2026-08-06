@@ -211,6 +211,16 @@ longlineage_add_cli(longlineage_regional_validator
     longlineage-regional-validate apps/regional_compat_validate_main.cpp
     longlineage_regional_validation)
 
+# Lineage post-processing tools. Like query/export-legacy/evaluate these read frozen
+# artifacts and emit derived products, so they intentionally do not link
+# longlineage_core and stay outside the production run's artifact catalog.
+longlineage_add_cli(longlineage_lineage_paths longlineage-lineage-paths
+    apps/lineage_paths_main.cpp PkgConfig::JANSSON ZLIB::ZLIB)
+longlineage_add_cli(longlineage_read_assign longlineage-read-assign
+    apps/read_assign_main.cpp PkgConfig::JANSSON ZLIB::ZLIB)
+longlineage_add_cli(longlineage_tag_bam longlineage-tag-bam
+    apps/tag_bam_main.cpp PkgConfig::HTSLIB PkgConfig::JANSSON OpenSSL::Crypto ZLIB::ZLIB)
+
 add_custom_target(
     governance-check
     COMMAND "$<TARGET_FILE:longlineage_governance>" check-all
