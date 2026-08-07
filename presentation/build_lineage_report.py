@@ -170,10 +170,82 @@ def main() -> int:
             rows = list(csv.DictReader(fh))
         avail["ism"] = {"available": True, "path": str(args.ism_summary), "rows": len(rows)}
         cols = list(rows[0].keys()) if rows else []
+        has_lineage = "LineageNGroups" in cols
+
+        def sig(v, thr=0.05):
+            try:
+                return float(v) <= thr
+            except (TypeError, ValueError):
+                return False
+
+        # 每個軸各自統計：可檢定的 region 數、其中顯著的數目
+        axes = [
+            ("HP", "HPMergedP", "HPMergedDelta"),
+            ("ALT", "AlleleP", "AlleleDelta"),
+            ("Cluster", "ClusterPermanovaP", "ClusterPermanovaF"),
+        ]
+        if has_lineage:
+            axes.append(("lineage", "LineagePermanovaP", "LineagePermanovaF"))
+
+        axis_rows = []
+        for name, pcol, scol in axes:
+            if pcol not in cols:
+                continue
+            testable = [r for r in rows if (r.get(pcol) or "").strip() not in ("", "nan")]
+            hits = [r for r in testable if sig(r.get(pcol))]
+            axis_rows.append(
+                f"<tr><td><code>{html.escape(name)}</code></td>"
+                f"<td class='n'>{len(testable):,}</td>"
+                f"<td class='n'>{len(hits):,}</td>"
+                f"<td class='n'>{len(hits)/len(testable)*100:.1f}%</td></tr>"
+                if testable
+                else f"<tr><td><code>{html.escape(name)}</code></td><td class='n'>0</td>"
+                     f"<td class='n'>0</td><td class='n'>—</td></tr>"
+            )
+
+        # 逐位點：哪個軸解釋了這個位點的甲基差異
+        detail = []
+        if has_lineage:
+            for r in rows:
+                if (r.get("LineageNGroups") or "0") in ("0", ""):
+                    continue
+                winners = [n for n, pc, _ in axes if sig(r.get(pc))]
+                detail.append(
+                    "<tr>"
+                    f"<td><code>{html.escape(r.get('Chr',''))}:{html.escape(r.get('Pos',''))}"
+                    f" {html.escape(r.get('Ref',''))}&gt;{html.escape(r.get('Alt',''))}</code></td>"
+                    f"<td><code>{html.escape(r.get('LineageAxis',''))}</code></td>"
+                    f"<td class='n'>{html.escape(r.get('LineageNGroups',''))}</td>"
+                    f"<td class='n'>{html.escape(r.get('LineageNReads',''))}</td>"
+                    f"<td class='n'>{html.escape(r.get('LineagePermanovaF',''))}</td>"
+                    f"<td class='n'>{html.escape(r.get('LineagePermanovaP',''))}</td>"
+                    "<td>"
+                    + (" + ".join(html.escape(w) for w in winners) if winners
+                       else "<span class='note'>無顯著軸</span>")
+                    + "</td>"
+                    "</tr>"
+                )
+
         body = (
             f"<p>載入 <b>{len(rows):,}</b> 個 region，<b>{len(cols)}</b> 個欄位。</p>"
-            "<p class='note'>甲基 × 標籤軸關聯分析（待 ISM 支援 <code>--group-by-tag lv</code> 後補完）。</p>"
+            "<h3>各軸的可檢定數與顯著數（p ≤ 0.05）</h3>"
+            "<table><tr><th>軸</th><th>可檢定 region</th><th>顯著</th><th>比例</th></tr>"
+            + "".join(axis_rows) + "</table>"
         )
+        if has_lineage and detail:
+            body += (
+                f"<h3>逐位點：lineage 軸可檢定的 {len(detail)} 個位點</h3>"
+                "<table><tr><th>位點</th><th>軸</th><th>群數</th><th>read</th>"
+                "<th>F</th><th>p</th><th>顯著的軸</th></tr>"
+                + "".join(detail) + "</table>"
+                "<p class='note'>「顯著的軸」列出該位點上 p ≤ 0.05 的所有軸，"
+                "用來判斷甲基差異究竟由哪個分組解釋。空白的 F/p 代表未計算（群數不足），不是 0。</p>"
+            )
+        elif has_lineage:
+            body += "<p class='note'>本批次沒有任何 region 的 lineage 軸達到可檢定的群數。</p>"
+        else:
+            body += ("<p class='note'>此 summary 由不支援 lineage 軸的 ISM 版本產生；"
+                     "重跑 <code>--group-by-tag ...,lv</code> 後本面板會顯示逐位點的軸歸因。</p>")
         panels.append(panel("ism", "4 · 甲基 × 標籤關聯", True, body=body))
     else:
         reason = "未提供 --ism-summary（ISM 尚未支援讀取 lc/lu/lv 標籤）"

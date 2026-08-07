@@ -31,12 +31,12 @@
  },
  "provenance": {
   "strict_linkage": {
-   "path": "/big7_disk/liaoyoyo2001/InterSubMod/research/20260723_production_exact_ps_strict_read_linkage/20260723_exactPS嚴格ReadLinkage全資料集報告_01/data/all7_report_data.json",
+   "path": "<INTERSUBMOD_REPO>/research/20260723_production_exact_ps_strict_read_linkage/20260723_exactPS嚴格ReadLinkage全資料集報告_01/data/all7_report_data.json",
    "sha256": "7c8fdaf0ae57a55c60b166ae4a34c8322de5efbd09e6e2483550b134d15b56f0",
    "size_bytes": 357438
   },
   "topology": {
-   "path": "/big7_disk/liaoyoyo2001/big7_disk_output/synthesis/research_rounds/20260724_exact_ps_cpp_topology_af_all_samples/all7_strict_guard1000_v1/summary/all7_summary.json",
+   "path": "<RESEARCH_ROUNDS>/20260724_exact_ps_cpp_topology_af_all_samples/all7_strict_guard1000_v1/summary/all7_summary.json",
    "sha256": "d2edca043564f9da4a5372dc70542b89024040a9b41a6290ccf938d262b46bcd",
    "size_bytes": 36992
   }

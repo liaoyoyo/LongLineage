@@ -37,7 +37,7 @@
 |---|---|---|
 | C1 | COLO829 `groups < W`（−14） | 守恆缺口，資料可信度 |
 | C2 | extraction/strict/k12 三階段無計時 | 7 樣本排程無法估算 |
-| C3 | chr1:1M-3M 的 `lineage_written` 僅 1.4% | 需更大區間確認是否正常 |
+| C3 | chr1 @ 1M-3M 的 `lineage_written` 僅 1.4% | 需更大區間確認是否正常 |
 | C4 | 該區間無 `ls_U`（全 P/M） | 需確認是否此區特有 |
 | C5 | `strict_graph` receipt 的 invariants 是硬編碼 `true` | 不可當驗證證據 |
 

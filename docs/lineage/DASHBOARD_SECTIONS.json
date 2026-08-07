@@ -1,0 +1,418 @@
+{
+ "sections": [
+  {
+   "id": "s01_authority_ceiling",
+   "title": "8 份 receipt 全數 SHA-256 通過；但階層標籤只覆蓋 39,617,373 條 alignment 中的 1.08%",
+   "purpose": "開頁第一屏同時交代「這頁的資料是真的」與「這頁能宣稱的範圍有多窄」。回答：資料從哪來、驗過沒、分母是什麼、哪些面板不可用。",
+   "chart_type": "KPI tile 列（5 格）+ provenance 表（可收合）+ 頁首 .boundary 琥珀帶",
+   "data_source": "全部 receipt：<OUT_ROOT>/HCC1395_v1/paths/HCC1395.unit_lineage_paths.receipt.json、同 run 下 bam/HCC1395.{chr1..chr22}.tag_bam.receipt.json（22 份）、assign/HCC1395.{chrom}.read_assign.receipt.json、<RESEARCH_ROUNDS>/20260724_exact_ps_cpp_topology_af_all_samples/all7_strict_guard1000_v1/samples/HCC1395/HCC1395.topology.receipt.json",
+   "fields": "receipt.stats.reads_total / lineage_written / lv_written（22 檔加總）、rows、schema_name、schema_version、每個輸入檔的 path+sha256+size_bytes；KPI = alignment 總數、寫入 lineage、寫入 lv、unit 總數、可用面板 n/N",
+   "interaction": "provenance 表放 <details> 預設收合；每個 KPI tile 的 note 行固定顯示自己的分母字串；<head> 埋 <meta name=\"longlineage-*-receipt-sha256\">，builder 的 --verify-only 會回讀比對",
+   "caveat": "KPI 不得只印分子。每格必須是 `{分子} / {分母}` 兩個數字並排 + unit badge（alignment/read/unit）。缺任一 receipt → 該 tile 顯示「未產出」而非 0，並計入頂部完整度指示器。"
+  },
+  {
+   "id": "s02_read_funnel",
+   "title": "3,961 萬 → 125 萬 → 42.8 萬：第二段掉掉的 65.8% 不是品質過濾，是 LCA 找不到共同祖先",
+   "purpose": "把 read 層的三段收斂講清楚，並曝光現行報告完全沒顯示的 lv_written < lineage_written 缺口（chr21 實測 3,067 / 6,454，即 52.5% 的 ls 標籤讀沒有 lv）。",
+   "chart_type": "手刻 SVG 階梯漏斗（4 階，每階寬度 ∝ 計數，階間標「掉了 N（pct）· 原因」）+ 右側逐 chrom 小表",
+   "data_source": "bam/HCC1395.{chrom}.tag_bam.receipt.json × 22 的 stats 區塊",
+   "fields": "reads_total、hp_written、ps_written、lineage_written、lv_written、no_lineage、lca_candidates_sum、lca_resolved、lca_no_common_ancestor、multi_block_reads",
+   "interaction": "點任一階 → 下方逐 chrom 表只顯示該階的 per-chrom 分解；hover 階間箭頭 → tooltip 顯示 tag_bam_main.cpp:422 的判定條件原文（`if (any_lv && ls != 'A')`）",
+   "caveat": "lineage_written 與 lv_written 是兩個不同分母，禁止用同一條軸的百分比並排。lca_no_common_ancestor 在部分 receipt 不存在 key（chr21 即無）→ 缺 key 一律當 0 但仍列出該階，不可整階消失。"
+  },
+  {
+   "id": "s03_ls_credibility",
+   "title": "88.3% 的 alignment 是 P（覆蓋不全），U 只有 7.7%：P 是覆蓋語意，不是品質差",
+   "purpose": "把 U/M/P/A 從現行的一行 note（build_lineage_report.py:157-159）升級為貫穿全站的一級可信度軸，並用 C++ 源碼定義取代口語敘述。",
+   "chart_type": "單條 100% stacked bar（P→M→A→U 固定順序）+ 22 列 per-chrom small-multiple 堆疊條 + 定義契約格（跨欄，放在數字格陣列最後）",
+   "data_source": "bam/HCC1395.{chrom}.tag_bam.receipt.json 的 stats.ls_*；定義文案逐字引自 <LONGLINEAGE_REPO>/apps/tag_bam_main.cpp:111（sev 排序）與 :371-379（判定分支）",
+   "fields": "ls_U / ls_M / ls_P / ls_A（缺 key 補 0）、lineage_written（作為分母，須斷言 Σls_* == lineage_written）",
+   "interaction": "點任一色段 → 全頁 state.lsFilter 生效，s05/s07/s09/s10 同步過濾；圖例為聯集多選，計數 0 的類別仍顯示但 disabled",
+   "caveat": "chr21 receipt 實測沒有 ls_A key，但 A 類別必須以 0 顯示。圖例文字必須寫「P = is_full_cov 為 false（block 內有未觀察位），非品質過濾」「A = topology 查無此 region 或 family_status ≠ FAMILY_COMPLETE」；多 block read 取最差級（A<P<M<U）此句必須出現。"
+  },
+  {
+   "id": "s04_lca_plus_semantics",
+   "title": "帶 `+` 的 lv 是子樹斷言不是葉節點：resolved-at-node 與 compatible-with-subtree 永不相加",
+   "purpose": "顯性處理 tag_bam_main.cpp:405 的 `lineage_path + \"+\"` 語意 —— 這是 88.3% P-class read 的唯一正確讀法，現行 4 面板完全沒呈現。",
+   "chart_type": "左：小型手刻 SVG 樹，compatible read 畫成覆蓋整個子樹的半透明色帶（subtree band）而非節點實心點；右：雙欄並排長條（resolved | compatible），刻意不堆疊",
+   "data_source": "assign/HCC1395.all.read_lineage_assignments.tsv.gz（is_full_cov 決定 resolved/compatible）+ paths/HCC1395.unit_lineage_paths.tsv.gz（樹結構）",
+   "fields": "is_full_cov、tree_supported、pattern_vector（X 的位置數）、lineage_path、depth、parent_vertex、vertex",
+   "interaction": "切換鈕「顯示為葉指派 / 顯示為子樹斷言」——選前者時整個面板變灰並顯示「此視圖會誤導：X 位可為 R 或 A，read 只被斷言落在該節點或其後代」",
+   "caveat": "任何 KPI 若混合 resolved 與 compatible，標籤必須寫「≥ 該節點」而非「該節點」。lineage_path 的計數分佈禁止把 `HP2-1` 與 `HP2-1+` 併為同一 bucket。"
+  },
+  {
+   "id": "s05_unit_funnel_determinacy",
+   "title": "11,590 個 unit 只有 9,130 建得出樹；其中 7,047 唯一、2,083 是同分並列而非失敗",
+   "purpose": "unit 層（非 read 層）的定解漏斗，並把「不可判定的各種原因」當一等公民逐項列出，包含 count=0 的失敗模式。",
+   "chart_type": "SVG 分段漏斗 + 下方 distribution_html 堆疊條（分母 = 11,590 final units）+ 第二條堆疊條（分母 = 9,130 ranked）",
+   "data_source": "paths/HCC1395.unit_lineage_paths.receipt.json 的 stats（units_seen 11,590 / units_with_paths 9,130 / skipped_no_vertices 2,460）+ topology.jsonl 的 objective_status / read_af_status / family_status / unit_status",
+   "fields": "units_seen、units_with_paths、skipped_no_vertices、best_tree_unique、best_tree_tie_count、total_tree_count、minimum_vertex_set_count、best_vertex_set_count、objective_status、reason、family_enumeration_exhausted",
+   "interaction": "兩條堆疊條各自獨立過濾；點任一段 → s07 樹瀏覽器只載該 resolution 類別的 unit",
+   "caveat": "這是「三個問題、三個分母」的實作：11,590 與 9,130 兩個分母絕不共用同一條軸，各自 panel 標題下第一行必須是 .denom 行。RECURRENCE_REQUIRED / ZERO_DENOMINATOR 等 count=0 的類別仍要顯示，否則讀者會以為該失敗模式不存在。"
+  },
+  {
+   "id": "s06_lineage_hierarchy_shape",
+   "title": "HP1 與 HP2 幾乎對稱（4,607 vs 4,523），但分支標籤 HP1-2 只有 475：這條譜系絕大多數是直鏈",
+   "purpose": "回答「演化階層標籤長什麼樣」——標籤分佈、鏈長分佈、直鏈 vs 分岔的對比，取代現行的 top-20 bar_table 截斷。",
+   "chart_type": "巢狀 icicle（橫向，寬度 = 該 lineage_path 的 vertex 數）+ 旁邊 depth 分佈堆疊條 + 直鏈/分岔對比雙欄",
+   "data_source": "paths/HCC1395.unit_lineage_paths.tsv.gz（26,748 列，整檔可嵌）+ 同層 receipt 的 depth_0..depth_5",
+   "fields": "lineage_path、depth、is_hidden、n_children、vertex_label（H_ 前綴 = hidden）、parent_vertex、best_tree_unique",
+   "interaction": "點 icicle 任一段 → 過濾出該標籤的所有 unit，並在 s07 逐個瀏覽；切換「合併 tie / 拆開 tie」——拆開時每條長條用 hatch pattern 疊出 best_tree_unique=false 的部分",
+   "caveat": "icicle 的橫軸是拓撲深度不是時間，寬度是 vertex 數不是 CCF 也不是細胞比例 —— 這三句必須寫在圖注。禁止畫 fishplot（單一 bulk 單時間點，時間軸不存在）。depth 分佈的分母是 26,748 vertex，與 s05 的 11,590 unit 分母不同，須各自標明。"
+  },
+  {
+   "id": "s07_tree_explorer",
+   "title": "這棵樹是一棵 exemplar 不是答案：2,083 個 unit 的代表樹來自多棵同分樹的確定性挑選",
+   "purpose": "核心面板 —— 逐 unit 的樹拓撲 + 突變順序 + 候選聯集，同時表達 union / global-best / selected 三個語意層。",
+   "chart_type": "手刻 inline SVG 雙圖：左 = representative tree（節點 = lineage_path 標籤、邊上標 acquired_position、hidden node 虛線琥珀框）；右 = candidate edge union（四層疊線：灰實=所有 minimum trees 的 union、灰虛=僅部分候選、藍=global-best union、綠=目前 exemplar）",
+   "data_source": "topology.jsonl 的 representative_best_edges / representative_best_vertices / representative_best_morphology + paths TSV 的 vertex_label / acquired_position / edge_score_fraction",
+   "fields": "representative_best_edges、total_tree_count、best_tree_tie_count、best_tree_unique、minimum_vertex_set_count、best_vertex_set_count、active_positions、active_bit_count、objective_status、reason、edge_score_fraction",
+   "interaction": "標題字串三元式：best_tree_unique 為真 → 「唯一 selected tree」，否則 → 「一棵 selected exemplar（同分 N 棵）」；<details> 在 total_tree_count>1 時自動 open；上/下一組候選 + 編號跳轉；hover 邊 → tooltip 顯示 candidate membership 分數",
+   "caveat": "圖注固定句：「任何聯集都不是一棵樹，edge 次數是 candidate membership，不是 probability 也不是 read support」。分支長度統一等長且圖例必須明寫「分支長度無意義」。節點>96 或邊>220 直接拒畫，改顯示真實 node/edge 計數 + 指向完整 edge census 表（照 candidateUnionSvg 的既有上限）。"
+  },
+  {
+   "id": "s08_mutation_order_support",
+   "title": "突變順序只在 7,047/9,130（77.2%）的 unit 上唯一；其餘必須報「此順序在 N 棵等價最佳樹中出現 M 次」",
+   "purpose": "把 mutation_order 從「一串字串範例」升級為有支持度的排序 claim，對應 phylogenetics 處理等分樹的既有慣例。",
+   "chart_type": "順序支持度條（每個 ordered pair 一列：100%=實線黑箭頭、50-99%=虛線+標 pct、≈50%=雙向灰箭頭標「順序不可定」）+ 上方 acquired_position 的座標軸",
+   "data_source": "paths/HCC1395.unit_lineage_paths.tsv.gz 的 mutation_order + acquired_position；支持度由 precompute 從 topology.jsonl 的候選集重算並落 order_support.json",
+   "fields": "mutation_order、acquired_position、edge_score_fraction、total_tree_count、best_tree_tie_count、depth",
+   "interaction": "點任一 pair → 高亮 s07 樹上對應的邊；切換「只看 support=100% 的順序」",
+   "caveat": "edge_score_fraction 實測 12,266/17,618 是 `0/1`（無競爭），只有極少數 edge 真的靠 read-AF 打破同分 —— 面板必須明示「AF 只在少數 unit 起作用」，且該分數是 HP 家族內 ALT/(REF+ALT) 的 edge 累加，不是 VAF。support 未重算完成前，該欄寫 {{待填}}，不得用 best_tree_unique 代替。"
+  },
+  {
+   "id": "s09_read_state_matrix",
+   "title": "88.4% 的 read 在 block 內有未觀察位（X）：pattern 裡每一個 X 都是一次子樹斷言",
+   "purpose": "本專案的原創面板（CellScape 的單分子版）——把 read × 位點的原始觀測攤開，讓讀者自己看見 X 有多少。",
+   "chart_type": "HTML table 三態格矩陣（rows = read pattern，cols = block 內的 sSNV 位點 S1..Sk，格子 A/R/X 三色，X 用中性灰且絕不與 R 同色）+ 左側 sticky 來源欄 + 右側 ls badge 欄；read 數大時走虛擬捲動（固定行高 28px、spacer 上限 8,000,000 px + downscale）",
+   "data_source": "assign/HCC1395.all.read_lineage_assignments.tsv.gz（1,009,543 列，precompute 端聚合成 per-unit 的 pattern→count）+ topology.jsonl 的 active_positions",
+   "fields": "pattern_vector、k、n_fixed_ra_in_block、is_full_cov、tree_supported、block_index、region_id、molecule_id（僅 count，不外露 qname）",
+   "interaction": "hover s07 樹節點 → highlight 相容的 read 列；點 read 列 → 顯示其 lineage_path（含 + 後綴）/ ls / k；pattern 種類 7,308 種，預設只列 count≥3 的 solver-visible pattern",
+   "caveat": "必須寫「只列 count≥3 的 solver-visible pattern；低於門檻的 molecule pattern 不能被推成『不存在』」。read 抽樣時標題必須寫「顯示 n/N，抽樣方式 X」，不可靜默截斷。alignment（1,251,092）與 distinct read（1,001,670）兩個數字並列顯示並標明 +24.9% 差異來自 supplementary/secondary。"
+  },
+  {
+   "id": "s10_genome_map",
+   "title": "17,618 個 acquired_position 鋪滿 22 條染色體；密度高低同時是 sSNV 密度與 CN 的函數，不是演化熱點",
+   "purpose": "全基因組尺度的分佈層 —— 這是現有 4 面板完全未用到的最大資產（acquired_position 欄）。",
+   "chart_type": "Canvas 2D：22 列共用 chr1 實體 bp 尺度（骨架寬 = L_chr/L_chr1，x = pos/L_chr1），點色 = 目前著色維度，hasMethylSignal 畫橘色 halo；上層疊 SVG 染色體骨架（可選 UCSC cytoBandIdeo 5 欄帶紋）；下方接 region 清單雙欄",
+   "data_source": "paths TSV 的 chrom + acquired_position（17,618 個非「.」座標）；第二軌由 assign TSV 的 region_id 解析 PS 座標得覆蓋密度；chrom 長度取 build_exact_ps_layered_workstation.py:135 的 CHROM_LENGTHS",
+   "fields": "chrom、acquired_position、depth、lineage_path、is_hidden、ls（由 unit 反查）、region_id→PS 座標",
+   "interaction": "7 個著色維度切換（depth / ls / best_tree_unique / hidden / lineage 主支 HP1|HP2 / 甲基有無 / resolution）；uniform-grid（8px bucket）hit detection，點擊最近點 <12px 命中 → 選中 region 並捲到 s07；座標區間搜尋（regex 解析 chrN:start-end，overlap 比對）；DPR 上限 2、resize 120ms debounce",
+   "caveat": "canvas 必須有 role=img + aria-label 並明寫「下方 region 清單提供鍵盤可操作的等價內容」。清單截斷（前 160 筆）時必須顯示「清單只顯示前 N 筆；全基因圖仍包含全部 M 筆」。密度圖注必須寫明 chr6-MHC 與 chr16 佔 sSNV 總量 42% 且為 CN 擴增/mapping artifact 好發區，不可讀成演化事件熱點。"
+  },
+  {
+   "id": "s11_methyl_axis_attribution",
+   "title": "lineage 軸只有 5/30 個位點可檢定（n<30，依 NCHS 標準不報百分比）；同位點多軸共顯著 = confound 警訊",
+   "purpose": "取代現行單一「軸 × 可檢定 × 顯著 × 比例」表（build_lineage_report.py:190-204）——那張表把四個不同分母的比例並排在同一欄，是 within-the-bar bias 的典型誤用。",
+   "chart_type": "視圖 A：軸歸因矩陣（rows = 位點，cols = 7 軸 + 2 控制變項欄，格子 = −log10(p) 分級色，「未檢定」畫斜線而非 0）；視圖 B：火山圖（x = effect Δβ 或 PERMANOVA F，y = −log10(p)，按軸著色，Canvas + grid hit detection）",
+   "data_source": "significance_summary.csv（199 欄 × 30 列，目前落在 scratchpad：/tmp/claude-1067/.../scratchpad/s5/significance_summary.csv —— builder 必須先複製進 run root 並登記 sha256，否則 provenance 斷鏈）",
+   "fields": "Chr、Pos、Ref、Alt、LineageAxis、LineageNGroups、LineageNReads、LineagePermanovaF、LineagePermanovaP、LineagePermanovaValid、HPMergedDelta/P/Sig、AlleleDelta/P/Sig、ClusterPermanovaF/P/Valid、ClusterDispersionP/Warn、LabelAllelePermanovaF/P/Valid、Coverage_Category、LOH_Subtype、VerificationClass",
+   "interaction": "每軸一張獨立 .axis-card（不並排比例）；排序切換（依 Chr:Pos / 依顯著軸數）；Coverage_Category 與 LOH_Subtype 分層切換；點任一格 → 展開 s12",
+   "caveat": "三態判定必須用 *Valid 欄位（LineagePermanovaValid / ClusterPermanovaValid / LabelAllelePermanovaValid）而非「p 是否可 parse」；現行 sig() 把空值靜默當 False（:175-179）是把未檢定陰性化。lineage 軸 n=5 → 只顯示 `k / 5` 不顯示百分比。LineageNGroups 與 LineageNReads 必須與 p 值同列並排顯示，避免 5/5=100% 被誤讀。多軸共顯著的列要有 confound 徽章。"
+  },
+  {
+   "id": "s12_methyl_locus_workstation",
+   "title": "逐位點 read×CpG 熱圖：側欄是 lineage 分組，但甲基不進入拓撲推論，只做事後 characterize",
+   "purpose": "對 lineage 軸可檢定的位點（實測 chr21 的 7 個）提供最細粒度的原始證據，並在版面上釘死甲基的 bounded-auxiliary 定位。",
+   "chart_type": "HTML table 熱圖（rows = read，cols = CpG，紅=甲基/藍=未甲基/灰=無覆蓋）+ 左側三條側欄（lineage_path 含 + 標記 / lineage_status U/M/P/A 配色 / hp）+ 各組上方疊該組甲基頻率折線 + 右側距離矩陣縮圖",
+   "data_source": "ISM region 目錄，實測結構：<s5>/chr21_test/chr21/chr21_<pos>/chr21_<start>_<end>/{methylation/methylation.csv, methylation/methylation_forward.csv, methylation/methylation_reverse.csv, methylation/cpg_sites.tsv, reads/reads.tsv, clustering/leaf_order.txt, clustering/tree.nwk, distance/NHD/matrix.csv, metadata.txt}",
+   "fields": "reads.tsv 的 hp / lineage_component / lineage_block / lineage_path / lineage_pattern / lineage_status；methylation.csv 的 read×CpG β 矩陣（chr21 @ 8856107 實測 69×41）；cpg_sites.tsv 座標；leaf_order.txt 決定列序",
+   "interaction": "forward / reverse / combined 三態切換；側欄排序鍵切換（leaf_order / lineage_path / ls）；點 CpG 欄 → 顯示該位點各 lineage 組的 β 分佈",
+   "caveat": "面板頁腳固定句：「甲基為 bounded-auxiliary，不參與拓撲推論；本圖的分組鍵是 lineage 不是 haplotype，與 methylation-based lineage tracing（MethylTree 等 single-cell 方法）不是同一類能力」。未列出的位點只是未進本次 targeted subset，不代表甲基陰性 —— 必須明文。"
+  },
+  {
+   "id": "s13_run_provenance_and_igv",
+   "title": "stages.tsv 是 append-only：22 條染色體有 43 筆 tag_bam 紀錄，直接加總會把耗時算兩次",
+   "purpose": "執行層可稽核性 + BAM 交接。260 GB 的 lineage_tagged BAM 不可能進 HTML，這節提供可複製的 IGV 載入路徑與 aux tag 契約。",
+   "chart_type": "去重後的階段甘特/長條（依 (stage,chrom) 取最新一筆）+ aux tag 契約表 + 可複製的 IGV/samtools 指令區塊",
+   "data_source": "<OUT_ROOT>/HCC1395_v1/logs/stages.tsv（6 欄 158 列）+ bam/*.tag_bam.receipt.json 的 in_bam/sidecar/topology 路徑欄",
+   "fields": "utc、stage、chrom、status、seconds、detail；receipt 的 in_bam / sidecar / topology / out_bam / threads；aux tag 表逐字引自 tag_bam_main.cpp:5-16",
+   "interaction": "切換「去重後 / 原始全部紀錄」並在切到原始時顯示紅色說明；點任一 chrom → 顯示該 chrom 的完整重跑歷史",
+   "caveat": "預設必須是去重視圖，且標題直接寫出重複倍數（43 筆 vs 22 chrom）。不變式三句必須原樣呈現：ls=='A' 不寫 lv/lo；lv 存在必有 ls；ls!='U' 時 lv 僅為代表值。"
+  },
+  {
+   "id": "s14_method_contract_and_export",
+   "title": "六個名詞契約與五種「不存在 ≠ 未測」：本頁的節點是 lineage vertex，不是已確認的 subclone",
+   "purpose": "收束全頁的定位與禁用口徑，並提供人工判讀的存檔/匯出（沿用 verify-workstation 模式）。",
+   "chart_type": "6 個名詞契約 panel（每個 = 定義 + 資料來源 file:line + 一句禁用口徑）+ 5 種缺席語彙對照表 + 匯出按鈕列",
+   "data_source": "tag_bam_main.cpp:5-16 / :111 / :371-379 / :405；topology.jsonl 的 schema_name+schema_version；各 receipt 的 schema 欄",
+   "fields": "lineage vertex 定義、read fraction 定義、ls 四級定義、+ 後綴定義、hidden node 定義、edge score 定義；五種缺席 = 未納入 subset / 低於門檻被截斷 / 結構上不可能建樹 / 群數不足未檢定 / 檔案缺件",
+   "interaction": "逐項人工判讀（同意/存疑/否定 + 原因）存 localStorage；JSON/CSV 匯出與匯入；每張 SVG 右上角 PNG/SVG 匯出鈕（純前端 serialize，零外部依賴）",
+   "caveat": "三句 boundary 必須逐字出現：①本圖的節點是 lineage vertex（HP1-1-1 形式），不是已確認的 subclone；②read fraction ≠ cellular prevalence ≠ CCF；③甲基軸為事後 characterize，不進入拓撲推論。五種缺席各自有專屬措辭，不得共用一句「資料不足」。"
+  }
+ ],
+ "tech_choices": [
+  {
+   "decision": "兩段式：先跑 precompute（build_lineage_dashboard_data.py）產 dashboard.data.json，renderer（build_lineage_dashboard.py）只做注入，任何必填 key 缺失即 raise AuthorityError → main() 印 `FAIL CLOSED:` 並 return 2",
+   "rationale": "CLAUDE.md §13-A「由構造防止捏造」的實作路徑：renderer 內不得出現任何手打數值。現行 build_lineage_report.py 是單體 renderer 邊掃邊算邊寫 HTML（:76-99、:111-126），一旦輸入半殘就可能寫出半真數字。分離後 precompute 的輸出可以被獨立 grep 驗證。"
+  },
+  {
+   "decision": "繪圖雙技術分流：全基因組散點用 Canvas 2D（17,618 acquired_position 點 + 可選的 read 密度軌），樹/漏斗/icicle/圖例用手刻 inline SVG，熱圖與相似度矩陣用 HTML <table>",
+   "rationale": "實測分界：Canvas + 降採樣約 300ms 完成而 raw SVG 數萬元素需數十秒；反之每個 unit 的樹只有 k≤12 個 active 位點、頂點數遠低於 phylotree.js 的數千 tip 能力，手刻 SVG 才好標註 acquired_position 與加 <title> tooltip。table 熱圖天生可存取（th scope / caption）、可複製、可列印。全程零外部函式庫，符合 standalone + CSP 限制。"
+  },
+  {
+   "decision": "樹的 layout 用 legacy 的 layoutNetwork（longest-path 迭代求 depth，通用 DAG）而非 exact-PS 的 popcount 分層",
+   "rationale": "exact-PS 的 candidateUnionSvg 用 popcount(bitmask) 當層數，前提是頂點集合是 {0,1}^n 的子圖（hypercube）。LongLineage 的 lineage_path 階層（HP1-1-1）由 parent_vertex 鏈定義，不保證是 hypercube 子圖；用 popcount 會排錯層。候選聯集面板若仍吃 topology.jsonl 的 bitmask vertex，則該面板可維持 popcount 分層。"
+  },
+  {
+   "decision": "資料層 = 欄式（struct-of-arrays）+ 字串字典編碼 + per-chrom gzip+base64 分片島，前端用 DecompressionStream('gzip') 惰性解壓；builder 同時支援 --no-compress 明文版",
+   "rationale": "lineage_path 這類高重複字串靠字典編碼即可縮 3–5×；參考頁實測資料島 gzip 後只剩原體積 9.9–11.5%（H2009 188 MB → 約 27.5 MB）。DecompressionStream 是瀏覽器原生 API 不是 CDN 函式庫（Chrome 80+/Firefox 113+/Safari 16.4+），符合零依賴硬限制。數值欄前端直接 new Int32Array(cols.pos) 供 Canvas 迴圈零配置使用。"
+  },
+  {
+   "decision": "資料規模三層：assign TSV（1,009,543 列 / 79 MB gz）永不整檔進 HTML，precompute 端聚合成 per-unit pattern→count 與 per-chrom 直方圖；paths TSV（26,748 列 / 555 KB gz）整檔嵌入；topology.jsonl（27.7 MB）只抽 representative_best_edges 等 12 個欄位後 per-chrom 分片",
+   "rationale": "JSON.parse 是同步阻塞且物件樹通常吃原字串 2–5 倍 RAM，主執行緒同步解析應控制在數 MB。paths 檔小到可整檔嵌入，正好是「階層/順序/拓撲」三個需求的單一 SoT；assign 檔是唯一真正需要聚合的層。"
+  },
+  {
+   "decision": "降級門檻寫成 builder 常數並在 UI 明示：series>100 → 面板預設收合按鈕才 render；series>2000 → 改畫聚合圖；table rows>500 → 預設摘要 + 「展開完整虛擬表」；候選網路 nodes>96 或 edges>220 → 拒畫改出完整 edge census 表",
+   "rationale": "前三個門檻直接沿用 MultiQC config_defaults.yaml 的量級（plots_defer_loading_numseries / plots_flat_numseries / max_table_rows），不自行拍腦袋；最後一個沿用 candidateUnionSvg 的既有可讀性上限。每個降級都在面板頂端寫一行「已聚合：N 列中顯示前 M」，不可靜默截斷。"
+  },
+  {
+   "decision": "明細表用虛擬捲動：固定行高 28px、spacer div 高度 = rows×rowHeight 但上限 cap 在 8,000,000 px（超過套 downscale factor）、只 render 可視列 ±10 buffer、<thead> position: sticky",
+   "rationale": "DOM 元素有最大高度上限（Firefox 約 1,700 萬 px），33px 行高下超過約 50 萬列就無法用真實高度。純 vanilla 約 120 行，可直接砍掉 build_lineage_report.py:40 的 top=20 截斷與 :62 的 --max-rows 2,000,000 造成的長尾不可見。"
+  },
+  {
+   "decision": "單一 state 物件 + 單一 refresh() 做 AND 合成，無框架無虛擬 DOM：state={mode, selected:Set, lsFilter, methylFilter, hpFilter, depthFilter, sortKey, sortDir, query, current, filtered, candidateIndex}",
+   "rationale": "參考實作在 35 MB 資料量下用這個結構仍可維護（HCC1395.html:451 state、:552-562 refresh）。關鍵細節是 renderLegend 會先算目前條件下每類計數、計數為 0 的類別不顯示、已選但歸零的類別自動移除 —— 這個「自動修剪失效選擇」多數自製 dashboard 會漏。"
+  },
+  {
+   "decision": "兩層產出 + URL 深連結：cohort index.html（<200 KB，7 樣本 KPI/漏斗/組成比較）+ per-sample 頁；index 每列連到 {SAMPLE}.html?region=chr3 @ 127986757#genome，樣本頁載入時讀 URLSearchParams('region')→parseQuery→套篩選→選中第一筆",
+   "rationale": "7 樣本塞一頁必爆（單樣本 assign 就 79 MB gz）。CSS 只寫一份兩層共用。深連結讓報告可被引用、可被 review、可在 issue 裡貼精確位置。"
+  },
+  {
+   "decision": "provenance 六層：require()/AuthorityError、每輸入檔綁 {path,sha256,size_bytes} 並用遞迴 verify_nested_identities 自動驗、all_true 遞迴斷言、schema_name/schema_version gate、atomic_write（staging+fsync+os.replace）、頁面 <head> 埋 meta + --verify-only 回讀前 12,000 bytes 比對",
+   "rationale": "缺資料/hash 漂移直接拒絕產出，而不是產出一個帶假數字的頁。頁面自帶 provenance meta 讓 HTML 本身成為可稽核 artifact，不必翻 log 就能判斷這頁是哪份資料產的、是否過期。"
+  },
+  {
+   "decision": "守恆斷言寫進 build()：(a) Σ ls_U+ls_M+ls_P+ls_A == lineage_written（逐 chrom 與全域各驗一次）；(b) units_with_paths + skipped_no_vertices == units_seen；(c) Σ per-chrom assign 列數 == 全檔列數；(d) lv_written ≤ lineage_written 且差額必須等於面板上顯示的 no-LCA 數",
+   "rationale": "這是比只驗輸入 hash 更嚴的最後一道閘 —— 「頁面數字 = 權威數字」。實測 chr21 的 614+1011+4829=6454=lineage_written 成立，而 lv_written=3067 有 3,387 的缺口，正是斷言 (d) 要逼出來的東西。常數從 receipt 讀入而非硬編碼。"
+  },
+  {
+   "decision": "色票寫死為 CSS 變數，用 Okabe-Ito 8 色色盲安全盤 + 沿用參考實作的既有語意色；Python 端與前端共用同一組字典（definitions ontology 注入）",
+   "rationale": "類別維度剛好 ≤8（ls 四級、depth 0-5、resolution 8 類、methyl 5 類），Okabe-Ito 完美覆蓋且是期刊接受標準。legend 用同一組 color 產生 → 顏色永遠不會兩處分歧。ls 建議：U=#176b58、M=#285f8f、P=#b9b8ad（中性灰，強調非品質差）、A=#a94336。"
+  },
+  {
+   "decision": "零外部資源：CSS/JS 以 module-level raw string 常數內嵌，資料走獨立 <script type=\"application/json\">，序列化一律 json.dumps(v, ensure_ascii=False, separators=(',',':')).replace('</','<\\\\/')；favicon 用 data:,；字體用系統堆疊含 \"Noto Sans TC\"",
+   "rationale": "standalone 交付物必須可離線、可寄給教授、可進 docs/ 版控（MultiQC 的 single stand-alone HTML 契約）。`</` 轉義是防止資料內容提前關閉 script 標籤。"
+  },
+  {
+   "decision": "ISM 輸入必須先落地：significance_summary.csv 目前在 /tmp/claude-1067/.../scratchpad/s5/ 這種 session 級暫存路徑，builder 第一步要 copy 進 run root 的 ism/ 子目錄並登記 sha256",
+   "rationale": "scratchpad 是 session-specific 會被清掉，直接讓 HTML 指向該路徑等於 provenance 斷鏈，且下次重建會 fail-closed。這是 s11/s12 兩個面板能否成立的前置。"
+  }
+ ],
+ "integrity_rules": [
+  "D1 分母不同的比例禁止並排於共用軸：拆成獨立 .axis-card，每張標題下第一行固定渲染 <div class=\"denom\">分母 = {testable} / {total}（{total-testable} 不可檢定）</div>，並移除跨軸的「比例」欄。真要橫向比較 → 另建「共同可檢定子集」表（四軸皆可檢定的位點，實測 n=5），標題明寫 paired subset n=5。",
+  "D2 小分母抑制（NCHS 標準）：實作 fmt_rate(hits, n) —— n<30 只回 `{hits} / {n}` 並掛 <span class=\"suppressed\" title=\"n<30，依 NCHS 標準不以百分比呈現\">；n≥30 才回 `{pct}% ({hits}/{n})` 並附 Clopper-Pearson 95% CI；CI 絕對寬度 ≥0.30 同樣抑制。lineage 軸 n=5 因此自動只顯示 k/5。",
+  "D3 三態檢定取代二值 sig()：test_state(row, axis) 回 'SIG'/'NS'/'NOT_TESTABLE'，且必須讀 *Valid 欄位（LineagePermanovaValid / ClusterPermanovaValid / LabelAllelePermanovaValid）而非用「p 能否 parse」推斷。三種視覺分明：SIG 綠底粗體、NS 白底、NOT_TESTABLE 灰底斜線 + title 寫原因（群數不足 / 欄位缺失 / read 數不足）。現行 build_lineage_report.py:175-179 把空值靜默當 False，等於把「未檢定」陰性化，必須修掉。",
+  "D4 每個數字掛分析單位徽章，杜絕維度混淆：五個 badge = unit（拓撲單元）/ region（block）/ read（distinct qname_sha256）/ alignment（BAM 行，含 supplementary）/ locus（sSNV 位點）。硬性配對：ls 分佈標 alignment 且必須同時並列 distinct read 數（1,251,092 vs 1,001,670，差 +24.9% 來自 supplementary/secondary）；unit 定解率標 unit；is_full_cov 標 read×block。",
+  "D5 tie 絕不畫成單一實線樹：total_tree_count>1 時 <details> 自動 open，畫四層邊聯集（灰實=所有 minimum trees union、灰虛=僅部分候選、藍=global-best union、綠=目前 exemplar），caption 固定句「任何聯集都不是一棵樹，edge 次數是 candidate membership，不是 probability 或 read support」。標題字串三元式：best_tree_unique 為真→「唯一 selected tree」，否則→「一棵 selected exemplar（同分 N 棵）」。",
+  "D6 突變順序報支持度不報單一箭頭：對每個 ordered pair (A before B) 統計在該 unit 的等價最佳樹集合中出現的比例 —— 100% 畫實線黑箭頭，50-99% 畫虛線 + 標 pct，≈50% 畫雙向灰箭頭標「順序不可定」。文字同步用頻率框架：「在 N 棵等價最佳樹中，A→B 出現於 M 棵」。支持度未重算完成前該欄寫 {{待填}}，不得用 best_tree_unique 代替。",
+  "D7 LCA 的 `+` 後綴：resolved-at-node 與 compatible-with-subtree 兩個計數永不相加、永不堆疊，畫成雙欄並排。樹上把 compatible read 畫成覆蓋整個子樹的半透明色帶而非節點實心點。任何混合兩者的 KPI 標籤必須寫「≥ 該節點」。lineage_path 計數禁止把 `HP2-1` 與 `HP2-1+` 併桶。依據 tag_bam_main.cpp:405 的 `lv += lineage_path + \"+\"`。",
+  "D8 缺 key = 0 但類別仍須顯示：實測 chr21 的 tag_bam receipt 沒有 ls_A 鍵，若用 dict 迭代產圖例會讓 A 類整個消失。所有 enum 類別走固定 order 列表迭代（照 distribution_html 的 order 參數），count=0 仍出現在 .dist 圖例列（只是不佔 stack 寬度）。同理 RECURRENCE_REQUIRED / ZERO_DENOMINATOR 等 0 計數的失敗模式必須列出。",
+  "D9 分母變動必須顯性宣告，禁止靜默截斷：(a) 若讀檔觸及 --max-rows 上限，面板頂端插紅色 .claim-boundary「本面板僅取前 N 列，比例分母為截斷後樣本」（建議直接把預設改成 None 走全量）；(b) 現行 :210 對 LineageNGroups=0 的 `continue` 改為計數 skipped_no_lineage_groups 並顯示「另有 k 個 region 未列入（不代表無關聯）」；(c) 清單只顯示前 160 筆時必須顯示「全基因圖仍包含全部 M 筆」。",
+  "D10 lv_written 缺口必須攤開：lineage_written 與 lv_written 是兩個分母（chr21 實測 6,454 vs 3,067），差額來自 tag_bam_main.cpp:422 的 `if (any_lv && ls != 'A')` 與 LCA 找不到共同祖先。s02 漏斗必須把這段畫成獨立一階並標原因，不可只報 lv_written 讓讀者以為那是全部有標籤的 read。",
+  "D11 五種缺席各有專屬措辭，不得共用一句「資料不足」：①未納入本次 targeted subset（不是甲基陰性，也不是未通過同一套 gate）②低於 count≥3 門檻被截斷（不能推成「不存在」）③結構上無法建樹（singleton / skipped_no_vertices 2,460，不是品質過濾）④群數不足未檢定（NOT_TESTABLE，不是 NS）⑤輸入檔缺件（面板標不可用 + 原因 + 計入頂部完整度指示器）。",
+  "D12 分支長度與座標軸的語意宣告：樹的分支長度統一等長且圖例明寫「分支長度無意義（不代表時間也不代表突變數）」；icicle/巢狀圖的橫軸圖注明寫「橫軸是拓撲深度不是時間，寬度是 vertex 數或 read fraction，不是 CCF 也不是 cellular prevalence」。單一 bulk 單時間點 → 絕不畫 fishplot/TimeScape 式時間軸。",
+  "D13 CN 與局部密度是必要控制變項：任何 prevalence/比例面板疊 CN 狀態帶（neutral/gain/LOH）並提供「只看 CN-neutral」開關（已知 HCC1395 共現區 94% CN-altered）；甲基軸歸因矩陣必須有「局部 sSNV 密度分層」欄 —— 本專案已踩過「甲基 allele 軸共同富集在密度分層後崩解」的坑，不放進圖裡等於重犯。全基因組密度圖注明寫 chr6-MHC + chr16 佔 42% 且為 artifact 好發區。",
+  "D14 由構造防捏造（§13-A）：renderer 模板內不得出現任何手打數值，全部由 dashboard.data.json 注入；缺必填 key → require() 拋 AuthorityError → 整批 build 失敗 exit 2，絕不半渲染。每個面板頁腳固定顯示「來源檔 + 列數 + sha256 前 8 碼」。撰寫報告的 Write 與產生數字的 Bash 永不同批。",
+  "D15 守恆斷言（頁面總和 = 權威數字）：(a) Σls_{U,M,P,A} == lineage_written（逐 chrom + 全域）；(b) units_with_paths + skipped_no_vertices == units_seen（9,130 + 2,460 == 11,590）；(c) Σ per-chrom assign 列數 == 全檔列數；(d) ranked/no_active_alt/family_incomplete/zero_denominator 四類加總 == units_seen（分類必須是完全劃分，不可有漏桶）。任一不成立即 build 失敗。",
+  "D16 read-AF edge score 的語意守衛：edge_score_fraction 實測 12,266/17,618 是 `0/1`（無競爭），面板必須明寫「AF 只在少數 unit 起作用」；且該分數是 HP 家族內 ALT/(REF+ALT) 的 edge 累加，**不是 VAF**，不可標成 VAF 或 CCF。同時必須說明 read-AF 是篩選器不只是排序器（會在同分 vertex set 中丟棄候選），因此純 parsimony 的單一拓撲率是一個區間而非點值。",
+  "D17 定位語言釘死在頁面本身（不放註腳）：頁首 .boundary 固定三句 —— ①本圖的節點是 lineage vertex（HP1-1-1 形式），不是已確認的 subclone；②read fraction ≠ cellular prevalence ≠ CCF；③甲基軸為事後 characterize，不進入拓撲推論（與 MethylTree 等 single-cell methylation-based lineage tracing 不是同類能力）。hedge 有固定顏色與位置四級：.boundary（琥珀，頁首全局）/ .claim-boundary（紅，逐節）/ .claim-ceiling（琥珀，行內）/ .denom（每面板分母），讀者掃頁即知哪裡有限制。"
+ ],
+ "reusable_code": [
+  {
+   "name": "require() + class AuthorityError",
+   "location": "<INTERSUBMOD_REPO>/research/20260724_exact_ps_cpp_topology_signature_census/scripts/build_exact_ps_layered_workstation.py:171-177",
+   "purpose": "fail-closed 骨架的核心原語。任何前置條件不成立即 raise，配合 main() 的 except 印 FAIL CLOSED 並 return 2，絕不半渲染。整份 builder 的所有 gate 都建在這兩行上。"
+  },
+  {
+   "name": "sha256_file()",
+   "location": "同檔 :180-185",
+   "purpose": "1 MiB 分塊算 SHA-256，用於把每個輸入檔（paths TSV / assign TSV / topology.jsonl / significance_summary.csv）綁進 receipt 與 <head> meta。"
+  },
+  {
+   "name": "verify_identity()",
+   "location": "同檔 :222-235",
+   "purpose": "吃 {path, sha256, size_bytes} 三元組，逐項驗檔案存在、size 無漂移、SHA-256 相符，回傳 Path。LongLineage 的每個輸入宣告都走這一個函式。"
+  },
+  {
+   "name": "verify_nested_identities()",
+   "location": "同檔 :238-250",
+   "purpose": "遞迴掃整棵 receipt 結構，自動找出所有 {path,sha256,size_bytes} 三元組並逐一 verify_identity，回傳驗過的檔數。一次呼叫就把整份 receipt 的所有綁定驗完，不必逐檔手寫。"
+  },
+  {
+   "name": "all_true()",
+   "location": "同檔 :214-219",
+   "purpose": "遞迴斷言 checks 樹裡每個 bool 都是 True，失敗時 label 帶完整路徑（如 gene_drug_receipt.checks.foo.bar）。用來吃 upstream receipt 的 checks 區塊。"
+  },
+  {
+   "name": "json_for_html()",
+   "location": "同檔 :1025-1028",
+   "purpose": "資料島序列化的唯一正確寫法：ensure_ascii=False + separators=(',',':') 壓體積，並把 '</' 轉成 '<\\\\/' 防止資料內容提前關閉 script 標籤。"
+  },
+  {
+   "name": "atomic_write()",
+   "location": "同檔 :1035-1042",
+   "purpose": "staging 檔 + flush + os.fsync + os.replace 的原子寫入，避免產到一半被讀到半殘 HTML。所有輸出（index.html / {SAMPLE}.html / dashboard.data.json）都走它。"
+  },
+  {
+   "name": "pct() 與 esc()",
+   "location": "同檔 :1021-1022（pct）、:1031-1032（esc）",
+   "purpose": "pct 對 denominator=0 回 0.0 而非炸掉（避免除零產生 NaN 混進頁面）；esc 是 html.escape(quote=True) 的統一入口。"
+  },
+  {
+   "name": "distribution_html()",
+   "location": "同檔 :2807-2833",
+   "purpose": "直接替換 build_lineage_report.py:40-53 的 bar_table。輸出 .stack 堆疊條（width 保留 8 位小數避免捨入漂移）+ .dist 三欄圖例（色塊+標籤 / 計數 / 百分比），且以 order 參數迭代 → count=0 的類別仍出現在圖例（正是 D8 規則的機械保障）。"
+  },
+  {
+   "name": "RESOLUTION_COLORS / RESOLUTION_LABELS / COARSE_* / METHYL_* 色票字典",
+   "location": "同檔 :2745-2804",
+   "purpose": "集中化的 ontology 色票與中文標籤範本。METHYL_LABELS 的 'NOT_IN_FORMAL_OVERLAY': '未進本次 formal-positive overlay（不是陰性）' 是 D11 措辭的直接可抄樣本。LongLineage 需新增 ls（U/M/P/A）與 depth 兩組。"
+  },
+  {
+   "name": "CHROM_LENGTHS",
+   "location": "同檔 :135-168",
+   "purpose": "GRCh38 chr1–chr22 長度表，全基因組 canvas 的共用 bp 尺度來源（骨架寬 = L_chr/L_chr1）。直接複製，並在頁面標註來源。"
+  },
+  {
+   "name": "build() 的守恆斷言區塊",
+   "location": "同檔 :4633-4664",
+   "purpose": "「頁面總和必須等於權威常數」的實作範本（groups==98,955 / ranked==71,955 等 4 組）。LongLineage 照此寫 D15 的四組斷言。"
+  },
+  {
+   "name": "main() 的 FAIL CLOSED 出口",
+   "location": "同檔 :4690-4699",
+   "purpose": "except AuthorityError → print(f'FAIL CLOSED: {exc}', file=sys.stderr) → return 2 的標準收尾，加上 --index-only / --verify-only 兩個 argparse flag。"
+  },
+  {
+   "name": "頁面 meta freshness gate",
+   "location": "同檔 :4666-4685",
+   "purpose": "--index-only 時回讀既有 sample page 前 12,000 bytes，比對 <meta name=\"intersubmod-authority\"> 與各 receipt sha256 meta，不符即報 stale。LongLineage 換成 longlineage-* 前綴即可用。"
+  },
+  {
+   "name": "treeSvg()（前端 JS）",
+   "location": "同檔 :3772-3788",
+   "purpose": "s07 主樹圖。由 edges 建 parent map → depth() 走鏈 → 分 level → x=70+d*(420/maxDepth)、單節點層 y=145 否則 48+i*(190/(n-1)) → <defs> arrow marker + line + circle；hidden node（label 以 H_ 開頭）用 stroke-dasharray=\"4 3\" + #b66e20；邊中點標 acquired_position；每個節點/邊掛 <title>。LongLineage 只需把 vertexLabel 換成 lineage_path。"
+  },
+  {
+   "name": "candidateUnionSvg() 含可讀性上限",
+   "location": "同檔 :3701-3720（上限判斷在 :3706）",
+   "purpose": "D5 的機械實作：同一條 edge 疊四層 stroke（灰 union / 藍 global-best / 綠 selected exemplar / 橘 methyl projection），每個 <g> 掛 data-parent/data-child/data-candidate-count/data-best-count 供測試與樣式選取；vertices>96 或 edges>220 直接回 <div class=\"empty\"> 附真實計數並指向 edge census 表。"
+  },
+  {
+   "name": "candidateEdgeTable()",
+   "location": "同檔 :3721-3729",
+   "purpose": "拒畫時的等價完整資訊：逐邊列出「所有 minimum trees / 部分 minimum trees」角色、minimum tree incidence（count/total）、global-best incidence。保證資訊沒有消失。"
+  },
+  {
+   "name": "candidateExplorer() 與「如何讀」callout",
+   "location": "同檔 :3730-3763（callout 原文在 :3744、自動 open 條件在 :3741）",
+   "purpose": "tie 的完整 UI：candidate-summary 五格（minimum vertex sets / all minimum trees / global-best sets / global-best trees / exact best shapes）、shape 下拉、上下一組、<details> 在 setCount>1 時自動 open。:3744 的 callout 原文可逐字改寫成 LongLineage 版的 D5 caption。"
+  },
+  {
+   "name": "bindCandidateControls()",
+   "location": "同檔 :3764-3771",
+   "purpose": "無框架下「局部重繪但不弄丟 <details> 展開狀態」的最小可行寫法：outerHTML 整段換掉後保留 open 並遞迴重綁事件。shape 下拉 / 上下組 / 編號跳轉三種操作共用同一條路徑。"
+  },
+  {
+   "name": "resizeCanvas() + renderCanvas() + hitPoints",
+   "location": "同檔 :3391-3396（resize）、:3397-3461（render）",
+   "purpose": "s10 全基因組圖的完整實作：dpr=Math.min(devicePixelRatio,2) + ctx.setTransform 防 Retina 糊；自畫 Mb 刻度軸（:3409-3419）；每條染色體依 bp 比例畫 track（:3424-3434）；每點 push {x,y,row} 進 hitPoints 供命中測試（:3447）；methyl signal 畫橘色 halo（:3444-3446）；結尾把幾何狀態掛 window.__intersubmodGenomeScale（:3455-3460）供自動稽核。"
+  },
+  {
+   "name": "renderList() 的截斷公告",
+   "location": "同檔 :3462-3482",
+   "purpose": "D9 的實作樣本：清單只顯示前 160 筆時追加 .denom 節點寫「清單只顯示前 N 筆；全基因圖仍包含全部 M 筆」（:3477-3481），不靜默截斷。"
+  },
+  {
+   "name": "renderLegend() 的自動修剪",
+   "location": "同檔 :3374-3390",
+   "purpose": "圖例聯集多選 + aria-pressed + 每類即時計數；計數 0 的類別不顯示、已選但歸零的類別自動移除，避免零結果孤兒狀態。切換著色維度時 state.selected.clear()。"
+  },
+  {
+   "name": "parseQuery() / matchesQuery()",
+   "location": "同檔 :3229-3236（parse）、:3237-3257（match）",
+   "purpose": "座標區間搜尋：regex 解析 chrN:start-end 並做 overlap 比對，是 index→sample 深連結（?region=chr3 @ 127986757）的落地點。"
+  },
+  {
+   "name": "refresh() 的 AND 合成",
+   "location": "同檔 :3258 起",
+   "purpose": "所有互動＝改 state → 呼叫 refresh；filtered = rows.filter(query AND ls AND methyl AND hp AND (圖例聯集為空則全選))。無框架 standalone HTML 最合適的組織法。"
+  },
+  {
+   "name": "readStateMatrix() + popcount()",
+   "location": "同檔 :3630-3636（matrix）、:3637-3639（popcount）",
+   "purpose": "s09 的骨架：位點欄頭 S1..Sk 帶 title 顯示真實座標、每格 class 為 A/R/X 三態、首欄 sticky、右欄顯示 reads 計數。LongLineage 的 pattern_vector 格式（XR/AX/RXX…）與此完全同構。"
+  },
+  {
+   "name": "methylEvidencePanel() 的 explicit-absence 分支",
+   "location": "同檔 :3565-3567",
+   "purpose": "D11 措辭①的逐字樣本：不在 overlay 的 region 渲染 NOT IN TARGETED OVERLAY 面板並明寫「這不是甲基陰性，也不是未通過同一套全 cohort gate」。s12 直接沿用語氣。"
+  },
+  {
+   "name": "escapeHtml() / fractionPct() / coveragePct()（前端）",
+   "location": "同檔 :3483-3485、:3486-3489、:3490-3494",
+   "purpose": "前端側的轉義與「a/b 有理數字串 → 百分比」轉換。edge_score_fraction 是 '0/1'、'4/7' 這種有理數字串，fractionPct 可直接用。"
+  },
+  {
+   "name": "locusStrip()",
+   "location": "同檔 :3495 起",
+   "purpose": "橫向捲動的 locus 卡片（S 編號、座標、ALT% 大字、ALT/REF 計數、.af-track 細條、基因 tag）。s07 的「這個 unit 有哪些 sSNV 位點」可直接複用。"
+  },
+  {
+   "name": "layoutNetwork()（通用 DAG layout）",
+   "location": "<INTERSUBMOD_REPO>/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/build_layered_workstation_v5.py:2178-2199",
+   "purpose": "用 longest-path 迭代求 depth（非 popcount），通用於任意 DAG。因為 LongLineage 的 HP1-1-1 階層不保證是 {0,1}^n 子圖，樹的分層必須用這個而不是 exact-PS 的 popcount 版。"
+  },
+  {
+   "name": "networkSvg()",
+   "location": "同檔 :2208-2257",
+   "purpose": "依 edge status 切四種 marker 顏色 + dash，並輸出 <p class=\"sr-only\"> 文字版摘要（可存取性等價內容）。"
+  },
+  {
+   "name": "renderIdeogram()",
+   "location": "同檔 :1827-1863",
+   "purpose": "真 SVG ideogram：22 條染色體 track、每 region 一根 <line>、每列疊一塊透明 .ideogram-chrom-hit rect 提供 click/Enter 下鑽。s10 若要在 Canvas 上層疊可鍵盤操作的骨架，抄這個 hit-rect 做法。"
+  },
+  {
+   "name": "per-chrom chunk 產生 + chunk_manifest",
+   "location": "同檔 :1004-1016（產生與 data-sha256）、:1064（manifest 掛進 page_data）",
+   "purpose": "分片資料島的 Python 端：payload=json_text(by_chrom[chrom]) → digest=sha256(payload) → <script type=\"application/json\" id=\"chunk-chrN\" data-sha256=\"…\">。LongLineage 在此基礎上加 gzip+base64 與 data-codec 屬性即可。"
+  },
+  {
+   "name": "loadChrom() / getDetail()（前端惰性載入）",
+   "location": "同檔 :1687-1693（loadChrom，含 :1693 的 count mismatch throw）、:1701（getDetail）",
+   "purpose": "前端分片載入 + 列數校驗（rows.length!==DATA.chunk_manifest[chrom].count 就 throw）。index row 只帶 chunk_index，明細用時才解。"
+  },
+  {
+   "name": "_MetaParser / read_page_meta() / page_freshness()",
+   "location": "<INTERSUBMOD_REPO>/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/build_layered_per_sample.py:635-648、:649-658、:659-684",
+   "purpose": "比 exact-PS 的字串比對更嚴的 stale 檢查：用 HTMLParser 解析既有頁的 meta 並同時要求輸出 mtime 新於所有輸入檔。LongLineage 的 --verify-only 可升級到這一層。"
+  },
+  {
+   "name": "read_tsv_gz()",
+   "location": "<LONGLINEAGE_REPO>/presentation/build_lineage_report.py:23-28",
+   "purpose": "現行 gz TSV 串流讀取器，可原樣搬進 precompute 腳本（但 limit 參數的用法要改：觸及上限必須回報而非靜默截斷，見 D9）。"
+  },
+  {
+   "name": "panel() 降級契約",
+   "location": "同檔 :31-37",
+   "purpose": "「缺件 → 面板標不可用並說明原因，其餘照常產出」的既有契約與 .p.na / .reason CSS。保留這個精神但升級：不可用也要計入頂部完整度指示器，且理由要走 D11 的五種專屬措辭。"
+  },
+  {
+   "name": "tag_bam aux tag 契約與不變式（定義來源，非可執行複用）",
+   "location": "<LONGLINEAGE_REPO>/apps/tag_bam_main.cpp:5-16",
+   "purpose": "s14 名詞契約 panel 的逐字引用來源：HP:Z / PS:i / lc:Z / lu:Z / lv:Z / lp:Z / lo:Z / ls:A 八個 tag 的定義，以及三條不變式（ls=='A' 不寫 lv/lo；lv 存在必有 ls；ls!='U' 時 lv 僅為代表值）。"
+  },
+  {
+   "name": "ls 判定與嚴重度排序（定義來源）",
+   "location": "同檔 :111（int sev(char c)，A<P<M<U）、:371-379（if (!e.full_cov) c='P'; else 依 topo 查 family_status 與 unique 定 A/U/M；多 block 取最差級）",
+   "purpose": "s03 圖例文案的權威定義，必須取代舊報告的口語敘述。特別是「P = 覆蓋不全，非品質差」與「A = topology 查無或 family_status≠FAMILY_COMPLETE」。"
+  },
+  {
+   "name": "lv 的 '+' 後綴與寫入條件（定義來源）",
+   "location": "同檔 :405（lv += anc_it->second.lineage_path + \"+\"）、:419-427（bam_aux_update_str lc/lu/lp、:422 的 if (any_lv && ls != 'A') 才寫 lv/lo、:427 bam_aux_append ls）",
+   "purpose": "D7 與 D10 兩條規則的源碼依據：'+' 是 LCA 子樹斷言標記；:422 的條件正是 lv_written < lineage_written 缺口的成因。"
+  }
+ ]
+}

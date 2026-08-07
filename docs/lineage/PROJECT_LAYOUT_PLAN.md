@@ -80,7 +80,13 @@ lineage-report/  或  LongLineage/presentation/   ← 整合與呈現
 cd LongLineage
 bash scripts/build.sh
 bash scripts/run_sample.sh --sample HCC1395 \
+     --partition-root <PARTITION>/chromosomes \
+     --topology <TOPOLOGY>/HCC1395.topology.jsonl \
+     --sidecar  <SIDECAR>/HCC1395.read_tags.tsv.gz \
      --in-bam <tagged_or_raw.bam> --out-root <OUT> --threads 16
+# 四個資料路徑亦可用環境變數提供：
+#   LL_PARTITION_ROOT / LL_TOPOLOGY / LL_SIDECAR / LL_IN_BAM
+# （站點路徑一律外部傳入、不寫死在 repo — 見 scripts/ci/check_repo_hygiene.sh）
 # 產出：
 #   OUT/paths/*.unit_lineage_paths.tsv.gz      階層路徑 + 突變順序
 #   OUT/assign/*.read_lineage_assignments.tsv.gz  read → block 指派

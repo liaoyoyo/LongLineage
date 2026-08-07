@@ -134,7 +134,7 @@ k, n_fixed_ra_in_block, is_full_cov, tree_supported
 
 方案 C 實作：讀 **raw BAM**，一次注入 sidecar 的 HP/PS ＋ assignments 的 lineage 標籤。
 
-**實跑驗證**（HCC1395 `chr1:1000000-3000000`，25,700 reads）：
+**實跑驗證**（HCC1395 `chr1 @ 1000000-3000000`，25,700 reads）：
 
 | 驗證 | 結果 |
 |---|---|

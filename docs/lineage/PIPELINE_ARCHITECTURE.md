@@ -20,7 +20,7 @@
 
 ```
 【輸入】
- raw BAM (292 GB)          MM/ML ✓   HP/PS ✗   ← /big8_disk/data/HCC1395/ONT_5khz.../HCC1395.bam
+ raw BAM (292 GB)          MM/ML ✓   HP/PS ✗   ← <BAM_ROOT>/HCC1395/ONT_5khz.../HCC1395.bam
  sidecar (1.4 GB + .tbi)   HP/PS ✓             ← 20260711_..._sidecars_v2/samples/HCC1395/
  PASS sSNV VCF                                  ← HCC1395.longphase_s.recalibrated.pass.vcf.gz
  reference FASTA + .fai

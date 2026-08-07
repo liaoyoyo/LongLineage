@@ -4,7 +4,7 @@
 
 實體 run root（HCC1395，已凍結）：
 ```
-/big7_disk/liaoyoyo2001/big7_disk_output/synthesis/research_rounds/
+<RESEARCH_ROUNDS>/
   20260723_production_exact_ps_strict_read_linkage/hcc1395_strict_regions_v2/
     ├── chromosomes/{chr1..chr22}/
     │     ├── HCC1395.{chr}.components.tsv.gz

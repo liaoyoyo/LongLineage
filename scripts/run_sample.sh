@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-only
+#
 # 統一 driver — 單樣本從 partition 到 tagged BAM
 #
 # 用法:
-#   bash scripts/run_sample.sh --sample HCC1395 --out-root /bip7_disk/.../out \
-#        [--chroms "chr1 chr2 ..."] [--threads 8] [--skip-bam]
+#   bash scripts/run_sample.sh --sample SAMPLE --out-root DIR \
+#        --partition-root DIR --topology FILE --sidecar FILE --in-bam FILE \
+#        [--chroms "chr1 chr2 ..."] [--threads 8] [--skip-bam] [--skip-existing]
+#
+# 依專案慣例，所有站點資料路徑一律由 CLI 傳入，不在本檔寫死
+# （scripts/ci/check_repo_hygiene.sh 會阻擋寫死的絕對路徑）。
+# 四個資料路徑可改用環境變數提供：
+#   LL_PARTITION_ROOT / LL_TOPOLOGY / LL_SIDECAR / LL_IN_BAM
 #
 # 前提: /usr/bin/cmake --build <build> 已建好 longlineage-{lineage-paths,read-assign,tag-bam}
 
@@ -13,33 +21,41 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # LongLineage build tree; override with LONGLINEAGE_BUILD when using another config.
 BUILD_DIR="${LONGLINEAGE_BUILD:-${REPO_ROOT}/build_lineage_migrate}"
 BIN="${BUILD_DIR}/bin"
-BIG7=/big7_disk/liaoyoyo2001/big7_disk_output/synthesis/research_rounds
 export LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH:-}
 
-SAMPLE=""; OUT_ROOT=""; THREADS=8; SKIP_BAM=0; IN_BAM=""; SKIP_EXISTING=0
+SAMPLE=""; OUT_ROOT=""; THREADS=8; SKIP_BAM=0; SKIP_EXISTING=0
+PARTITION_ROOT="${LL_PARTITION_ROOT:-}"
+TOPOLOGY="${LL_TOPOLOGY:-}"
+SIDECAR="${LL_SIDECAR:-}"
+RAW_BAM="${LL_IN_BAM:-}"
 CHROMS="chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --sample) SAMPLE="$2"; shift 2;;
         --out-root) OUT_ROOT="$2"; shift 2;;
+        --partition-root) PARTITION_ROOT="$2"; shift 2;;
+        --topology) TOPOLOGY="$2"; shift 2;;
+        --sidecar) SIDECAR="$2"; shift 2;;
         --chroms) CHROMS="$2"; shift 2;;
         --threads) THREADS="$2"; shift 2;;
         --skip-bam) SKIP_BAM=1; shift;;
-        --in-bam) IN_BAM="$2"; shift 2;;
+        --in-bam) RAW_BAM="$2"; shift 2;;
         --skip-existing) SKIP_EXISTING=1; shift;;
         *) echo "unknown: $1" >&2; exit 2;;
     esac
 done
 [[ -n "$SAMPLE" && -n "$OUT_ROOT" ]] || { echo "need --sample and --out-root" >&2; exit 2; }
 
-# 🔴 partition 必須用 production，不可用 pilot（unit_id 雜湊不同，見 KNOWN_ISSUES E10a）
-PARTITION_ROOT="${BIG7}/20260723_production_exact_ps_strict_read_linkage/hcc1395_partition_v2/chromosomes"
-TOPOLOGY="${BIG7}/20260724_exact_ps_cpp_topology_af_all_samples/all7_strict_guard1000_v1/samples/${SAMPLE}/${SAMPLE}.topology.jsonl"
-SIDECAR="${BIG7}/20260711_longphase_s_raw_all_production_sidecars_v2/samples/${SAMPLE}/${SAMPLE}.read_tags.tsv.gz"
-# 預設走 NFS 上的 raw BAM；建議用 --in-bam 指向本機 ext4 的 tagged BAM（read 集合相同、IO 較快）
-RAW_BAM="${IN_BAM:-/big8_disk/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam}"
+missing_arg() { echo "need $1 (or env $2)" >&2; exit 2; }
+[[ -n "$PARTITION_ROOT" ]] || missing_arg --partition-root LL_PARTITION_ROOT
+[[ -n "$TOPOLOGY" ]]       || missing_arg --topology       LL_TOPOLOGY
+[[ -n "$SIDECAR" ]]        || missing_arg --sidecar        LL_SIDECAR
+[[ -n "$RAW_BAM" ]]        || missing_arg --in-bam         LL_IN_BAM
 
+# 🔴 --partition-root 必須指向 production partition，不可用 pilot
+#    （unit_id 雜湊不同，對不上 topology；見 KNOWN_ISSUES E10a）
+[[ -d "$PARTITION_ROOT" ]] || { echo "MISSING dir: $PARTITION_ROOT" >&2; exit 2; }
 for f in "$TOPOLOGY" "$SIDECAR" "$RAW_BAM"; do
     [[ -f "$f" ]] || { echo "MISSING: $f" >&2; exit 2; }
 done
