@@ -34,7 +34,12 @@ PARTITION_ROOT="${LL_PARTITION_ROOT:-}"
 TOPOLOGY="${LL_TOPOLOGY:-}"
 SIDECAR="${LL_SIDECAR:-}"
 RAW_BAM="${LL_IN_BAM:-}"
-CHROMS="chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22"
+# 預設涵蓋 chr1-22 + chrX + chrY —— 輸出 BAM 必須是輸入 BAM 的完整複本。
+# 拓撲分析的 scope 是 chr1-22（topology.jsonl 不含性染色體），但那是**分析** scope，
+# 不該讓 read 從輸出裡消失：chrX/chrY 的 read 照樣經 sidecar 拿到 HP/PS，
+# 只是沒有 lineage 標籤（no_lineage）。漏掉它們會讓合併後的 BAM 少 3.04% 的 read，
+# 而 header 仍宣告全部 @SQ —— 在 IGV 裡看起來像資料遺失。
+CHROMS="chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX chrY"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -174,7 +179,18 @@ else
         if samtools merge -@ "$THREADS" -f -o "$MERGED_BAM" "${parts[@]}" \
              > "$OUT_ROOT/logs/merge.log" 2>&1 \
            && samtools index -@ "$THREADS" "$MERGED_BAM" >> "$OUT_ROOT/logs/merge.log" 2>&1; then
-            # 只有在 merge + index 都成功後才刪中間檔
+            # merge/index 成功還不夠 —— 再核對 read 數守恆才刪來源。
+            # 期望值取自各 receipt 的 reads_total 合計（tag_bam 逐檔記錄的真值）。
+            expect=$(cat "$OUT_ROOT/bam"/*.tag_bam.receipt.json 2>/dev/null |
+                     python3 -c "import sys,json,re; print(sum(json.loads(m).get('stats',{}).get('reads_total',0) for m in re.findall(r'\{(?:[^{}]|\{[^{}]*\})*\}', sys.stdin.read()) if '\"reads_total\"' in m))" 2>/dev/null || echo 0)
+            got=$(samtools idxstats "$MERGED_BAM" | awk '{s+=$3+$4} END{print s}')
+            if [[ "$expect" -gt 0 && "$got" != "$expect" ]]; then
+                echo "      FAIL —— read 數不符（合併後 $got，期望 $expect）；分檔全部保留未刪"
+                log_stage merge ALL FAIL $((SECONDS-t0)) "reads got=$got expect=$expect"
+                exit 1
+            fi
+            echo "      read 數守恆 OK: $got"
+            # 只有在 merge + index + read 數守恆全部成立後才刪中間檔
             for f in "${parts[@]}"; do rm -f "$f" "$f.bai"; done
             sz=$(stat -c%s "$MERGED_BAM")
             echo "      OK  ${#parts[@]} 檔 → $(numfmt --to=iec "$sz")  ($((SECONDS-t0))s)"

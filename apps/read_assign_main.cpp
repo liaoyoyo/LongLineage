@@ -138,17 +138,32 @@ int main(int argc, char** argv) {
             }
             return argv[++i];
         };
-        if (a == "-h" || a == "--help") { usage(); return 0; }
-        else if (a == "--chrom-dir") chrom_dir = next();
-        else if (a == "--sample") sample = next();
-        else if (a == "--chrom") chrom = next();
-        else if (a == "--output") out_path = next();
-        else if (a == "--receipt") receipt_path = next();
-        else if (a == "--partition-subdir") part_sub = next();
-        else if (a == "--min-read") min_read = std::stoi(next());
-        else { std::cerr << "unknown option: " << a << "\n"; return 2; }
+        if (a == "-h" || a == "--help") {
+            usage();
+            return 0;
+        } else if (a == "--chrom-dir")
+            chrom_dir = next();
+        else if (a == "--sample")
+            sample = next();
+        else if (a == "--chrom")
+            chrom = next();
+        else if (a == "--output")
+            out_path = next();
+        else if (a == "--receipt")
+            receipt_path = next();
+        else if (a == "--partition-subdir")
+            part_sub = next();
+        else if (a == "--min-read")
+            min_read = std::stoi(next());
+        else {
+            std::cerr << "unknown option: " << a << "\n";
+            return 2;
+        }
     }
-    if (chrom_dir.empty() || sample.empty() || chrom.empty() || out_path.empty()) { usage(); return 2; }
+    if (chrom_dir.empty() || sample.empty() || chrom.empty() || out_path.empty()) {
+        usage();
+        return 2;
+    }
 
     std::map<std::string, std::uint64_t> stats;
     std::vector<Block> blocks;
@@ -176,7 +191,8 @@ int main(int argc, char** argv) {
         while (br.next(line)) {
             if (line.empty()) continue;
             auto f = split_tab(line);
-            if (f[bi_ds] != sample || f[bi_ch] != chrom) throw std::runtime_error(block_path + ": dataset/chrom mismatch");
+            if (f[bi_ds] != sample || f[bi_ch] != chrom)
+                throw std::runtime_error(block_path + ": dataset/chrom mismatch");
             if ((f[bi_hp] != "1" && f[bi_hp] != "2") || f[bi_ps].empty())
                 throw std::runtime_error(block_path + ": non-primary HP or missing PS");
             Block b;
@@ -233,7 +249,8 @@ int main(int argc, char** argv) {
             if (line.empty()) continue;
             ++stats["molecule_rows_total"];
             auto f = split_tab(line);
-            if (f[mi_ds] != sample || f[mi_ch] != chrom) throw std::runtime_error(mol_path + ": dataset/chrom mismatch");
+            if (f[mi_ds] != sample || f[mi_ch] != chrom)
+                throw std::runtime_error(mol_path + ": dataset/chrom mismatch");
             const std::string& mid = f[mi_mid];
             if (mid.empty() || !seen_mol.insert(mid).second)
                 throw std::runtime_error(mol_path + ": empty or duplicate molecule_id");
@@ -277,7 +294,8 @@ int main(int argc, char** argv) {
                 a.hp_family = hp;
                 a.phase_set = ps;
                 a.block_ref = bidx;
-                a.n_fixed_ra = static_cast<int>(std::count_if(vec.begin(), vec.end(), [](char c) { return c == 'R' || c == 'A'; }));
+                a.n_fixed_ra = static_cast<int>(
+                    std::count_if(vec.begin(), vec.end(), [](char c) { return c == 'R' || c == 'A'; }));
                 a.is_full_cov = vec.find('X') == std::string::npos;
                 a.pattern_vector = std::move(vec);
                 raw.push_back(std::move(a));
@@ -326,7 +344,8 @@ int main(int argc, char** argv) {
             json_object_set_new(rj, "output", json_string(out_path.c_str()));
             json_object_set_new(rj, "rows", json_integer(static_cast<json_int_t>(rows)));
             json_t* sj = json_object();
-            for (const auto& [k, v] : stats) json_object_set_new(sj, k.c_str(), json_integer(static_cast<json_int_t>(v)));
+            for (const auto& [k, v] : stats)
+                json_object_set_new(sj, k.c_str(), json_integer(static_cast<json_int_t>(v)));
             json_object_set_new(rj, "metrics", sj);
             json_dump_file(rj, receipt_path.c_str(), JSON_INDENT(1) | JSON_SORT_KEYS);
             json_decref(rj);

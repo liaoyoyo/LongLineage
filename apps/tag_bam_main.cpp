@@ -58,7 +58,10 @@ std::vector<std::string> split_tab(const std::string& s) {
     std::size_t st = 0;
     while (true) {
         std::size_t p = s.find('\t', st);
-        if (p == std::string::npos) { out.push_back(s.substr(st)); break; }
+        if (p == std::string::npos) {
+            out.push_back(s.substr(st));
+            break;
+        }
         out.push_back(s.substr(st, p - st));
         st = p + 1;
     }
@@ -70,7 +73,9 @@ class GzLines {
     explicit GzLines(const std::string& p) : fp_(gzopen(p.c_str(), "rb")), buf_(1 << 20) {
         if (fp_ == nullptr) throw std::runtime_error("cannot open: " + p);
     }
-    ~GzLines() { if (fp_) gzclose(fp_); }
+    ~GzLines() {
+        if (fp_) gzclose(fp_);
+    }
     bool next(std::string& line) {
         line.clear();
         while (true) {
@@ -78,9 +83,13 @@ class GzLines {
             std::size_t n = std::strlen(buf_.data());
             bool done = (n > 0 && buf_[n - 1] == '\n');
             line.append(buf_.data(), done ? n - 1 : n);
-            if (done) { if (!line.empty() && line.back() == '\r') line.pop_back(); return true; }
+            if (done) {
+                if (!line.empty() && line.back() == '\r') line.pop_back();
+                return true;
+            }
         }
     }
+
    private:
     gzFile fp_;
     std::vector<char> buf_;
@@ -105,7 +114,10 @@ struct RegionTree {
     std::map<std::string, PathInfo> by_label;   // vertex_label -> info
     std::map<long long, std::string> label_of;  // vertex -> label
 };
-struct TopoInfo { bool unique = false; std::string family_status; };
+struct TopoInfo {
+    bool unique = false;
+    std::string family_status;
+};
 
 // ls 保守度：A < P < M < U
 int sev(char c) { return c == 'A' ? 0 : c == 'P' ? 1 : c == 'M' ? 2 : 3; }
@@ -160,7 +172,10 @@ long long lca_of(const RegionTree& tree, const std::vector<std::string>& labels)
         const long long v = chains[0][d];
         bool all = true;
         for (const auto& c : chains)
-            if (c[d] != v) { all = false; break; }
+            if (c[d] != v) {
+                all = false;
+                break;
+            }
         if (!all) break;
         lca = v;
     }
@@ -183,21 +198,39 @@ int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         std::string a = argv[i];
         auto nx = [&]() -> std::string {
-            if (i + 1 >= argc) { std::cerr << "missing value for " << a << "\n"; std::exit(2); }
+            if (i + 1 >= argc) {
+                std::cerr << "missing value for " << a << "\n";
+                std::exit(2);
+            }
             return argv[++i];
         };
-        if (a == "-h" || a == "--help") { usage(); return 0; }
-        else if (a == "--in-bam") in_bam = nx();
-        else if (a == "--sidecar") sidecar = nx();
-        else if (a == "--assignments") assign_p = nx();
-        else if (a == "--lineage-paths") paths_p = nx();
-        else if (a == "--topology") topo_p = nx();
-        else if (a == "--region") region = nx();
-        else if (a == "--out-bam") out_bam = nx();
-        else if (a == "--receipt") receipt_p = nx();
-        else if (a == "--out-format") out_fmt = nx();
-        else if (a == "--threads") threads = std::stoi(nx());
-        else { std::cerr << "unknown option: " << a << "\n"; return 2; }
+        if (a == "-h" || a == "--help") {
+            usage();
+            return 0;
+        } else if (a == "--in-bam")
+            in_bam = nx();
+        else if (a == "--sidecar")
+            sidecar = nx();
+        else if (a == "--assignments")
+            assign_p = nx();
+        else if (a == "--lineage-paths")
+            paths_p = nx();
+        else if (a == "--topology")
+            topo_p = nx();
+        else if (a == "--region")
+            region = nx();
+        else if (a == "--out-bam")
+            out_bam = nx();
+        else if (a == "--receipt")
+            receipt_p = nx();
+        else if (a == "--out-format")
+            out_fmt = nx();
+        else if (a == "--threads")
+            threads = std::stoi(nx());
+        else {
+            std::cerr << "unknown option: " << a << "\n";
+            return 2;
+        }
     }
     if (in_bam.empty() || sidecar.empty() || assign_p.empty() || region.empty() || out_bam.empty()) {
         usage();
@@ -226,8 +259,12 @@ int main(int argc, char** argv) {
                 auto f = split_tab(line);
                 if (f[i_ch] != chrom) continue;
                 Assign a;
-                a.unit_id = f[i_ui]; a.block_id = f[i_bi]; a.region_id = f[i_ri]; a.pattern = f[i_pv];
-                a.full_cov = (f[i_fc] == "true"); a.tree_supported = (f[i_ts] == "true");
+                a.unit_id = f[i_ui];
+                a.block_id = f[i_bi];
+                a.region_id = f[i_ri];
+                a.pattern = f[i_pv];
+                a.full_cov = (f[i_fc] == "true");
+                a.tree_supported = (f[i_ts] == "true");
                 assign[f[i_qs]].push_back(std::move(a));
             }
         }
@@ -250,7 +287,11 @@ int main(int argc, char** argv) {
                     PathInfo pi;
                     pi.lineage_path = f[i_lp];
                     pi.mutation_order = f[i_mo];
-                    try { pi.vertex = std::stoll(f[i_v]); } catch (...) { continue; }
+                    try {
+                        pi.vertex = std::stoll(f[i_v]);
+                    } catch (...) {
+                        continue;
+                    }
                     pi.parent_vertex = (f[i_pv] == ".") ? -1 : std::stoll(f[i_pv]);
                     RegionTree& t = trees[f[i_ri]];
                     t.label_of[pi.vertex] = f[i_vl];
@@ -291,7 +332,10 @@ int main(int argc, char** argv) {
             htsFile* tf = hts_open(sidecar.c_str(), "r");
             if (tf == nullptr) throw std::runtime_error("cannot open sidecar: " + sidecar);
             tbx_t* tbx = tbx_index_load(sidecar.c_str());
-            if (tbx == nullptr) { hts_close(tf); throw std::runtime_error("cannot load tabix for: " + sidecar); }
+            if (tbx == nullptr) {
+                hts_close(tf);
+                throw std::runtime_error("cannot load tabix for: " + sidecar);
+            }
             hts_itr_t* itr = tbx_itr_querys(tbx, region.c_str());
             kstring_t ks = {0, 0, nullptr};
             if (itr != nullptr) {
@@ -311,7 +355,10 @@ int main(int argc, char** argv) {
         samFile* fin = sam_open(in_bam.c_str(), "r");
         if (fin == nullptr) throw std::runtime_error("cannot open BAM: " + in_bam);
         hts_idx_t* idx = sam_index_load(fin, in_bam.c_str());
-        if (idx == nullptr) { sam_close(fin); throw std::runtime_error("cannot load BAM index"); }
+        if (idx == nullptr) {
+            sam_close(fin);
+            throw std::runtime_error("cannot load BAM index");
+        }
         bam_hdr_t* hdr = sam_hdr_read(fin);
 
         const std::string mode = (out_fmt == "cram") ? "wc" : "wb";
@@ -351,7 +398,9 @@ int main(int argc, char** argv) {
                     try {
                         bam_aux_update_int(aln, "PS", std::stoll(ps));
                         ++st["ps_written"];
-                    } catch (...) { ++st["ps_malformed"]; }
+                    } catch (...) {
+                        ++st["ps_malformed"];
+                    }
                 }
             }
 
@@ -365,16 +414,26 @@ int main(int argc, char** argv) {
                 bool any_lv = false;
                 for (std::size_t i = 0; i < es.size(); ++i) {
                     const Assign& e = es[i];
-                    if (i != 0) { lc += ','; lu += ','; lp += ','; }
-                    lc += e.unit_id; lu += e.block_id; lp += e.pattern;
+                    if (i != 0) {
+                        lc += ',';
+                        lu += ',';
+                        lp += ',';
+                    }
+                    lc += e.unit_id;
+                    lu += e.block_id;
+                    lp += e.pattern;
 
                     char c;
-                    if (!e.full_cov) c = 'P';
+                    if (!e.full_cov)
+                        c = 'P';
                     else {
                         auto t = topo.find(e.region_id);
-                        if (t == topo.end()) c = e.tree_supported ? 'M' : 'A';
-                        else if (t->second.family_status != "FAMILY_COMPLETE") c = 'A';
-                        else c = t->second.unique ? 'U' : 'M';
+                        if (t == topo.end())
+                            c = e.tree_supported ? 'M' : 'A';
+                        else if (t->second.family_status != "FAMILY_COMPLETE")
+                            c = 'A';
+                        else
+                            c = t->second.unique ? 'U' : 'M';
                     }
                     if (sev(c) < sev(ls)) ls = c;
 
@@ -386,7 +445,10 @@ int main(int argc, char** argv) {
                             auto pit = tree.by_label.find(e.pattern);
                             if (pit != tree.by_label.end()) {
                                 // 完整覆蓋：pattern 直接命中一個 vertex
-                                if (any_lv) { lv += ','; lo += ','; }
+                                if (any_lv) {
+                                    lv += ',';
+                                    lo += ',';
+                                }
                                 lv += pit->second.lineage_path;
                                 lo += pit->second.mutation_order;
                                 any_lv = true;
@@ -401,7 +463,10 @@ int main(int argc, char** argv) {
                                     if (lit != tree.label_of.end()) {
                                         auto anc_it = tree.by_label.find(lit->second);
                                         if (anc_it != tree.by_label.end()) {
-                                            if (any_lv) { lv += ','; lo += ','; }
+                                            if (any_lv) {
+                                                lv += ',';
+                                                lo += ',';
+                                            }
                                             lv += anc_it->second.lineage_path + "+";
                                             lo += anc_it->second.mutation_order;
                                             any_lv = true;
