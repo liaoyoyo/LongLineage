@@ -106,14 +106,34 @@ struct Assign {
     bool full_cov = false, tree_supported = false;
 };
 struct PathInfo {
-    std::string lineage_path, mutation_order;
+    std::string lineage_path, mutation_order, raw_label;
     long long vertex = -1, parent_vertex = -1;
 };
 // 一個 region 內的所有 vertex，供 partial read 求最近共同祖先(LCA)
+//
+// 🔴 by_label 的 key 必須是**狀態字串**（純 R/A），不是 lineage_paths 的
+//    vertex_label 原值。vertex_label 有三種形態：
+//      實測節點  "AAR"      —— 本來就是狀態字串
+//      補入節點  "H_RAAR"   —— 多了 H_ 前綴
+//      根        "ROOT"     —— 完全不是狀態字串
+//    read pattern 永遠是純 R/A/X，拿它去查原值 key，補入節點與 ROOT
+//    **在結構上不可能命中**。這正是 2026-08-09 查出的漏標根因：
+//    compatible_labels() 產生的候選全是純 R/A，`by_label.count()` 對
+//    "H_RAAR" 與 "ROOT" 一律落空 → cands 為空 → lca_of 回 -1 → 不寫 lv。
+//    實測 chr21：3,067 個帶 lv 的 alignment 中落在補入節點的是 **0 個**；
+//    全樣本 33.0% 的樹「非 ROOT 節點全是補入」，那些 region 一條 lv 都寫不出來，
+//    佔有樹 region 的 assignment 列 48.8%。
 struct RegionTree {
-    std::map<std::string, PathInfo> by_label;   // vertex_label -> info
-    std::map<long long, std::string> label_of;  // vertex -> label
+    std::map<std::string, PathInfo> by_label;   // 正規化後的狀態字串 -> info
+    std::map<long long, std::string> label_of;  // vertex -> 正規化後的狀態字串
 };
+
+// vertex_label -> 狀態字串。width 為該 region 的狀態字串寬度（ROOT 用）。
+inline std::string state_key(const std::string& label, std::size_t width) {
+    if (label == "ROOT") return width ? std::string(width, 'R') : label;
+    if (label.rfind("H_", 0) == 0) return label.substr(2);
+    return label;
+}
 struct TopoInfo {
     bool unique = false;
     std::string family_status;
@@ -272,6 +292,7 @@ int main(int argc, char** argv) {
 
         // ── lineage_paths（region_id + vertex_label -> path）──────
         std::unordered_map<std::string, RegionTree> trees;
+        std::unordered_map<std::string, std::vector<PathInfo>> staging;
         std::size_t n_vertices = 0;
         if (!paths_p.empty()) {
             GzLines r(paths_p);
@@ -293,14 +314,34 @@ int main(int argc, char** argv) {
                         continue;
                     }
                     pi.parent_vertex = (f[i_pv] == ".") ? -1 : std::stoll(f[i_pv]);
-                    RegionTree& t = trees[f[i_ri]];
-                    t.label_of[pi.vertex] = f[i_vl];
-                    t.by_label[f[i_vl]] = std::move(pi);
+                    pi.raw_label = f[i_vl];
+                    staging[f[i_ri]].push_back(std::move(pi));
                     ++n_vertices;
                 }
             }
         }
-        std::cerr << "lineage_paths : " << n_vertices << " vertices in " << trees.size() << " regions\n";
+        // ROOT 的狀態字串寬度要看同 region 其他 vertex，所以必須整個 region
+        // 讀完才能正規化 —— 這是上面用 staging 暫存而非直接建索引的原因。
+        std::size_t n_root = 0, n_hidden = 0;
+        for (auto& kv : staging) {
+            std::size_t width = 0;
+            for (const auto& pi : kv.second) {
+                if (pi.raw_label == "ROOT") continue;
+                width = std::max(width, state_key(pi.raw_label, 0).size());
+            }
+            RegionTree& t = trees[kv.first];
+            for (auto& pi : kv.second) {
+                const std::string key = state_key(pi.raw_label, width);
+                if (pi.raw_label == "ROOT")
+                    ++n_root;
+                else if (pi.raw_label.rfind("H_", 0) == 0)
+                    ++n_hidden;
+                t.label_of[pi.vertex] = key;
+                t.by_label[key] = std::move(pi);
+            }
+        }
+        std::cerr << "lineage_paths : " << n_vertices << " vertices in " << trees.size() << " regions (正規化 ROOT "
+                  << n_root << "、補入 " << n_hidden << ")\n";
 
         // ── topology（ls 判定）────────────────────────────────────
         std::unordered_map<std::string, TopoInfo> topo;
@@ -423,23 +464,31 @@ int main(int argc, char** argv) {
                     lu += e.block_id;
                     lp += e.pattern;
 
+                    // ls 判定順序：**region 層的「定不出來」優先於 read 層的「覆蓋不足」**。
+                    // 🔴 原本先看 full_cov 再看 topology，導致無樹 region 裡的部分覆蓋 read
+                    //    被標成 'P'（只覆蓋部分），暗示「覆蓋夠就能定位」—— 但那個 region
+                    //    根本沒有樹，覆蓋再多也定不出來，正確標記是 'A'。
+                    //    實測 chr13 的 ABSTAIN_RESOURCE_LIMIT region：149/153 條被標 'P'，
+                    //    下游若用 `ls != A` 篩掉拓撲未定的 read，會留下 97.4%。
+                    //    全樣本 19.32% 的 read×region 落在無樹 region。
                     char c;
-                    if (!e.full_cov)
+                    auto t = topo.find(e.region_id);
+                    const bool undetermined =
+                        (t == topo.end()) ? !e.tree_supported : (t->second.family_status != "FAMILY_COMPLETE");
+                    if (undetermined)
+                        c = 'A';
+                    else if (!e.full_cov)
                         c = 'P';
-                    else {
-                        auto t = topo.find(e.region_id);
-                        if (t == topo.end())
-                            c = e.tree_supported ? 'M' : 'A';
-                        else if (t->second.family_status != "FAMILY_COMPLETE")
-                            c = 'A';
-                        else
-                            c = t->second.unique ? 'U' : 'M';
-                    }
+                    else if (t == topo.end())
+                        c = 'M';
+                    else
+                        c = t->second.unique ? 'U' : 'M';
                     if (sev(c) < sev(ls)) ls = c;
 
                     // lv/lo 只在非 abstain 時取（不變式 3）
                     if (c != 'A') {
                         auto tit = trees.find(e.region_id);
+                        if (tit == trees.end()) ++st["lv_skip_region_has_no_tree"];
                         if (tit != trees.end()) {
                             const RegionTree& tree = tit->second;
                             auto pit = tree.by_label.find(e.pattern);
@@ -452,6 +501,11 @@ int main(int argc, char** argv) {
                                 lv += pit->second.lineage_path;
                                 lo += pit->second.mutation_order;
                                 any_lv = true;
+                                ++st["lv_exact_vertex"];
+                                if (pit->second.raw_label == "ROOT")
+                                    ++st["lv_at_root"];
+                                else if (pit->second.raw_label.rfind("H_", 0) == 0)
+                                    ++st["lv_at_hidden"];
                             } else if (!e.full_cov) {
                                 // 部分覆蓋：枚舉相容 vertex 求最近共同祖先。
                                 // 結論是「屬於該節點或其後代」，以 '+' 後綴標明是子樹範圍，
@@ -472,10 +526,17 @@ int main(int argc, char** argv) {
                                             any_lv = true;
                                             ++st["lca_resolved"];
                                             st["lca_candidates_sum"] += cands.size();
+                                            if (anc_it->second.raw_label == "ROOT")
+                                                ++st["lv_at_root"];
+                                            else if (anc_it->second.raw_label.rfind("H_", 0) == 0)
+                                                ++st["lv_at_hidden"];
                                         }
                                     }
                                 } else if (!cands.empty()) {
                                     ++st["lca_no_common_ancestor"];
+                                } else {
+                                    // 相容集為空 = 該 pattern 與這棵樹的任何狀態都矛盾
+                                    ++st["lv_skip_no_compatible_vertex"];
                                 }
                             }
                         }
