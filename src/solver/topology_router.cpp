@@ -188,13 +188,48 @@ TopologyRouterResult solve_topology_exact(const TopologyProblem& problem, const 
         return result;
     }
 
-    result.structural = solve_obligation_bnb(normalized.problem, options.bnb);
+    // Objective-only subset DP runs FIRST so its certified h* can seed the B&B
+    // upper bound. Historically the B&B started unbounded, so its lower_bound
+    // prune stayed inert until a first feasible solution was stumbled on, and
+    // the DP was consulted only afterwards as a crosscheck — precisely the
+    // information that was thrown away whenever the node budget ran out.
+    //
+    // The seed prunes only branches whose lower_bound already exceeds a
+    // certified optimum, so no optimal solution is lost and the enumerated
+    // family is unchanged. Any disagreement remains observable and is checked
+    // explicitly below.
+    ObligationBnbOptions bnb_options = options.bnb;
+    bool dp_seeded = false;
+    std::uint32_t dp_objective_h = 0;
+    if (options.run_objective_dp_crosscheck) {
+        const TerminalSubsetDpResult dp = solve_terminal_subset_objective(normalized.problem, options.dp);
+        if (dp.objective_state == ExactObjectiveState::kObjectiveCertified && dp.objective_h) {
+            dp_objective_h = *dp.objective_h;
+            bnb_options.seed_incumbent = static_cast<std::size_t>(dp_objective_h);
+            dp_seeded = true;
+        }
+    }
+
+    result.structural = solve_obligation_bnb(normalized.problem, bnb_options);
     result.route = normalized.problem.bit_count <= 4 ? ExactSolverRoute::kSmallQOracleDifferentialBnb
                                                      : ExactSolverRoute::kBitsetObligationBnb;
 
     if (result.structural.objective_state != ExactObjectiveState::kObjectiveCertified) {
         result.message = "exact B&B abstained before a differential result was available";
         return result;
+    }
+
+    if (dp_seeded) {
+        // A seeded search that still lands on a different h* means the DP and
+        // the B&B disagree; withhold everything rather than publish either.
+        result.objective_dp_checked = true;
+        result.objective_dp_match = result.structural.objective_h == dp_objective_h;
+        if (!result.objective_dp_match) {
+            fail_differential(result,
+                              "objective-only subset DP and obligation B&B disagree; "
+                              "all structural outputs withheld");
+            return result;
+        }
     }
 
     if (normalized.problem.bit_count <= 4) {
@@ -217,7 +252,9 @@ TopologyRouterResult solve_topology_exact(const TopologyProblem& problem, const 
         }
     }
 
-    if (options.run_objective_dp_crosscheck &&
+    // Fallback crosscheck for problems the DP could not certify up front (it
+    // abstains on large state spaces), so the seeded path above never ran.
+    if (options.run_objective_dp_crosscheck && !dp_seeded &&
         result.structural.objective_state == ExactObjectiveState::kObjectiveCertified) {
         const TerminalSubsetDpResult dp = solve_terminal_subset_objective(normalized.problem, options.dp);
         if (dp.objective_state == ExactObjectiveState::kObjectiveCertified) {

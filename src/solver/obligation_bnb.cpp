@@ -224,7 +224,7 @@ std::vector<HypercubeVertex> materialize_vertices(const VertexSet& selected, std
 class ExactSearch {
    public:
     ExactSearch(const NormalizedProblem& problem, const ObligationBnbOptions& options)
-        : problem_(problem), options_(options) {}
+        : problem_(problem), options_(options), incumbent_(options.seed_incumbent) {}
 
     void run() {
         VertexSet selected = problem_.mandatory;
@@ -233,7 +233,9 @@ class ExactSearch {
     }
 
     bool aborted() const noexcept { return aborted_; }
-    bool has_incumbent() const noexcept { return incumbent_ != std::numeric_limits<std::size_t>::max(); }
+    // A seeded incumbent must not be mistaken for a discovered solution, so
+    // feasibility is tracked separately from the bound.
+    bool has_incumbent() const noexcept { return solution_found_; }
     std::size_t incumbent() const noexcept { return incumbent_; }
     bool family_overflow() const noexcept { return family_overflow_; }
     std::uint64_t search_nodes() const noexcept { return search_nodes_; }
@@ -254,6 +256,7 @@ class ExactSearch {
             family_overflow_ = false;
             optimal_family_.clear();
         }
+        solution_found_ = true;
         if (std::find(optimal_family_.begin(), optimal_family_.end(), vertices) != optimal_family_.end()) {
             return;
         }
@@ -321,7 +324,10 @@ class ExactSearch {
 
     const NormalizedProblem& problem_;
     const ObligationBnbOptions& options_;
+    // Seeded from a certified optimum when the caller supplies one; otherwise
+    // the historical "no bound until a first solution" behaviour is preserved.
     std::size_t incumbent_ = std::numeric_limits<std::size_t>::max();
+    bool solution_found_ = false;
     bool family_overflow_ = false;
     bool aborted_ = false;
     std::uint64_t search_nodes_ = 0;
