@@ -567,6 +567,20 @@ int main(int argc, char** argv) {
         sam_close(fout);
         if (pool.pool != nullptr) hts_tpool_destroy(pool.pool);
 
+        // 輸出必須自帶索引 —— 沒有 .bai/.crai 的 BAM 在 IGV 與任何 region query
+        // 下都不可用，而且失敗方式是**靜默回空**（samtools view FILE chr21 印不出東西
+        // 也不報錯），比直接報錯更難查。輸入是座標排序的、我們照序寫出，所以這裡
+        // 一定建得起來；建不起來就 fail-loud，不要留一個半殘的產物。
+        // 🔴 先前這一步在 scripts/run_sample.sh 裡用 samtools index 做，但只做在
+        //    「合併成單一 BAM」那條路徑上 —— --split-by-chrom 產出的分檔全部無索引。
+        //    索引屬於「輸出的一部分」，該由產出它的程式負責，不是 shell。
+        {
+            const int nthr = threads > 1 ? threads : 1;
+            if (sam_index_build3(out_bam.c_str(), nullptr, 0, nthr) < 0)
+                throw std::runtime_error("failed to build index for: " + out_bam);
+            st["index_built"] = 1;
+        }
+
         if (!receipt_p.empty()) {
             json_t* rj = json_object();
             json_object_set_new(rj, "schema_name", json_string("intersubmod.lineage_tagged_bam_receipt"));
