@@ -35,19 +35,10 @@ def inspect_page(page: Any, html_uri: str, screenshot: Path) -> Dict[str, Any]:
           title: document.title,
           lang: document.documentElement.lang,
           partial: document.documentElement.dataset.partial,
-          portable: document.documentElement.hasAttribute('data-data-analytics-portable-artifact'),
           h1Count: document.querySelectorAll('h1').length,
-          visibleH1Count: Array.from(document.querySelectorAll('h1')).filter((element) => {
-            const rect = element.getBoundingClientRect();
-            const style = getComputedStyle(element);
-            return rect.width > 0 && rect.height > 0 && style.display !== 'none' &&
-              style.visibility !== 'hidden';
-          }).length,
           sectionCount: document.querySelectorAll('main section').length,
           tableCount: document.querySelectorAll('table').length,
           navLinkCount: document.querySelectorAll('nav a').length,
-          portableOptionsButtonCount:
-            document.querySelectorAll('button[aria-label^="Open options"]').length,
           ribbonVisible: !!document.querySelector('.partial-ribbon') &&
             getComputedStyle(document.querySelector('.partial-ribbon')).display !== 'none',
           scrollWidth: document.documentElement.scrollWidth,
@@ -75,14 +66,10 @@ def inspect_page(page: Any, html_uri: str, screenshot: Path) -> Dict[str, Any]:
         "navigation_ok": response is None or response.ok,
         "lang_zh_hant": metrics["lang"] == "zh-Hant",
         "partial_flag": metrics["partial"] == "true",
-        "single_visible_h1": metrics["visibleH1Count"] == 1,
+        "single_h1": metrics["h1Count"] == 1,
         "sections_present": metrics["sectionCount"] >= 9,
         "tables_present": metrics["tableCount"] >= 2,
-        "navigation_or_portable_controls_present": (
-            metrics["portableOptionsButtonCount"] >= 1
-            if metrics["portable"]
-            else metrics["navLinkCount"] >= 9
-        ),
+        "navigation_present": metrics["navLinkCount"] >= 9,
         "partial_ribbon_visible": metrics["ribbonVisible"],
         "no_horizontal_overflow": metrics["scrollWidth"] <= metrics["viewportWidth"] + 1,
         "no_console_errors": not console_errors,

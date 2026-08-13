@@ -85,7 +85,7 @@
     {
       "role": "reader_report",
       "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.md",
-      "sha256": "961b5f9af83948056562d283b67846e6af8dbdfc480c7546ad6174f2071a1432"
+      "sha256": "06350e274f4d12304dc83a27a10beec9c1559340fa3c8e1a0ef75071ee55401a"
     },
     {
       "role": "standalone_html",
@@ -135,8 +135,7 @@
   ],
   "deviations": [
     "The requested complete scientific run was not launched after the bounded probes proved that the production engine, co-occurrence authority, complete topology path, independent validator and atomic freeze are unavailable. This is the governed NO-GO outcome, not a runtime failure hidden as completion.",
-    "Three read-only subagents independently inspected mounted inputs, executable readiness and the profiling/report chain. The root agent replayed all completion commands and wrote every repository artifact.",
-    "The 2026-07-22 private-publication hygiene repair replaced the bare private mount root in the reader Markdown with <BIG8_INPUT_ROOT>. Machine JSON, standalone HTML, scientific decisions and the original audit evidence were unchanged."
+    "Three read-only subagents independently inspected mounted inputs, executable readiness and the profiling/report chain. The root agent replayed all completion commands and wrote every repository artifact."
   ],
   "blockers": [],
   "updated_at": "2026-07-20T00:49:42+08:00"
