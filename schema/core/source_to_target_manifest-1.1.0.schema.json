@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://longlineage.local/schema/source_to_target_manifest-1.2.0.json",
+  "$id": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json",
   "title": "LongLineage source-to-target provenance manifest",
   "type": "object",
   "additionalProperties": false,
@@ -15,13 +15,13 @@
   ],
   "properties": {
     "$schema": {
-      "const": "https://longlineage.local/schema/source_to_target_manifest-1.2.0.json"
+      "const": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json"
     },
     "schema_name": {
       "const": "longlineage.source_to_target_manifest"
     },
     "schema_version": {
-      "const": "1.2.0"
+      "const": "1.1.0"
     },
     "origin_repository": {
       "const": "InterSubMod"
@@ -46,39 +46,6 @@
       }
     }
   },
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "license_review_status": {
-            "const": "APPROVED_FOR_PUBLIC_RELEASE"
-          }
-        },
-        "required": [
-          "license_review_status"
-        ]
-      },
-      "then": {
-        "properties": {
-          "mappings": {
-            "items": {
-              "properties": {
-                "license_disposition": {
-                  "const": "APPROVED_FOR_PUBLIC_RELEASE"
-                },
-                "license_evidence": {
-                  "const": "PER_FILE_LICENSE_REVIEWED"
-                },
-                "review_scope": {
-                  "const": "LICENSE_AND_PROVENANCE_REVIEW"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  ],
   "$defs": {
     "sha256": {
       "type": "string",
@@ -96,13 +63,6 @@
         "origin_id",
         "source_path",
         "source_sha256",
-        "source_commit",
-        "source_replay_status",
-        "license_disposition",
-        "license_evidence",
-        "reviewer_id",
-        "reviewed_at",
-        "review_scope",
         "target",
         "target_kind",
         "target_presence",
@@ -124,52 +84,6 @@
         },
         "source_sha256": {
           "$ref": "#/$defs/sha256"
-        },
-        "source_commit": {
-          "oneOf": [
-            {
-              "type": "string",
-              "pattern": "^[0-9a-f]{40}$"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "source_replay_status": {
-          "enum": [
-            "MATCHED_DECLARED_ORIGIN_COMMIT",
-            "MATCHED_OTHER_COMMIT",
-            "HASH_NOT_FOUND"
-          ]
-        },
-        "license_disposition": {
-          "enum": [
-            "PENDING_PUBLIC_RELEASE_REVIEW",
-            "APPROVED_FOR_PUBLIC_RELEASE",
-            "REJECTED_FOR_PUBLIC_RELEASE"
-          ]
-        },
-        "license_evidence": {
-          "enum": [
-            "ORIGIN_REPOSITORY_LICENSE_ONLY",
-            "PER_FILE_LICENSE_REVIEWED",
-            "NO_LICENSE_EVIDENCE"
-          ]
-        },
-        "reviewer_id": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
-        },
-        "reviewed_at": {
-          "type": "string",
-          "format": "date"
-        },
-        "review_scope": {
-          "enum": [
-            "PROVENANCE_REPLAY_ONLY",
-            "LICENSE_AND_PROVENANCE_REVIEW"
-          ]
         },
         "target": {
           "$ref": "#/$defs/safe_relative_path"
@@ -238,60 +152,6 @@
         }
       },
       "allOf": [
-        {
-          "if": {
-            "properties": {
-              "source_replay_status": {
-                "const": "HASH_NOT_FOUND"
-              }
-            },
-            "required": [
-              "source_replay_status"
-            ]
-          },
-          "then": {
-            "properties": {
-              "source_commit": {
-                "type": "null"
-              }
-            }
-          },
-          "else": {
-            "properties": {
-              "source_commit": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{40}$"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "license_disposition": {
-                "const": "APPROVED_FOR_PUBLIC_RELEASE"
-              }
-            },
-            "required": [
-              "license_disposition"
-            ]
-          },
-          "then": {
-            "properties": {
-              "source_replay_status": {
-                "not": {
-                  "const": "HASH_NOT_FOUND"
-                }
-              },
-              "license_evidence": {
-                "const": "PER_FILE_LICENSE_REVIEWED"
-              },
-              "review_scope": {
-                "const": "LICENSE_AND_PROVENANCE_REVIEW"
-              }
-            }
-          }
-        },
         {
           "if": {
             "properties": {

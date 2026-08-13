@@ -20,7 +20,13 @@ C++ outputs with separately frozen vectors.
 
 Machine-readable source-port lifecycle is
 `LongLineage/provenance/source_to_target_manifest.json`, validated by offline schema
-ID `https://longlineage.local/schema/source_to_target_manifest-1.1.0.json`.
+ID `https://longlineage.local/schema/source_to_target_manifest-1.2.0.json`. Version 1.2
+records the exact replayed source commit (or an explicit unresolved state) and a
+separate per-row license disposition; provenance replay never implies public-license
+approval.
+The byte-identical 1.1 contract remains resolvable at
+`LongLineage/schema/core/source_to_target_manifest-1.1.0.schema.json`; it is retained
+for historical receipts and is not the current manifest contract.
 `PLANNED`, `SKELETON` and `IMPLEMENTED` are distinct from
 `NOT_VERIFIED`, `CONTRACT_VERIFIED` and `PARITY_VERIFIED`; target presence, kind,
 digest kind/SHA and evidence ID follow closed conditional nullability rules. Current

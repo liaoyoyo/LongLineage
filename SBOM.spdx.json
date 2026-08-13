@@ -1,0 +1,870 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "comment": "License/source-origin audit remains pending; NOASSERTION is intentional and fail-closed.",
+  "creationInfo": {
+    "created": "2026-08-13T02:49:30Z",
+    "creators": [
+      "Tool: LongLineage deterministic SPDX generator"
+    ]
+  },
+  "dataLicense": "CC0-1.0",
+  "documentDescribes": [
+    "SPDXRef-Package-LongLineage"
+  ],
+  "documentNamespace": "https://github.com/liaoyoyo/LongLineage/sbom/72d8a1135c54e56285a96ee670d72db2238da17804e6468586c0a854ce41c568",
+  "name": "LongLineage-private-research-preview",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Dependency-apt-resolution",
+      "comment": "Inventory source=Ubuntu-jammy-updates-security; digest_or_resolution=captured-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "apt_resolution",
+      "versionInfo": "jammy-current-at-image-build"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-boost",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "boost",
+      "versionInfo": "1.74.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-clang-format",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-ci-log; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "clang_format",
+      "versionInfo": "14.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-cmake",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "cmake",
+      "versionInfo": "3.22.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-gcc",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=apt-major; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "gcc",
+      "versionInfo": "11"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-git",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "git",
+      "versionInfo": "2.34.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-htslib",
+      "comment": "Inventory source=https://github.com/samtools/htslib/releases/download/1.18/htslib-1.18.tar.bz2; digest_or_resolution=f1ab53a593a2320a1bfadf4ef915dae784006c5b5c922c8a8174d7530a9af18f; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "htslib",
+      "versionInfo": "1.18"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-jansson",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "jansson",
+      "versionInfo": "2.13.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-openssl",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "openssl",
+      "versionInfo": "3.0.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-python3-jsonschema",
+      "comment": "Inventory source=Ubuntu-jammy; digest_or_resolution=resolved-in-image; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "python3-jsonschema",
+      "versionInfo": "3.2.x"
+    },
+    {
+      "SPDXID": "SPDXRef-Dependency-ubuntu-base",
+      "comment": "Inventory source=docker.io/library/ubuntu; digest_or_resolution=sha256:0e0a0fc6d18feda9db1590da249ac93e8d5abfea8f4c3c0c849ce512b5ef8982; license review pending",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "ubuntu_base",
+      "versionInfo": "22.04"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-cooccurrence-analyzer",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3d7650983fce68abc122748d167e56b9a53bc6ef9775b9b1beb19793e25a769c"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_methyl_ssnv_cooccurrence.py; source_replay_status=HASH_NOT_FOUND; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:cooccurrence-analyzer",
+      "versionInfo": "UNRESOLVED"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-cooccurrence-library",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3d41023b03f1f047312011f8513b685bf7ffe25f5d0795d253bc9013b9ec88ff"
+        }
+      ],
+      "comment": "source_path=InterSubMod/scripts/ssnv_cooccurrence_lib.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:cooccurrence-library",
+      "versionInfo": "204f678897a7dd39373ade61fff9965b12bad3ac"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-hypercube-exact",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "1def0de1952d127d8d013820ac7b0eabe33d6f1a66fd8c6d47a1985b14a32f77"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/hypercube_exact.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:hypercube-exact",
+      "versionInfo": "6583ae1382befd20ff4a4c4ff076cb17020537de"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-ism-bam-reader",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d2da0ef68b907fe093d8722f739e0f77dee22bc4e12b88d6b37c30ccfe2876af"
+        }
+      ],
+      "comment": "source_path=InterSubMod/src/core/BamReader.cpp; source_replay_status=MATCHED_DECLARED_ORIGIN_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:ism-bam-reader",
+      "versionInfo": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-ism-indexed-block-reader",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d2da0ef68b907fe093d8722f739e0f77dee22bc4e12b88d6b37c30ccfe2876af"
+        }
+      ],
+      "comment": "source_path=InterSubMod/src/core/BamReader.cpp; source_replay_status=MATCHED_DECLARED_ORIGIN_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:ism-indexed-block-reader",
+      "versionInfo": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-ism-methylation-parser",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "45b51176cd28bda77adf82de1a80a0f618eba5d2cf518da97e0c651cadee1d01"
+        }
+      ],
+      "comment": "source_path=InterSubMod/src/core/MethylationParser.cpp; source_replay_status=MATCHED_DECLARED_ORIGIN_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:ism-methylation-parser",
+      "versionInfo": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-ism-read-parser",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "34a38c96fb0184840321482a2f1ec64eee928f392db4d4b3bee5628a14bff03a"
+        }
+      ],
+      "comment": "source_path=InterSubMod/src/core/ReadParser.cpp; source_replay_status=MATCHED_DECLARED_ORIGIN_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:ism-read-parser",
+      "versionInfo": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-ism-somatic-snv",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "9082c5e0845d6c2761bf3cebb7f0804567ccdec86bde2de20a8209ef8da0b8ed"
+        }
+      ],
+      "comment": "source_path=InterSubMod/src/core/SomaticSnv.cpp; source_replay_status=MATCHED_DECLARED_ORIGIN_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:ism-somatic-snv",
+      "versionInfo": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-latest-tag-join",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7ddadb05481bb61f2dc3a489762944ec347ab9f5265c69fb17538efd44b543cd"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/latest_tag_join.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:latest-tag-join",
+      "versionInfo": "6583ae1382befd20ff4a4c4ff076cb17020537de"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-m1-cluster-library",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "ed5f3c99461248248b20a9f49597ab5de7340a1e2055d77a1d83dbcc2799b72a"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260715_single_fp_alt_multicluster_subclone_validation/scripts/focal_alt_cluster_lib.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:m1-cluster-library",
+      "versionInfo": "6583ae1382befd20ff4a4c4ff076cb17020537de"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-m1-frozen-analyzer",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "390228ce1fb98b59409f2517341334ab94329ef6c73a4838555fca85878027b2"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_all_ssnv_focal_alt_multigroup.pinned_390228ce.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:m1-frozen-analyzer",
+      "versionInfo": "6583ae1382befd20ff4a4c4ff076cb17020537de"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-m2-screen-gate",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f3d932388bf8ddc90f8fa1a136f6203dfe8d9f5aa9979ae32e9d936c2a413b79"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/m2_screen_gate.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:m2-screen-gate",
+      "versionInfo": "6583ae1382befd20ff4a4c4ff076cb17020537de"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-layered-unit-census",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "70d28fa4dfe3e69a0ea610e346457a894e7e024ffdb437895343fc66516639d0"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/layered_tree_reconstruction.py; source_replay_status=HASH_NOT_FOUND; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-layered-unit-census",
+      "versionInfo": "UNRESOLVED"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-layered-unit-classification",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "70d28fa4dfe3e69a0ea610e346457a894e7e024ffdb437895343fc66516639d0"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/layered_tree_reconstruction.py; source_replay_status=HASH_NOT_FOUND; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-layered-unit-classification",
+      "versionInfo": "UNRESOLVED"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-linkage-read-evidence",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "83ef74971566459dc7bfeeeb7842f2a6cf0056d033171d8c49326c862d574677"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/sm_linkage_genomewide.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-linkage-read-evidence",
+      "versionInfo": "23aef3f5527bd2dd9b4b05712414b68f8183baea"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-linkage-regional-plan",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "83ef74971566459dc7bfeeeb7842f2a6cf0056d033171d8c49326c862d574677"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/sm_linkage_genomewide.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-linkage-regional-plan",
+      "versionInfo": "23aef3f5527bd2dd9b4b05712414b68f8183baea"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-multilocus-family-contract",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "12ae8e9b79fecc7e66266cf39e13b10a81723dd954d1ff98c3ad22e0434e10bc"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/sm_multilocus_combinations.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-multilocus-family-contract",
+      "versionInfo": "23aef3f5527bd2dd9b4b05712414b68f8183baea"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-multilocus-pattern-evidence",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "12ae8e9b79fecc7e66266cf39e13b10a81723dd954d1ff98c3ad22e0434e10bc"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/sm_multilocus_combinations.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-multilocus-pattern-evidence",
+      "versionInfo": "23aef3f5527bd2dd9b4b05712414b68f8183baea"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-region-view-census",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "cd39bb7799f6b62190f9dca2a3afad321d0b384e254ab3fb4a102e594d02d872"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/build_region_view.py; source_replay_status=HASH_NOT_FOUND; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-region-view-census",
+      "versionInfo": "UNRESOLVED"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-python-v2-tree-enumeration-solver",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "36727f4e1d8d7ce8abf869606211c93d8c1a0506dd7d142e855863c412ca0d61"
+        }
+      ],
+      "comment": "source_path=InterSubMod/docs/methodology/_assets/20260627_subclone_4axis_teaching/scripts/tree_enumeration_solver.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:python-v2-tree-enumeration-solver",
+      "versionInfo": "23aef3f5527bd2dd9b4b05712414b68f8183baea"
+    },
+    {
+      "SPDXID": "SPDXRef-Origin-topology-ranker",
+      "annotations": [
+        {
+          "annotationDate": "2026-08-13T02:49:30Z",
+          "annotationType": "REVIEW",
+          "annotator": "Tool: LongLineage deterministic SPDX generator",
+          "comment": "reviewer_id=codex-provenance-replay-20260813; reviewed_at=2026-08-13; review_scope=PROVENANCE_REPLAY_ONLY"
+        }
+      ],
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "b28d494563bea70cbfea7b13853d99c0b3aeafed7ed4f0c0a6fff3b92c84f0a9"
+        }
+      ],
+      "comment": "source_path=InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/build_m2_patterns_and_rank.py; source_replay_status=MATCHED_OTHER_COMMIT; license_disposition=PENDING_PUBLIC_RELEASE_REVIEW; license_evidence=ORIGIN_REPOSITORY_LICENSE_ONLY",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "name": "InterSubMod:topology-ranker",
+      "versionInfo": "6583ae1382befd20ff4a4c4ff076cb17020537de"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-LongLineage",
+      "comment": "Private research-preview inventory; not a production or public-release approval",
+      "copyrightText": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "GPL-3.0-only",
+      "licenseDeclared": "GPL-3.0-only",
+      "name": "LongLineage",
+      "versionInfo": "research-preview-b9aaa12a11fa00606bd174dabd0f172a5d112359"
+    }
+  ],
+  "relationships": [
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-apt-resolution",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-boost",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-clang-format",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-cmake",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-gcc",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-git",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-htslib",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-jansson",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-openssl",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-python3-jsonschema",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "Static lock inventory; runtime/build role and license require final review",
+      "relatedSpdxElement": "SPDXRef-Dependency-ubuntu-base",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=unreleased_contract_reference_no_execution; transformation=review_only_until_cpp_dual_authority_is_established",
+      "relatedSpdxElement": "SPDXRef-Origin-cooccurrence-analyzer",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_synthetic_vectors_only; transformation=independent_cpp_exact_test_and_four_state_reimplementation",
+      "relatedSpdxElement": "SPDXRef-Origin-cooccurrence-library",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_against_frozen_small_q_oracles",
+      "relatedSpdxElement": "SPDXRef-Origin-hypercube-exact",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=concept_and_fixtures_only; transformation=clean_reimplementation_with_typed_coordinates_and_fail_closed_errors",
+      "relatedSpdxElement": "SPDXRef-Origin-ism-bam-reader",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=concept_and_synthetic_fixtures_only; transformation=clean_reimplementation_with_frozen_order_block_planning_explicit_index_and_worker_owned_handles",
+      "relatedSpdxElement": "SPDXRef-Origin-ism-indexed-block-reader",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=concept_and_fixtures_only; transformation=clean_reimplementation_with_typed_B_array_and_ParseResult",
+      "relatedSpdxElement": "SPDXRef-Origin-ism-methylation-parser",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=concept_and_fixtures_only; transformation=clean_reimplementation_with_R_A_O_X",
+      "relatedSpdxElement": "SPDXRef-Origin-ism-read-parser",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=concept_and_fixtures_only; transformation=clean_reimplementation_with_index_and_read_error_checks",
+      "relatedSpdxElement": "SPDXRef-Origin-ism-somatic-snv",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_and_synthetic_vectors_only; transformation=independent_cpp_reimplementation_with_stronger_full_identity_checks",
+      "relatedSpdxElement": "SPDXRef-Origin-latest-tag-join",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_golden_vectors_only; transformation=independent_cpp_reimplementation_of_rng_distance_linkage_and_gates",
+      "relatedSpdxElement": "SPDXRef-Origin-m1-cluster-library",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_golden_outputs_only; transformation=independent_cpp_reimplementation_against_frozen_vectors",
+      "relatedSpdxElement": "SPDXRef-Origin-m1-frozen-analyzer",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_golden_outputs_only; transformation=independent_cpp_reimplementation_against_frozen_census_and_boundaries",
+      "relatedSpdxElement": "SPDXRef-Origin-m2-screen-gate",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_unit_rows_class_census_and_semantic_digest",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-layered-unit-census",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_unit_role_and_classification_precedence",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-layered-unit-classification",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_htslib_reimplementation_of_pileup_identity_allele_calls_and_exact_truth_free_sidecar_join",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-linkage-read-evidence",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_50kb_transitive_grouping_and_left_tie_densest8_selection",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-linkage-regional-plan",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_hp_prefix_family_and_primary_lineage_precedence",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-multilocus-family-contract",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_full_subread_pattern_census_and_minread3_support",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-multilocus-pattern-evidence",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_region_determinacy_precedence_and_family_census",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-region-view-census",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=contract_hash_and_frozen_outputs_only; transformation=independent_cpp_reimplementation_of_extra_cap4_level_budget150000_analytical_tree_count_and_cpython39_capped_fallback",
+      "relatedSpdxElement": "SPDXRef-Origin-python-v2-tree-enumeration-solver",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    },
+    {
+      "comment": "reuse=hash_and_synthetic_vectors_only; transformation=vertex_set_ranking_contract_pending_full_authority",
+      "relatedSpdxElement": "SPDXRef-Origin-topology-ranker",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-Package-LongLineage"
+    }
+  ],
+  "spdxVersion": "SPDX-2.3"
+}
