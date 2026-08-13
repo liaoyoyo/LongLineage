@@ -43,6 +43,10 @@ scripts/ci/check_all.sh build
   `LongLineage/docs/data/RECORD_AND_QUERY_STANDARD.zh-TW.md`
 - Development: `LongLineage/docs/development/WORKFLOW.md`
 - Release gates: `LongLineage/docs/release/RELEASE_GATES.md`
+- Public-preview boundary and fail-closed safety status:
+  `LongLineage/docs/release/PUBLIC_PREVIEW.md`
+- Branch/commit-specific capability matrix:
+  `LongLineage/docs/release/CAPABILITY_MATRIX.md`
 - Claim boundary: `LongLineage/docs/claims/CLAIM_BOUNDARY.md`
 
 ## License
@@ -50,3 +54,5 @@ scripts/ci/check_all.sh build
 Source files declare `GPL-3.0-only` and the repository carries the canonical
 GPLv3 text in `LongLineage/LICENSE`. The project remains private and unreleased
 until the source-origin and dependency compatibility audit is complete.
+The current candidate is therefore a private research preview and must pass
+`scripts/ci/check_public_preview_gate.sh` before any public-visibility change.

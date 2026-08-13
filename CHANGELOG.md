@@ -6,6 +6,10 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 
 ### Added
 
+- A private-first public-preview safety foundation: row-level source replay and
+  license-review states, a deterministic SPDX 2.3 inventory, third-party
+  notices, branch-specific capability documentation and a fail-closed public
+  gate. This records blockers and does not approve publication or a release.
 - Repository governance, authority map, data-contract registry, C++ foundation and validation gates.
 - Machine-readable artifact membership, record-lineage, semantic-digest and immutable
   receipt contracts.
