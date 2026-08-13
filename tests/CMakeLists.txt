@@ -301,6 +301,12 @@ add_test(
 add_test(
     NAME json_schema_contract_fixtures
     COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_json_schema_fixtures.sh")
+add_test(
+    NAME sbom_spdx_contract
+    COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_sbom_spdx.sh")
+set_tests_properties(
+    sbom_spdx_contract
+    PROPERTIES LABELS "governance;release;contract;synthetic")
 if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
     add_test(
         NAME performance_benchmark_records
@@ -308,6 +314,15 @@ if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
     add_test(
         NAME dependency_lock_negative
         COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_dependency_lock_negative.sh")
+    add_test(
+        NAME public_preview_gate_fail_closed
+        COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_public_preview_gate.sh"
+                "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_public_preview_gate.sh"
+                "${CMAKE_CURRENT_SOURCE_DIR}/.."
+                "origin/main")
+    set_tests_properties(
+        public_preview_gate_fail_closed
+        PROPERTIES LABELS "governance;release;negative;synthetic;repository-context")
 endif()
 set(longlineage_governance_contract_tests
     governance_phase_state_negative governance_audit_evidence_negative gate_negative_binding_contract
@@ -317,7 +332,7 @@ set_tests_properties(
     PROPERTIES LABELS "governance;contract;negative;synthetic")
 if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
     set_tests_properties(
-        performance_benchmark_records dependency_lock_negative
+        performance_benchmark_records dependency_lock_negative public_preview_gate_fail_closed
         PROPERTIES LABELS "governance;contract;negative;synthetic;repository-context")
 endif()
 
