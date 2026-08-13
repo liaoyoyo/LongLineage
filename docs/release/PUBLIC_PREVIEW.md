@@ -68,8 +68,9 @@ production validation. See [`CAPABILITY_MATRIX.md`](CAPABILITY_MATRIX.md).
 # Foundation: may pass while release blockers remain visible.
 scripts/ci/check_all.sh BUILD_DIR
 
-# Public-preview safety: must currently fail closed.
-scripts/ci/check_public_preview_gate.sh origin/main HEAD
+# Public-preview safety: must currently fail closed. The immutable history-audit
+# base is read from PUBLIC_SAFETY_RECEIPT.json, never from a moving branch name.
+scripts/ci/check_public_preview_gate.sh HEAD
 
 # Production entry point: must currently return KernelBlocked (6).
 BUILD_DIR/bin/longlineage run --manifest MANIFEST --repo REPO_ROOT

@@ -318,8 +318,7 @@ if(LONGLINEAGE_BUILD_REPOSITORY_CONTEXT_TESTS)
         NAME public_preview_gate_fail_closed
         COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/testing/test_public_preview_gate.sh"
                 "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/ci/check_public_preview_gate.sh"
-                "${CMAKE_CURRENT_SOURCE_DIR}/.."
-                "origin/main")
+                "${CMAKE_CURRENT_SOURCE_DIR}/..")
     set_tests_properties(
         public_preview_gate_fail_closed
         PROPERTIES LABELS "governance;release;negative;synthetic;repository-context")

@@ -3,14 +3,13 @@
 
 set -euo pipefail
 
-if [[ $# -lt 1 || $# -gt 2 ]]; then
-    echo "usage: check_public_preview_gate.sh BASE_REF [HEAD_REF]" >&2
+if [[ $# -gt 1 ]]; then
+    echo "usage: check_public_preview_gate.sh [HEAD_REF]" >&2
     exit 2
 fi
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-base_ref="$1"
-head_ref="${2:-HEAD}"
+head_ref="${1:-HEAD}"
 manifest="$repo_root/provenance/source_to_target_manifest.json"
 receipt="$repo_root/docs/release/PUBLIC_SAFETY_RECEIPT.json"
 sbom="$repo_root/SBOM.spdx.json"
@@ -42,6 +41,19 @@ done
 if ((missing_required > 0)); then
     echo "PUBLIC PREVIEW GATE RESULT: FAIL blockers=$blockers" >&2
     exit 1
+fi
+
+audit_base="$(jq -r '.history_hygiene.merge_base // empty' "$receipt")"
+history_base_valid=true
+if ! [[ "$audit_base" =~ ^[0-9a-f]{40}$ ]]; then
+    block "history_audit_base=INVALID_OR_MISSING"
+    history_base_valid=false
+elif ! git -C "$repo_root" cat-file -e "${audit_base}^{commit}" 2>/dev/null; then
+    block "history_audit_base_unavailable=$audit_base"
+    history_base_valid=false
+elif ! git -C "$repo_root" merge-base --is-ancestor "$audit_base" "$head_ref"; then
+    block "history_audit_base_not_ancestor=base:$audit_base,head:$head_ref"
+    history_base_valid=false
 fi
 
 if ! /usr/bin/jsonschema -i "$manifest" \
@@ -110,13 +122,18 @@ for marker in "NOT_READY" "RESEARCH PREVIEW" "NON-PRODUCTION" 'exit `6`' "47/47"
     fi
 done
 
-set +e
-history_output="$(
-    cd "$repo_root"
-    "$repo_root/scripts/ci/check_history_hygiene.sh" "$base_ref" "$head_ref" 2>&1
-)"
-history_exit=$?
-set -e
+if [[ "$history_base_valid" == true ]]; then
+    set +e
+    history_output="$(
+        cd "$repo_root"
+        "$repo_root/scripts/ci/check_history_hygiene.sh" "$audit_base" "$head_ref" 2>&1
+    )"
+    history_exit=$?
+    set -e
+else
+    history_output=""
+    history_exit=2
+fi
 history_finding_count=""
 if ((history_exit != 0)); then
     history_summary="$(
@@ -142,6 +159,7 @@ if [[ -n "$(git -C "$repo_root" tag --points-at "$head_ref")" ]]; then
 fi
 
 echo "PUBLIC PREVIEW GATE OBSERVATION: mappings=$(jq '.mappings | length' "$manifest") targets=$target_rows unresolved=$unresolved_source_rows license_pending=$unapproved_license_rows receipt_consistent=$receipt_consistent"
+echo "PUBLIC PREVIEW GATE OBSERVATION: history_audit_base=$audit_base head_ref=$head_ref"
 echo "PUBLIC PREVIEW GATE OBSERVATION: visibility_verification=EXTERNAL_REQUIRED no_network_call_performed=true"
 
 if ((blockers > 0)); then

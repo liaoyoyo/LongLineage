@@ -3,14 +3,13 @@
 
 set -euo pipefail
 
-if [[ $# -ne 3 ]]; then
-    echo "usage: test_public_preview_gate.sh GATE REPO_ROOT BASE_REF" >&2
+if [[ $# -ne 2 ]]; then
+    echo "usage: test_public_preview_gate.sh GATE REPO_ROOT" >&2
     exit 2
 fi
 
 gate="$1"
 repo_root="$(cd "$2" && pwd)"
-base_ref="$3"
 manifest="$repo_root/provenance/source_to_target_manifest.json"
 schema="$repo_root/schema/core/source_to_target_manifest.schema.json"
 
@@ -26,7 +25,7 @@ if [[ "$false_approval_exit" -eq 0 ]]; then
 fi
 
 set +e
-output="$("$gate" "$base_ref" HEAD 2>&1)"
+output="$("$gate" HEAD 2>&1)"
 observed=$?
 set -e
 
@@ -43,6 +42,7 @@ for expected in \
     "dependency_license_noassertion=11" \
     "history_hygiene_exit=1" \
     "failures=7" \
+    "history_audit_base=5daf50f04cbe233abfade816ce9e0903f6b38954" \
     "PUBLIC PREVIEW GATE RESULT: FAIL"; do
     if ! grep -Fq "$expected" <<<"$output"; then
         echo "PUBLIC PREVIEW REGRESSION FAIL: missing expected blocker: $expected" >&2
