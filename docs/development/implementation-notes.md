@@ -2,6 +2,49 @@
 
 Status: verified · PARTIAL — history-safe private draft publication scope closed; not P8 or a production release
 
+## 2026-08-13 private-first public-preview safety foundation
+
+- [決策] `b9aaa12a11fa00606bd174dabd0f172a5d112359`只作 private
+  research-preview candidate；不直接公開、不建立tag或release，production
+  `run`仍以`KernelBlocked` exit 6安全停止，P3/P4/P5/P7/P8維持`BLOCKED`。
+- [決策] source-to-target contract升為1.2.0。21 rows逐列記錄真正可重播的
+  source commit、replay status、license disposition、evidence、reviewer與scope；
+  現況為5筆declared-origin match、12筆other-commit match、4筆hash not found，
+  且21/21 license disposition皆保持pending。
+- [決策] SPDX 2.3檔由`LongLineage/scripts/release/generate_sbom_spdx.sh`
+  決定性產生；未知dependency license與尚未完成per-file license mapping均使用
+  `NOASSERTION`及annotation，不把inventory冒充license audit PASS。
+- [驗證] `LongLineage/scripts/testing/test_sbom_spdx.sh` exit 0；33 packages
+  （root + 11 locked dependencies + 21 source mappings）可重生且byte-identical。
+- [驗證] `LongLineage/scripts/ci/check_public_preview_gate.sh HEAD`
+  預期exit 1，固定辨識5類blocker：repository license review、4 unresolved source
+  rows、21 unapproved mappings、11 dependency license `NOASSERTION`及7 history
+  findings。`LongLineage/scripts/testing/test_public_preview_gate.sh`把此安全失敗
+  驗為PASS，避免誤認成工具故障。
+- [驗證事件] hosted CI顯示moving `origin/main`已前進且不再是candidate ancestor，
+  造成history checker exit 2。Gate已改從`PUBLIC_SAFETY_RECEIPT.json`讀取immutable
+  audit base `5daf50f04cbe233abfade816ce9e0903f6b38954`；在更新後的remote-main狀態仍
+  精確重播7 findings，CTest regression PASS。
+- [驗證] safety layer configure/build exit 0，新增tests 2/2 PASS，最後完整
+  CTest 49/49 PASS；clang-format 14與`git diff --check`均exit 0。47/47仍只代表
+  frozen `b9aaa12` baseline，49/49則代表本輪stacked safety layer，不混為同一receipt。
+- [決策] current source mapping schema為1.2.0；原1.1.0 schema以byte-identical
+  versioned path保留並同時登錄，避免歷史receipt的schema ID失去repository-local
+  resolution。
+- [偏離] 首次手動重播gate時，shell命令誤帶`+set`/`+scripts`前綴而未執行；
+  該次不作證據。移除誤植後重新執行，gate exit 1、兩個test wrappers皆exit 0。
+- [驗證事件] 新gate首次由CTest build directory啟動時只回報前4類blocker，
+  因history checker隱含依賴current working directory，且missing summary在
+  `set -e -o pipefail`下提前結束。修正為明確在repository root執行history scan，
+  並讓summary absence安全回報；此失敗不計入PASS證據。
+- [驗證事件] GitHub visibility在本次稽核期間兩度被觀察為`PUBLIC`，第二次
+  containment後API回報`PRIVATE`及`updatedAt=2026-08-13T03:23:45Z`。此狀態只能
+  證明目前已收回，不能證明暴露期間沒有clone或download；因此仍維持
+  `KEEP_PRIVATE_NO_TAG_NO_RELEASE`。
+- [未決] 公開前仍需獨立完成7筆history findings處置、3個unique missing source
+  hashes來源重建、21筆per-file source/license review與11項dependency license
+  determination；本輪不宣告license compatibility或publication readiness。
+
 ## Decisions
 
 - [決策 2026-07-21] Python-compatible regional endpoint擴充範圍凍結為
