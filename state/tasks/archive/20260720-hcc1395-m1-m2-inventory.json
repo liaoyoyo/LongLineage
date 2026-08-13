@@ -1,0 +1,157 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-m1-m2-inventory",
+  "owner_agent_id": "codex:root/hcc1395_input_runroot",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-m1-m2-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-m1-m2-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/m1",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "src/m1",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "include/longlineage/m2",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "src/m2",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "include/longlineage/cooccurrence",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "src/cooccurrence",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "oracle/frozen_vectors",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "tests/unit/test_science_parity.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "contracts/v1/science_parameters.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "contracts/v1/hp_family.tsv",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T14:41:04+08:00",
+  "task_type": "A",
+  "goals": ["LL-G1", "LL-G2", "LL-G4"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "First-stage P3/P4 scientific-kernel implementation on synthetic frozen vectors: deterministic M1 primitives and explicit abstention for unsupported full clustering, versioned HP-family mapping, M2 precedence/power boundaries, exact Kx2/BH/BY, 16-cell conservation and Endpoint-B callability precedence. This task does not authorize HCC1395 production execution or phase promotion."
+  },
+  "assumptions": [
+    "Pinned historical Python may be executed only against synthetic/small vectors to freeze reference JSON; it must not read BAM, VCF, sidecar or production artifacts.",
+    "Production C++ never invokes Python and unsupported M1 compatibility states must explicitly abstain.",
+    "No successful historical full co-occurrence result may be promoted into an authority.",
+    "The parent task owns docs/development/implementation-notes.md and will record cross-kernel living-note decisions; this child must not write that file."
+  ],
+  "inputs": [
+    {
+      "role": "source_port_lifecycle",
+      "path": "provenance/source_to_target_manifest.json",
+      "sha256": "8a8e8c6ebd260b12824381dd08f87c73a6d8d035343a2709058f637a7ae206ae"
+    },
+    {
+      "role": "science_contract",
+      "path": "contracts/v1/science_parameters.json",
+      "sha256": "4e6ed26c7d2afd9a340492ee68b8a57b43bdeae61b199d586e3766b4086ab5a7"
+    },
+    {
+      "role": "oracle_authority",
+      "path": "oracle/authority_manifest.json",
+      "sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "m1_cpp_kernel",
+      "path": "src/m1",
+      "sha256": null
+    },
+    {
+      "role": "m2_cpp_kernel",
+      "path": "src/m2",
+      "sha256": null
+    },
+    {
+      "role": "cooccurrence_cpp_kernel",
+      "path": "src/cooccurrence",
+      "sha256": null
+    },
+    {
+      "role": "synthetic_frozen_vectors",
+      "path": "oracle/frozen_vectors",
+      "sha256": null
+    },
+    {
+      "role": "direct_compile_parity_test",
+      "path": "tests/unit/test_science_parity.cpp",
+      "sha256": null
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Freeze small synthetic RNG, clustering-boundary, HP-family, M2 and co-occurrence vectors without production data.",
+      "verify": "Every JSON vector carries generator/source identity and all referenced inputs are synthetic."
+    },
+    {
+      "step": "Implement deterministic C++ primitives and explicit unsupported-state abstention.",
+      "verify": "A direct C++17 compile succeeds with warnings enabled and the standalone test exits 0."
+    },
+    {
+      "step": "Replay pinned-vector parity and independent brute-force negative cases.",
+      "verify": "Report exact case counts, decision/status mismatches, floating tolerances and remaining abstentions."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "P3_P4_FIRST_STAGE_DIRECT_PARITY",
+      "evidence_path": "oracle/frozen_vectors/p3_p4_first_stage_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "/usr/bin/g++ -std=c++17 -O0 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -Iinclude tests/unit/test_science_parity.cpp src/m1/science.cpp src/m1/hp_family.cpp src/m2/eligibility.cpp src/cooccurrence/statistics.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-science-parity-debug && /tmp/longlineage-science-parity-debug <REPO_ROOT>",
+      "exit_code": 0,
+      "output_excerpt": "science_parity: PASS pinned_cases=99 independent_cases=2 negative_cases=5 m1_full_clustering=ABSTAIN_NOT_IMPLEMENTED production_python_calls=0",
+      "evidence_sha256": "a4aaa7a037fd129d559f4d204c2a937d6ad53ac83594e79f7cfa29fad71e955a",
+      "recorded_at": "2026-07-20T03:31:33+08:00"
+    }
+  ],
+  "deviations": [
+    "The first governance invocation used the absent build/bin path and exited 1; the latest executable under build-cpp-output-validation was then used successfully.",
+    "The first task-record patch accidentally duplicated heartbeat_at; strict governance rejected it before implementation, and the duplicate was removed before any science-file write.",
+    "The initial strict-threshold fixture set equality to 1.2945, which was below the prior 1.3 separation gate; the synthetic null vector was shifted so equality is 1.3945 and tests the intended later precedence branch.",
+    "Pre-handoff review found that historical MethylationParser materializes ML_raw / 255.0f as binary32 before matrix serialization; the C++ point estimator and frozen vectors were corrected from binary64 division while the distinct SAM [N/256,(N+1)/256) interval contract remained unchanged.",
+    "The repository publication repair later replaced private absolute-path strings in the receipt with portable tokens. The evidence SHA now binds that sanitized projection; scientific counters and verdict fields were not changed."
+  ],
+  "blockers": [
+    "M1 recursive null generation, recursive labeling, ten coarse runs, fine run, ARI and full assignment parity remain explicit ABSTAIN_NOT_IMPLEMENTED.",
+    "CMake, CLI, schema/catalog, validator and provenance integration are outside this child write-set and require parent replay.",
+    "No formal production co-occurrence authority or HCC1395 full-run evidence is created by synthetic first-stage parity."
+  ],
+  "heartbeat_at": "2026-07-20T03:31:33+08:00",
+  "updated_at": "2026-07-20T03:34:20+08:00"
+}

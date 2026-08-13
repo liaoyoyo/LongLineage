@@ -26,5 +26,6 @@ P2_FAILURE_CANCELLATION	true	production	ctest -R p2_worker_failure_cancellation	
 DETERMINISM_PACKED	true	production	ctest -R determinism	ctest:determinism_contract	determinism
 VALIDATOR_FAULT_INJECTION	true	validation	ctest -R validator_fault	fixture:tests/fixtures/governance/forged_pass_receipt.case.json	independent_validation
 TOPOLOGY_NO_INCOMPLETE_WINNER	true	science	ctest -R topology_no_incomplete_winner	ctest:topology_no_incomplete_winner	scientific_contract
+REGIONAL_COMPAT_PYTHON_V2_PARITY	true	science	ctest -R regional_compat	ctest:regional_compat_validator	python_v2_regional_parity
 QUERY_READ_ONLY	true	query	ctest -R query_read_only	ctest:query_read_only_rejects_unfrozen	query_contract
 RELEASE_PHASES	true	release	scripts/ci/check_release_gate.sh	fixture:tests/fixtures/governance/phase_blocked.case.json	release

@@ -8,7 +8,14 @@
     "schema_version",
     "run_id",
     "state",
+    "validation_profile",
+    "production_claim_allowed",
     "production_executable",
+    "producer_hostname",
+    "producer_kernel_release",
+    "validator_hostname",
+    "validator_kernel_release",
+    "input_mount_identity_sha256",
     "manifest_sha256",
     "input_lock_sha256",
     "phase_ledger_sha256",
@@ -35,10 +42,29 @@
       "type": "string"
     },
     "state": {
-      "const": "VALIDATED_FROZEN"
+      "enum": ["VALIDATED_FROZEN", "VALIDATED_FROZEN_DATASET_GATE"]
+    },
+    "validation_profile": {
+      "enum": ["PRODUCTION_7_DATASET", "DATASET_GATE"]
+    },
+    "production_claim_allowed": {
+      "type": "boolean"
     },
     "production_executable": {
       "$ref": "#/$defs/executable"
+    },
+    "producer_hostname": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,252}$"
+    },
+    "producer_kernel_release": {"type": "string", "minLength": 1, "maxLength": 255},
+    "validator_hostname": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,252}$"
+    },
+    "validator_kernel_release": {"type": "string", "minLength": 1, "maxLength": 255},
+    "input_mount_identity_sha256": {
+      "$ref": "#/$defs/sha256"
     },
     "manifest_sha256": {
       "$ref": "#/$defs/sha256"
@@ -79,7 +105,15 @@
         "required": ["sequence", "state", "at", "actor_executable_sha256", "previous_event_sha256"],
         "properties": {
           "sequence": {"type": "integer", "minimum": 0},
-          "state": {"enum": ["RUNNING", "FAILED", "VALIDATED", "VALIDATED_FROZEN"]},
+          "state": {
+            "enum": [
+              "RUNNING",
+              "FAILED",
+              "VALIDATED",
+              "VALIDATED_FROZEN",
+              "VALIDATED_FROZEN_DATASET_GATE"
+            ]
+          },
           "at": {"type": "string", "format": "date-time"},
           "actor_executable_sha256": {"$ref": "#/$defs/sha256"},
           "previous_event_sha256": {
@@ -176,11 +210,32 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"validation_profile": {"const": "DATASET_GATE"}},
+        "required": ["validation_profile"]
+      },
+      "then": {
+        "properties": {
+          "state": {"const": "VALIDATED_FROZEN_DATASET_GATE"},
+          "production_claim_allowed": {"const": false}
+        }
+      },
+      "else": {
+        "properties": {
+          "state": {"const": "VALIDATED_FROZEN"},
+          "production_claim_allowed": {"const": true}
+        }
+      }
+    }
+  ],
   "x-longlineage-invariants": [
     "input_snapshot_before_sha256 equals input_snapshot_after_sha256",
     "state_history sequences start at zero and increase by one",
-    "state transitions are exactly RUNNING to VALIDATED to VALIDATED_FROZEN",
+    "state transitions are exactly RUNNING to VALIDATED to the profile-specific frozen terminal state",
     "each previous_event_sha256 binds the preceding canonical state event",
-    "FAILED and incomplete topology artifacts contain no winner"
+    "FAILED and incomplete topology artifacts contain no winner",
+    "DATASET_GATE is preproduction, production_claim_allowed is false and general production query entrypoints reject it"
   ]
 }

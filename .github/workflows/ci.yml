@@ -16,6 +16,66 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  repository-history-hygiene:
+    name: repository-history-hygiene
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout complete history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan every blob introduced by this ref
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            base="$PR_BASE_SHA"
+          elif [[ -n "$PUSH_BEFORE_SHA" && ! "$PUSH_BEFORE_SHA" =~ ^0+$ ]]; then
+            base="$PUSH_BEFORE_SHA"
+          elif git rev-parse --verify origin/main >/dev/null 2>&1; then
+            base="$(git merge-base origin/main HEAD)"
+          else
+            base="$(git rev-list --max-parents=0 HEAD | tail -n1)"
+          fi
+          scripts/ci/check_history_hygiene.sh "$base" HEAD
+
+  presentation-browser-qa:
+    name: presentation-browser-qa
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pinned browser QA dependencies
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          python3 -m pip install --disable-pip-version-check \
+            playwright==1.60.0 \
+            greenlet==3.2.4 \
+            pyee==13.0.0 \
+            typing_extensions==4.15.0
+          python3 -m playwright install --with-deps chromium
+      - name: Verify committed standalone reports
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          reports=(
+            "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html"
+            "docs/reports/20260721_HCC1395_Python相容區域拓撲驗證報告_01.html"
+          )
+          for report in "${reports[@]}"; do
+            stem="$(basename "${report%.html}")"
+            python3 presentation/qa_static_report.py \
+              --html "$report" \
+              --evidence-dir "$RUNNER_TEMP/browser-qa/$stem" \
+              --receipt "$RUNNER_TEMP/browser-qa/$stem.receipt.json"
+          done
+
   synthetic-build-test:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
@@ -65,7 +125,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            build-essential clang clang-format-14 cmake curl jq libbz2-dev libdeflate-dev \
+            build-essential clang clang-format-14 cmake curl jq libboost-dev libbz2-dev libdeflate-dev \
             libjansson-dev liblzma-dev libssl-dev pkg-config strace zlib1g-dev
           sudo apt-get install -y --no-install-recommends python3-jsonschema
           test -x /usr/bin/cmake
@@ -129,7 +189,20 @@ jobs:
       - name: Verify dependency lock
         run: scripts/ci/check_dependency_lock.sh
       - name: Build pinned production image
-        run: docker build --file containers/Dockerfile --tag longlineage:ci .
+        run: |
+          verify_source_binding() {
+            actual_commit="$(git rev-parse --verify HEAD)"
+            test "$actual_commit" = "$GITHUB_SHA"
+            git cat-file -e "${GITHUB_SHA}^{commit}"
+            test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          }
+          verify_source_binding
+          docker build \
+            --build-arg LONGLINEAGE_GIT_COMMIT="${GITHUB_SHA}" \
+            --file containers/Dockerfile \
+            --tag longlineage:ci \
+            .
+          verify_source_binding
       - name: Verify resolved package manifests
         run: |
           docker image inspect longlineage:ci --format 'IMAGE_ID={{.Id}}'

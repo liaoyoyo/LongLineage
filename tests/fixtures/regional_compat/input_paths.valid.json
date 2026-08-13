@@ -1,0 +1,97 @@
+{
+  "schema_name": "longlineage.regional_compat_input_paths",
+  "schema_version": "1.0.0",
+  "datasets": [
+    {
+      "dataset_id": "HCC1395", "dataset_order": 0,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/HCC1395/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/HCC1395/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/HCC1395/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/HCC1395/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/HCC1395/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/HCC1395/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    },
+    {
+      "dataset_id": "HCC1395_DORADO", "dataset_order": 1,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/HCC1395_DORADO/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/HCC1395_DORADO/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/HCC1395_DORADO/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/HCC1395_DORADO/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/HCC1395_DORADO/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/HCC1395_DORADO/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    },
+    {
+      "dataset_id": "COLO829", "dataset_order": 2,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/COLO829/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/COLO829/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/COLO829/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/COLO829/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/COLO829/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/COLO829/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    },
+    {
+      "dataset_id": "H1437", "dataset_order": 3,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/H1437/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/H1437/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/H1437/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/H1437/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/H1437/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/H1437/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    },
+    {
+      "dataset_id": "H2009", "dataset_order": 4,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/H2009/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/H2009/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/H2009/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/H2009/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/H2009/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/H2009/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    },
+    {
+      "dataset_id": "HCC1937", "dataset_order": 5,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/HCC1937/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/HCC1937/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/HCC1937/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/HCC1937/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/HCC1937/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/HCC1937/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    },
+    {
+      "dataset_id": "HCC1954", "dataset_order": 6,
+      "files": [
+        {"role": "raw_bam", "path": "/synthetic/HCC1954/raw.bam"},
+        {"role": "raw_bam_index", "path": "/synthetic/HCC1954/raw.bam.bai"},
+        {"role": "pass_biallelic_ssnv_vcf", "path": "/synthetic/HCC1954/pass.vcf.gz"},
+        {"role": "pass_biallelic_ssnv_vcf_index", "path": "/synthetic/HCC1954/pass.vcf.gz.tbi"},
+        {"role": "latest_hp_ps_sidecar", "path": "/synthetic/HCC1954/latest.tsv.gz"},
+        {"role": "latest_hp_ps_sidecar_index", "path": "/synthetic/HCC1954/latest.tsv.gz.tbi"},
+        {"role": "reference_fasta", "path": "/synthetic/reference/grch38.fa"},
+        {"role": "reference_fai", "path": "/synthetic/reference/grch38.fa.fai"}
+      ]
+    }
+  ]
+}

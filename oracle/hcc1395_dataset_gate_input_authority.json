@@ -1,0 +1,81 @@
+{
+  "schema_name": "longlineage.dataset_gate_input_authority",
+  "schema_version": "1.0.0",
+  "authority_id": "HCC1395_RAW_BAM_LPS_SIDECAR_V2_PASS_SSNV_GRCH38_20260720",
+  "authority_profile": "HCC1395_DATASET_GATE",
+  "allowed_terminal_state": "VALIDATED_FROZEN_DATASET_GATE",
+  "dataset_id": "HCC1395",
+  "dataset_order": 0,
+  "truth_fields": 0,
+  "private_source_paths_stored": false,
+  "tagged_bam_persisted": false,
+  "latest_tag_join": "EXACT_PROJECTION_NO_FALLBACK",
+  "variant_scope": {
+    "all_pass_biallelic_ssnv": 113061,
+    "autosomal_chr1_to_chr22": 79687,
+    "outside_autosomal_scope": 33374
+  },
+  "files": [
+    {
+      "role": "raw_bam",
+      "path_token": "LOCAL_HCC1395_RAW_BAM",
+      "size_bytes": 292055926761,
+      "sha256": "77e9bb6185f1e922f1b0cd311dde42d6b5721ac91bd017cea29dac34691b6308"
+    },
+    {
+      "role": "raw_bam_index",
+      "path_token": "LOCAL_HCC1395_RAW_BAM_BAI",
+      "size_bytes": 119741784,
+      "sha256": "f7a23610899ff535de17ccb324f99fc8bede402f65b992d5601d34ffb62c49d3"
+    },
+    {
+      "role": "pass_biallelic_ssnv_vcf",
+      "path_token": "LOCAL_HCC1395_LPS_PASS_VCF",
+      "size_bytes": 3728864,
+      "sha256": "bc393dda8eb549d46e9993eccebd4b7c4cd7bf809cde20e071b8fdd8ff6437e6"
+    },
+    {
+      "role": "pass_biallelic_ssnv_vcf_index",
+      "path_token": "LOCAL_HCC1395_LPS_PASS_VCF_CSI",
+      "size_bytes": 344074,
+      "sha256": "d66ecf3dbfbcf3f2b39d9b1e221954aee77a4cbda6f00f0b64021c57ded81fd3"
+    },
+    {
+      "role": "latest_hp_ps_sidecar",
+      "path_token": "LOCAL_HCC1395_LPS_SIDECAR_V2",
+      "size_bytes": 1433423193,
+      "sha256": "8e79e89cb668e65b22a8c02aee9dcb9fea81fc8903962c094839d317ebd93dfb"
+    },
+    {
+      "role": "latest_hp_ps_sidecar_index",
+      "path_token": "LOCAL_HCC1395_LPS_SIDECAR_V2_TBI",
+      "size_bytes": 910475,
+      "sha256": "f972c1538c91be36d504b516358faa86a44a36e2e452f0c0e0066e35d88b0d76"
+    },
+    {
+      "role": "reference_fasta",
+      "path_token": "LOCAL_GRCH38_NO_ALT_FASTA",
+      "size_bytes": 3144230986,
+      "sha256": "9cce8b926416dd96b152deea85188495b75f7ac8d634cc723a017067be8702b7"
+    },
+    {
+      "role": "reference_fai",
+      "path_token": "LOCAL_GRCH38_NO_ALT_FASTA_FAI",
+      "size_bytes": 7804,
+      "sha256": "502a1b8fb73ccd53285c28a0f12df90c818b4fe3de1e862ef47c593ef1a0a4b4"
+    }
+  ],
+  "full_content_freeze": {
+    "command": "sha256sum <raw_bam> <reference_fasta>",
+    "started_at": "2026-07-20T02:56:31+08:00",
+    "observed_complete_no_later_than": "2026-07-20T03:48:59+08:00",
+    "observed_wall_upper_bound_seconds": 3148,
+    "timing_precision": "POLL_BOUNDED_NOT_EXACT",
+    "cost_domain": "INPUT_FREEZE_NOT_SCIENCE_RUNTIME"
+  },
+  "claim": {
+    "dataset_gate_allowed": true,
+    "production_seven_dataset_claim_allowed": false,
+    "cross_dataset_generalization_allowed": false
+  }
+}

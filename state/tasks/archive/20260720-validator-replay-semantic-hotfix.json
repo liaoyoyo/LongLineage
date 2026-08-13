@@ -1,0 +1,100 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-validator-replay-semantic-hotfix",
+  "owner_agent_id": "codex:root/closeout-validator-audit",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-validator-replay-semantic-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-validator-replay-semantic-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/validation/artifact_validator.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_validator_dataset_gate.cpp",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T11:52:59+08:00",
+  "heartbeat_at": "2026-07-20T05:59:27+08:00",
+  "task_type": "E",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G4"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Hotfix two independent-validator replay mismatches without changing producer science: count M1 joined ALT reads from site_reads even when a read has zero serialized CpG calls, and exclude M1 other/outlier labels from co-occurrence endpoint-A core-group replay. Add bounded synthetic regression fixtures in the existing dataset-gate integration test."
+  },
+  "assumptions": [
+    "Producer n_alt_joined and Bernoulli dimensions intentionally census every focal ALT matrix row, including all-missing rows later removed by incomplete-distance peeling.",
+    "Producer endpoint-A co-occurrence intentionally uses only core M1 labels; other and outlier remain serialized assignments but are excluded from the Kx2 endpoint-A table.",
+    "The independent validator must derive both contracts from producer artifacts without linking producer science kernels."
+  ],
+  "inputs": [
+    {
+      "role": "validator_before_hotfix",
+      "path": "src/validation/artifact_validator.cpp",
+      "sha256": "900f85678a3d11ae568089cef15b65bb4f851e758e9c2ac9168bc43e2a722a88"
+    },
+    {
+      "role": "dataset_gate_fixture_before_hotfix",
+      "path": "tests/integration/test_validator_dataset_gate.cpp",
+      "sha256": "0a79242f584f102376510894f3292e44c1d0c66f1eb4caa647b8a6e86910175b"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "validator_hotfix",
+      "path": "src/validation/artifact_validator.cpp",
+      "sha256": "3e60fab23030ad44e2da18634e0c94a16af04ea34ce1019701313f976d16232a"
+    },
+    {
+      "role": "regression_fixture",
+      "path": "tests/integration/test_validator_dataset_gate.cpp",
+      "sha256": "86d05cbcde65a08d8ebd9283a223c2e7bdab5efdd9d48334440275fbe96a764e"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Add positive/regression fixture states for a zero-CpG focal ALT read and non-core M1 labels.",
+      "verify": "The positive fixture passes only when n_alt_joined/LLM use site_reads ALT census and endpoint-A group replay excludes other/outlier."
+    },
+    {
+      "step": "Adjust the independent replay in artifact_validator.cpp without producer-kernel linkage.",
+      "verify": "The validator target builds with warnings-as-errors and the dataset-gate regression target exits 0."
+    },
+    {
+      "step": "Run targeted validator tests and record source/test digests.",
+      "verify": "Targeted CTest exits 0; modified file SHA-256 values and command output are reported before the lease is released."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "validator-replay-semantic-hotfix-targeted",
+      "evidence_path": "state/audits/20260720-validator-replay-semantic-hotfix-001.txt",
+      "evidence_kind": "AUDIT",
+      "command": "/usr/bin/cmake --build build-final-verify --target longlineage_validator test_validator_fault test_validator_dataset_gate test_run_root -j4; ctest --test-dir build-final-verify -R '^(validator_fault|validator_dataset_gate|run_root_transaction)$' --output-on-failure; sha256sum src/validation/artifact_validator.cpp tests/integration/test_validator_dataset_gate.cpp",
+      "exit_code": 0,
+      "output_excerpt": "Warnings-as-errors targets built; run_root_transaction, validator_fault and validator_dataset_gate passed 3/3 in 6.98 s. Validator SHA-256 3e60fab23030ad44e2da18634e0c94a16af04ea34ce1019701313f976d16232a; regression fixture SHA-256 86d05cbcde65a08d8ebd9283a223c2e7bdab5efdd9d48334440275fbe96a764e.",
+      "evidence_sha256": "dae52b054106a3bf822b7bde2de75674b14bf2e418db31a55a8e18a4ee02ed02",
+      "recorded_at": "2026-07-20T05:59:27+08:00"
+    }
+  ],
+  "deviations": [
+    "The repository-wide source-boundary script still reports pre-existing evaluation-only vocabulary in apps/longlineage_main.cpp and src/artifact; neither path is in this hotfix write-set. The three targeted validator/run-root tests pass."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T05:59:27+08:00"
+}

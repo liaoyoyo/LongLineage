@@ -1,0 +1,135 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-joint-signature-global-fdr",
+  "owner_agent_id": "codex:root/hcc1395_input_runroot",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-joint-signature-global-fdr.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-joint-signature-global-fdr.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/cooccurrence/joint_signature.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/cooccurrence/joint_signature.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_joint_signature.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p4_joint_signature_receipt.txt",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T13:00:00+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G3",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Implement and independently validate the deterministic C++17 joint-signature and global-FDR P4 science kernel: top-partner selection, complete-core-read categorical association, stratified 999-permutation evidence, same-readset per-marker effect gates, global BH/BY correction and explicit fail-closed statuses. Python is limited to synthetic/small oracle generation and never executes in production."
+  },
+  "assumptions": [
+    "The pinned historical authority is InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_methyl_ssnv_cooccurrence.py at SHA-256 3d7650983fce68abc122748d167e56b9a53bc6ef9775b9b1beb19793e25a769c.",
+    "The implementation is an independent C++17 reimplementation against bounded synthetic vectors; existing co-occurrence files, CMake and production orchestration remain untouched.",
+    "Stable keys, deterministic PCG64 permutation order, exact status precedence and canonical global correction order are required; malformed, incomplete or unsupported inputs fail closed.",
+    "Any historical behavior that depends on unordered Python containers or implicit row order must be made explicit and tested rather than copied as platform accident.",
+    "The receipt is synthetic/small scientific evidence only and cannot promote an HCC1395 or seven-dataset production claim."
+  ],
+  "inputs": [
+    {
+      "role": "source_port_lifecycle",
+      "path": "provenance/source_to_target_manifest.json",
+      "sha256": "e5fa262299489e5090b2cb9f11fc5b9a0d8fae78e1b2050d786c403ca1f53ca9"
+    },
+    {
+      "role": "historical_authority_manifest",
+      "path": "oracle/authority_manifest.json",
+      "sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16"
+    },
+    {
+      "role": "science_parameters",
+      "path": "contracts/v1/science_parameters.json",
+      "sha256": "3959e30617c302df8c794a02347f3b535bd395cacdd9e86bd61c11b18a5399c1"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "joint_signature_public_api",
+      "path": "include/longlineage/cooccurrence/joint_signature.hpp",
+      "sha256": "8b45e7f7bd8a5296a42d63357b6c3372befddca1151f8590c09295d8f672064f"
+    },
+    {
+      "role": "joint_signature_cpp_kernel",
+      "path": "src/cooccurrence/joint_signature.cpp",
+      "sha256": "8448e1cce5521294239bc697b2ee37f16a129564e6c95e44f959c5d34ab72e9b"
+    },
+    {
+      "role": "standalone_parity_test",
+      "path": "tests/unit/test_joint_signature.cpp",
+      "sha256": "83f1c786007a2a39af0fe6b644a95946cba1ac97b6d57b1195b0cb13befc633b"
+    },
+    {
+      "role": "frozen_replay_receipt",
+      "path": "oracle/frozen_vectors/p4_joint_signature_receipt.txt",
+      "sha256": "e1867cc6ef23532c4981a37bb75ce6677f0ddfbee32b398311329f47d75162d4"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Extract and record exact historical top-partner, joint-signature, permutation, same-readset effect-gate and global-FDR semantics.",
+      "verify": "Every ported rule is mapped to a pinned source line or an explicit documented deviation; no broad repository search or production Python execution occurs."
+    },
+    {
+      "step": "Implement deterministic C++17 joint-signature and global-FDR APIs with fail-closed status precedence.",
+      "verify": "Strict standalone Debug and Release compilation passes with -Werror, -fno-fast-math and -ffp-contract=off; production code contains no Python process invocation."
+    },
+    {
+      "step": "Replay positive, null, tie, missing, strata, same-readset and global BH/BY edge vectors.",
+      "verify": "Pinned statuses, selected partners, effects, permutation p-values, adjusted q-values and semantic digests match; stable-key input order and worker-independent calls are invariant."
+    },
+    {
+      "step": "Obtain independent parent replay and freeze a receipt.",
+      "verify": "Independent exit 0 and exact output are recorded with receipt and binary SHA-256 before task release/archive."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "p4-joint-signature-immutable-replay",
+      "evidence_path": "oracle/frozen_vectors/p4_joint_signature_receipt.txt",
+      "evidence_kind": "RECEIPT",
+      "command": "strict GCC Debug/Release/ASan+UBSan compile and replay; independent parent Release replay; independent P4/P5 complete-readset digest cross-replay",
+      "exit_code": 0,
+      "output_excerpt": "PASS oracle_cases=9 topology_gate_cases=3 negative_cases=10; intermediate PCG64=213/999 p=0.214; P4/P5 readset=f9a34ec0... exact; parent binary SHA=f6fbf92a... exact; ASan/UBSan errors=0.",
+      "evidence_sha256": "e1867cc6ef23532c4981a37bb75ce6677f0ddfbee32b398311329f47d75162d4",
+      "recorded_at": "2026-07-20T05:38:26+08:00"
+    }
+  ],
+  "deviations": [
+    "The signed-v5 authority pins analyzer SHA-256 3d7650983fce68abc122748d167e56b9a53bc6ef9775b9b1beb19793e25a769c at 208031 bytes; the live analyzer is 6dc673fafaeeb7e0c0c8335915a0b8ea1a9b14c9344132e1640a93f96c7ac4f0 at 210257 bytes. Per parent authorization, the signed-v5 manifest plus byte-identical science library 3d41023b03f1f047312011f8513b685bf7ffe25f5d0795d253bc9013b9ec88ff are authoritative; the live analyzer is only a function-location reference.",
+    "Read and stratum ordering are explicit deterministic stable-key/lexicographic orders rather than incidental Python input/container order; Python oracle rows were aligned to the same order.",
+    "Malformed finite/non-finite/off-grid permutation p-values fail closed as INVALID_JOINT_SIGNATURE_PERMUTATION_EVIDENCE instead of inheriting ambiguous historical BH behavior.",
+    "The LongLineage post-global finalizer explicitly sets global calibration and topology PASS fields; the historical per-site pre-global helper left postselection_fdr_calibrated false and a later reconciliation function applied the formal candidate gate.",
+    "The repository publication repair later replaced private absolute-path strings in the receipt with portable tokens. The input and evidence SHA values now bind that sanitized projection; joint-signature counts and verdict fields were not changed."
+  ],
+  "blockers": [],
+  "heartbeat_at": "2026-07-20T05:38:26+08:00",
+  "updated_at": "2026-07-20T05:40:13+08:00"
+}

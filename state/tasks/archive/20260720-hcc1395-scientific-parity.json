@@ -1,0 +1,601 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-scientific-parity",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-scientific-parity.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-scientific-parity.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-dataset-producer-integration.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-validator-replay-semantic-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/audits/20260720-validator-replay-semantic-hotfix-001.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/audits/20260720-dataset-producer-integration-recovery-001.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/audits/20260720-m2-summary-conservation-hotfix-001.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260720_HCC1395科學parity實作前稽核_01.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/audits/20260720_HCC1395科學parity實作前稽核_01.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/development/implementation-notes.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "provenance/source_to_target_manifest.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/alignment.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/alignment.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/block_reader.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/block_reader.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_typed_io.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_block_pipeline.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/cigar_projection.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/cigar_projection.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/sidecar.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/sidecar.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/variant_sites.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/variant_sites.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/io/reference_reader.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/io/reference_reader.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/m1/science.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/m1/science.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/block_science.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/dataset_plan.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/dataset_runner.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/dataset_science_runner.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/site_matrix.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/site_science.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/pipeline/dataset_producer.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/block_science.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/dataset_plan.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/dataset_runner.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/dataset_science_runner.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/site_matrix.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/site_science.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/dataset_producer.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/validation/artifact_validator.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "apps/governance_main.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/records/group_allele_counts.embedded.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/records/group_allele_counts-1.0.1.embedded.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/records/cooccurrence_pairs.record.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/records/cooccurrence_pairs-1.0.1.record.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/catalog.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/contract_registry_bindings.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/contract_registry_bindings-1.0.0.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/contract_registry_bindings.valid.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/contract_registry_bindings.invalid_digest.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/group_allele_counts.empty.valid.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/adr/20260720_共現零群組Schema相容性修正_01.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_validator_dataset_gate.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/cooccurrence/statistics.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/cooccurrence/site_cooccurrence.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/cooccurrence/statistics.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/cooccurrence/site_cooccurrence.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/artifact/dataset_artifacts.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/artifact/dataset_artifacts.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_dataset_engine.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_dataset_producer.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_cooccurrence_full.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/CMakeLists.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "cmake/Dependencies.cmake",
+      "kind": "FILE"
+    },
+    {
+      "path": "apps/audit_main.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/audit/hcc1395_determinism.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-determinism-audit.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/hcc1395_audit/cases.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/hcc1395_audit/verification_receipt.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_hcc1395_audit.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/audit/hcc1395_determinism.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/hcc1395_determinism_historical_receipt-1.0.0.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/hcc1395_audit_verification_receipt.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/adr/20260720_HCC1395稽核Receipt_v2共現守恆遷移_01.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/presentation/hcc1395_execution_evidence.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/presentation/hcc1395_performance_edge_observation.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/data/HCC1395_PERFORMANCE_EDGE_OBSERVATION.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-report-builder.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/hcc1395_report/verification_receipt.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/testing/test_agent_task_negative.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/artifact/dataset_closeout.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/artifact/dataset_closeout.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "apps/longlineage_main.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/manifest/production_manifest.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/manifest/production_manifest.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/production_manifest.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/dataset_gate_input_authority.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/id_registry.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "apps/cli_support.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/ci/check_json_schema_fixtures.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/testing/test_cli_gates.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/CURRENT_FOCUS.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "ROADMAP.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/phase_ledger.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/project_state.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "evidence_ledger.jsonl",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "presentation/build_hcc1395_validated_report.py",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/development/HCC1395_DATASET_GATE_RUNBOOK.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/hcc1395_dataset_gate_input_authority.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-21T23:58:48+08:00",
+  "heartbeat_at": "2026-07-21T04:18:26+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G3",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Implement and independently validate the complete truth-isolated HCC1395 whole-genome LongLineage science path from raw BAM plus frozen latest HP/PS sidecar through M1, sSNV co-occurrence, topology, atomic freeze, performance receipts and validated-only HTML; compare only against method-compatible historical evidence."
+  },
+  "assumptions": [
+    "The HCC1395 gate is a complete single-dataset validation scope and must not be mislabeled as the governed seven-dataset production release.",
+    "The production input is the raw MM/ML BAM plus exact latest HP/PS sidecar; no persisted tagged BAM or BAM HP fallback is allowed.",
+    "Historical co-occurrence has no successful formal authority, so correctness must be established by frozen synthetic/small-real independent oracles and conservation, not invented exact parity.",
+    "Historical regional-tree output uses a different method and truth/CN boundary; only explicitly mapped aggregates are comparable.",
+    "Any mismatch in keys, status, discrete decisions, semantic digests or independent replay stops the full run."
+  ],
+  "inputs": [
+    {
+      "role": "production_input_authority",
+      "path": "oracle/production_input_authority.json",
+      "sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557"
+    },
+    {
+      "role": "historical_authority",
+      "path": "oracle/authority_manifest.json",
+      "sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16"
+    },
+    {
+      "role": "source_port_lifecycle",
+      "path": "provenance/source_to_target_manifest.json",
+      "sha256": "a6b7d894c43727fd634345939ee97bfceee2356cf11f5ffce99c8600fa35e69c"
+    },
+    {
+      "role": "readiness_gate",
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json",
+      "sha256": "eb6dfe8c444f80f00de766dc82bfef780529d8d8204a67162a620b5bb4ca0c40"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "pre_decision_audit",
+      "path": "docs/audits/20260720_HCC1395科學parity實作前稽核_01.json",
+      "sha256": "18cbc87c53ec3269f8fb54f013cbcf26a9512d8f23a107077d6e044cb5389dab"
+    },
+    {
+      "role": "sanitized_hcc1395_validation_report",
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb"
+    },
+    {
+      "role": "full_hcc1395_report",
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "sha256": "9cd86244b388f9d4b58ef844517c6cb73f55543fd4b106417b3ecccc389d5fda"
+    },
+    {
+      "role": "aggregate_implementation_verification_receipt",
+      "path": "tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+      "sha256": "39cdd5d6a90c09c5fcb6233b5ba02d22cd2aac165a4e895d52d06c4a0c98b882"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Freeze method-compatible P3-P5 authority vectors, negative cases and HCC1395 input identities before implementing kernels.",
+      "verify": "Every authority has schema/version/SHA-256; truth-bearing fields are absent from production; incompatible historical evidence is marked context-only."
+    },
+    {
+      "step": "Implement C++ M1 and M2/co-occurrence paths plus independent replay.",
+      "verify": "Frozen fixtures have zero key/status/discrete-decision mismatch, exact semantic digests, and documented floating tolerances for non-decision values."
+    },
+    {
+      "step": "Implement complete-family topology, parent mapping and fail-closed ranking states.",
+      "verify": "Objective/family/ranking state machines, legal-parent counts, tree counts and abstain cases pass independent oracle replay; incomplete/capped cases publish no rank."
+    },
+    {
+      "step": "Implement producer receipts, independent validator, atomic freeze and a governed complete HCC1395 validation profile.",
+      "verify": "Fault injection is rejected; only successful independent replay reaches VALIDATED_FROZEN_DATASET_GATE; seven-dataset production claim remains false."
+    },
+    {
+      "step": "Run HCC1395 whole genome at governed worker counts and compare outputs.",
+      "verify": "The eight run-ID-invariant science artifacts have identical 24/40-worker schema, row count and semantic SHA-256; run-scoped summary/catalog/lineage fields are compared by an explicit projection; all conservation counts pass; performance receipts contain wall/CPU/RSS/I/O; old/new differences are classified exact/semantic/context/not-comparable."
+    },
+    {
+      "step": "Render presentation-only HTML from validated C++ chart-ready artifacts.",
+      "verify": "Builder rejects non-frozen inputs; standalone HTML maps every displayed number to a receipt claim and passes offline desktop/mobile/print checks."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "20260720-hcc1395-predecision-audit",
+      "evidence_path": "docs/audits/20260720_HCC1395科學parity實作前稽核_01.md",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/audits/20260720_HCC1395科學parity實作前稽核_01.md",
+      "exit_code": 0,
+      "output_excerpt": "aa9db9e39f506aca40390d649694c8e90a98ae5fe76cab02e6657dba4574d2ad",
+      "evidence_sha256": "aa9db9e39f506aca40390d649694c8e90a98ae5fe76cab02e6657dba4574d2ad",
+      "recorded_at": "2026-07-20T02:59:02+08:00"
+    },
+    {
+      "evidence_id": "20260720-m2-summary-conservation-hotfix",
+      "evidence_path": "state/audits/20260720-m2-summary-conservation-hotfix-001.txt",
+      "evidence_kind": "RECEIPT",
+      "command": "/tmp/longlineage-cmake-3.31/cmake/data/bin/cmake --build build-hcc1395-v4-release --parallel 24; /usr/bin/time -v ctest --test-dir build-hcc1395-v4-release --output-on-failure",
+      "exit_code": 0,
+      "output_excerpt": "Formal producer, science census and independent validator now enforce a mutually exclusive M2 stable-site partition. The legacy-style summary double count is rejected; Release build passed and the full suite passed 42/42 in 71.16 seconds.",
+      "evidence_sha256": "fccc859b5339171b5cf76f483a639560e21ddb472af3c774b7fed7e147abaeaa",
+      "recorded_at": "2026-07-20T15:58:28+08:00"
+    },
+    {
+      "evidence_id": "20260721-hcc1395-aggregate-implementation-verification-v2",
+      "evidence_path": "tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+      "evidence_kind": "RECEIPT",
+      "command": "sha256sum tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+      "exit_code": 0,
+      "output_excerpt": "SYNTHETIC_IMPLEMENTATION_VERIFICATION PASS; Debug/Release/sanitizer/schema/format/privacy/focused gates are bound, but this does not replace formal real-run or P7 evidence.",
+      "evidence_sha256": "39cdd5d6a90c09c5fcb6233b5ba02d22cd2aac165a4e895d52d06c4a0c98b882",
+      "recorded_at": "2026-07-21T04:08:03+08:00"
+    },
+    {
+      "evidence_id": "20260721-hcc1395-sanitized-machine-report-v2",
+      "evidence_path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "exit_code": 0,
+      "output_excerpt": "HCC1395 1/7 w24/w40 dataset-gate report; 8 science artifacts deterministic, independent validation PASS, production claim false, legacy M1 parity blocked.",
+      "evidence_sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+      "recorded_at": "2026-07-21T04:40:07+08:00"
+    },
+    {
+      "evidence_id": "20260721-hcc1395-sanitized-standalone-html-v2",
+      "evidence_path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "exit_code": 0,
+      "output_excerpt": "Standalone presentation report; static and keyboard QA receipts PASS for desktop, mobile, print and offline scope.",
+      "evidence_sha256": "9cd86244b388f9d4b58ef844517c6cb73f55543fd4b106417b3ecccc389d5fda",
+      "recorded_at": "2026-07-21T04:36:00+08:00"
+    }
+  ],
+  "deviations": [
+    "The first schema-1.0.1 full-run attempt was operator-aborted during input SHA preflight after 14:12.80, before staging creation, because an independent row-level recount proved that the producer and validator both double-counted NOT_EVALUABLE M2 sites in m2_evaluable_ineligible despite the summary contract requiring mutually exclusive bins.",
+    "The M2 counter repair did not version summary.schema.json because schema 1.0.0 already states the intended mutually-exclusive conservation rule; this is an implementation hotfix, not a contract change.",
+    "The archived dataset-producer integration task had bound a mutable test source as evidence. It was rebound to an immutable historical receipt that preserves the old command and source SHA without retroactively claiming the successor M2 assertion.",
+    "The v5 w40 producer completed science but its independent validator rejected peak_threads=47 before replay or freeze. Root cause was the background ThreadCountSampler adding the thread it measured above the manifest's 46-slot ceiling. The v5 staging remains failed diagnostic evidence; v6 removes the observer effect, synchronously observes 46 threads, and requires fresh same-binary w24/w40 runs.",
+    "The successor report hotfix replaced phase_status_at_producer_closeout with producer_run_local_phase_status and an explicit RUN_LOCAL_DATASET_GATE_CLOSEOUT_NOT_PROJECT_PHASE_LEDGER scope; old report hashes remain superseded in Git history.",
+    "The current feature branch contains prohibited private-path and coordinate-shaped blobs in unpushed history. Forward sanitization cannot remove those blobs, so no GitHub push is allowed until a clean branch is reconstructed from origin/main.",
+    "Real HCC1395 run roots, producer and validator receipts, performance observation payloads and browser-QA screenshots remain in the restricted workspace and are not committed. The tracked outputs bind their sanitized digests without fabricating a repository-local formal run receipt.",
+    "FULL means the complete HCC1395 chr1-22 single-dataset scope. Production entrypoint integration, P7 seven-dataset replay, legacy M1 exact parity, real nonzero topology, query/export/evaluate completion, strict release bindings, report claim IDs/schema, history hygiene and license audit remain explicit project-phase blockers; they do not invalidate the frozen HCC1395 dataset-gate result or promote it to production.",
+    "Legacy M1 is COMPARABLE_DIFFERENT: stable net count increases by 13 but stable membership has 2373 transitions. The old workflow has no durable formal full co-occurrence result, so no Python exact-parity claim is made.",
+    "The real HCC1395 topology artifact contains zero eligible units. Historical regional-tree output is NOT_COMPARABLE because membership, CN/LOH gates and methods differ; zero is an abstention result, not evidence that no biological structure exists.",
+    "Cache condition is UNKNOWN. w40 improves science-core wall by 10.1059 percent but makes the sequential trusted active-stage total 0.9282 percent slower and increases producer RSS by 26.0478 percent; w24 is the current HCC1395 default.",
+    "Two extra post-builder Python assertions initially referenced incorrect sealed-report JSON paths and failed before mutation; corrected closed predicates subsequently passed. An additional keyboard probe attempt preserved URL hash state and assumed a fixed Tab order, failed two focus checks, and was retained before a no-hash focus-loop replay passed 10/10 without changing the report.",
+    "A concurrent AI session changed ROADMAP, CURRENT_FOCUS, phase ledger, project state and the task heartbeat after the root agent read them, causing two apply_patch verification failures. The root agent preserved the changes, independently replayed report hashes and compiled governance 7/7, and committed the reviewed projection as fc2f467. The same-session expansion and write of state/project_state.json is recorded as a process deviation rather than retroactively represented as an independently leased child task.",
+    "The repository publication repair later replaced private absolute-path strings in the M2 hotfix receipt and related fixtures with portable tokens. Current evidence SHA values bind the sanitized projections; scientific counters and verdict fields were not changed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-21T04:40:07+08:00"
+}

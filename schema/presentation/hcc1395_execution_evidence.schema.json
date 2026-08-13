@@ -1,0 +1,396 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/presentation/hcc1395_execution_evidence.schema.json",
+  "title": "LongLineage HCC1395 report execution evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "evidence_id",
+    "created_at",
+    "dataset_id",
+    "report_scope",
+    "production_claim_allowed",
+    "truth_fields",
+    "tagged_bam_persisted",
+    "latest_tag_join",
+    "software_provenance",
+    "runs",
+    "authorities",
+    "audit_receipt",
+    "determinism_contract"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.hcc1395_execution_evidence"
+    },
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dataset_id": {
+      "const": "HCC1395"
+    },
+    "report_scope": {
+      "const": "HCC1395_ONLY_NON_PRODUCTION_DATASET_GATE"
+    },
+    "production_claim_allowed": {
+      "const": false
+    },
+    "truth_fields": {
+      "const": 0
+    },
+    "tagged_bam_persisted": {
+      "const": false
+    },
+    "latest_tag_join": {
+      "const": "EXACT_PROJECTION_NO_FALLBACK"
+    },
+    "software_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "science_execution",
+        "audit_report_generation"
+      ],
+      "properties": {
+        "science_execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "repository",
+            "executable_build_receipt"
+          ],
+          "properties": {
+            "repository": {
+              "$ref": "#/$defs/repository"
+            },
+            "executable_build_receipt": {
+              "$ref": "#/$defs/fileBinding"
+            }
+          }
+        },
+        "audit_report_generation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "repository",
+            "source_worktree_clean",
+            "audit_executable",
+            "report_builder_source",
+            "release_build",
+            "ctest",
+            "ctest_log"
+          ],
+          "properties": {
+            "repository": {
+              "$ref": "#/$defs/repository"
+            },
+            "source_worktree_clean": {
+              "const": true
+            },
+            "audit_executable": {
+              "$ref": "#/$defs/fileBinding"
+            },
+            "report_builder_source": {
+              "$ref": "#/$defs/fileBinding"
+            },
+            "release_build": {
+              "$ref": "#/$defs/releaseBuild"
+            },
+            "ctest": {
+              "$ref": "#/$defs/ctestSummary"
+            },
+            "ctest_log": {
+              "$ref": "#/$defs/fileBinding"
+            }
+          }
+        }
+      }
+    },
+    "runs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w24",
+        "w40"
+      ],
+      "properties": {
+        "w24": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/run"
+            },
+            {
+              "properties": {
+                "label": {
+                  "const": "w24"
+                },
+                "compute_workers": {
+                  "const": 24
+                }
+              }
+            }
+          ]
+        },
+        "w40": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/run"
+            },
+            {
+              "properties": {
+                "label": {
+                  "const": "w40"
+                },
+                "compute_workers": {
+                  "const": 40
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "authorities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_gate_input",
+        "production_input"
+      ],
+      "properties": {
+        "dataset_gate_input": {
+          "$ref": "#/$defs/fileBinding"
+        },
+        "production_input": {
+          "$ref": "#/$defs/fileBinding"
+        }
+      }
+    },
+    "audit_receipt": {
+      "$ref": "#/$defs/fileBinding"
+    },
+    "determinism_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ids",
+        "manifest_difference_pointers",
+        "summary_projection_fields"
+      ],
+      "properties": {
+        "artifact_ids": {
+          "const": [
+            "site_reads",
+            "methyl_calls",
+            "bernoulli_upper",
+            "m1_sites",
+            "m1_assignments",
+            "cooccurrence_pairs",
+            "cooccurrence_sites",
+            "topology_units"
+          ]
+        },
+        "manifest_difference_pointers": {
+          "const": [
+            "/output_root",
+            "/run_id",
+            "/runtime/compute_workers"
+          ]
+        },
+        "summary_projection_fields": {
+          "const": [
+            "scope",
+            "counts",
+            "phase_status"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "absolutePath": {
+      "type": "string",
+      "pattern": "^/"
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "git_commit"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "git_commit": {
+          "type": "string",
+          "pattern": "^(?!0{40}$)[0-9a-f]{40}$"
+        }
+      }
+    },
+    "fileBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "size_bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "releaseBuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_type",
+        "warnings_as_errors",
+        "require_exact_htslib",
+        "htslib_version"
+      ],
+      "properties": {
+        "build_type": {
+          "const": "Release"
+        },
+        "warnings_as_errors": {
+          "const": true
+        },
+        "require_exact_htslib": {
+          "const": true
+        },
+        "htslib_version": {
+          "const": "1.18"
+        }
+      }
+    },
+    "ctestSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "passed",
+        "failed",
+        "exit_code"
+      ],
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "passed": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "failed": {
+          "const": 0
+        },
+        "exit_code": {
+          "const": 0
+        }
+      }
+    },
+    "timedExecution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stdout_log",
+        "time_log",
+        "status_marker",
+        "exit_code",
+        "wall_seconds",
+        "user_seconds",
+        "system_seconds",
+        "max_rss_kib"
+      ],
+      "properties": {
+        "stdout_log": {
+          "$ref": "#/$defs/fileBinding"
+        },
+        "time_log": {
+          "$ref": "#/$defs/fileBinding"
+        },
+        "status_marker": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "exit_code": {
+          "const": 0
+        },
+        "wall_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "user_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "system_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_rss_kib": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "compute_workers",
+        "run_root",
+        "manifest",
+        "producer_execution",
+        "validator_execution"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "compute_workers": {
+          "type": "integer"
+        },
+        "run_root": {
+          "$ref": "#/$defs/absolutePath"
+        },
+        "manifest": {
+          "$ref": "#/$defs/fileBinding"
+        },
+        "producer_execution": {
+          "$ref": "#/$defs/timedExecution"
+        },
+        "validator_execution": {
+          "$ref": "#/$defs/timedExecution"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_summary-1.0.0.json",
+  "title": "LongLineage Python-v2 descriptive regional compatibility summary (legacy)",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "profile_id",
+    "state",
+    "workers",
+    "row_counts",
+    "census",
+    "parameters",
+    "inputs",
+    "timing"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_summary"},
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL"},
+    "state": {"enum": ["PARTIAL_PROBE", "READY_FOR_VALIDATION"]},
+    "workers": {"type": "integer", "minimum": 1, "maximum": 64},
+    "first_region": {"type": "integer", "minimum": 0},
+    "requested_region_count": {"type": "integer", "minimum": 0},
+    "row_counts": {
+      "type": "object",
+      "required": ["regions", "units", "patterns"],
+      "additionalProperties": false,
+      "properties": {
+        "regions": {"type": "integer", "minimum": 0},
+        "units": {"type": "integer", "minimum": 0},
+        "patterns": {"type": "integer", "minimum": 0}
+      }
+    },
+    "census": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "parameters": {"type": "object"},
+    "inputs": {"type": "array", "minItems": 8},
+    "timing": {"type": "object"},
+    "source_manifest_path": {"type": "string"},
+    "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_manifest_run_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}

@@ -30,7 +30,7 @@
     {
       "id": "https://longlineage.local/schema/artifact_record-1.0.0.json",
       "path": "schema/core/artifact_record.schema.json",
-      "sha256": "139a6f50e28fd2ca089f13cce748fc586dfea7ba26b8a31df40f8043ab6954c6"
+      "sha256": "e51308ebd08b55425064e56c7afdf9d6988bff756c8fc67b142fb8cdf753bf9d"
     },
     {
       "id": "https://longlineage.local/schema/compatible_relation_models-1.0.0.json",
@@ -39,8 +39,13 @@
     },
     {
       "id": "https://longlineage.local/schema/contract_registry_bindings-1.0.0.json",
+      "path": "schema/core/contract_registry_bindings-1.0.0.schema.json",
+      "sha256": "486934f62c6ed96922a060cc2df8007727626bda67851067460b6d9950d5eb73"
+    },
+    {
+      "id": "https://longlineage.local/schema/contract_registry_bindings-1.0.1.json",
       "path": "schema/core/contract_registry_bindings.schema.json",
-      "sha256": "a900ef9f1982d2147fb5bf1f465d05c8f5ff92ac3228bad2a1fcdcb3d4667e40"
+      "sha256": "79f4a418e51b81061de7895e12b7e21eabfcd43b8cbf9cbc42dd59ccc3f451a1"
     },
     {
       "id": "https://longlineage.local/schema/data_lineage_record-1.0.0.json",
@@ -48,9 +53,19 @@
       "sha256": "3085fa3777b828344d496034af44f382f2b81addc7c6a6372d94a0519dd73ec9"
     },
     {
+      "id": "https://longlineage.local/schema/dataset_gate_input_authority-1.0.0.json",
+      "path": "schema/core/dataset_gate_input_authority.schema.json",
+      "sha256": "0a757312fa6b7a8e9cedc98986bcc96f69106fce721364164a514584fa9e2c4d"
+    },
+    {
       "id": "https://longlineage.local/schema/group_allele_counts-1.0.0.json",
       "path": "schema/records/group_allele_counts.embedded.schema.json",
       "sha256": "ac292f99b63b01f14d8ced7e9a040082d72e40928f2a31c561d41ed018f73cc7"
+    },
+    {
+      "id": "https://longlineage.local/schema/group_allele_counts-1.0.1.json",
+      "path": "schema/records/group_allele_counts-1.0.1.embedded.schema.json",
+      "sha256": "29513a1657539190ec3ab2dca2d1b9743d5cfe5c8b3c64bec54c9e6356bd05a3"
     },
     {
       "id": "https://longlineage.local/schema/joint_partner_orders-1.0.0.json",
@@ -65,7 +80,7 @@
     {
       "id": "https://longlineage.local/schema/producer_receipt-1.0.0.json",
       "path": "schema/core/producer_receipt.schema.json",
-      "sha256": "2110096ca908a86696edfe30a6cf3c751125e32a56ce52883c506dcb98d1d903"
+      "sha256": "aafe637d2fe9e5a2f8346aa26ae7ecc32e9b5681aaf6d0a7495dc914ed4250fd"
     },
     {
       "id": "https://longlineage.local/schema/production_input_authority-1.0.0.json",
@@ -73,9 +88,9 @@
       "sha256": "e1d5840ebea077e8fbc15cdf6e2f352fac74eee3705b91ca6c30baa1ad8dd43d"
     },
     {
-      "id": "https://longlineage.local/schema/production_manifest-1.0.0.json",
+      "id": "https://longlineage.local/schema/production_manifest-1.1.0.json",
       "path": "schema/core/production_manifest.schema.json",
-      "sha256": "9ed467e12da94fd8e1861ed285b7fcddb374a3dc8c3cac1a64a845cbbd8d4d41"
+      "sha256": "8a245878b0272da708cc667c738e9d4d3c9e22846863c57536043a77d61bcbd0"
     },
     {
       "id": "https://longlineage.local/schema/query_response-1.0.0.json",
@@ -90,7 +105,7 @@
     {
       "id": "https://longlineage.local/schema/run_receipt-1.0.0.json",
       "path": "schema/core/run_receipt.schema.json",
-      "sha256": "e94ef084f1118a7ab4d0e20917c6feb1d88a6ea17cb013dacfffe45ed4c8d8ed"
+      "sha256": "01bf2d2ac750fa41cbd787887609d9ad9ee676415f73b7672f1df5ccc5fb51ed"
     },
     {
       "id": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json",
@@ -99,36 +114,41 @@
     },
     {
       "id": "https://longlineage.local/schema/summary-1.0.0.json",
-      "path": "schema/core/summary.schema.json",
+      "path": "schema/core/summary-1.0.0.schema.json",
       "sha256": "b5e4f86519874092887a172dbaebb17bcde13b907558406ff6a4919c1c93b1d8"
     },
     {
-      "id": "https://longlineage.local/schema/topology_unit-1.0.0.json",
+      "id": "https://longlineage.local/schema/summary-2.0.0.json",
+      "path": "schema/core/summary.schema.json",
+      "sha256": "0771de78bd5fa1e649c0a7fef3f2c596add27275ad23de1a4062c14258cb5c09"
+    },
+    {
+      "id": "https://longlineage.local/schema/topology_unit-2.0.0.json",
       "path": "schema/records/topology_unit.schema.json",
-      "sha256": "76f9489761ba7b4f7b6441ef36d09ad2eeb0c66635b678480bb3f998ea95bd6e"
+      "sha256": "02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03"
     },
     {
       "id": "https://longlineage.local/schema/validation_receipt-1.0.0.json",
       "path": "schema/core/validation_receipt.schema.json",
-      "sha256": "372ac1bcf43659e5c7fa31ff69dff645c111f296650c6051320c246e2489fbe6"
+      "sha256": "a9d2917cabb46f0aaa0897571e29229558c4d36dda0a985f1da14059d67c101c"
     }
   ],
   "catalog_schema_locks": [
     {
       "path": "schema/core/producer_receipt.schema.json",
-      "sha256": "2110096ca908a86696edfe30a6cf3c751125e32a56ce52883c506dcb98d1d903"
+      "sha256": "aafe637d2fe9e5a2f8346aa26ae7ecc32e9b5681aaf6d0a7495dc914ed4250fd"
     },
     {
       "path": "schema/core/run_receipt.schema.json",
-      "sha256": "e94ef084f1118a7ab4d0e20917c6feb1d88a6ea17cb013dacfffe45ed4c8d8ed"
+      "sha256": "01bf2d2ac750fa41cbd787887609d9ad9ee676415f73b7672f1df5ccc5fb51ed"
     },
     {
       "path": "schema/core/summary.schema.json",
-      "sha256": "b5e4f86519874092887a172dbaebb17bcde13b907558406ff6a4919c1c93b1d8"
+      "sha256": "0771de78bd5fa1e649c0a7fef3f2c596add27275ad23de1a4062c14258cb5c09"
     },
     {
       "path": "schema/core/validation_receipt.schema.json",
-      "sha256": "372ac1bcf43659e5c7fa31ff69dff645c111f296650c6051320c246e2489fbe6"
+      "sha256": "a9d2917cabb46f0aaa0897571e29229558c4d36dda0a985f1da14059d67c101c"
     },
     {
       "path": "schema/records/artifact_catalog_record.schema.json",
@@ -143,8 +163,8 @@
       "sha256": "4f7654a9c089509e487a5d775a2b361d8915112e2bbab65dfda769b23516b8bc"
     },
     {
-      "path": "schema/records/cooccurrence_pairs.record.json",
-      "sha256": "fb48f6795042ff40982115291ffa4784e83f7ce69e2f7bc2edb8e2c8367ef69a"
+      "path": "schema/records/cooccurrence_pairs-1.0.1.record.json",
+      "sha256": "e816741b0dad9c78edba17f1f844ef659230a80eccb85577126bd7a63154203f"
     },
     {
       "path": "schema/records/cooccurrence_sites.record.json",
@@ -180,7 +200,7 @@
     },
     {
       "path": "schema/records/topology_unit.schema.json",
-      "sha256": "76f9489761ba7b4f7b6441ef36d09ad2eeb0c66635b678480bb3f998ea95bd6e"
+      "sha256": "02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03"
     }
   ],
   "resolution": {

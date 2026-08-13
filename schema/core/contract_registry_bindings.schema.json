@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://longlineage.local/schema/contract_registry_bindings-1.0.0.json",
+  "$id": "https://longlineage.local/schema/contract_registry_bindings-1.0.1.json",
   "title": "LongLineage repository contract registry bindings",
   "description": "The const values form a machine-readable SHA lock and exact row-set relation for repository contract registries.",
   "type": "object",
@@ -17,12 +17,12 @@
       "const": "longlineage.contract_registry_bindings"
     },
     "schema_version": {
-      "const": "1.0.0"
+      "const": "1.0.1"
     },
     "catalog": {
       "const": {
         "path": "schema/catalog.json",
-        "sha256": "3e5013273c99e5c0e9feb8383938a75e2b9cf02b796f5214eab37720fde3f41b"
+        "sha256": "bc3deac1c50f5c99365dd2e322f400b909243a9ce15405b3ef46c261f06991e5"
       }
     },
     "registries": {

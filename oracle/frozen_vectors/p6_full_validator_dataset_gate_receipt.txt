@@ -1,0 +1,80 @@
+LONG_LINEAGE_P6_FULL_VALIDATOR_DATASET_GATE_RECEIPT_V1
+recorded_at=2026-07-20T05:26:10+08:00
+repository=<REPO_ROOT>
+git_head=0c0c6eab93ad3909b60ebc68211ef7887b759d92
+host=bip7
+kernel=5.15.0-173-generic
+compiler=c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+htslib=1.18
+profile=VALIDATED_FROZEN_DATASET_GATE
+production_claim_allowed=false
+fixture_scope=FROZEN_SYNTHETIC_TWO_SITE
+
+[warnings_as_errors_build]
+command=/usr/bin/cmake --build build-final-verify --target longlineage_validator test_validator_dataset_gate -j4
+exit_code=0
+evidence=longlineage_validation and test_validator_dataset_gate compile with -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror
+
+[targeted_p6_tests]
+command=ctest --test-dir build-final-verify -R '^(validator_fault|validator_dataset_gate|run_root_transaction)$' --output-on-failure
+exit_code=0
+output=100% tests passed, 0 tests failed out of 3; total real time 6.36 seconds
+dataset_gate_test_seconds=5.79
+coverage=canonical nine-science-artifact replay; physical/schema/catalog/status/index/checksum/receipt/mount/environment replay; site-read/methyl/M1/LLM/cooccurrence/M2/FDR/callability/topology/summary conservation; canonical zero-row topology; complete parent mapping; same-device atomic freeze; crash-after-rename recovery
+negative_coverage=missing/extra/truncated/modified/reordered/duplicate/forged artifacts; truth_fields_seen; R/A/O/X cell drift; exact/FDR/conditional/callability drift; M2 precedence drift; incomplete topology parent mapping; summary drift; forbidden producer-owned final receipt fields
+
+[contract_and_boundary_checks]
+schema_command=bash scripts/ci/check_json_schema_fixtures.sh
+schema_exit_code=0
+schema_output=JSON SCHEMA FIXTURES RESULT: PASS
+catalog_command=build-final-verify/bin/longlineage-governance check-catalog --repo <REPO_ROOT>
+catalog_exit_code=0
+catalog_output=PASS; 16 artifacts and 22 offline schema IDs
+status_command=build-final-verify/bin/longlineage-governance check-status-codes --repo <REPO_ROOT>
+status_exit_code=0
+status_output=PASS; 118 closed-vocabulary rows
+state_command=build-final-verify/bin/longlineage-governance check-state --repo <REPO_ROOT>
+state_exit_code=0
+state_output=PASS; active task leases and write sets internally consistent
+source_boundary_command=bash scripts/ci/check_source_boundaries.sh
+source_boundary_exit_code=0
+source_boundary_output=BOUNDARY RESULT: PASS validator_link=independent python_science=absent
+gate_command=bash scripts/ci/check_gate_test_coverage.sh build-final-verify --allow-declared-blocked
+gate_exit_code=0
+gate_output=PASS_WITH_DECLARED_BLOCKERS missing=12 mode=--allow-declared-blocked
+validator_link=/usr/bin/c++ ... liblonglineage_cli_support.a liblonglineage_validation.a libjansson.so libcrypto.so libhts.so
+validator_links_longlineage_core=false
+
+[full_ctest_integration_note]
+command=ctest --test-dir build-final-verify --output-on-failure -j4
+exit_code=8
+output=35/36 passed; validator_dataset_gate, validator_fault and run_root_transaction all passed
+deferred_test=governance_agent_task_unknown_field_negative
+deferred_reason=The repository-wide negative harness copied the parent active task into /tmp without its newly added untracked docs/audits evidence file, so evidence path validation fired before the intended unknown-field assertion. The parent owner accepted the P6 science/boundary evidence and will rerun the full suite after integrating and fixing that parent-task fixture dependency.
+
+[source_sha256]
+include/longlineage/validation/artifact_validator.hpp=9ffd09f7df03294996cda65e6db0037d4504ec0718365223c811e12282bf2faa
+include/longlineage/artifact/run_root.hpp=2b1316ab5a166789bd311b39b99120e4ec2770d22c4fc97d86bea98e9703fa3c
+src/validation/artifact_validator.cpp=900f85678a3d11ae568089cef15b65bb4f851e758e9c2ac9168bc43e2a722a88
+src/artifact/run_root.cpp=bc33d3e95904d31b0e76fb2420f5ee1fc82b4345afbce58805eabd06b2d82926
+tests/integration/test_validator_dataset_gate.cpp=0a79242f584f102376510894f3292e44c1d0c66f1eb4caa647b8a6e86910175b
+tests/integration/test_validator_fault.cpp=fb6cb27c310a075d35511a962586b48628a081aba7afc75f073e58bb91320454
+tests/unit/test_run_root.cpp=d8b77fbfe34ebd04867ea824408296263dec4811e992d6a44562de08740c6f6f
+schema/core/validation_receipt.schema.json=a9d2917cabb46f0aaa0897571e29229558c4d36dda0a985f1da14059d67c101c
+schema/core/producer_receipt.schema.json=aafe637d2fe9e5a2f8346aa26ae7ecc32e9b5681aaf6d0a7495dc914ed4250fd
+schema/core/run_receipt.schema.json=01bf2d2ac750fa41cbd787887609d9ad9ee676415f73b7672f1df5ccc5fb51ed
+schema/core/artifact_record.schema.json=e51308ebd08b55425064e56c7afdf9d6988bff756c8fc67b142fb8cdf753bf9d
+schema/records/cooccurrence_pairs.record.json=42fc9a645a518ccb9c9c0d69772afc3c9c6cea04f3e071da1d3c76c6d638c4f9
+schema/catalog.json=07701d1416d79032e753859f2acb48058463dc7d1ec86b21a7cdac1d3ab6b72e
+schema/id_registry.json=a7fd025705a548a5bed85e23cebf19876f1a4bb3eee3a3fb6186ae087e1bdc2a
+
+[binary_sha256]
+build-final-verify/bin/longlineage-validate=708077f9802a3a02521dc448bd2132075ce466dae31121a13a8328a4a8ec3fb6
+build-final-verify/bin/test_validator_dataset_gate=316f4ea10225f02cd1ec30556d4db624e243ce40c4fdd005c89fdd7430b4ebde
+build-final-verify/bin/test_validator_fault=17672d7d900cb22e5df0dfffc9ebc954b8d343dd9add95dd9a1f0518afa349cb
+build-final-verify/bin/test_run_root=bb30ef16b5d96b98cbb59ea3eef362327bdb8fa02cc143858214fb0b0106fe50
+
+[verdict]
+status=VERIFIED_FOR_BOUNDED_DATASET_GATE
+production_status=NOT_CLAIMED
+seven_dataset_status=OUT_OF_SCOPE

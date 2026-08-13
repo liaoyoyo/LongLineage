@@ -7,6 +7,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 scratch="$(mktemp -d "${TMPDIR:-/tmp}/longlineage-hygiene-untracked.XXXXXX")"
 git -C "$scratch" init -q
 printf 'synthetic forbidden payload\n' >"$scratch/untracked-forbidden.bam"
+printf '/%s%s\n' 'big9' '_disk' >"$scratch/private-mount-root.txt"
 
 set +e
 output="$(LONGLINEAGE_REPO_ROOT="$scratch" \
@@ -21,6 +22,11 @@ if [[ "$observed" -eq 0 ]]; then
 fi
 if ! grep -Fq 'untracked-forbidden.bam' <<<"$output"; then
     echo "untracked hygiene negative: failure did not identify fixture" >&2
+    echo "$output" >&2
+    exit 1
+fi
+if ! grep -Fq 'private-mount-root.txt' <<<"$output"; then
+    echo "untracked hygiene negative: mount root without a trailing slash was missed" >&2
     echo "$output" >&2
     exit 1
 fi

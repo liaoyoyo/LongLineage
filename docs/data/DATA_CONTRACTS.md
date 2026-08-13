@@ -203,6 +203,29 @@ Equal or reversed endpoints are negative fixtures. P1 typed I/O enforces the
 relation in C++; P6 is still blocked until the independent artifact validator replays
 it over serialized rows.
 
+## External regional input path map
+
+Private physical paths for the descriptive seven-dataset endpoint live only in an
+untracked `longlineage.regional_compat_input_paths@1.0.0` JSON file. Its closed
+contract is `schema/compat/regional_compat_input_paths.schema.json`; a safe,
+regenerable example is `tests/fixtures/regional_compat/input_paths.valid.json`.
+
+The primary key is `(dataset_id, dataset_order, role)`. Dataset and role order are
+fixed by the schema, so consumers query one path without positional guessing:
+
+```bash
+jq -er --arg dataset H2009 --arg role raw_bam \
+  'first(.datasets[] | select(.dataset_id == $dataset) |
+         .files[] | select(.role == $role) | .path)' PRIVATE_PATH_MAP.json
+```
+
+The two authority/manifest builders require `--input-paths`, reject unknown fields,
+relative or truth-bearing paths, and bind the map's SHA-256 before reading. They
+replay the SHA immediately before atomic publication and print only
+`INPUT_PATH_MAP_SHA256`; the private map pathname and individual paths must not be
+copied into Git, task evidence or public logs. The final restricted run manifest may
+contain physical paths because it remains outside Git and is independently frozen.
+
 ## Source-port lifecycle
 
 `provenance/source_to_target_manifest.json` uses a closed, independently validated

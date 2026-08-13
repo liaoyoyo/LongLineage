@@ -1,0 +1,71 @@
+{
+  "schema_name": "longlineage.synthetic_hcc1395_audit_cases",
+  "schema_version": "1.1.0",
+  "scope": "SYNTHETIC_ONLY",
+  "production_claim_allowed": false,
+  "positive": [
+    {
+      "case_id": "frozen_w24_w40_equal_science_with_stable_m1_churn",
+      "expected_exit": 0,
+      "expected_status": "PASS"
+    },
+    {
+      "case_id": "empty_exact_fdr_family_is_valid_and_worker_invariant",
+      "expected_exit": 0,
+      "expected_status": "PASS"
+    }
+  ],
+  "negative": [
+    {"case_id": "failed_validation_receipt", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "non_frozen_run_receipt", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "truth_fields_seen_nonzero", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "artifact_path_escape", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "artifact_symlink", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "manifest_non_whitelisted_difference", "expected_exit": 1, "expected_error_code": "RUN_CONTRACT_DETERMINISM"},
+    {"case_id": "wrong_worker_count", "expected_exit": 1, "expected_error_code": "RUN_CONTRACT_DETERMINISM"},
+    {"case_id": "science_semantic_digest_mismatch", "expected_exit": 1, "expected_error_code": "RUN_CONTRACT_DETERMINISM"},
+    {"case_id": "summary_projection_mismatch", "expected_exit": 1, "expected_error_code": "RUN_CONTRACT_DETERMINISM"},
+    {"case_id": "topology_region_partition_mismatch", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "m2_summary_double_count", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "m2_overlapping_duplicate_key", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "m2_missing_key", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "m2_extra_key", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "native_tsv_preamble_missing", "expected_exit": 1, "expected_error_code": "M1_REPLAY_W24"},
+    {"case_id": "native_tsv_preamble_wrong_schema", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "native_tsv_preamble_wrong_order", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "native_tsv_duplicate_header", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "native_tsv_preamble_wrong_version", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "native_tsv_preamble_wrong_run_id", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "native_tsv_header_missing_marker", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "native_tsv_header_missing_required_column", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24", "expected_detail_contains": "TSV header lacks required column: formal_pair_by_confirmed"},
+    {"case_id": "validation_receipt_missing_scientific_conservation", "expected_exit": 1, "expected_error_code": "FROZEN_ROOT_W24"},
+    {"case_id": "cooccurrence_worker_counter_mismatch", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_WORKER_DETERMINISM"},
+    {"case_id": "cooccurrence_duplicate_pair_key", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24", "expected_detail_contains": "cooccurrence-pair primary key is outside HCC1395 scope, duplicated or out of order"},
+    {"case_id": "cooccurrence_out_of_order_pair_key", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24", "expected_detail_contains": "cooccurrence-pair primary key is outside HCC1395 scope, duplicated or out of order"},
+    {"case_id": "cooccurrence_site_aggregate_overflow", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24", "expected_detail_contains": "partner_universe_pair_rows counter overflow"},
+    {"case_id": "cooccurrence_unknown_family_status", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "cooccurrence_internal_exact_status_leak", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "cooccurrence_family_exact_status_mismatch", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "cooccurrence_by_outside_exact_family", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "cooccurrence_by_true_bh_false", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24", "expected_detail_contains": "exact BY discovery is not a subset of exact BH discoveries"},
+    {"case_id": "cooccurrence_formal_without_by", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "cooccurrence_fdr_family_size_mismatch", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_AGGREGATE_W24"},
+    {"case_id": "cooccurrence_pair_site_aggregate_mismatch", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_CROSS_ARTIFACT_W24"},
+    {"case_id": "cooccurrence_unknown_joint_signature_status", "expected_exit": 1, "expected_error_code": "M2_CONSERVATION_W24"},
+    {"case_id": "cooccurrence_joint_signature_topology_mismatch", "expected_exit": 1, "expected_error_code": "COOCCURRENCE_CROSS_ARTIFACT_W24"},
+    {"case_id": "historical_physical_sha_mismatch", "expected_exit": 1, "expected_error_code": "HISTORICAL_M1_SOURCE"},
+    {"case_id": "historical_duplicate_key", "expected_exit": 1, "expected_error_code": "HISTORICAL_M1_SOURCE"},
+    {"case_id": "historical_missing_key", "expected_exit": 1, "expected_error_code": "HISTORICAL_M1_COMPARISON"},
+    {"case_id": "historical_status_mismatch", "expected_exit": 1, "expected_error_code": "HISTORICAL_M1_COMPARISON"}
+  ],
+  "notes": [
+    "The C++ unit test strict-parses this manifest and binds its identity, version, exact case order, expected error codes and branch-sensitive detail markers before executing every documented case.",
+    "Fixtures are generated at test runtime and contain no real loci, read names or production payload.",
+    "The positive case intentionally contains old/new stable transitions; historical stable churn is reported as COMPARABLE_DIFFERENT and is not confused with the required w24/w40 semantic determinism.",
+    "Native TSV negatives cover missing, wrong and out-of-order metadata plus duplicate headers before any scientific counter can be trusted.",
+    "Co-occurrence negatives cover worker-count replay parity, duplicate/out-of-order primary keys, checked aggregate overflow, the frozen endpoint-A, family and joint-signature vocabularies, family/exact-status compatibility, BY/BH/formal subset hierarchy, FDR family-size binding, pair/site aggregate conservation and joint/topology-unit conservation.",
+    "A focused positive fixture proves that an empty exact FDR family is legal: fdr_family_size, BH, BY, formal, joint PASS and topology units are all zero and w24 equals w40.",
+    "The positive fixture deliberately has one topology unit and two topology regions; units and regions are different grains, while complete plus incomplete regions still conserves topology_regions.",
+    "Every negative fixture rebuilds its own hashes and receipt chain and asserts its expected_error_code; branch-sensitive cases also assert expected_detail_contains so an earlier generic failure cannot satisfy the oracle."
+  ]
+}

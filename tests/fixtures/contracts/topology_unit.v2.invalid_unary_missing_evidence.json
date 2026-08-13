@@ -1,0 +1,85 @@
+{
+  "schema_name": "longlineage.topology_unit",
+  "schema_version": "2.0.0",
+  "dataset_order": 0,
+  "dataset_id": "synthetic",
+  "unit_order": 5,
+  "unit_id": "invalid-unary-missing-evidence",
+  "active_bits": [0],
+  "input_patterns": [
+    {"kind": "FULL_STATE", "pattern": "1", "multiplicity": 1}
+  ],
+  "input_evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "observed_states": ["1"],
+  "solver_route": "SMALL_Q_ORACLE_DIFFERENTIAL_BNB",
+  "objective_state": "OBJECTIVE_CERTIFIED",
+  "objective_h": 0,
+  "objective_bounds": {"lower_bound": 0, "upper_bound": 0, "gap": 0},
+  "objective_evidence_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "objective_reason": "NONE",
+  "family_state": "FAMILY_COMPLETE",
+  "family_representation": "EXPLICIT_MINIMUM_VERTEX_SETS_V1",
+  "family_evidence_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "family_reason": "NONE",
+  "candidate_family_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+  "candidate_count": 1,
+  "tree_count": "1",
+  "candidates": [
+    {
+      "vertex_set": ["0", "1"],
+      "vertex_set_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "legal_parent_choices": [
+        {"vertex": "1", "parents": ["0"]}
+      ],
+      "legal_parent_count": "1",
+      "tree_count": "1"
+    }
+  ],
+  "ranking_state": "RANKING_NOT_REQUESTED",
+  "ranking_endpoint_id": null,
+  "ranking_mode": null,
+  "ranking_evidence_sha256": null,
+  "ranking_certificate": null,
+  "published_rank": null,
+  "ranking_reason": "NOT_REQUESTED",
+  "edge_endpoint": {
+    "status": "EDGE_NOT_RUN",
+    "endpoint_id": null,
+    "evidence_sha256": null,
+    "candidate_results": [],
+    "reason": "NOT_REQUESTED"
+  },
+  "evolution_models": {
+    "evo_m0": {
+      "role": "PRIMARY",
+      "model": "RECURRENCE_ALLOWED",
+      "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    "evo_m1": {
+      "role": "SENSITIVITY_ONLY",
+      "model": "STRICT_INFINITE_SITES",
+      "cn_loh_gate": "NOT_EVALUATED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    },
+    "evo_m2": {
+      "role": "UNRESOLVED",
+      "model": "LOSS_SUPPORTED_DOLLO",
+      "state": "UNRESOLVED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    }
+  },
+  "multi_mutation_edge_equivalence": [
+    {
+      "candidate_vertex_set_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "kind": "MULTI_MUTATION_EDGE_EQUIVALENCE",
+      "from_state": "00",
+      "to_state": "11",
+      "mutation_active_bits": [0, 1],
+      "order_state": "UNRESOLVED_NO_READ_EVIDENCE",
+      "order_count": "2",
+      "projection_only": true
+    }
+  ]
+}

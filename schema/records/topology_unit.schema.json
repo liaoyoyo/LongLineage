@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://longlineage.local/schema/topology_unit-1.0.0.json",
+  "$id": "https://longlineage.local/schema/topology_unit-2.0.0.json",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -13,24 +13,35 @@
     "active_bits",
     "input_patterns",
     "input_evidence_sha256",
-    "parent_score_evidence_sha256",
     "observed_states",
     "solver_route",
     "objective_state",
-    "family_state",
     "objective_h",
-    "winner",
+    "objective_bounds",
+    "objective_evidence_sha256",
+    "objective_reason",
+    "family_state",
+    "family_representation",
+    "family_evidence_sha256",
+    "family_reason",
     "candidate_family_digest",
     "candidate_count",
     "tree_count",
     "candidates",
+    "ranking_state",
+    "ranking_endpoint_id",
+    "ranking_mode",
+    "ranking_evidence_sha256",
+    "ranking_certificate",
+    "published_rank",
+    "ranking_reason",
+    "edge_endpoint",
     "evolution_models",
-    "multi_mutation_edge_equivalence",
-    "reason"
+    "multi_mutation_edge_equivalence"
   ],
   "properties": {
     "schema_name": {"const": "longlineage.topology_unit"},
-    "schema_version": {"const": "1.0.0"},
+    "schema_version": {"const": "2.0.0"},
     "dataset_order": {"type": "integer", "minimum": 0},
     "dataset_id": {"type": "string", "minLength": 1},
     "unit_order": {"type": "integer", "minimum": 0},
@@ -49,120 +60,403 @@
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
-    "parent_score_evidence_sha256": {
-      "type": ["string", "null"],
-      "pattern": "^[0-9a-f]{64}$"
-    },
     "observed_states": {
       "type": "array",
       "items": {"type": "string", "pattern": "^[01]+$"},
       "uniqueItems": true
     },
     "solver_route": {
-      "enum": ["ANALYTIC_SINGLE_TERMINAL", "SMALL_Q_DP_BNB", "BITSET_BNB", "DIRECT_HIGHS", "ABSTAIN"]
+      "enum": ["ANALYTIC_SINGLE_TERMINAL", "SMALL_Q_ORACLE_DIFFERENTIAL_BNB", "BITSET_OBLIGATION_BNB", "ABSTAIN"]
     },
     "objective_state": {
-      "enum": ["OBJECTIVE_CERTIFIED", "ABSTAIN_DEPENDENCY_UNAVAILABLE", "ABSTAIN_KERNEL_NOT_VERIFIED", "ABSTAIN_NOT_IDENTIFIABLE"]
-    },
-    "family_state": {
-      "enum": ["FAMILY_COMPLETE", "FAMILY_INCOMPLETE_CAP", "FAMILY_INCOMPLETE_DEADLINE", "ABSTAIN_DEPENDENCY_UNAVAILABLE", "ABSTAIN_KERNEL_NOT_VERIFIED", "ABSTAIN_NOT_IDENTIFIABLE"]
+      "enum": [
+        "OBJECTIVE_CERTIFIED",
+        "ABSTAIN_DEPENDENCY_UNAVAILABLE",
+        "ABSTAIN_KERNEL_NOT_VERIFIED",
+        "ABSTAIN_NOT_IDENTIFIABLE",
+        "ABSTAIN_RESOURCE_LIMIT",
+        "ABSTAIN_DIFFERENTIAL_MISMATCH"
+      ]
     },
     "objective_h": {"type": ["integer", "null"], "minimum": 0},
+    "objective_bounds": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lower_bound", "upper_bound", "gap"],
+          "properties": {
+            "lower_bound": {"type": "integer", "minimum": 0},
+            "upper_bound": {"type": "integer", "minimum": 0},
+            "gap": {"type": "integer", "minimum": 0}
+          }
+        }
+      ]
+    },
+    "objective_evidence_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "objective_reason": {
+      "enum": [
+        "NONE",
+        "DEPENDENCY_UNAVAILABLE",
+        "SOLVER_ROUTE_NOT_VERIFIED",
+        "MODEL_NOT_IDENTIFIABLE",
+        "SEARCH_RESOURCE_LIMIT_REACHED",
+        "DIFFERENTIAL_CHECK_FAILED"
+      ]
+    },
+    "family_state": {
+      "enum": [
+        "FAMILY_COMPLETE",
+        "FAMILY_INCOMPLETE_CAP",
+        "FAMILY_INCOMPLETE_DEADLINE",
+        "ABSTAIN_DEPENDENCY_UNAVAILABLE",
+        "ABSTAIN_KERNEL_NOT_VERIFIED",
+        "ABSTAIN_NOT_IDENTIFIABLE",
+        "ABSTAIN_RESOURCE_LIMIT",
+        "ABSTAIN_DIFFERENTIAL_MISMATCH"
+      ]
+    },
+    "family_representation": {
+      "enum": ["EXPLICIT_MINIMUM_VERTEX_SETS_V1", null]
+    },
+    "family_evidence_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "family_reason": {
+      "enum": [
+        "NONE",
+        "MAX_FAMILY_SIZE_REACHED",
+        "DEADLINE_REACHED",
+        "DEPENDENCY_UNAVAILABLE",
+        "SOLVER_ROUTE_NOT_VERIFIED",
+        "MODEL_NOT_IDENTIFIABLE",
+        "SEARCH_RESOURCE_LIMIT_REACHED",
+        "DIFFERENTIAL_CHECK_FAILED"
+      ]
+    },
     "candidate_family_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
     "candidate_count": {"type": "integer", "minimum": 0},
     "tree_count": {"type": "string", "pattern": "^[0-9]+$"},
-    "winner": {
-      "oneOf": [
-        {"type": "null"},
-        {"$ref": "#/$defs/winner"}
-      ]
-    },
     "candidates": {
       "type": "array",
       "items": {"$ref": "#/$defs/candidate"}
     },
+    "ranking_state": {
+      "enum": [
+        "RANKING_COMPLETE",
+        "RANKING_NOT_RUN_FAMILY_INCOMPLETE",
+        "RANKING_NOT_RUN_OBJECTIVE_ABSTAIN",
+        "RANKING_ABSTAIN_NUMERICAL_CERTIFICATE",
+        "RANKING_NOT_REQUESTED"
+      ]
+    },
+    "ranking_endpoint_id": {
+      "enum": ["BQ_AWARE_READ_PATTERN_MIXTURE_V1", null]
+    },
+    "ranking_mode": {
+      "enum": ["EXHAUSTIVE", "OUTWARD_ROUNDED_INTERVAL_CERTIFIED", null]
+    },
+    "ranking_evidence_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "ranking_certificate": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/ranking_certificate"}
+      ]
+    },
+    "published_rank": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/published_rank"}
+      ]
+    },
+    "ranking_reason": {
+      "enum": [
+        "NONE",
+        "FAMILY_NOT_COMPLETE",
+        "OBJECTIVE_NOT_CERTIFIED",
+        "NUMERICAL_CERTIFICATE_UNAVAILABLE",
+        "NOT_REQUESTED"
+      ]
+    },
+    "edge_endpoint": {"$ref": "#/$defs/edge_endpoint"},
     "evolution_models": {
       "type": "object",
       "additionalProperties": false,
       "required": ["evo_m0", "evo_m1", "evo_m2"],
       "properties": {
-        "evo_m0": {"const": "PRIMARY_RECURRENCE_ALLOWED"},
-        "evo_m1": {"enum": ["SENSITIVITY_GATE_PASS", "SENSITIVITY_GATE_FAIL", "SENSITIVITY_NOT_RUN"]},
-        "evo_m2": {"const": "UNRESOLVED_NOT_IMPLEMENTED"}
-      }
-    },
-    "multi_mutation_edge_equivalence": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["from_state", "to_state", "active_bit_orders"],
-        "properties": {
-          "from_state": {"type": "string", "pattern": "^[01]+$"},
-          "to_state": {"type": "string", "pattern": "^[01]+$"},
-          "active_bit_orders": {
-            "type": "array",
-            "minItems": 2,
-            "items": {"type": "integer", "minimum": 0}
+        "evo_m0": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "model", "evidence_sha256"],
+          "properties": {
+            "role": {"const": "PRIMARY"},
+            "model": {"const": "RECURRENCE_ALLOWED"},
+            "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        },
+        "evo_m1": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "model", "cn_loh_gate", "evidence_sha256", "affects_primary"],
+          "properties": {
+            "role": {"const": "SENSITIVITY_ONLY"},
+            "model": {"const": "STRICT_INFINITE_SITES"},
+            "cn_loh_gate": {"enum": ["PASS", "FAIL", "NOT_EVALUATED"]},
+            "evidence_sha256": {
+              "type": ["string", "null"],
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "affects_primary": {"const": false}
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {"cn_loh_gate": {"const": "NOT_EVALUATED"}},
+                "required": ["cn_loh_gate"]
+              },
+              "then": {
+                "properties": {"evidence_sha256": {"type": "null"}}
+              },
+              "else": {
+                "properties": {
+                  "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+                }
+              }
+            }
+          ]
+        },
+        "evo_m2": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "model", "state", "evidence_sha256", "affects_primary"],
+          "properties": {
+            "role": {"const": "UNRESOLVED"},
+            "model": {"const": "LOSS_SUPPORTED_DOLLO"},
+            "state": {"const": "UNRESOLVED"},
+            "evidence_sha256": {"type": "null"},
+            "affects_primary": {"const": false}
           }
         }
       }
     },
-    "reason": {
-      "enum": [
-        "NONE",
-        "MAX_FAMILY_SIZE_REACHED",
-        "DEADLINE_REACHED",
-        "HIGHS_NOT_AVAILABLE",
-        "SOLVER_ROUTE_NOT_VERIFIED",
-        "MODEL_NOT_IDENTIFIABLE"
-      ]
+    "multi_mutation_edge_equivalence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/unary_projection"}
     }
   },
   "allOf": [
+    {
+      "if": {
+        "properties": {"objective_state": {"const": "OBJECTIVE_CERTIFIED"}},
+        "required": ["objective_state"]
+      },
+      "then": {
+        "properties": {
+          "objective_h": {"type": "integer", "minimum": 0},
+          "objective_bounds": {"type": "object"},
+          "objective_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "objective_reason": {"const": "NONE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "objective_state": {
+            "enum": [
+              "ABSTAIN_DEPENDENCY_UNAVAILABLE",
+              "ABSTAIN_KERNEL_NOT_VERIFIED",
+              "ABSTAIN_NOT_IDENTIFIABLE",
+              "ABSTAIN_RESOURCE_LIMIT",
+              "ABSTAIN_DIFFERENTIAL_MISMATCH"
+            ]
+          }
+        },
+        "required": ["objective_state"]
+      },
+      "then": {
+        "properties": {
+          "solver_route": {"const": "ABSTAIN"},
+          "objective_h": {"type": "null"},
+          "objective_bounds": {"type": "null"},
+          "objective_evidence_sha256": {"type": "null"},
+          "family_representation": {"type": "null"},
+          "family_evidence_sha256": {"type": "null"},
+          "candidate_family_digest": {"type": "null"},
+          "candidate_count": {"const": 0},
+          "tree_count": {"const": "0"},
+          "candidates": {"maxItems": 0},
+          "ranking_state": {"const": "RANKING_NOT_RUN_OBJECTIVE_ABSTAIN"},
+          "ranking_endpoint_id": {"type": "null"},
+          "ranking_mode": {"type": "null"},
+          "ranking_evidence_sha256": {"type": "null"},
+          "ranking_certificate": {"type": "null"},
+          "published_rank": {"type": "null"},
+          "ranking_reason": {"const": "OBJECTIVE_NOT_CERTIFIED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {"objective_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"}},
+            "required": ["objective_state"]
+          },
+          {
+            "properties": {"family_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"}},
+            "required": ["family_state"]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"},
+          "objective_reason": {"const": "DEPENDENCY_UNAVAILABLE"},
+          "family_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"},
+          "family_reason": {"const": "DEPENDENCY_UNAVAILABLE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {"objective_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"}},
+            "required": ["objective_state"]
+          },
+          {
+            "properties": {"family_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"}},
+            "required": ["family_state"]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"},
+          "objective_reason": {"const": "SOLVER_ROUTE_NOT_VERIFIED"},
+          "family_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"},
+          "family_reason": {"const": "SOLVER_ROUTE_NOT_VERIFIED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {"objective_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"}},
+            "required": ["objective_state"]
+          },
+          {
+            "properties": {"family_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"}},
+            "required": ["family_state"]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"},
+          "objective_reason": {"const": "MODEL_NOT_IDENTIFIABLE"},
+          "family_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"},
+          "family_reason": {"const": "MODEL_NOT_IDENTIFIABLE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {"objective_state": {"const": "ABSTAIN_RESOURCE_LIMIT"}},
+            "required": ["objective_state"]
+          },
+          {
+            "properties": {"family_state": {"const": "ABSTAIN_RESOURCE_LIMIT"}},
+            "required": ["family_state"]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "ABSTAIN_RESOURCE_LIMIT"},
+          "objective_reason": {"const": "SEARCH_RESOURCE_LIMIT_REACHED"},
+          "family_state": {"const": "ABSTAIN_RESOURCE_LIMIT"},
+          "family_reason": {"const": "SEARCH_RESOURCE_LIMIT_REACHED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {"objective_state": {"const": "ABSTAIN_DIFFERENTIAL_MISMATCH"}},
+            "required": ["objective_state"]
+          },
+          {
+            "properties": {"family_state": {"const": "ABSTAIN_DIFFERENTIAL_MISMATCH"}},
+            "required": ["family_state"]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "ABSTAIN_DIFFERENTIAL_MISMATCH"},
+          "objective_reason": {"const": "DIFFERENTIAL_CHECK_FAILED"},
+          "family_state": {"const": "ABSTAIN_DIFFERENTIAL_MISMATCH"},
+          "family_reason": {"const": "DIFFERENTIAL_CHECK_FAILED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"family_state": {"const": "FAMILY_COMPLETE"}},
+        "required": ["family_state"]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
+          "family_representation": {"const": "EXPLICIT_MINIMUM_VERTEX_SETS_V1"},
+          "family_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "family_reason": {"const": "NONE"},
+          "candidate_family_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "candidate_count": {"type": "integer", "minimum": 1},
+          "tree_count": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+          "candidates": {"minItems": 1}
+        }
+      }
+    },
     {
       "if": {
         "properties": {
           "family_state": {
             "enum": ["FAMILY_INCOMPLETE_CAP", "FAMILY_INCOMPLETE_DEADLINE"]
           }
-        }
-      },
-      "then": {
-        "properties": {
-          "winner": {"type": "null"},
-          "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
-          "objective_h": {"type": "integer", "minimum": 0}
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {"family_state": {"const": "FAMILY_COMPLETE"}}
+        },
+        "required": ["family_state"]
       },
       "then": {
         "properties": {
           "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
-          "objective_h": {"type": "integer", "minimum": 0},
-          "candidate_family_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-          "parent_score_evidence_sha256": {
-            "type": "string",
-            "pattern": "^[0-9a-f]{64}$"
-          },
-          "reason": {"const": "NONE"}
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {"winner": {"type": "object"}},
-        "required": ["winner"]
-      },
-      "then": {
-        "properties": {
-          "objective_state": {"const": "OBJECTIVE_CERTIFIED"},
-          "family_state": {"const": "FAMILY_COMPLETE"},
-          "candidate_count": {"type": "integer", "minimum": 1}
+          "family_representation": {"type": "null"},
+          "family_evidence_sha256": {"type": "null"},
+          "candidate_family_digest": {"type": "null"},
+          "candidate_count": {"const": 0},
+          "tree_count": {"const": "0"},
+          "candidates": {"maxItems": 0},
+          "ranking_state": {"const": "RANKING_NOT_RUN_FAMILY_INCOMPLETE"},
+          "ranking_endpoint_id": {"type": "null"},
+          "ranking_mode": {"type": "null"},
+          "ranking_evidence_sha256": {"type": "null"},
+          "ranking_certificate": {"type": "null"},
+          "published_rank": {"type": "null"},
+          "ranking_reason": {"const": "FAMILY_NOT_COMPLETE"}
         }
       }
     },
@@ -171,72 +465,193 @@
         "properties": {"family_state": {"const": "FAMILY_INCOMPLETE_CAP"}},
         "required": ["family_state"]
       },
-      "then": {"properties": {"reason": {"const": "MAX_FAMILY_SIZE_REACHED"}}}
+      "then": {
+        "properties": {
+          "family_reason": {"const": "MAX_FAMILY_SIZE_REACHED"}
+        }
+      }
     },
     {
       "if": {
         "properties": {"family_state": {"const": "FAMILY_INCOMPLETE_DEADLINE"}},
         "required": ["family_state"]
       },
-      "then": {"properties": {"reason": {"const": "DEADLINE_REACHED"}}}
-    },
-    {
-      "if": {
-        "properties": {"family_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"}},
-        "required": ["family_state"]
-      },
       "then": {
         "properties": {
-          "solver_route": {"const": "ABSTAIN"},
-          "objective_state": {"const": "ABSTAIN_DEPENDENCY_UNAVAILABLE"},
-          "objective_h": {"type": "null"},
-          "candidate_family_digest": {"type": "null"},
-          "parent_score_evidence_sha256": {"type": "null"},
-          "candidate_count": {"const": 0},
-          "tree_count": {"const": "0"},
-          "winner": {"type": "null"},
-          "candidates": {"maxItems": 0},
-          "reason": {"const": "HIGHS_NOT_AVAILABLE"}
+          "family_reason": {"const": "DEADLINE_REACHED"}
         }
       }
     },
     {
       "if": {
-        "properties": {"family_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"}},
+        "properties": {
+          "family_state": {
+            "enum": [
+              "ABSTAIN_DEPENDENCY_UNAVAILABLE",
+              "ABSTAIN_KERNEL_NOT_VERIFIED",
+              "ABSTAIN_NOT_IDENTIFIABLE",
+              "ABSTAIN_RESOURCE_LIMIT",
+              "ABSTAIN_DIFFERENTIAL_MISMATCH"
+            ]
+          }
+        },
         "required": ["family_state"]
       },
       "then": {
         "properties": {
-          "solver_route": {"const": "ABSTAIN"},
-          "objective_state": {"const": "ABSTAIN_KERNEL_NOT_VERIFIED"},
-          "objective_h": {"type": "null"},
+          "family_representation": {"type": "null"},
+          "family_evidence_sha256": {"type": "null"},
           "candidate_family_digest": {"type": "null"},
-          "parent_score_evidence_sha256": {"type": "null"},
           "candidate_count": {"const": 0},
           "tree_count": {"const": "0"},
-          "winner": {"type": "null"},
-          "candidates": {"maxItems": 0},
-          "reason": {"const": "SOLVER_ROUTE_NOT_VERIFIED"}
+          "candidates": {"maxItems": 0}
         }
       }
     },
     {
       "if": {
-        "properties": {"family_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"}},
-        "required": ["family_state"]
+        "properties": {"ranking_state": {"const": "RANKING_COMPLETE"}},
+        "required": ["ranking_state"]
       },
       "then": {
         "properties": {
-          "solver_route": {"const": "ABSTAIN"},
-          "objective_state": {"const": "ABSTAIN_NOT_IDENTIFIABLE"},
-          "objective_h": {"type": "null"},
-          "candidate_family_digest": {"type": "null"},
-          "parent_score_evidence_sha256": {"type": "null"},
-          "candidate_count": {"const": 0},
-          "tree_count": {"const": "0"},
-          "winner": {"type": "null"},
-          "candidates": {"maxItems": 0},
-          "reason": {"const": "MODEL_NOT_IDENTIFIABLE"}
+          "family_state": {"const": "FAMILY_COMPLETE"},
+          "ranking_endpoint_id": {"const": "BQ_AWARE_READ_PATTERN_MIXTURE_V1"},
+          "ranking_mode": {
+            "enum": ["EXHAUSTIVE", "OUTWARD_ROUNDED_INTERVAL_CERTIFIED"]
+          },
+          "ranking_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "ranking_certificate": {"type": "object"},
+          "published_rank": {"type": "object"},
+          "ranking_reason": {"const": "NONE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"ranking_state": {"const": "RANKING_NOT_RUN_FAMILY_INCOMPLETE"}},
+        "required": ["ranking_state"]
+      },
+      "then": {
+        "properties": {
+          "family_state": {
+            "enum": ["FAMILY_INCOMPLETE_CAP", "FAMILY_INCOMPLETE_DEADLINE"]
+          },
+          "ranking_endpoint_id": {"type": "null"},
+          "ranking_mode": {"type": "null"},
+          "ranking_evidence_sha256": {"type": "null"},
+          "ranking_certificate": {"type": "null"},
+          "published_rank": {"type": "null"},
+          "ranking_reason": {"const": "FAMILY_NOT_COMPLETE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"ranking_state": {"const": "RANKING_NOT_RUN_OBJECTIVE_ABSTAIN"}},
+        "required": ["ranking_state"]
+      },
+      "then": {
+        "properties": {
+          "objective_state": {
+            "enum": [
+              "ABSTAIN_DEPENDENCY_UNAVAILABLE",
+              "ABSTAIN_KERNEL_NOT_VERIFIED",
+              "ABSTAIN_NOT_IDENTIFIABLE",
+              "ABSTAIN_RESOURCE_LIMIT",
+              "ABSTAIN_DIFFERENTIAL_MISMATCH"
+            ]
+          },
+          "ranking_endpoint_id": {"type": "null"},
+          "ranking_mode": {"type": "null"},
+          "ranking_evidence_sha256": {"type": "null"},
+          "ranking_certificate": {"type": "null"},
+          "published_rank": {"type": "null"},
+          "ranking_reason": {"const": "OBJECTIVE_NOT_CERTIFIED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"ranking_state": {"const": "RANKING_ABSTAIN_NUMERICAL_CERTIFICATE"}},
+        "required": ["ranking_state"]
+      },
+      "then": {
+        "properties": {
+          "family_state": {"const": "FAMILY_COMPLETE"},
+          "ranking_endpoint_id": {"const": "BQ_AWARE_READ_PATTERN_MIXTURE_V1"},
+          "ranking_mode": {"type": "null"},
+          "ranking_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "ranking_certificate": {"type": "null"},
+          "published_rank": {"type": "null"},
+          "ranking_reason": {"const": "NUMERICAL_CERTIFICATE_UNAVAILABLE"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"ranking_state": {"const": "RANKING_NOT_REQUESTED"}},
+        "required": ["ranking_state"]
+      },
+      "then": {
+        "properties": {
+          "family_state": {"const": "FAMILY_COMPLETE"},
+          "ranking_endpoint_id": {"type": "null"},
+          "ranking_mode": {"type": "null"},
+          "ranking_evidence_sha256": {"type": "null"},
+          "ranking_certificate": {"type": "null"},
+          "published_rank": {"type": "null"},
+          "ranking_reason": {"const": "NOT_REQUESTED"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"ranking_mode": {"const": "EXHAUSTIVE"}},
+        "required": ["ranking_mode"]
+      },
+      "then": {
+        "properties": {
+          "ranking_certificate": {
+            "type": "object",
+            "properties": {
+              "mode": {"const": "EXHAUSTIVE"},
+              "excluded_by_interval_count": {"const": 0}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"ranking_mode": {"const": "OUTWARD_ROUNDED_INTERVAL_CERTIFIED"}},
+        "required": ["ranking_mode"]
+      },
+      "then": {
+        "properties": {
+          "ranking_certificate": {
+            "type": "object",
+            "properties": {
+              "mode": {"const": "OUTWARD_ROUNDED_INTERVAL_CERTIFIED"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "edge_endpoint": {
+            "type": "object",
+            "properties": {"status": {"const": "EDGE_COMPLETE"}},
+            "required": ["status"]
+          }
+        },
+        "required": ["edge_endpoint"]
+      },
+      "then": {
+        "properties": {
+          "family_state": {"const": "FAMILY_COMPLETE"}
         }
       }
     }
@@ -272,33 +687,226 @@
       "required": [
         "vertex_set",
         "vertex_set_sha256",
+        "legal_parent_choices",
         "legal_parent_count",
-        "tree_count",
-        "best_additive_edge_score",
-        "best_parent_tie_count"
+        "tree_count"
       ],
       "properties": {
         "vertex_set": {
           "type": "array",
+          "minItems": 1,
           "items": {"type": "string", "pattern": "^[01]+$"},
           "uniqueItems": true
         },
         "vertex_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "legal_parent_count": {"type": "integer", "minimum": 0},
-        "tree_count": {"type": "string", "pattern": "^[0-9]+$"},
-        "best_additive_edge_score": {"type": ["number", "null"]},
-        "best_parent_tie_count": {"type": "string", "pattern": "^[0-9]+$"}
+        "legal_parent_choices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["vertex", "parents"],
+            "properties": {
+              "vertex": {"type": "string", "pattern": "^[01]+$"},
+              "parents": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string", "pattern": "^[01]+$"},
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "legal_parent_count": {"type": "string", "pattern": "^[0-9]+$"},
+        "tree_count": {"type": "string", "pattern": "^[1-9][0-9]*$"}
       }
     },
-    "winner": {
+    "ranking_certificate": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["candidate_vertex_set_sha256", "parent_mapping", "edge_score", "tie"],
+      "required": [
+        "mode",
+        "evaluated_vertex_set_count",
+        "excluded_by_interval_count",
+        "certificate_sha256"
+      ],
       "properties": {
-        "candidate_vertex_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "parent_mapping": {"type": "object", "additionalProperties": {"type": "string"}},
-        "edge_score": {"type": "number"},
-        "tie": {"const": false}
+        "mode": {
+          "enum": ["EXHAUSTIVE", "OUTWARD_ROUNDED_INTERVAL_CERTIFIED"]
+        },
+        "evaluated_vertex_set_count": {"type": "integer", "minimum": 1},
+        "excluded_by_interval_count": {"type": "integer", "minimum": 0},
+        "certificate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "published_rank": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "endpoint_id",
+        "best_score",
+        "best_vertex_set_tie_class"
+      ],
+      "properties": {
+        "endpoint_id": {"const": "BQ_AWARE_READ_PATTERN_MIXTURE_V1"},
+        "best_score": {"type": "number"},
+        "best_vertex_set_tie_class": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "edge_endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "endpoint_id",
+        "evidence_sha256",
+        "candidate_results",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "EDGE_COMPLETE",
+            "EDGE_NOT_RUN",
+            "EDGE_ABSTAIN_EVIDENCE_MISSING"
+          ]
+        },
+        "endpoint_id": {
+          "enum": ["ADDITIVE_PARENT_EDGE_SCORE_V1", null]
+        },
+        "evidence_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "candidate_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "candidate_vertex_set_sha256",
+              "best_additive_edge_score",
+              "best_parent_tie_count",
+              "published_parent_mapping"
+            ],
+            "properties": {
+              "candidate_vertex_set_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "best_additive_edge_score": {"type": "number"},
+              "best_parent_tie_count": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*$"
+              },
+              "published_parent_mapping": {
+                "oneOf": [
+                  {"type": "null"},
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["child_state", "parent_state"],
+                      "properties": {
+                        "child_state": {"type": "string", "pattern": "^[01]+$"},
+                        "parent_state": {"type": "string", "pattern": "^[01]+$"}
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "reason": {
+          "enum": ["NONE", "NOT_REQUESTED", "PARENT_SCORE_EVIDENCE_MISSING"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "EDGE_COMPLETE"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "endpoint_id": {"const": "ADDITIVE_PARENT_EDGE_SCORE_V1"},
+              "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "candidate_results": {"minItems": 1},
+              "reason": {"const": "NONE"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"status": {"const": "EDGE_NOT_RUN"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "endpoint_id": {"type": "null"},
+              "evidence_sha256": {"type": "null"},
+              "candidate_results": {"maxItems": 0},
+              "reason": {"const": "NOT_REQUESTED"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"status": {"const": "EDGE_ABSTAIN_EVIDENCE_MISSING"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "endpoint_id": {"const": "ADDITIVE_PARENT_EDGE_SCORE_V1"},
+              "evidence_sha256": {"type": "null"},
+              "candidate_results": {"maxItems": 0},
+              "reason": {"const": "PARENT_SCORE_EVIDENCE_MISSING"}
+            }
+          }
+        }
+      ]
+    },
+    "unary_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_vertex_set_sha256",
+        "kind",
+        "from_state",
+        "to_state",
+        "mutation_active_bits",
+        "order_state",
+        "order_count",
+        "eligibility_evidence_sha256",
+        "projection_only"
+      ],
+      "properties": {
+        "candidate_vertex_set_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "kind": {"const": "MULTI_MUTATION_EDGE_EQUIVALENCE"},
+        "from_state": {"type": "string", "pattern": "^[01]+$"},
+        "to_state": {"type": "string", "pattern": "^[01]+$"},
+        "mutation_active_bits": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"type": "integer", "minimum": 0},
+          "uniqueItems": true
+        },
+        "order_state": {"const": "UNRESOLVED_NO_READ_EVIDENCE"},
+        "order_count": {"type": "string", "pattern": "^([2-9]|[1-9][0-9]+)$"},
+        "eligibility_evidence_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "projection_only": {"const": true}
       }
     }
   },
@@ -307,16 +915,24 @@
     "input_patterns are sorted by kind then pattern and duplicate kind/pattern pairs are consolidated into multiplicity",
     "observed_states is the sorted unique set of FULL_STATE input patterns",
     "input_evidence_sha256 binds the exact receipted upstream row membership and canonical input_patterns stream for this unit",
-    "parent_score_evidence_sha256 binds the independently reproducible per-unit sufficient statistics used by additive edge scoring",
-    "candidate_count equals candidates length and tree_count is the exact decimal sum of candidate tree counts",
-    "winner is non-null only after an objective-certified complete family and only when additive parent mapping has no tie",
-    "any tied best result, incomplete family, deadline, cap or abstention has winner null",
-    "winner candidate_vertex_set_sha256 resolves to exactly one candidates entry",
-    "multi_mutation_edge_equivalence is projection-only and never changes objective_h, candidates or winner"
+    "OBJECTIVE_CERTIFIED requires objective_h = objective_bounds.lower_bound = objective_bounds.upper_bound and objective_bounds.gap = 0",
+    "candidate_count equals candidates length and tree_count is the exact decimal sum of candidate tree_count values",
+    "every candidate legal_parent_count and tree_count is an exact decimal integer derived once from its fixed vertex set",
+    "any incomplete or abstaining family has no explicit candidates and published_rank is null",
+    "ranking scores each distinct vertex_set_sha256 once and never contains a parent mapping",
+    "RANKING_COMPLETE best_vertex_set_tie_class contains every exactly tied optimum and every digest resolves to one complete-family candidate",
+    "OUTWARD_ROUNDED_INTERVAL_CERTIFIED exclusions are replayable from ranking_certificate.certificate_sha256",
+    "edge_endpoint evidence, scores and parent mappings are independent from abundance ranking evidence",
+    "a published edge parent mapping is non-null only when best_parent_tie_count equals one",
+    "multi_mutation_edge_equivalence is projection-only, candidate-bound and never changes objective_h, candidates or published_rank",
+    "Evo-M1 strict infinite-sites is CN/LOH-gated sensitivity only; Evo-M2 remains unresolved without loss-supported evidence"
   ],
   "x-longlineage-status-domain-bindings": {
     "objective_state": "topology_objective",
+    "objective_reason": "topology_objective",
     "family_state": "topology_family",
-    "reason": "topology_family"
+    "family_reason": "topology_family",
+    "ranking_state": "topology_ranking",
+    "ranking_reason": "topology_ranking"
   }
 }

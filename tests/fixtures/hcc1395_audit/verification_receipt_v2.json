@@ -1,0 +1,372 @@
+{
+  "schema_name": "longlineage.hcc1395_audit_child_verification_receipt",
+  "schema_version": "2.0.0",
+  "receipt_id": "20260721-hcc1395-audit-verification-v2-52e85bb",
+  "status": "PASS",
+  "scope": {
+    "kind": "SYNTHETIC_IMPLEMENTATION_VERIFICATION",
+    "completeness": "FULL_FOR_DECLARED_SCOPE",
+    "production_claim_allowed": false,
+    "real_hcc1395_data_consumed": false
+  },
+  "subject": {
+    "repository": "LongLineage",
+    "verified_source_commit": "52e85bbceb4bd034a89e74e5ae33d7f2bfb132e5",
+    "git_tree_object": "56ce71feafe1115773a3c4a4bd5d3ccea814cc20",
+    "canonical_tree_sha256": "f6dc698b20d5de55a3beefba48802a59a2fe0c2bd56877d07bea877073f36394",
+    "dirty_before": false,
+    "dirty_after": false
+  },
+  "schema_binding": {
+    "path": "schema/core/hcc1395_audit_verification_receipt.schema.json",
+    "sha256": "2610f8fedf803641be1874605254ddabfb7b51e2aa799b943513be410fbf152a",
+    "dialect": "https://json-schema.org/draft/2020-12/schema"
+  },
+  "supersedes": [
+    {
+      "path": "tests/fixtures/hcc1395_audit/verification_receipt.json",
+      "sha256": "74a1d5d931ff5b9cea27444088e04126dbaab42dc8649d75e4eaf08713fc7937",
+      "subject_commit": "71f16b42819fb1dd22b4fce9fdec666190d3a666",
+      "schema_version": "1.0.0"
+    }
+  ],
+  "supersession_reason": "Replaces the unversioned child attestation with a closed Draft 2020-12 receipt bound to one clean source commit, fixed test order, binary digests, sanitizer replay and explicit claim limits.",
+  "toolchain": {
+    "cmake": "cmake version 3.31.6",
+    "cxx": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "clang_format": "Ubuntu clang-format version 14.0.0-1ubuntu1.1",
+    "htslib": "1.18",
+    "jansson": "2.13.1",
+    "openssl": "3.0.2",
+    "zlib": "1.2.11",
+    "python": {
+      "executable_role": "PINNED_JSONSCHEMA_VENV_PYTHON",
+      "executable_sha256": "d6bca2b84e73c7775a0dd5e6a76899cfe4ee62863d7c8f88513811d1fda23f49",
+      "version": "3.10.12"
+    },
+    "jsonschema": {
+      "version": "4.23.0",
+      "validator_class": "Draft202012Validator",
+      "resolved_packages": [
+        "attrs==26.1.0",
+        "jsonschema-specifications==2025.9.1",
+        "jsonschema==4.23.0",
+        "referencing==0.37.0",
+        "rpds-py==0.30.0",
+        "typing_extensions==4.16.0"
+      ],
+      "wheel_set_sha256": "41505fe8767d11f4c17edf3ef8ad8cad0a18115732557e8d843a7b6db1cbc70c"
+    }
+  },
+  "source_snapshot": {
+    "manifest_sha256": "6a7618bd2aae365ada74947ee8cef17b83daf3b6ecc7ee8f3200eb0e6beb07f4",
+    "files": [
+      {
+        "path": "CMakeLists.txt",
+        "bytes": 6228,
+        "sha256": "38b56d8a5a7260f094ad5981776f286e7eeb8ad90aa222f78408d5e94e6e996f"
+      },
+      {
+        "path": "tests/CMakeLists.txt",
+        "bytes": 12505,
+        "sha256": "81ffbf193354bb573a1dabba0d3a7e2ff5c39f2e49c99e6f11fa9667f386657f"
+      },
+      {
+        "path": "include/longlineage/audit/hcc1395_determinism.hpp",
+        "bytes": 1020,
+        "sha256": "ae5226b63b822973e85b2a46ed31d16ef4fb5af993ea23c231989d79ca47b036"
+      },
+      {
+        "path": "apps/audit_main.cpp",
+        "bytes": 3420,
+        "sha256": "66f4cf1fb55fcf63eeacdd93c96e72ba8846d6792abb7d352e900fc03819d427"
+      },
+      {
+        "path": "src/audit/hcc1395_determinism.cpp",
+        "bytes": 133270,
+        "sha256": "74b639edeae42b594cea95e087852e9061daf19c97174463a03ef246db45db42"
+      },
+      {
+        "path": "tests/unit/test_hcc1395_audit.cpp",
+        "bytes": 73297,
+        "sha256": "26720d29749cd1fcd7873d036052ff76690e80f3f33341d5b610ea2160dc475c"
+      },
+      {
+        "path": "tests/fixtures/hcc1395_audit/cases.json",
+        "bytes": 7554,
+        "sha256": "d0864e68d8a07d8856291a6045d6705ce41a269338c1fc17b64e55266039c6ca"
+      },
+      {
+        "path": "schema/core/hcc1395_determinism_historical_receipt-1.0.0.schema.json",
+        "bytes": 19445,
+        "sha256": "5f346604954cdffae26cba79a05de165289af7416c8d23990677b0e4cc8e60f2"
+      },
+      {
+        "path": "schema/core/hcc1395_determinism_historical_receipt.schema.json",
+        "bytes": 26300,
+        "sha256": "75f509da2649eca096d5d69443c604ef2a53951d2476dc25f350c2e5481eef03"
+      },
+      {
+        "path": "schema/core/hcc1395_audit_verification_receipt.schema.json",
+        "bytes": 23397,
+        "sha256": "2610f8fedf803641be1874605254ddabfb7b51e2aa799b943513be410fbf152a"
+      },
+      {
+        "path": "schema/presentation/hcc1395_execution_evidence.schema.json",
+        "bytes": 8965,
+        "sha256": "fd7863d19a8c9c20f659615ee0138e0e160018a5219344a794955fb74b239ab9"
+      },
+      {
+        "path": "presentation/build_hcc1395_validated_report.py",
+        "bytes": 234963,
+        "sha256": "06a286d8197569ea8ce7b17ca53352a191d157c7e3195bd8378b79892d1641e3"
+      },
+      {
+        "path": "docs/adr/20260720_HCC1395稽核Receipt_v2共現守恆遷移_01.md",
+        "bytes": 9548,
+        "sha256": "2dc5661890f24acfca6b6b5f33b3a4914cc8bab11002cb517ee9c3abd22603b7"
+      },
+      {
+        "path": "docs/development/implementation-notes.md",
+        "bytes": 30996,
+        "sha256": "b018318257f63ee47c24872697ef3293673a7d7693e04e8d06f7e288f388b9b3"
+      }
+    ]
+  },
+  "case_matrix": {
+    "manifest_path": "tests/fixtures/hcc1395_audit/cases.json",
+    "manifest_sha256": "d0864e68d8a07d8856291a6045d6705ce41a269338c1fc17b64e55266039c6ca",
+    "manifest_schema_version": "1.1.0",
+    "total": 43,
+    "positive": 2,
+    "negative": 41,
+    "unique_case_ids": true,
+    "execution_binding": "DIRECT_CASE_ID_RECONCILIATION",
+    "binding_negative_cases": 2,
+    "executed": 43,
+    "passed": 43,
+    "failed": 0,
+    "executed_order_exact": true,
+    "direct_test_stdout": {
+      "bytes": 243,
+      "sha256": "cdd787648b37ada59793e1291ad26c09c106c06c709ed48552850512032f7db4"
+    }
+  },
+  "binaries": {
+    "debug_test": {
+      "role": "DEBUG_TEST_HCC1395_AUDIT",
+      "bytes": 2513624,
+      "sha256": "6656ab964cba799ab009d609bde45d7587ff728dae380d3ecfdda051a4d59768",
+      "embedded_commit": "52e85bbceb4bd034a89e74e5ae33d7f2bfb132e5"
+    },
+    "release_test": {
+      "role": "RELEASE_TEST_HCC1395_AUDIT",
+      "bytes": 515328,
+      "sha256": "a5b1edae043a5de870ffd73ca127f4e6308126ae2e2897cbca33eb6939b2e0e3",
+      "embedded_commit": "52e85bbceb4bd034a89e74e5ae33d7f2bfb132e5"
+    },
+    "release_audit": {
+      "role": "RELEASE_LONGLINEAGE_AUDIT",
+      "bytes": 336888,
+      "sha256": "fed7b945fc57608735c4cec3013c4d47715a61ac9db3568d41f8727010aab7e6",
+      "embedded_commit": "52e85bbceb4bd034a89e74e5ae33d7f2bfb132e5"
+    },
+    "asan_ubsan_test": {
+      "role": "ASAN_UBSAN_TEST_HCC1395_AUDIT",
+      "bytes": 23230304,
+      "sha256": "e03152eca0ce8a0b30b79c874ee966a7e8a097f9bb444d7429c3d7d7754ffd91",
+      "embedded_commit": "52e85bbceb4bd034a89e74e5ae33d7f2bfb132e5"
+    }
+  },
+  "validations": [
+    {
+      "check_id": "SCOPED_CPP_FORMAT",
+      "status": "PASS",
+      "argv_role_tokens": ["CLANG_FORMAT_14", "--dry-run", "--Werror", "AUDIT_CPP_SCOPE"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:26:17+08:00",
+      "completed_at": "2026-07-21T03:26:18+08:00",
+      "summary": "Four changed C++ audit and test files pass clang-format 14 without output."
+    },
+    {
+      "check_id": "DEBUG_CONFIGURE_BUILD",
+      "status": "PASS",
+      "argv_role_tokens": ["CMAKE_3_31", "CONFIGURE_DEBUG", "EXACT_HTSLIB_1_18", "WARNINGS_AS_ERRORS", "BUILD_PARALLEL_8"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 9516, "sha256": "5b7defbe603360376d0901245aaa0ce7091cab9c16a0deb908f34d46365b06f4"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:25:50+08:00",
+      "completed_at": "2026-07-21T03:26:34+08:00",
+      "summary": "Fresh GCC Debug configure and build completed with warnings as errors and exact HTSlib 1.18."
+    },
+    {
+      "check_id": "DEBUG_FULL_CTEST",
+      "status": "PASS",
+      "argv_role_tokens": ["CTEST", "DEBUG_BUILD", "--output-on-failure"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 7428, "sha256": "6f95437c9aa6fb0f0c36e436857fcc03b8ca4521d366ca23c4fe5633b1f1235f"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:28:23+08:00",
+      "completed_at": "2026-07-21T03:30:24+08:00",
+      "summary": "Debug full CTest passed 44 of 44 tests in 120.75 seconds."
+    },
+    {
+      "check_id": "RELEASE_CONFIGURE_BUILD",
+      "status": "PASS",
+      "argv_role_tokens": ["CMAKE_3_31", "CONFIGURE_RELEASE", "EXACT_HTSLIB_1_18", "WARNINGS_AS_ERRORS", "BUILD_PARALLEL_8"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 9518, "sha256": "5281c1c4567b991db1ebc86af9b08e0e9b26d3b6de04de6485eb39ec0374640c"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:25:50+08:00",
+      "completed_at": "2026-07-21T03:26:58+08:00",
+      "summary": "Fresh GCC Release configure and build completed with warnings as errors and exact HTSlib 1.18."
+    },
+    {
+      "check_id": "FOCUSED_MANIFEST_BOUND_CPP",
+      "status": "PASS",
+      "argv_role_tokens": ["RELEASE_TEST_HCC1395_AUDIT", "DIRECT_MANIFEST_BOUND_CASE_MATRIX"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 243, "sha256": "cdd787648b37ada59793e1291ad26c09c106c06c709ed48552850512032f7db4"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:28:24+08:00",
+      "completed_at": "2026-07-21T03:28:25+08:00",
+      "summary": "All 43 declared cases ran in exact manifest order; two binding negatives also rejected drift."
+    },
+    {
+      "check_id": "RELEASE_FULL_CTEST",
+      "status": "PASS",
+      "argv_role_tokens": ["CTEST", "RELEASE_BUILD", "--output-on-failure"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 7432, "sha256": "d8e5e7a4abd69e485df87f4fdd95922b84b5f43246a1f1cdeb36f2f5a2dd0cd2"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:28:23+08:00",
+      "completed_at": "2026-07-21T03:29:51+08:00",
+      "summary": "Release full CTest passed 44 of 44 tests in 87.29 seconds."
+    },
+    {
+      "check_id": "ASAN_UBSAN_CONFIGURE_BUILD",
+      "status": "PASS",
+      "argv_role_tokens": ["CMAKE_3_31", "CONFIGURE_RELWITHDEBINFO", "ADDRESS_SANITIZER", "UNDEFINED_BEHAVIOR_SANITIZER", "BUILD_PARALLEL_8"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 9521, "sha256": "bfc0e3fda526f314bb308aabc5d89baca110871c3ffec2f9fde14c7fa56351bc"},
+      "stderr": {"bytes": 1582, "sha256": "41ca6218597b6ffdd93801030722233800d1f699b254b679e632de4d8958ba6a"},
+      "started_at": "2026-07-21T03:25:50+08:00",
+      "completed_at": "2026-07-21T03:33:45+08:00",
+      "summary": "Sanitizer build completed; stderr contains only two GCC variable-tracking size-limit notes, not warnings or errors."
+    },
+    {
+      "check_id": "ASAN_UBSAN_FULL_CTEST",
+      "status": "PASS",
+      "argv_role_tokens": ["ASAN_OPTIONS_DETECT_LEAKS_0_HALT_ON_ERROR_1", "UBSAN_OPTIONS_HALT_ON_ERROR_1_PRINT_STACKTRACE_1", "CTEST", "SANITIZER_BUILD"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 7438, "sha256": "3fc59815336807937f2c38988841df113d39c3534c923405788ea274f763f2b3"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:34:17+08:00",
+      "completed_at": "2026-07-21T03:39:04+08:00",
+      "summary": "AddressSanitizer and UndefinedBehaviorSanitizer full CTest passed 44 of 44 in 287.37 seconds."
+    },
+    {
+      "check_id": "PYTHON_REPORT_SELF_TEST",
+      "status": "PASS",
+      "argv_role_tokens": ["PYTHON_3_10", "REPORT_BUILDER", "--self-test", "NO_BYTECODE"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 7090, "sha256": "137b2951253994fe6c427a6ba90dd8aa355cfc9368508d7a524110cccce71d89"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:27:47+08:00",
+      "completed_at": "2026-07-21T03:27:56+08:00",
+      "summary": "Report builder positive fixture and all 49 fail-closed negative mutations passed."
+    },
+    {
+      "check_id": "DRAFT202012_MIGRATION_MATRIX",
+      "status": "PASS",
+      "argv_role_tokens": ["PINNED_JSONSCHEMA_VENV_PYTHON", "JSONSCHEMA_4_23_0", "DRAFT202012_VALIDATOR", "V1_V2_ORDER_MATRIX"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 241, "sha256": "eb5689719ac3a3606ae4e238f9ba54cec8578baca75dc7d6ce295a09a54fe098"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:29:14+08:00",
+      "completed_at": "2026-07-21T03:29:15+08:00",
+      "summary": "v1 passes only v1, v2 passes only v2, and swapping the first two fixed checks yields two path-specific errors."
+    },
+    {
+      "check_id": "PRODUCER_KERNEL_LINKAGE_SCAN",
+      "status": "PASS",
+      "argv_role_tokens": ["RIPGREP", "AUDIT_CPP_SCOPE", "FORBIDDEN_PRODUCER_KERNEL_SYMBOLS", "EXPECT_ZERO_MATCHES"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 44, "sha256": "3edc831f5438df147e792241d303216bf0889532bb5ecd8ca9638cc08f0a3667"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:27:08+08:00",
+      "completed_at": "2026-07-21T03:27:08+08:00",
+      "summary": "Independent audit implementation links no producer M1, M2, co-occurrence, solver or pipeline kernel."
+    },
+    {
+      "check_id": "PATCH_PRIVACY_SCAN",
+      "status": "PASS",
+      "argv_role_tokens": ["GIT_DIFF_ADDED_LINES", "SCIENCE_COMMIT_TO_VERIFIED_SOURCE_COMMIT", "PRIVATE_PATH_CREDENTIAL_LOCUS_SCAN", "EXPECT_ZERO_MATCHES"],
+      "working_directory_role": "CLEAN_DETACHED_SOURCE_A",
+      "exit_code": 0,
+      "stdout": {"bytes": 85, "sha256": "12a6951c4503e67d2a8cc486d48bc08919a4c6a5b4faa33ec9255982add1e404"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      "started_at": "2026-07-21T03:27:08+08:00",
+      "completed_at": "2026-07-21T03:27:08+08:00",
+      "summary": "All 3289 added lines since the immutable science commit contain zero private path, credential or real-locus matches."
+    }
+  ],
+  "claim_boundary": {
+    "synthetic_implementation_verified": true,
+    "formal_hcc1395_run_verified": false,
+    "production_claim_allowed": false
+  },
+  "deviations": [
+    {
+      "deviation_id": "CHILD_TASK_PROCESS_DEVIATION",
+      "impact": "An early isolated-worktree writer lacked its own child task and non-overlapping lease.",
+      "mitigation": "The root agent stopped shared writes, reviewed every path and replayed all twelve checks on one clean detached commit.",
+      "claim_effect": "No child result is accepted directly; only the root replay is represented by this receipt."
+    },
+    {
+      "deviation_id": "READ_ONLY_DELEGATION_PROCESS_DEVIATION",
+      "impact": "Three read-only delegates also lacked child task records before delivering inventories.",
+      "mitigation": "They made no filesystem changes, and the root independently replayed every cited binding and command.",
+      "claim_effect": "Their reports are navigation aids only and do not independently establish any PASS claim."
+    },
+    {
+      "deviation_id": "CONCURRENT_SESSION_WRITESET_DEVIATION",
+      "impact": "A separate AI session used the root lease to prepare report fixes without an independently visible child write set.",
+      "mitigation": "The root avoided simultaneous edits, reviewed both commits and required fresh self-test plus browser QA.",
+      "claim_effect": "The concurrent session cannot enlarge scope or production claims and its first failed mobile report remains failed evidence."
+    },
+    {
+      "deviation_id": "LEAK_SANITIZER_DISABLED",
+      "impact": "LeakSanitizer is unsupported under the local sandbox tracing boundary.",
+      "mitigation": "Leak detection was explicitly disabled while AddressSanitizer and UndefinedBehaviorSanitizer retained halt-on-error behavior.",
+      "claim_effect": "This receipt covers address and undefined behavior faults but makes no local leak-freedom claim."
+    },
+    {
+      "deviation_id": "ACTIVE_HEARTBEAT_TIME_BOUND",
+      "impact": "The verified source commit contains a time-bounded active task heartbeat that will eventually become stale.",
+      "mitigation": "All checks ran inside the valid lease window; the final handoff must archive the task and replay the full suite.",
+      "claim_effect": "A later replay of this exact commit may fail governance timing without indicating a scientific code regression."
+    },
+    {
+      "deviation_id": "REPO_WIDE_GATES_PREEXISTING_DEBT",
+      "impact": "Repository-wide formatting and private-path inventories contain pre-existing out-of-scope debt.",
+      "mitigation": "This receipt records exact patch-scoped formatting and privacy checks and does not rewrite immutable historical evidence.",
+      "claim_effect": "No repository-wide public-release, hygiene or seven-dataset production readiness claim is made."
+    }
+  ],
+  "captured_at": "2026-07-21T03:40:27+08:00",
+  "captured_by_agent_id": "codex:root"
+}

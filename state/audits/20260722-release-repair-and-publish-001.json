@@ -1,0 +1,173 @@
+{
+  "schema_name": "longlineage.audit_evidence",
+  "schema_version": "1.0.0",
+  "snapshot_id": "20260722-release-repair-and-publish-001",
+  "task_id": "20260722-release-repair-and-publish",
+  "scope": {
+    "kind": "REPOSITORY",
+    "completeness": "FULL",
+    "description": "Complete verification of the history-safe private draft publication at implementation commit fa1249b9b8873c0b6bc099d8662bd87a62021e8c. This scope does not verify or promote any P0-P8 project phase; the phase ledger remains 0/9 VERIFIED. It also does not verify a production release, seven-dataset w24/w40 execution, a full C++ versus Python speedup claim, or final seven-dataset HTML.",
+    "included_paths": [
+      "."
+    ],
+    "excluded_paths": []
+  },
+  "source_snapshot_kind": "GIT_COMMIT",
+  "source_commit": "fa1249b9b8873c0b6bc099d8662bd87a62021e8c",
+  "source_tree_sha256": "689842dc2b64d0e929454e0950d4917729e7e3619073d326f5f19059b22c2e2c",
+  "source_dirty": false,
+  "commands": [
+    {
+      "command_id": "history-hygiene",
+      "argv": [
+        "scripts/ci/check_history_hygiene.sh",
+        "origin/main",
+        "HEAD"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:04+08:00",
+      "completed_at": "2026-07-23T01:11:11+08:00"
+    },
+    {
+      "command_id": "push-ci-terminal",
+      "argv": [
+        "gh",
+        "run",
+        "watch",
+        "29938942025",
+        "--repo",
+        "liaoyoyo/LongLineage",
+        "--exit-status"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:12+08:00",
+      "completed_at": "2026-07-23T01:11:15+08:00"
+    },
+    {
+      "command_id": "pr-ci-terminal",
+      "argv": [
+        "gh",
+        "run",
+        "watch",
+        "29938944740",
+        "--repo",
+        "liaoyoyo/LongLineage",
+        "--exit-status"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:16+08:00",
+      "completed_at": "2026-07-23T01:11:18+08:00"
+    },
+    {
+      "command_id": "pr-checks",
+      "argv": [
+        "gh",
+        "pr",
+        "checks",
+        "4",
+        "--repo",
+        "liaoyoyo/LongLineage"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:19+08:00",
+      "completed_at": "2026-07-23T01:11:22+08:00"
+    },
+    {
+      "command_id": "repository-visibility",
+      "argv": [
+        "gh",
+        "repo",
+        "view",
+        "liaoyoyo/LongLineage",
+        "--json",
+        "visibility"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:23+08:00",
+      "completed_at": "2026-07-23T01:11:25+08:00"
+    },
+    {
+      "command_id": "draft-pr-state",
+      "argv": [
+        "gh",
+        "pr",
+        "view",
+        "4",
+        "--repo",
+        "liaoyoyo/LongLineage",
+        "--json",
+        "isDraft,headRefOid,state,url,mergeStateStatus"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:26+08:00",
+      "completed_at": "2026-07-23T01:11:29+08:00"
+    },
+    {
+      "command_id": "worktree-clean",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-23T01:11:30+08:00",
+      "completed_at": "2026-07-23T01:11:31+08:00"
+    },
+    {
+      "command_id": "remote-head",
+      "argv": [
+        "git",
+        "ls-remote",
+        "origin",
+        "refs/heads/fix/release-repair-verify"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": null,
+      "stderr_sha256": null,
+      "started_at": "2026-07-23T01:11:32+08:00",
+      "completed_at": "2026-07-23T01:11:35+08:00"
+    },
+    {
+      "command_id": "remote-assertion-bundle",
+      "argv": [
+        "/bin/bash",
+        "-lc",
+        "set -o pipefail\nexpected=fa1249b9b8873c0b6bc099d8662bd87a62021e8c\ngh repo view liaoyoyo/LongLineage --json visibility | jq -e '.visibility == \"PRIVATE\"'\ngh pr view 4 --repo liaoyoyo/LongLineage --json isDraft,headRefOid,state,mergeStateStatus | jq -e --arg expected \"$expected\" '.isDraft == true and .headRefOid == $expected and .state == \"OPEN\" and .mergeStateStatus == \"CLEAN\"'\nfor run_id in 29938942025 29938944740; do\n  gh run view \"$run_id\" --repo liaoyoyo/LongLineage --json conclusion,status,headSha,jobs | jq -e --arg expected \"$expected\" '.conclusion == \"success\" and .status == \"completed\" and .headSha == $expected and ([.jobs[].conclusion] | length) == 9 and ([.jobs[].conclusion] | all(. == \"success\"))'\ndone\ngh pr checks 4 --repo liaoyoyo/LongLineage --json bucket | jq -e 'length == 18 and all(.bucket == \"pass\")'\ntest \"$(git ls-remote origin refs/heads/fix/release-repair-verify | awk '{print $1}')\" = \"$expected\"\necho REMOTE_ASSERTIONS_PASS"
+      ],
+      "working_directory": ".",
+      "exit_code": 0,
+      "stdout_sha256": "52aa8716c584a0f5623bcd37b781411d5f60e0b372e7a9998108827b0f115145",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "started_at": "2026-07-23T01:18:52+08:00",
+      "completed_at": "2026-07-23T01:19:01+08:00"
+    }
+  ],
+  "captured_at": "2026-07-23T01:19:01+08:00",
+  "captured_by_agent_id": "codex:root",
+  "supersedes": [],
+  "superseded_by": null,
+  "supersession_reason": null
+}

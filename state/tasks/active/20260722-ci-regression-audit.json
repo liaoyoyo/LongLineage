@@ -1,0 +1,39 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260722-ci-regression-audit",
+  "owner_agent_id": "codex:root/ci-audit",
+  "parent_task_id": "20260722-release-repair-and-publish",
+  "allowed_paths": [
+    {"path": "state/tasks/active/20260722-ci-regression-audit.json", "kind": "FILE"}
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-22T23:56:37+08:00",
+  "heartbeat_at": "2026-07-22T20:03:51+08:00",
+  "task_type": "E",
+  "goals": ["LL-G4", "LL-G5"],
+  "status": "BLOCKED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Read-only root-cause and minimal-fix review of the current-head governance and agent-task negative-test failures."
+  },
+  "assumptions": ["The child may inspect all repository files but may modify only its task record."],
+  "inputs": [
+    {"role": "negative_test", "path": "scripts/testing/test_agent_task_negative.sh", "sha256": null},
+    {"role": "active_task", "path": "state/tasks/active/20260721-python-compatible-regional-all-datasets.json", "sha256": null}
+  ],
+  "expected_outputs": [
+    {"role": "child_task_record", "path": "state/tasks/active/20260722-ci-regression-audit.json", "sha256": null}
+  ],
+  "step_verify": [
+    {
+      "step": "Reproduce and isolate each current-head CTest failure.",
+      "verify": "Handoff identifies exact root cause, minimal patch and focused regression command."
+    }
+  ],
+  "evidence": [],
+  "deviations": [],
+  "blockers": ["READ_ONLY_AUDIT_DELIVERED_PARENT_INTEGRATION_PENDING"],
+  "updated_at": "2026-07-22T20:03:51+08:00"
+}

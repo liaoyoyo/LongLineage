@@ -1,9 +1,9 @@
 {
   "schema_name": "longlineage.contract_registry_bindings",
-  "schema_version": "1.0.0",
+  "schema_version": "1.0.1",
   "catalog": {
     "path": "schema/catalog.json",
-    "sha256": "3e5013273c99e5c0e9feb8383938a75e2b9cf02b796f5214eab37720fde3f41b"
+    "sha256": "bc3deac1c50f5c99365dd2e322f400b909243a9ce15405b3ef46c261f06991e5"
   },
   "registries": {
     "artifact_roles": {

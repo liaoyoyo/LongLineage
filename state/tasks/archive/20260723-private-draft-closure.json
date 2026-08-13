@@ -1,0 +1,75 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260723-private-draft-closure",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": "20260722-release-repair-and-publish",
+  "allowed_paths": [
+    {"path": "docs/CURRENT_FOCUS.md", "kind": "FILE"},
+    {"path": "docs/development/implementation-notes.md", "kind": "FILE"},
+    {"path": "state/audits/20260722-release-repair-and-publish-001.json", "kind": "FILE"},
+    {"path": "state/phase_ledger.json", "kind": "FILE"},
+    {"path": "state/project_state.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260722-release-repair-and-publish.json", "kind": "FILE"},
+    {"path": "state/tasks/active/20260723-private-draft-closure.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260723-private-draft-closure.json", "kind": "FILE"}
+  ],
+  "depends_on": ["20260722-release-repair-and-publish"],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-23T03:25:49+08:00",
+  "heartbeat_at": "2026-07-23T01:30:46+08:00",
+  "task_type": "E",
+  "goals": ["LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Regularize the private-draft closure metadata after the parent task was archived before its final audit SHA synchronization, preserve the process deviation without backdating authority, and revalidate the exact closure tree before commit. This task does not promote any P0-P8 phase."
+  },
+  "assumptions": [
+    "The implementation authority remains commit fa1249b9b8873c0b6bc099d8662bd87a62021e8c and audit snapshot 20260722-release-repair-and-publish-001.",
+    "The forthcoming metadata commit cannot attest its own later hosted CI; final-head Actions are separate live evidence.",
+    "No scientific source, workflow, container, schema contract, fixture or presentation artifact changes are in scope."
+  ],
+  "inputs": [
+    {"role": "parent_task", "path": "state/tasks/archive/20260722-release-repair-and-publish.json", "sha256": null},
+    {"role": "implementation_audit", "path": "state/audits/20260722-release-repair-and-publish-001.json", "sha256": "7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac"}
+  ],
+  "expected_outputs": [
+    {"role": "closure_task", "path": "state/tasks/archive/20260723-private-draft-closure.json", "sha256": null},
+    {"role": "implementation_record", "path": "docs/development/implementation-notes.md", "sha256": null},
+    {"role": "phase_ledger", "path": "state/phase_ledger.json", "sha256": null},
+    {"role": "project_state", "path": "state/project_state.json", "sha256": null}
+  ],
+  "step_verify": [
+    {
+      "step": "Register the post-archive sequencing deviation without backdating or reactivating the completed parent task.",
+      "verify": "The continuation task has a new task_id, ACTIVE lease and non-overlapping exact write-set before any subsequent correction write."
+    },
+    {
+      "step": "Revalidate closure schemas, immutable audit binding, governance state and foundation suite.",
+      "verify": "All schemas, audit replay, compiled check-state and check_all exit 0; strict coverage remains exit 1 with exactly 12 declared blockers."
+    },
+    {
+      "step": "Freeze the correction record and release its lease as the last worktree edit.",
+      "verify": "This task is archived as VERIFIED/RELEASED with immutable audit evidence and no blockers; no later worktree content change is made before commit."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "PRIVATE_DRAFT_CLOSURE_GOVERNANCE",
+      "evidence_path": "state/audits/20260722-release-repair-and-publish-001.json",
+      "evidence_kind": "AUDIT",
+      "command": "scripts/ci/check_audit_source_snapshot.sh state/audits/20260722-release-repair-and-publish-001.json && <BUILD_ROOT>/bin/longlineage-governance check-state --repo <REPO_ROOT> && scripts/ci/check_all.sh <BUILD_ROOT>",
+      "exit_code": 0,
+      "output_excerpt": "Audit replay PASS with 424 blobs and tree 689842dc2b64d0e929454e0950d4917729e7e3619073d326f5f19059b22c2e2c; compiled governance PASS with a non-overlapping continuation lease; check_all 47/47 in 104.56 seconds, no-network PASS and FOUNDATION_PASS; P0-P8 remain 0/9 VERIFIED.",
+      "evidence_sha256": "7709d45fab7f1247dc93d7c06c022d17234dbd2c2b87b3cdc0c6038134a5a9ac",
+      "recorded_at": "2026-07-23T01:30:46+08:00"
+    }
+  ],
+  "deviations": [
+    "The parent publication task was moved to archive before the strengthened remote assertion changed the audit physical SHA. Root then synchronized the new SHA and timestamps while that parent lease was already RELEASED. This was a governance sequencing error, not a data or scientific-content error; it is recorded here without backdating or fabricating an earlier lease.",
+    "The local interactive shell did not provide clang-format-14 or Ruby. No C++ or workflow file changed after the already formatted and hosted-green fa1249b implementation; git diff confirmed implementation and presentation paths unchanged, /usr/bin/python3 parsed the unchanged workflow YAML, and the final closure head still requires hosted format and workflow jobs before handoff."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-23T01:30:46+08:00"
+}

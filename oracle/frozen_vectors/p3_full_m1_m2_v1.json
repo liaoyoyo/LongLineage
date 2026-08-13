@@ -1,0 +1,322 @@
+{
+  "schema_name": "longlineage.p3_full_m1_m2.synthetic_vectors",
+  "schema_version": "1.0.0",
+  "scope": "SYNTHETIC_ONLY_NOT_PRODUCTION_AUTHORITY",
+  "compatibility_contract": {
+    "observed_distance": "BERNOULLI_FROM_RAW_BINARY32_POINT_THEN_HISTORICAL_FIXED_SETPRECISION_6",
+    "null_methylation": "HISTORICAL_REGIONWRITER_FIXED_SETPRECISION_4",
+    "production_primary": "UNDECIDED_REQUIRES_SEPARATE_EVIDENCE",
+    "null_mode": "column",
+    "coarse_seeds": 10,
+    "coarse_seed_formula": "20260622 + seed_index * 101",
+    "coarse_percentile": 95.0,
+    "fine_seed": 20260622,
+    "fine_percentile": 90.0,
+    "null_replicates": 40,
+    "minimum_valid_null": 32,
+    "strict_split_threshold": true,
+    "m2_permutations": 499,
+    "m2_add_one_p": true
+  },
+  "generator": {
+    "python": "3.9.12",
+    "numpy": "1.23.5",
+    "scipy": "1.13.1",
+    "sklearn": "1.6.1",
+    "focal_alt_cluster_lib_sha256": "ed5f3c99461248248b20a9f49597ab5de7340a1e2055d77a1d83dbcc2799b72a",
+    "m2_screen_gate_sha256": "f3d932388bf8ddc90f8fa1a136f6203dfe8d9f5aa9979ae32e9d936c2a413b79",
+    "region_writer_sha256": "6ef329302a364ff81d5bdf7846ae214038bcacae7b0101999777e167b707c120"
+  },
+  "round4_points": [
+    {"ml_raw": 0, "raw_point": 0.0, "historical_matrix_point_round4": 0.0},
+    {"ml_raw": 1, "raw_point": 0.003921568859368563, "historical_matrix_point_round4": 0.0039},
+    {"ml_raw": 2, "raw_point": 0.007843137718737125, "historical_matrix_point_round4": 0.0078},
+    {"ml_raw": 12, "raw_point": 0.0470588244497776, "historical_matrix_point_round4": 0.0471},
+    {"ml_raw": 25, "raw_point": 0.09803921729326248, "historical_matrix_point_round4": 0.098},
+    {"ml_raw": 127, "raw_point": 0.49803921580314636, "historical_matrix_point_round4": 0.498},
+    {"ml_raw": 128, "raw_point": 0.501960813999176, "historical_matrix_point_round4": 0.502},
+    {"ml_raw": 230, "raw_point": 0.9019607901573181, "historical_matrix_point_round4": 0.902},
+    {"ml_raw": 243, "raw_point": 0.9529411792755127, "historical_matrix_point_round4": 0.9529},
+    {"ml_raw": 254, "raw_point": 0.9960784316062927, "historical_matrix_point_round4": 0.9961},
+    {"ml_raw": 255, "raw_point": 1.0, "historical_matrix_point_round4": 1.0}
+  ],
+  "m1_fixtures": [
+    {
+      "name": "two_group_positive",
+      "recipe": "12x12 raw binary32 points; rows 0-5 low raw12 with raw25 when (column+row)%5=0; rows 6-11 high raw243 with raw230 at the same positions; observed distance round6 and null methylation round4",
+      "expected": {
+        "forced_k": 2,
+        "forced_silhouette": 0.879758284789797,
+        "forced_labels": [2,2,2,2,2,2,1,1,1,1,1,1],
+        "coarse_ng": 2,
+        "modal_fraction": 1.0,
+        "fine_ng": 2,
+        "n_other": 0,
+        "n_outlier": 0,
+        "unstable": false,
+        "ng_min": 2,
+        "ng_max": 2,
+        "seed_group_counts": [2,2,2,2,2,2,2,2,2,2],
+        "modal_assignment_pair_count": 45,
+        "modal_assignment_ari_median": 1.0,
+        "modal_assignment_ari_min": 1.0,
+        "modal_assignment_all_pairs_ari_ge_0_8": true,
+        "hidden_heterogeneity": false,
+        "stable_null_multigroup": true,
+        "coarse_labels": ["1-2","1-2","1-2","1-2","1-2","1-2","1-1","1-1","1-1","1-1","1-1","1-1"],
+        "fine_labels": ["1-2","1-2","1-2","1-2","1-2","1-2","1-1","1-1","1-1","1-1","1-1","1-1"],
+        "partition_sha256": "2e23283aa494a3f7be4bc05759b572fa98ff6400d819d6407302d2ec64e89603",
+        "coarse_trace": [
+          {
+            "n_node": 12,
+            "child_sizes": [6,6],
+            "observed_between_within": 8.316784595148427,
+            "null_percentile": 95.0,
+            "null_threshold": 1.3433611273092518,
+            "empirical_p": 0.024390243902439025,
+            "n_valid_null": 40,
+            "passed": true
+          }
+        ],
+        "fine_trace": [
+          {
+            "n_node": 12,
+            "child_sizes": [6,6],
+            "observed_between_within": 8.316784595148427,
+            "null_percentile": 90.0,
+            "null_threshold": 1.3019309974493403,
+            "empirical_p": 0.024390243902439025,
+            "n_valid_null": 40,
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "three_group_recursive",
+      "recipe": "18x12 raw binary32 points; six rows each for low-low-high, low-high-low and high-low-low 4-column blocks; deterministic raw25/raw230 perturbations; observed distance round6 and null methylation round4",
+      "expected": {
+        "forced_k": 3,
+        "forced_silhouette": 0.8384040455711373,
+        "forced_labels": [2,2,2,2,2,2,3,3,3,3,3,3,1,1,1,1,1,1],
+        "coarse_ng": 3,
+        "modal_fraction": 1.0,
+        "fine_ng": 3,
+        "n_other": 0,
+        "n_outlier": 0,
+        "unstable": false,
+        "ng_min": 3,
+        "ng_max": 3,
+        "seed_group_counts": [3,3,3,3,3,3,3,3,3,3],
+        "modal_assignment_pair_count": 45,
+        "modal_assignment_ari_median": 1.0,
+        "modal_assignment_ari_min": 1.0,
+        "modal_assignment_all_pairs_ari_ge_0_8": true,
+        "hidden_heterogeneity": false,
+        "stable_null_multigroup": true,
+        "coarse_labels": ["1-1-1","1-1-1","1-1-1","1-1-1","1-1-1","1-1-1","1-1-2","1-1-2","1-1-2","1-1-2","1-1-2","1-1-2","1-2","1-2","1-2","1-2","1-2","1-2"],
+        "fine_labels": ["1-1-1","1-1-1","1-1-1","1-1-1","1-1-1","1-1-1","1-1-2","1-1-2","1-1-2","1-1-2","1-1-2","1-1-2","1-2","1-2","1-2","1-2","1-2","1-2"],
+        "partition_sha256": "abf66a8464a9b63ff3e166c30cd7e667969bcf32a8deee03c51079766acf78bc",
+        "coarse_trace": [
+          {
+            "n_node": 18,
+            "child_sizes": [6,12],
+            "observed_between_within": 1.8808177800684087,
+            "null_percentile": 95.0,
+            "null_threshold": 1.2978057230381048,
+            "empirical_p": 0.024390243902439025,
+            "n_valid_null": 40,
+            "passed": true
+          },
+          {
+            "n_node": 12,
+            "child_sizes": [6,6],
+            "observed_between_within": 6.2230195440124705,
+            "null_percentile": 95.0,
+            "null_threshold": 1.4385867135198285,
+            "empirical_p": 0.024390243902439025,
+            "n_valid_null": 40,
+            "passed": true
+          }
+        ],
+        "fine_trace": [
+          {
+            "n_node": 18,
+            "child_sizes": [6,12],
+            "observed_between_within": 1.8808177800684087,
+            "null_percentile": 90.0,
+            "null_threshold": 1.2837500847086856,
+            "empirical_p": 0.024390243902439025,
+            "n_valid_null": 40,
+            "passed": true
+          },
+          {
+            "n_node": 12,
+            "child_sizes": [6,6],
+            "observed_between_within": 6.2230195440124705,
+            "null_percentile": 90.0,
+            "null_threshold": 1.4180741774710561,
+            "empirical_p": 0.024390243902439025,
+            "n_valid_null": 40,
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "one_group_negative",
+      "recipe": "12x12 raw binary32 homogeneous low raw12 with raw25 when (row*3+column*5)%7=0; observed distance round6 and null methylation round4",
+      "expected": {
+        "forced_k": 0,
+        "forced_silhouette": null,
+        "forced_labels": [],
+        "coarse_ng": 1,
+        "modal_fraction": 1.0,
+        "fine_ng": 1,
+        "n_other": 0,
+        "n_outlier": 0,
+        "unstable": false,
+        "ng_min": 1,
+        "ng_max": 1,
+        "seed_group_counts": [1,1,1,1,1,1,1,1,1,1],
+        "modal_assignment_pair_count": 45,
+        "modal_assignment_ari_median": 1.0,
+        "modal_assignment_ari_min": 1.0,
+        "modal_assignment_all_pairs_ari_ge_0_8": true,
+        "hidden_heterogeneity": false,
+        "stable_null_multigroup": false,
+        "coarse_labels": ["1","1","1","1","1","1","1","1","1","1","1","1"],
+        "fine_labels": ["1","1","1","1","1","1","1","1","1","1","1","1"],
+        "partition_sha256": "a802952fbb5ded105e40b4caf457590cf3c06a8c60ef98ed7a185643c15f773d",
+        "coarse_trace": [],
+        "fine_trace": []
+      }
+    }
+  ],
+  "m2_associations": [
+    {
+      "name": "categorical_positive",
+      "kind": "categorical",
+      "seed": 12345,
+      "recipe": "labels G1x10,G2x10; values Ax10,Bx10",
+      "expected": {"effect": 1.0, "p_perm": 0.002, "n": 20, "exceedance": 0, "aligned": true}
+    },
+    {
+      "name": "categorical_null",
+      "kind": "categorical",
+      "seed": 12346,
+      "recipe": "labels G1x10,G2x10; values alternating A,B within each group",
+      "expected": {"effect": 0.0, "p_perm": 1.0, "n": 20, "exceedance": 499, "aligned": false}
+    },
+    {
+      "name": "categorical_constant",
+      "kind": "categorical",
+      "seed": 12347,
+      "recipe": "labels G1x10,G2x10; values Ax20",
+      "expected": {"effect": null, "p_perm": null, "n": 20, "exceedance": 0, "aligned": false}
+    },
+    {
+      "name": "continuous_positive",
+      "kind": "continuous",
+      "seed": 54321,
+      "recipe": "labels G1x10,G2x10; values 0..9,100..109",
+      "expected": {"effect": 0.9967108541812021, "p_perm": 0.002, "n": 20, "exceedance": 0, "aligned": true}
+    },
+    {
+      "name": "continuous_null",
+      "kind": "continuous",
+      "seed": 54322,
+      "recipe": "labels G1x10,G2x10; values 0..9 repeated in each group",
+      "expected": {"effect": 0.0, "p_perm": 1.0, "n": 20, "exceedance": 499, "aligned": false}
+    },
+    {
+      "name": "continuous_missing",
+      "kind": "continuous",
+      "seed": 54323,
+      "recipe": "labels G1x10,G2x10; values 0..8,NaN repeated in each group",
+      "expected": {"effect": 0.0, "p_perm": 1.0, "n": 18, "exceedance": 499, "aligned": false}
+    },
+    {
+      "name": "categorical_three_group",
+      "kind": "categorical",
+      "seed": 60001,
+      "recipe": "labels G1x6,G2x6,G3x6; values Ax6,Bx6,Cx6",
+      "expected": {"effect": 1.0, "p_perm": 0.002, "n": 18, "exceedance": 0, "aligned": true}
+    },
+    {
+      "name": "continuous_three_group",
+      "kind": "continuous",
+      "seed": 60002,
+      "recipe": "labels G1x6,G2x6,G3x6; values 0..5,50..55,100..105",
+      "expected": {
+        "effect": 0.9982530571499876,
+        "p_perm": 0.002,
+        "n": 18,
+        "exceedance": 0,
+        "aligned": true
+      }
+    }
+  ],
+  "m2_eight_axis": [
+    {
+      "name": "residual_determinate",
+      "recipe": {"n_per_group": 80, "kind": "residual", "base_seed": 70020},
+      "expected": {
+        "hp_axis_confound": false,
+        "technical_axis_confound": false,
+        "axis_indeterminate": false,
+        "residual_unexplained": true,
+        "axes": [
+          {"name":"hp_exact","effect":null,"p_perm":null,"status":"NOT_ALIGNED_AXIS_HAS_NO_OBSERVED_VARIATION","adequate":true,"override":false},
+          {"name":"hp_family","effect":null,"p_perm":null,"status":"NOT_ALIGNED_AXIS_HAS_NO_OBSERVED_VARIATION","adequate":true,"override":false},
+          {"name":"strand","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"start","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"end","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"length","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"mapq","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"cpg_called","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false}
+        ]
+      }
+    },
+    {
+      "name": "hp_aligned_low_power_override",
+      "recipe": {"n_per_group": 10, "kind": "hp", "base_seed": 70029},
+      "expected": {
+        "hp_axis_confound": true,
+        "technical_axis_confound": false,
+        "axis_indeterminate": true,
+        "residual_unexplained": false,
+        "axes": [
+          {"name":"hp_exact","effect":1.0,"p_perm":0.002,"status":"ALIGNED_EFFECT_AND_PERMUTATION_P_PASS","adequate":false,"override":true},
+          {"name":"hp_family","effect":1.0,"p_perm":0.002,"status":"ALIGNED_EFFECT_AND_PERMUTATION_P_PASS","adequate":false,"override":true},
+          {"name":"strand","effect":0.0,"p_perm":1.0,"status":"INDETERMINATE_INSUFFICIENT_INFORMATION_FOR_EFFECT_THRESHOLD","adequate":false,"override":false},
+          {"name":"start","effect":0.0,"p_perm":1.0,"status":"INDETERMINATE_INSUFFICIENT_INFORMATION_FOR_EFFECT_THRESHOLD","adequate":false,"override":false},
+          {"name":"end","effect":0.0,"p_perm":1.0,"status":"INDETERMINATE_INSUFFICIENT_INFORMATION_FOR_EFFECT_THRESHOLD","adequate":false,"override":false},
+          {"name":"length","effect":0.0,"p_perm":1.0,"status":"INDETERMINATE_INSUFFICIENT_INFORMATION_FOR_EFFECT_THRESHOLD","adequate":false,"override":false},
+          {"name":"mapq","effect":0.0,"p_perm":1.0,"status":"INDETERMINATE_INSUFFICIENT_INFORMATION_FOR_EFFECT_THRESHOLD","adequate":false,"override":false},
+          {"name":"cpg_called","effect":0.0,"p_perm":1.0,"status":"INDETERMINATE_INSUFFICIENT_INFORMATION_FOR_EFFECT_THRESHOLD","adequate":false,"override":false}
+        ]
+      }
+    },
+    {
+      "name": "technical_aligned_determinate",
+      "recipe": {"n_per_group": 80, "kind": "tech", "base_seed": 70029},
+      "expected": {
+        "hp_axis_confound": false,
+        "technical_axis_confound": true,
+        "axis_indeterminate": false,
+        "residual_unexplained": false,
+        "axes": [
+          {"name":"hp_exact","effect":null,"p_perm":null,"status":"NOT_ALIGNED_AXIS_HAS_NO_OBSERVED_VARIATION","adequate":true,"override":false},
+          {"name":"hp_family","effect":null,"p_perm":null,"status":"NOT_ALIGNED_AXIS_HAS_NO_OBSERVED_VARIATION","adequate":true,"override":false},
+          {"name":"strand","effect":1.0,"p_perm":0.002,"status":"ALIGNED_EFFECT_AND_PERMUTATION_P_PASS","adequate":true,"override":false},
+          {"name":"start","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"end","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"length","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"mapq","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false},
+          {"name":"cpg_called","effect":0.0,"p_perm":1.0,"status":"NOT_ALIGNED_EFFECT_BELOW_THRESHOLD_WITH_ADEQUATE_POWER","adequate":true,"override":false}
+        ]
+      }
+    }
+  ]
+}

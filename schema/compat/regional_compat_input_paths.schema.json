@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_input_paths-1.0.0.json",
+  "title": "LongLineage external seven-dataset regional input path map",
+  "description": "Closed operational schema for an untracked map of private physical input paths. Repository artifacts may bind its SHA-256 but must never copy its paths.",
+  "type": "object",
+  "required": ["schema_name", "schema_version", "datasets"],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_input_paths"},
+    "schema_version": {"const": "1.0.0"},
+    "datasets": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": [
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "HCC1395"}, "dataset_order": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "HCC1395_DORADO"}, "dataset_order": {"const": 1}}}]},
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "COLO829"}, "dataset_order": {"const": 2}}}]},
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "H1437"}, "dataset_order": {"const": 3}}}]},
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "H2009"}, "dataset_order": {"const": 4}}}]},
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "HCC1937"}, "dataset_order": {"const": 5}}}]},
+        {"allOf": [{"$ref": "#/definitions/dataset"}, {"properties": {"dataset_id": {"const": "HCC1954"}, "dataset_order": {"const": 6}}}]}
+      ],
+      "additionalItems": false
+    }
+  },
+  "definitions": {
+    "path": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^/",
+      "allOf": [
+        {"not": {"pattern": "[Tt][Rr][Uu][Tt][Hh]"}},
+        {"not": {"pattern": "(^|/)\\.\\.?(/|$)"}},
+        {"not": {"pattern": "[\\r\\n]"}}
+      ]
+    },
+    "file": {
+      "type": "object",
+      "required": ["role", "path"],
+      "properties": {
+        "role": {"type": "string"},
+        "path": {"$ref": "#/definitions/path"}
+      },
+      "additionalProperties": false
+    },
+    "files": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": [
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "raw_bam"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "raw_bam_index"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "pass_biallelic_ssnv_vcf"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "pass_biallelic_ssnv_vcf_index"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "latest_hp_ps_sidecar"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "latest_hp_ps_sidecar_index"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "reference_fasta"}}}]},
+        {"allOf": [{"$ref": "#/definitions/file"}, {"properties": {"role": {"const": "reference_fai"}}}]}
+      ],
+      "additionalItems": false
+    },
+    "dataset": {
+      "type": "object",
+      "required": ["dataset_id", "dataset_order", "files"],
+      "properties": {
+        "dataset_id": {"enum": ["HCC1395", "HCC1395_DORADO", "COLO829", "H1437", "H2009", "HCC1937", "HCC1954"]},
+        "dataset_order": {"type": "integer", "minimum": 0, "maximum": 6},
+        "files": {"$ref": "#/definitions/files"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "x-longlineage-storage-policy": {
+    "git_tracked": false,
+    "log_path_value": false,
+    "allowed_record": "sha256_only",
+    "query_join": ["dataset_id", "dataset_order", "role"]
+  }
+}

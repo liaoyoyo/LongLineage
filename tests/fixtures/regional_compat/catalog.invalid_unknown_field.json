@@ -1,0 +1,31 @@
+{
+  "schema_name": "longlineage.compat_schema_catalog",
+  "schema_version": "1.0.0",
+  "profile_id": "PYTHON_V2_DESCRIPTIVE_REGIONAL_7_DATASET",
+  "scope": "EVALUATION_DESCRIPTIVE_ONLY",
+  "production_catalog_member": false,
+  "unknown_schema_policy": "FAIL_CLOSED",
+  "schemas": [
+    {
+      "id": "https://longlineage.local/schema/compat/regional_compat_summary-2.0.0.json",
+      "path": "schema/compat/regional_compat_summary.schema.json",
+      "sha256": "eb1d041db0152ef61a013099559be032919d48cb9b7b0d78325756e6847b3cad"
+    },
+    {
+      "id": "https://longlineage.local/schema/compat/regional_compat_producer_receipt-2.0.0.json",
+      "path": "schema/compat/regional_compat_producer_receipt.schema.json",
+      "sha256": "beaef61a849b3d40dd5042a4090b3469cffd2f573f7ed81e717991e9ee3b35de"
+    },
+    {
+      "id": "https://longlineage.local/schema/compat/regional_compat_validation_receipt-2.0.0.json",
+      "path": "schema/compat/regional_compat_validation_receipt.schema.json",
+      "sha256": "814cdb8ac938e7ae46f6c4b0b5b5ca28a45cd8d8494c245871b6fa2a87a30f91"
+    },
+    {
+      "id": "https://longlineage.local/schema/compat/regional_compat_cohort_receipt-1.0.0.json",
+      "path": "schema/compat/regional_compat_cohort_receipt.schema.json",
+      "sha256": "4ec6b261505dd3ff7e051bbfa1ffd4ec6966442aa7094822bddb25a278ec5ea8"
+    }
+  ],
+  "unexpected": true
+}

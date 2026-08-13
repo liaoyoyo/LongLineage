@@ -1,0 +1,66 @@
+scope=FULL_P3_M1_M2_SCIENCE_KERNEL_SYNTHETIC_AND_BOUNDED_SMALL_ONLY
+task_id=20260720-p3-full-m1-m2-axis
+owner=codex:root/hcc1395_input_runroot
+production_python_calls=0
+phase_promotion=false
+
+input_frozen_vector=LongLineage/oracle/frozen_vectors/p3_full_m1_m2_v1.json
+input_frozen_vector_sha256=9b3ae7ee7a2b07ae06c3f4532ed43598d417618998025829d42f6b266c0e62c9
+python_generator=3.9.12
+numpy_generator=1.23.5
+scipy_generator=1.13.1
+sklearn_generator=1.6.1
+focal_alt_cluster_lib_sha256=ed5f3c99461248248b20a9f49597ab5de7340a1e2055d77a1d83dbcc2799b72a
+m2_screen_gate_sha256=f3d932388bf8ddc90f8fa1a136f6203dfe8d9f5aa9979ae32e9d936c2a413b79
+region_writer_sha256=6ef329302a364ff81d5bdf7846ae214038bcacae7b0101999777e167b707c120
+
+compatibility_observed_distance=BERNOULLI_FROM_RAW_BINARY32_ML_RAW_DIV_255_THEN_FIXED_SETPRECISION_6
+compatibility_null_methylation=RAW_BINARY32_ML_RAW_DIV_255_THEN_REGIONWRITER_FIXED_SETPRECISION_4
+compatibility_production_primary=UNDECIDED_REQUIRES_SEPARATE_EVIDENCE
+compatibility_sam_ml_interval=SEPARATE_IO_CONTRACT_NOT_USED_AS_M1_POINT_ESTIMATE
+
+debug_command=/usr/bin/g++ -std=c++17 -O0 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -pthread -Iinclude tests/parity/test_p3_full_m1_m2.cpp src/m1/science.cpp src/m2/eligibility.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-p3-full-parity-debug
+debug_run=/tmp/longlineage-p3-full-parity-debug <REPO_ROOT>
+debug_exit=0
+debug_output=p3_full_parity: PASS m1_fixtures=3 m1_trace_splits=6 m2_associations=8 m2_axes=24 invariance_cases=34 negative_cases=4 m1_full_clustering=IMPLEMENTED production_python_calls=0
+
+release_command=/usr/bin/g++ -std=c++17 -O2 -DNDEBUG -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -pthread -Iinclude tests/parity/test_p3_full_m1_m2.cpp src/m1/science.cpp src/m2/eligibility.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-p3-full-parity-release
+release_run=/tmp/longlineage-p3-full-parity-release <REPO_ROOT>
+release_exit=0
+release_output=p3_full_parity: PASS m1_fixtures=3 m1_trace_splits=6 m2_associations=8 m2_axes=24 invariance_cases=34 negative_cases=4 m1_full_clustering=IMPLEMENTED production_python_calls=0
+
+sanitizer_command=/usr/bin/g++ -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer -pthread -Iinclude tests/parity/test_p3_full_m1_m2.cpp src/m1/science.cpp src/m2/eligibility.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-p3-full-parity-asan-ubsan
+sanitizer_run=ASAN_OPTIONS=detect_leaks=1 /tmp/longlineage-p3-full-parity-asan-ubsan <REPO_ROOT>
+sanitizer_exit=0
+sanitizer_output=p3_full_parity: PASS m1_fixtures=3 m1_trace_splits=6 m2_associations=8 m2_axes=24 invariance_cases=34 negative_cases=4 m1_full_clustering=IMPLEMENTED production_python_calls=0
+
+regression_command=/usr/bin/g++ -std=c++17 -O2 -DNDEBUG -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -pthread -Iinclude tests/unit/test_science_parity.cpp src/m1/science.cpp src/m1/hp_family.cpp src/m2/eligibility.cpp src/cooccurrence/statistics.cpp src/common/digest.cpp -ljansson -lcrypto -o /tmp/longlineage-science-parity-release
+regression_run=/tmp/longlineage-science-parity-release <REPO_ROOT>
+regression_exit=0
+regression_output=science_parity: PASS pinned_cases=99 independent_cases=2 negative_cases=5 m1_full_clustering=IMPLEMENTED_IN_P3_PARITY production_python_calls=0
+
+bounded_helper_command=/usr/bin/g++ -std=c++17 -O2 -DNDEBUG -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -pthread -Iinclude tests/parity/bounded_real_m1_helper.cpp src/m1/science.cpp src/common/digest.cpp -lcrypto -o /tmp/longlineage-bounded-real-m1-helper
+bounded_helper_run=/tmp/longlineage-bounded-real-m1-helper tests/parity/fixtures/m1_two_group_distance_round6.csv tests/parity/fixtures/m1_two_group_methylation_round4.csv synthetic-two-group 4
+bounded_helper_exit=0
+bounded_helper_output={"schema_name":"longlineage.bounded_real_m1_parity","schema_version":"1.0.0","scope":"BOUNDED_REAL_READ_ONLY_NOT_PRODUCTION_AUTHORITY","input_mode":"HISTORICAL_DISTANCE_ROUND6_NULL_METHYLATION_ROUND4","key_sha256":"1942976346c8844257696a9c20091dc9fee8cf95b8c9adc73ac8cf897e3c7479","status":"FULL_CLUSTERING_READY","n_input":12,"n_retained":12,"forced_k":2,"coarse_k":2,"fine_k":2,"stable_null_multigroup":true,"partition_sha256":"2e23283aa494a3f7be4bc05759b572fa98ff6400d819d6407302d2ec64e89603","trace_sha256":"aa17961e98a20744edbb22aa3aea26aaba897fa1f922a321fe8a8bbdbc926f1e","coordinates_emitted":false,"read_names_emitted":false}
+
+format_command=/tmp/clang-format-14-root/usr/bin/clang-format-14 --dry-run --Werror include/longlineage/m1/science.hpp src/m1/science.cpp include/longlineage/m2/eligibility.hpp src/m2/eligibility.cpp tests/unit/test_science_parity.cpp tests/parity/test_p3_full_m1_m2.cpp tests/parity/bounded_real_m1_helper.cpp
+format_exit=0
+jq_command=jq empty oracle/frozen_vectors/p3_full_m1_m2_v1.json
+jq_exit=0
+diff_check_command=git diff --check -- include/longlineage/m1 src/m1 include/longlineage/m2 src/m2 oracle/frozen_vectors/p3_full_m1_m2_v1.json tests/unit/test_science_parity.cpp tests/parity
+diff_check_exit=0
+governance_state_command=LongLineage/build-cpp-output-validation/bin/longlineage-governance check-state --repo <REPO_ROOT>
+governance_state_exit=0
+governance_state_output=project state, P0-P8 ledger and 9 active AI task records, owner leases and non-overlapping write sets are internally consistent
+
+verified_m1=NumPy-1.23.5-PCG64; Bernoulli distance; SciPy-1.13.1-average-linkage; fcluster-maxclust; forced silhouette; recursive column-null split; ten coarse seeds; fine seed; modal-first tie; ARI; stable-gate; canonical partition and deterministic traces
+verified_m2=Cramers-V and eta-squared with 499 PCG64 permutations; add-one p; two-group and three-group cases; eight-axis seed mapping; power and precedence; input-order and label-renaming invariance; deterministic traces
+verified_parallelism=M1 worker-count 1 versus 4 produces identical status, K, labels, partition digest and trace digest
+verified_fail_closed=duplicate stable keys, incomplete integrated M2 axes, wrong permutation count and out-of-range historical methylation points throw explicit errors
+
+known_correction=Observed M1 BERNOULLI distances and null methylation values initially shared one unrounded matrix. Historical RegionWriter serializes distance at fixed precision 6 and methylation at fixed precision 4; a last-bit BLAS tie can alter SciPy leaf order and null threshold. The implementation now exposes and tests both representations explicitly instead of masking the mismatch with tolerance.
+known_governance_correction=The first active-task claim covered the entire frozen-vector directory and overlapped another agent. The claim was narrowed to exact P3 files before further shared work; check-state then passed.
+remaining_boundary=CMake, CLI, BAM/VCF/sidecar IO, validators, provenance manifests, production HCC1395 execution and HTML generation are outside this child write-set.
+remaining_boundary=The bounded helper is a read-only compatibility probe and is not production authority.
+remaining_boundary=Choosing raw-point or historical serialized values as the future production primary remains a separately gated decision.

@@ -1,0 +1,139 @@
+receipt_name=longlineage.p4_joint_signature_frozen_vectors
+receipt_version=1.0.0
+created_at=2026-07-20T05:35:03+08:00
+status=VERIFIED
+task_id=20260720-joint-signature-global-fdr
+task_type=B
+scope=SYNTHETIC_SMALL_ORACLE_ONLY
+scope_warning=This receipt does not assert HCC1395, seven-dataset, production-runtime, biological-result, or end-to-end parity.
+production_python_calls=0
+
+[authority]
+signed_v5_authority_path=<INTERSUBMOD_ROOT>/docs/provenance/source_authorities/20260718_all_ssnv_focal_alt_release_source_authority.v5.json
+signed_v5_authority_sha256=0b68438b1dfc8d4123a03089e98f79bdd9d3ee0ab77110eb40937e9426e851fc
+signed_v5_authorized_git_head=0ee2fa1b31fcf6af670efd301251b5b3a24c1a99
+signed_v5_analyzer_path=<INTERSUBMOD_ROOT>/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/analyze_methyl_ssnv_cooccurrence.py
+signed_v5_analyzer_sha256=3d7650983fce68abc122748d167e56b9a53bc6ef9775b9b1beb19793e25a769c
+signed_v5_analyzer_size_bytes=208031
+live_analyzer_sha256=6dc673fafaeeb7e0c0c8335915a0b8ea1a9b14c9344132e1640a93f96c7ac4f0
+live_analyzer_size_bytes=210257
+exact_science_library_path=<INTERSUBMOD_ROOT>/scripts/ssnv_cooccurrence_lib.py
+exact_science_library_sha256=3d41023b03f1f047312011f8513b685bf7ffe25f5d0795d253bc9013b9ec88ff
+exact_science_library_size_bytes=24577
+authority_deviation=The live analyzer differs from the signed-v5 analyzer. Per parent authorization, signed-v5 plus the byte-identical exact science library are the authority; the live analyzer is used only to locate unchanged functions and post-v5 execution/provenance additions. Claims are limited to per-function frozen-vector parity.
+
+[source_mapping]
+top_partner_ranking=analyze_methyl_ssnv_cooccurrence.py:2782
+joint_signature_complete_read_and_effect_gate=analyze_methyl_ssnv_cooccurrence.py:2593
+joint_signature_global_fdr=analyze_methyl_ssnv_cooccurrence.py:2165
+formal_topology_candidate_gate=analyze_methyl_ssnv_cooccurrence.py:3401,3408
+marker_association=ssnv_cooccurrence_lib.py:165
+categorical_association=ssnv_cooccurrence_lib.py:331
+conditional_label_permutation=ssnv_cooccurrence_lib.py:360
+benjamini_hochberg=ssnv_cooccurrence_lib.py:582
+benjamini_yekutieli=ssnv_cooccurrence_lib.py:597
+
+[frozen_rules]
+top_markers=3
+minimum_spacing_bp=20
+permutations=999
+minimum_total=10
+minimum_group=3
+minimum_category_or_allele=3
+cramers_v_minimum=0.30
+delta_alt_fraction_minimum=0.50
+conditional_p_maximum=0.05
+global_q_maximum=0.05
+formal_global_method=BY
+complete_read_rule=Every selected marker is R/A on the identical M1-core read set.
+stratum_rule=latest_HP_family|PS=<phase_set>|strand=<strand>
+pass_rule=M2 eligible AND global joint BY discovery AND at least two >=20bp-spaced formal pairs AND at least two spaced coverage-top formal pairs AND at least two spaced top formal pairs retaining the same-complete-read effect gate.
+selected_partner_rule=Use the final same-complete/effect-supported/top/formal/spaced set, but emit site_order values in original deterministic coverage-ranking order.
+m2_ineligible_rule=Keep the site in the global census as INELIGIBLE_M2_SCREEN; do not run the 999-permutation joint kernel; finalize a cheap NOT_EVALUATED result without a complete-readset digest.
+
+[deterministic_deviations]
+read_order=Opaque lowercase 64-hex read IDs are UTF-8-byte sorted before permutation. Historical incidental input ordering is not copied.
+stratum_order=Strata use lexicographic map order. Synthetic Python vectors use the same order.
+global_order=Rows are sorted by stable_site_key; tied p-values use stable_site_key as deterministic secondary order.
+invalid_p=Non-finite, out-of-range, or non-999-add-one-grid p-values are excluded as INVALID_JOINT_SIGNATURE_PERMUTATION_EVIDENCE and invalidate the aggregate evidence flag.
+fewer_than_two_markers=The contingency table is empty, matching the historical output contract.
+
+[python_small_oracles]
+runtime=<PYTHON_AUTHORITY_ENV>/bin/python
+python_version=3.11.15
+numpy_version=1.25.2
+scipy_version=1.9.2
+positive_24=table[[0,12],[12,0]];V=1;p=0.001;exceedance=0;both markers effect-pass
+balanced_null_20=table[[5,5],[5,5]];V=0;p=1;exceedance=999
+intermediate_24=table[[3,9],[7,5]];V=0.3380617018914066;seed=73;p=0.214;exceedance=213
+nonexchangeable_12=NOT_IDENTIFIABLE_NONEXCHANGEABLE;permutations=0
+one_marker_effect_20=joint p=0.001;only position 1100 passes the same-complete-read effect gate
+rare_category_12=CATEGORY_BELOW_MINIMUM
+global_bh=0.004,0.01,0.02666666666666667,0.2
+global_by=0.008333333333333335,0.020833333333333336,0.055555555555555566,0.41666666666666674
+
+[complete_readset_contract]
+canonical_header=longlineage.topology_joint_complete_readset<TAB>1.0.0<LF>reads=N<LF>
+canonical_row=<ASCII decimal byte length>:<raw lowercase 64-hex opaque read ID>|<LF>
+canonical_order=UTF-8 byte order
+duplicates=FAIL_CLOSED
+malformed_ids=FAIL_CLOSED
+vector=24 zero-padded lowercase 64-hex IDs representing integers 0 through 23
+digest=f9a34ec03d93a5c1dcce24160fe5eb9d121090f43e286505f8ad72af170c2672
+independent_p5_replay=PASS; /root/topology_membership_contract obtained the exact same digest with the independently implemented topology helper under strict GCC -Werror.
+
+[build_inputs]
+header=include/longlineage/cooccurrence/joint_signature.hpp
+source=src/cooccurrence/joint_signature.cpp
+test=tests/unit/test_joint_signature.cpp
+dependency_m1=src/m1/science.cpp
+dependency_digest=src/common/digest.cpp
+
+[debug]
+command=/usr/bin/g++ -std=c++17 -O0 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -pthread -Iinclude tests/unit/test_joint_signature.cpp src/cooccurrence/joint_signature.cpp src/m1/science.cpp src/common/digest.cpp -lcrypto -o /tmp/longlineage-test-joint-signature-debug
+binary_sha256=a97468eff5ed155b76888395e961bbcd38c8e7b764ad0ddd6a29884331c0d6a0
+run_command=/tmp/longlineage-test-joint-signature-debug
+exit_code=0
+
+[release]
+command=/usr/bin/g++ -std=c++17 -O3 -DNDEBUG -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -pthread -Iinclude tests/unit/test_joint_signature.cpp src/cooccurrence/joint_signature.cpp src/m1/science.cpp src/common/digest.cpp -lcrypto -o /tmp/longlineage-test-joint-signature-release
+binary_sha256=f6fbf92a627637d3e03a776ce3ecf47dde112f979be92d47e8705f3e68790b60
+run_command=/tmp/longlineage-test-joint-signature-release
+exit_code=0
+
+[asan_ubsan]
+command=/usr/bin/g++ -std=c++17 -O1 -g -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer -pthread -Iinclude tests/unit/test_joint_signature.cpp src/cooccurrence/joint_signature.cpp src/m1/science.cpp src/common/digest.cpp -lcrypto -o /tmp/longlineage-test-joint-signature-asan
+binary_sha256=49c791dc510e338c5443e0cc029395f806b07a9ec1105a229ac33c81ac5ab748
+run_command=ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 /tmp/longlineage-test-joint-signature-asan
+exit_code=0
+sanitizer_findings=0
+
+[exact_test_output]
+line=joint_signature: PASS oracle_cases=9 top_partner_cases=1 fdr_rows=11 topology_gate_cases=3 invariance_cases=4 negative_cases=10 positive_trace=9a4fab2a6f90dee4bd3cc345d969168d8c7d1ddbf2697ef301126c722a36b4f4 complete_readset_trace=f9a34ec03d93a5c1dcce24160fe5eb9d121090f43e286505f8ad72af170c2672 fdr_trace=daef4675f35dc17779bf93a0b362838938d3355fc5997ee6586f2e200a4a140b topology_trace=8bd49c708a99b7086579bb207e9275e3054ee31bf8ff02cea82a5aff1f6313cb production_python_calls=0
+debug_release_asan_exact_output_match=true
+
+[frozen_source_hashes]
+include/longlineage/cooccurrence/joint_signature.hpp=8b45e7f7bd8a5296a42d63357b6c3372befddca1151f8590c09295d8f672064f
+src/cooccurrence/joint_signature.cpp=8448e1cce5521294239bc697b2ee37f16a129564e6c95e44f959c5d34ab72e9b
+tests/unit/test_joint_signature.cpp=83f1c786007a2a39af0fe6b644a95946cba1ac97b6d57b1195b0cb13befc633b
+
+[independent_parent_replay]
+replayed_at=2026-07-20T05:38:26+08:00
+replayer=codex:root
+binary=/tmp/longlineage-test-joint-signature-release
+expected_binary_sha256=f6fbf92a627637d3e03a776ce3ecf47dde112f979be92d47e8705f3e68790b60
+observed_binary_sha256=f6fbf92a627637d3e03a776ce3ecf47dde112f979be92d47e8705f3e68790b60
+exit_code=0
+exact_output_match=true
+observed_oracle_cases=9
+observed_topology_gate_cases=3
+observed_negative_cases=10
+observed_topology_trace=8bd49c708a99b7086579bb207e9275e3054ee31bf8ff02cea82a5aff1f6313cb
+
+[exclusions]
+cmake=NOT_MODIFIED_BY_THIS_TASK
+existing_cooccurrence_files=NOT_MODIFIED_BY_THIS_TASK
+production_orchestration=OUT_OF_SCOPE
+hcc1395_execution=NOT_RUN
+html_generation=NOT_RUN
+phase_promotion=NOT_AUTHORIZED_BY_THIS_RECEIPT

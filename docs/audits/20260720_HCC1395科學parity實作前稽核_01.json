@@ -1,0 +1,63 @@
+{
+  "schema_name": "longlineage.pre_decision_audit",
+  "schema_version": "1.0.0",
+  "audit_id": "20260720-hcc1395-scientific-parity-predecision-001",
+  "task_id": "20260720-hcc1395-scientific-parity",
+  "task_type": "B",
+  "scope": "FULL_HCC1395_DATASET_GATE",
+  "cynefin_domain": "COMPLEX",
+  "score": 50,
+  "dimensions": {
+    "theory": 20,
+    "observation": 10,
+    "mechanism": 10,
+    "counter_risk": 10,
+    "resource": 0
+  },
+  "verdict": "PROBE",
+  "production_claim_allowed": false,
+  "full_run_allowed": false,
+  "falsifiers": [
+    "ANY_FROZEN_KEY_STATUS_DECISION_OR_SEMANTIC_DIGEST_MISMATCH",
+    "ANY_SIDECAR_IDENTITY_MISSING_EXTRA_MULTIMATCH_OR_CONFLICT",
+    "INCOMPLETE_FAMILY_PUBLISHES_RANK_OR_WINNER",
+    "VALIDATOR_CANNOT_INDEPENDENTLY_REPLAY_CONSERVATION_AND_DIGESTS",
+    "WORKER_COUNT_CHANGES_SEMANTIC_SHA256",
+    "HCC_GATE_MISLABELED_AS_SEVEN_DATASET_PRODUCTION"
+  ],
+  "required_probe_order": [
+    "FREEZE_P3_P4_P5_VECTORS",
+    "P3_CPP_AND_INDEPENDENT_ORACLE",
+    "P4_CPP_AND_INDEPENDENT_ORACLE",
+    "P5_SCHEMA_SOLVER_AND_INDEPENDENT_ORACLE",
+    "P6_STAGING_VALIDATOR_ATOMIC_FREEZE",
+    "BOUNDED_REAL_HCC",
+    "FULL_HCC_24_40_WORKER"
+  ],
+  "conflicts": [
+    {
+      "evidence": "InterSubMod/docs/reports/validated/2026/04/20260401_LOH_weekly_review/06_methylation_hypothesis_negative.md",
+      "relation": "DEPENDENT_BOUNDARY",
+      "effect": "Methylation cannot be used as somatic truth or TO LOH scenario discriminator; LOH and strict infinite-sites remain independently gated."
+    },
+    {
+      "evidence": "oracle/authority_manifest.json#cooccurrence_live_source",
+      "relation": "DIRECT",
+      "effect": "No successful historical full co-occurrence authority exists."
+    },
+    {
+      "evidence": "docs/decisions/ADR-0005-topology-ranking-separation.md",
+      "relation": "DIRECT",
+      "effect": "Objective, family and ranking completion are independent; current hard cases are NO-GO."
+    }
+  ],
+  "red_team_failure_modes": [
+    "AGGREGATE_ONLY_FALSE_PARITY",
+    "INCOMPATIBLE_HISTORICAL_METHOD_AS_GOLDEN",
+    "OBJECTIVE_FAMILY_RANKING_CONFLATION",
+    "NON_INDEPENDENT_VALIDATOR",
+    "BOUNDED_SPEEDUP_EXTRAPOLATED_TO_NFS_FULL_RUN"
+  ],
+  "next_action": "IMPLEMENT_FROZEN_BOUNDED_PROBES",
+  "created_at": "2026-07-20T02:45:00+08:00"
+}

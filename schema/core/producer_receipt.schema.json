@@ -10,11 +10,15 @@
     "state",
     "producer_outcome",
     "producer_executable_sha256",
+    "producer_hostname",
+    "producer_kernel_release",
+    "input_mount_identity",
     "manifest_sha256",
     "input_snapshot_before_sha256",
     "input_snapshot_after_sha256",
     "schema_catalog_sha256",
     "science_parameters_sha256",
+    "run_receipt_draft",
     "artifacts",
     "truth_fields_seen",
     "finished_at"
@@ -26,11 +30,23 @@
     "state": {"enum": ["RUNNING", "FAILED"]},
     "producer_outcome": {"enum": ["READY_FOR_VALIDATION", "FAILED"]},
     "producer_executable_sha256": {"$ref": "#/$defs/sha256"},
+    "producer_hostname": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,252}$"
+    },
+    "producer_kernel_release": {"type": "string", "minLength": 1, "maxLength": 255},
+    "input_mount_identity": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/mount_identity"}
+    },
     "manifest_sha256": {"$ref": "#/$defs/sha256"},
     "input_snapshot_before_sha256": {"$ref": "#/$defs/sha256"},
     "input_snapshot_after_sha256": {"$ref": "#/$defs/sha256"},
     "schema_catalog_sha256": {"$ref": "#/$defs/sha256"},
     "science_parameters_sha256": {"$ref": "#/$defs/sha256"},
+    "run_receipt_draft": {"$ref": "#/$defs/run_receipt_draft"},
     "artifacts": {
       "type": "array",
       "uniqueItems": true,
@@ -43,7 +59,129 @@
     "finished_at": {"type": "string", "format": "date-time"}
   },
   "$defs": {
-    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "run_receipt_draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "production_executable",
+        "input_lock_sha256",
+        "phase_ledger_sha256",
+        "performance"
+      ],
+      "properties": {
+        "production_executable": {"$ref": "#/$defs/executable"},
+        "input_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "phase_ledger_sha256": {"$ref": "#/$defs/sha256"},
+        "performance": {"$ref": "#/$defs/performance"}
+      }
+    },
+    "executable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "git_commit", "executable_sha256", "compiler", "htslib_version"],
+      "properties": {
+        "name": {"const": "longlineage"},
+        "version": {"type": "string", "minLength": 1},
+        "git_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "executable_sha256": {"$ref": "#/$defs/sha256"},
+        "compiler": {"type": "string", "minLength": 1},
+        "htslib_version": {"const": "1.18"}
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_seconds",
+        "user_seconds",
+        "system_seconds",
+        "memory_peak_bytes",
+        "oom_events",
+        "io_read_bytes",
+        "io_write_bytes",
+        "major_page_faults",
+        "minor_page_faults",
+        "peak_threads",
+        "queue_wait_seconds",
+        "reorder_wait_seconds",
+        "task_latency_seconds",
+        "logical_records",
+        "logical_bytes",
+        "final_file_count",
+        "transient_file_count",
+        "cache_condition"
+      ],
+      "properties": {
+        "wall_seconds": {"type": "number", "minimum": 0},
+        "user_seconds": {"type": "number", "minimum": 0},
+        "system_seconds": {"type": "number", "minimum": 0},
+        "memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "oom_events": {"type": "integer", "minimum": 0},
+        "io_read_bytes": {"type": "integer", "minimum": 0},
+        "io_write_bytes": {"type": "integer", "minimum": 0},
+        "major_page_faults": {"type": "integer", "minimum": 0},
+        "minor_page_faults": {"type": "integer", "minimum": 0},
+        "peak_threads": {"type": "integer", "minimum": 1, "maximum": 46},
+        "queue_wait_seconds": {"type": "number", "minimum": 0},
+        "reorder_wait_seconds": {"type": "number", "minimum": 0},
+        "task_latency_seconds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p50", "p95", "p99", "max"],
+          "properties": {
+            "p50": {"type": "number", "minimum": 0},
+            "p95": {"type": "number", "minimum": 0},
+            "p99": {"type": "number", "minimum": 0},
+            "max": {"type": "number", "minimum": 0}
+          }
+        },
+        "logical_records": {"type": "integer", "minimum": 0},
+        "logical_bytes": {"type": "integer", "minimum": 0},
+        "final_file_count": {"type": "integer", "minimum": 0},
+        "transient_file_count": {"type": "integer", "minimum": 0},
+        "cache_condition": {"enum": ["COLD", "WARM", "MIXED", "UNKNOWN"]}
+      }
+    },
+    "mount_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "role",
+        "canonical_path",
+        "mount_source",
+        "filesystem_type",
+        "readonly",
+        "mount_options_sha256"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+        },
+        "role": {
+          "enum": [
+            "raw_bam",
+            "raw_bam_index",
+            "pass_biallelic_ssnv_vcf",
+            "pass_biallelic_ssnv_vcf_index",
+            "latest_hp_ps_sidecar",
+            "latest_hp_ps_sidecar_index",
+            "reference_fasta",
+            "reference_fai"
+          ]
+        },
+        "canonical_path": {
+          "type": "string",
+          "pattern": "^/(?!.*(?:/\\.\\./|/\\.\\.$|/\\./|/\\.$))(?:[^/]+/)*[^/]+$"
+        },
+        "mount_source": {"type": "string", "minLength": 1},
+        "filesystem_type": {"type": "string", "minLength": 1},
+        "readonly": {"type": "boolean"},
+        "mount_options_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
   },
   "allOf": [
     {
@@ -70,6 +208,8 @@
     "input snapshots are equal for every non-failed production result",
     "producer receipt never declares VALIDATED or VALIDATED_FROZEN",
     "READY_FOR_VALIDATION means producer work is closed while the run remains RUNNING",
-    "only the independent validator may authorize the next transition"
+    "only the independent validator may authorize the next transition",
+    "input_mount_identity contains exactly one row for each manifest dataset and each of its eight input roles",
+    "mount identity is environment description and never substitutes for manifest file size or SHA-256 authority"
   ]
 }

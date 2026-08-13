@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-Hant" data-partial="true" data-report-id="20260720_HCC1395_autosomes_w24_fullscience_v6_syncpeak + 20260720_HCC1395_autosomes_w40_fullscience_v6_syncpeak">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>HCC1395 完整科學運算與資料確認 · LongLineage</title>
+  <style>
+    :root {
+      --paper:#f1eee5; --sheet:#fbfaf5; --ink:#162129; --muted:#5f6a6f;
+      --steel:#19384a; --steel2:#28566b; --line:#c8c4b8; --orange:#d85b22;
+      --acid:#c8df52; --green:#287a5a; --blue:#2f6f92; --amber:#bd7a19;
+      --red:#a83a34; --gray:#7a8282; --shadow:0 16px 38px rgba(18,33,41,.11);
+      --serif:"Iowan Old Style","Baskerville","Noto Serif TC","PMingLiU",serif;
+      --sans:"Avenir Next","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      --mono:"IBM Plex Mono","SFMono-Regular","Cascadia Mono",monospace;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; overflow-x:clip; }
+    body {
+      margin:0; color:var(--ink); background:
+        linear-gradient(rgba(25,56,74,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(25,56,74,.045) 1px,transparent 1px),
+        var(--paper);
+      background-size:32px 32px; font-family:var(--sans); line-height:1.62;
+    }
+    code,pre { font-family:var(--mono); overflow-wrap:anywhere; word-break:break-word; }
+    .skip-link { position:absolute; left:.75rem; top:-5rem; z-index:20; padding:.7rem 1rem; color:#fff; background:#000; }
+    .skip-link:focus { top:.75rem; }
+    .ribbon {
+      position:relative; z-index:5; padding:.62rem 1rem; text-align:center;
+      color:#fff; background-color:#96322d;
+      background-image:repeating-linear-gradient(135deg,#a83a34 0 14px,#96322d 14px 28px);
+      font-size:.78rem; font-weight:850; letter-spacing:.08em;
+    }
+    .layout { max-width:1540px; margin:0 auto; display:grid; grid-template-columns:270px minmax(0,1fr); }
+    aside {
+      position:sticky; top:0; height:100vh; padding:2rem 1.35rem;
+      color:#eaf1f1; background:var(--steel); border-right:5px solid var(--acid);
+    }
+    .brand { font-family:var(--serif); font-size:1.45rem; font-weight:800; line-height:1.05; }
+    .brand small { display:block; margin-top:.55rem; color:#a9c1cb; font:700 .72rem/1.35 var(--mono); }
+    nav { display:grid; gap:.18rem; margin-top:2.2rem; }
+    nav a {
+      color:#c9d8dc; text-decoration:none; padding:.48rem .65rem;
+      border-left:3px solid transparent; font-size:.86rem;
+    }
+    nav a:hover,nav a:focus-visible { color:#fff; border-color:var(--acid); background:#244b5f; }
+    .aside-note { position:absolute; left:1.35rem; right:1.35rem; bottom:1.6rem; color:#9eb5be; font-size:.75rem; }
+    main { min-width:0; padding:2rem clamp(1rem,4vw,4.5rem) 5rem; }
+    .hero {
+      position:relative; overflow:hidden; padding:clamp(2rem,5vw,5rem);
+      color:#fff; background:var(--steel); box-shadow:var(--shadow); border-bottom:8px solid var(--orange);
+    }
+    .hero:after {
+      content:""; position:absolute; width:340px; height:340px; right:-100px; top:-120px;
+      border:44px solid rgba(200,223,82,.17); border-radius:50%;
+    }
+    .eyebrow { color:var(--acid); font:800 .76rem/1.2 var(--mono); letter-spacing:.13em; text-transform:uppercase; }
+    h1,h2 { font-family:var(--serif); }
+    h1 { max-width:1050px; margin:.65rem 0 1rem; font-size:clamp(2.2rem,5.6vw,5.3rem); line-height:.98; letter-spacing:-.048em; }
+    .hero-lead { max-width:920px; font-size:clamp(1rem,2vw,1.28rem); color:#dce7e9; }
+    .state-line { display:flex; flex-wrap:wrap; gap:.55rem; align-items:center; margin-top:1.6rem; }
+    .terminal { color:var(--steel); background:var(--acid); padding:.45rem .7rem; font:850 .9rem/1.2 var(--mono); }
+    .hero-grid { margin-top:2.4rem; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid #557484; }
+    .hero-grid div { padding:1rem; background:#21475a; border-right:1px solid #557484; }
+    .hero-grid span { display:block; color:#abc2cb; font:700 .68rem/1.3 var(--mono); text-transform:uppercase; }
+    .hero-grid strong { display:block; margin-top:.25rem; font-size:1.08rem; overflow-wrap:anywhere; }
+    section { scroll-margin-top:1rem; padding:4.4rem 0 0; }
+    .kicker { color:var(--orange); font:850 .74rem/1.2 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+    h2 { margin:.32rem 0 .85rem; color:var(--steel); font-size:clamp(1.75rem,3.3vw,3.1rem); line-height:1.08; letter-spacing:-.028em; }
+    h3 { margin:.25rem 0 .4rem; line-height:1.2; }
+    .lead { max-width:930px; color:var(--muted); font-size:1.04rem; }
+    .cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; margin-top:1.4rem; }
+    .card { min-width:0; padding:1.15rem; background:var(--sheet); border:1px solid var(--line); border-top:5px solid var(--steel); box-shadow:0 5px 15px rgba(18,33,41,.055); }
+    .card .label { color:var(--muted); font:700 .72rem/1.3 var(--mono); text-transform:uppercase; }
+    .card .value { display:block; margin:.38rem 0; color:var(--steel); font:850 clamp(1.35rem,2.5vw,2.3rem)/1 var(--serif); }
+    .card p { margin:.4rem 0 0; font-size:.86rem; color:var(--muted); }
+    .callout { margin-top:1.2rem; padding:1.2rem 1.3rem; background:#fff7ef; border-left:7px solid var(--orange); }
+    .callout strong { color:var(--red); }
+    .flow { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.7rem; margin-top:1.6rem; }
+    .flow div { position:relative; padding:1rem .75rem; min-height:120px; background:var(--steel); color:#fff; }
+    .flow div:not(:last-child):after { content:"→"; position:absolute; right:-.58rem; top:41%; z-index:2; color:var(--orange); font-size:1.5rem; }
+    .flow span { color:var(--acid); font:800 .7rem/1.3 var(--mono); }
+    .flow strong { display:block; margin-top:.35rem; }
+    .flow small { display:block; color:#b9cdd4; margin-top:.5rem; }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.4rem; }
+    .panel { min-width:0; background:var(--sheet); border:1px solid var(--line); padding:1.2rem; }
+    .bar-row { margin:.9rem 0; }
+    .bar-label { display:flex; justify-content:space-between; gap:1rem; }
+    .track { height:12px; margin:.35rem 0; background:#dedbd1; overflow:hidden; }
+    .track span { display:block; height:100%; }
+    .track .green { background:var(--green); } .track .blue { background:var(--blue); }
+    .track .amber { background:var(--amber); } .track .red { background:var(--red); }
+    .track .gray { background:var(--gray); }
+    .bar-row small { color:var(--muted); font-family:var(--mono); }
+    .table-wrap {
+      width:100%; max-width:100%; min-width:0; margin-top:1.3rem;
+      overflow:auto; border:1px solid var(--line); background:var(--sheet);
+    }
+    .table-wrap:focus-visible { outline:3px solid var(--orange); outline-offset:3px; }
+    table { width:100%; border-collapse:collapse; font-size:.86rem; }
+    th { position:sticky; top:0; color:#fff; background:var(--steel); text-align:left; font:750 .72rem/1.25 var(--mono); letter-spacing:.04em; }
+    th,td { padding:.75rem; border-bottom:1px solid var(--line); vertical-align:top; }
+    tr:last-child td { border-bottom:0; }
+    td code { display:block; max-width:58ch; overflow-wrap:anywhere; font-size:.76rem; color:#365464; }
+    td small { display:block; color:var(--muted); }
+    .num { text-align:right; white-space:nowrap; font-family:var(--mono); }
+    .badge { display:inline-block; padding:.26rem .45rem; font:850 .68rem/1.15 var(--mono); letter-spacing:.03em; background:#e1e4df; }
+    .badge.exact,.badge.pass { color:#145d43; background:#dcefe5; }
+    .badge.semantic { color:#215d7a; background:#dcecf4; }
+    .badge.context { color:#875610; background:#f6e8ca; }
+    .badge.not-comparable { color:#8a302d; background:#f3ddda; }
+    .bottleneck { display:grid; grid-template-columns:56px 1fr; gap:1rem; padding:1.1rem 0; border-top:1px solid var(--line); }
+    .rank { display:grid; place-items:center; width:46px; height:46px; color:#fff; background:var(--orange); font:850 1rem/1 var(--mono); }
+    .bottleneck strong { color:var(--steel); font:800 1.08rem/1.3 var(--mono); }
+    .bottleneck p { margin:.35rem 0 0; color:var(--muted); }
+    details { margin:.7rem 0; border:1px solid var(--line); background:var(--sheet); }
+    summary { cursor:pointer; padding:.85rem 1rem; font-weight:750; }
+    summary:hover { background:#f3f0e7; }
+    .detail-body { padding:.1rem 1rem 1rem; border-top:1px solid var(--line); }
+    .detail-body code { display:block; overflow-wrap:anywhere; color:#365464; }
+    .source-list { list-style:none; padding:0; margin:1rem 0 0; display:grid; gap:.55rem; }
+    .source-list li { padding:.8rem; border-left:4px solid var(--steel2); background:var(--sheet); }
+    .source-list code,.source-list span { display:block; overflow-wrap:anywhere; font-size:.76rem; color:var(--muted); }
+    .limits { padding:1.2rem 1.4rem 1.2rem 2.5rem; background:#f6e8ca; border:1px solid #dfc58e; }
+    .limits li { margin:.55rem 0; }
+    footer { margin-top:4.4rem; padding:1.4rem; color:#c7d7dd; background:var(--steel); font-size:.8rem; }
+    @media(max-width:1050px) {
+      .layout { grid-template-columns:1fr; } aside { position:relative; height:auto; border-right:0; border-bottom:5px solid var(--acid); }
+      nav { grid-template-columns:repeat(3,minmax(0,1fr)); } .aside-note { position:static; margin-top:1.2rem; }
+      .cards { grid-template-columns:repeat(2,minmax(0,1fr)); } .flow { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    }
+    @media(max-width:680px) {
+      main { padding:1rem .8rem 3rem; } nav { grid-template-columns:1fr 1fr; }
+      .hero { padding:2rem 1.1rem; } .hero-grid,.cards,.two-col { grid-template-columns:1fr; }
+      .flow { grid-template-columns:1fr; } .flow div:not(:last-child):after { content:"↓"; right:auto; left:48%; top:auto; bottom:-1.15rem; }
+      th,td { min-width:150px; } h1 { font-size:2.45rem; }
+    }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+    @media print {
+      .ribbon { position:static; } .layout { display:block; } aside { display:none; } main { padding:0; }
+      .hero,footer { print-color-adjust:exact; } section { break-inside:avoid; } details { break-inside:avoid; } details > * { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#report-main">跳到主要內容</a>
+  <div class="ribbon partial-ribbon">HCC1395 ONLY · DATASET GATE · NON-PRODUCTION · 1 / 7 DATASETS</div>
+  <div class="layout">
+    <aside>
+      <div class="brand">LongLineage<small>VALIDATED SCIENTIFIC AUDIT / HCC1395</small></div>
+      <nav aria-label="報告章節">
+        <a href="#verdict">結論</a><a href="#chain">證據鏈</a><a href="#inputs">輸入契約</a><a href="#methods">判斷與設定</a>
+        <a href="#m1">M1 守恆</a><a href="#cooccurrence">sSNV 共現</a><a href="#topology">區域拓樸</a>
+        <a href="#comparison">舊新比較</a><a href="#timing">時間與瓶頸</a><a href="#artifacts">Artifacts</a>
+        <a href="#checks">Validator checks</a><a href="#limits">限制</a>
+      </nav>
+      <p class="aside-note">Offline self-contained · Python presentation only · C++ scientific outputs remain authoritative.</p>
+    </aside>
+    <main id="report-main">
+      <header class="hero">
+        <div class="eyebrow">Task B · comprehensive validation · 影響高 / 信心高</div>
+        <h1>HCC1395 完整科學運算與資料確認</h1>
+        <p class="hero-lead">完整 chr1–22 HCC1395 dataset gate 已由獨立 validator 凍結；工程與 worker-determinism gate 通過，但 legacy Python M1 decision parity 尚未通過。本頁只呈現已驗證的 C++ artifacts、守恆計數、時間與歷史證據邊界。</p>
+        <div class="state-line"><span class="terminal">w24=VALIDATED_FROZEN_DATASET_GATE / w40=VALIDATED_FROZEN_DATASET_GATE</span><span class="badge pass">PASS</span><span>dataset gate PASS · legacy M1 parity BLOCKED · production_claim_allowed = false</span></div>
+        <div class="hero-grid">
+          <div><span>w24 run</span><strong>20260720_HCC1395_autosomes_w24_fullscience_v6_syncpeak</strong></div>
+          <div><span>w40 run</span><strong>20260720_HCC1395_autosomes_w40_fullscience_v6_syncpeak</strong></div>
+          <div><span>Autosomal sites</span><strong>79,687</strong></div>
+          <div><span>8-artifact determinism</span><strong>8 / 8 PASS</strong></div>
+        </div>
+        <p class="hero-lead"><small>Validated: w24=2026-07-20T15:56:23Z / w40=2026-07-20T18:50:44Z</small></p>
+      </header>
+
+      <section id="verdict">
+        <div class="kicker">01 · Answer first</div>
+        <h2>工程執行與凍結通過；legacy Python 科學 parity 未通過</h2>
+        <p class="lead">終態、receipt chain、artifact physical SHA、semantic bindings、site/M1/M2/topology 守恆與輸入快照均已 fail-closed 重驗；但 historical M1 stable membership 仍有 per-key churn。結論可用於定位差異與優化流程，不足以宣稱 Python-equivalent，也不可把 1/7 gate 改寫成 production claim。</p>
+        <div class="cards">
+          <article class="card"><span class="label">Terminal state</span><span class="value">FROZEN</span><p>RUNNING → VALIDATED → DATASET_GATE frozen</p></article>
+          <article class="card"><span class="label">Validation checks</span><span class="value">26</span><p>全部 PASS；validator independent=true</p></article>
+          <article class="card"><span class="label">Site population</span><span class="value">79,687</span><p>missing / extra / duplicate 全為 0</p></article>
+          <article class="card"><span class="label">Production claim</span><span class="value">禁止</span><p>DATASET_GATE profile 固定 false</p></article>
+        </div>
+        <div class="callout"><strong>Legacy parity blocker：</strong>old stable 12,838、new stable 12,851，但 symmetric difference = 2,373；Jaccard intersection / union = 11,658 / 14,031。Aggregate 淨差不能取代逐站 parity。</div>
+        <div class="callout"><strong>最重要的輸入澄清：</strong>本輪輸入是 raw BAM + external latest HP/PS sidecar；不是一個持久化、已 tag 的 production BAM。 HP/PS 由同一 frozen sidecar exact-join；不可把 raw BAM 說成已持久化 tagged BAM。</div>
+      </section>
+
+      <section id="chain">
+        <div class="kicker">02 · Evidence chain</div>
+        <h2>不是「程式跑完」；而是五層證據都封閉</h2>
+        <div class="flow">
+          <div><span>01 / INPUT</span><strong>8 roles locked</strong><small>raw BAM、BAI、VCF/CSI、sidecar/TBI、FASTA/FAI</small></div>
+          <div><span>02 / C++</span><strong>Science artifacts</strong><small>M1 → co-occurrence → topology</small></div>
+          <div><span>03 / RECEIPT</span><strong>Producer closeout</strong><small>truth_fields_seen=0</small></div>
+          <div><span>04 / REPLAY</span><strong>Independent validator</strong><small>unlinked producer kernels</small></div>
+          <div><span>05 / FREEZE</span><strong>Atomic terminal</strong><small>input snapshots equal</small></div>
+          <div><span>06 / PRESENT</span><strong>HTML only</strong><small>no Python science recomputation</small></div>
+        </div>
+        <div class="table-wrap" tabindex="0" aria-label="Worker-invariant science artifacts"><table>
+          <thead><tr><th>Invariant artifact</th><th>Schema</th><th>Logical rows</th><th>Semantic SHA</th><th>w24 = w40</th></tr></thead>
+          <tbody><tr><td><strong>site_reads</strong></td><td><code>longlineage.site_reads@1.0.0</code></td><td class="num">7,578,727</td><td><code>06be3e0415da…3f8e4fc7</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>methyl_calls</strong></td><td><code>longlineage.methyl_calls@1.0.0</code></td><td class="num">261,130,339</td><td><code>9f17c32f5713…cf702a0e</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>bernoulli_upper</strong></td><td><code>longlineage.bernoulli_upper@1.0.0</code></td><td class="num">78,643</td><td><code>9d57e356b20a…50d5e0d2</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>m1_sites</strong></td><td><code>longlineage.m1_sites@1.0.0</code></td><td class="num">79,687</td><td><code>31763c81c88e…bb44dd90</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>m1_assignments</strong></td><td><code>longlineage.m1_assignment@1.0.0</code></td><td class="num">78,629</td><td><code>e4a065d133b4…6829b6ba</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>cooccurrence_pairs</strong></td><td><code>longlineage.cooccurrence_pairs@1.0.1</code></td><td class="num">134,278</td><td><code>d396292cf884…b0437aee</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>cooccurrence_sites</strong></td><td><code>longlineage.cooccurrence_sites@1.0.0</code></td><td class="num">79,687</td><td><code>7e19001b0fc1…18e63665</code></td><td><span class="badge pass">PASS</span></td></tr><tr><td><strong>topology_units</strong></td><td><code>longlineage.topology_unit@2.0.0</code></td><td class="num">0</td><td><code>d1bce93f6e54…fd4b02c5</code></td><td><span class="badge pass">PASS</span></td></tr></tbody>
+        </table></div>
+        <div class="callout"><strong>Manifest 差異白名單：</strong>/output_root, /run_id, /runtime/compute_workers；summary projection digest = <code>99ac8d8078084addbd60d1d00f62380dd71ccfb406d9fdb85d567d671fd6b985</code>。</div>
+      </section>
+
+      <section id="inputs">
+        <div class="kicker">03 · Input contract</div>
+        <h2>raw BAM + latest HP/PS sidecar；truth 輸入為零</h2>
+        <p class="lead">這裡顯示由 input authority exact-join 投影的 portable token 與 producer mount 類型；完整 canonical path 只留在外部 frozen receipt。raw BAM 與 latest_hp_ps_sidecar 角色彼此分離，這就是「不是 tagged BAM」的契約證據。</p>
+        <div class="table-wrap" tabindex="0" aria-label="Frozen input authority roles"><table>
+          <thead><tr><th>Role</th><th>Authority token</th><th>Filesystem</th><th>Mode</th></tr></thead>
+          <tbody><tr><td><strong>latest_hp_ps_sidecar</strong></td><td><code>LOCAL_HCC1395_LPS_SIDECAR_V2</code></td><td>ext4</td><td>RW</td></tr><tr><td><strong>latest_hp_ps_sidecar_index</strong></td><td><code>LOCAL_HCC1395_LPS_SIDECAR_V2_TBI</code></td><td>ext4</td><td>RW</td></tr><tr><td><strong>pass_biallelic_ssnv_vcf</strong></td><td><code>LOCAL_HCC1395_LPS_PASS_VCF</code></td><td>ext4</td><td>RW</td></tr><tr><td><strong>pass_biallelic_ssnv_vcf_index</strong></td><td><code>LOCAL_HCC1395_LPS_PASS_VCF_CSI</code></td><td>ext4</td><td>RW</td></tr><tr><td><strong>raw_bam</strong></td><td><code>LOCAL_HCC1395_RAW_BAM</code></td><td>nfs4</td><td>RW</td></tr><tr><td><strong>raw_bam_index</strong></td><td><code>LOCAL_HCC1395_RAW_BAM_BAI</code></td><td>nfs4</td><td>RW</td></tr><tr><td><strong>reference_fai</strong></td><td><code>LOCAL_GRCH38_NO_ALT_FASTA_FAI</code></td><td>nfs4</td><td>RW</td></tr><tr><td><strong>reference_fasta</strong></td><td><code>LOCAL_GRCH38_NO_ALT_FASTA</code></td><td>nfs4</td><td>RW</td></tr></tbody>
+        </table></div>
+      </section>
+
+      <section id="methods">
+        <div class="kicker">03B · Methods and exact settings</div>
+        <h2>判斷順序、門檻、fallback 與 abstention 全部來自 frozen C++ contract</h2>
+        <p class="lead">下表直接映射 <code>contracts/v1/science_parameters.json</code>；HTML 沒有在 Python 重新計算 p-value、FDR、cluster 或 topology。任何不足證據、state ceiling、MN mismatch、非等價 duplicate 或 incomplete family 都保持 fail closed / unresolved。</p>
+        <div class="callout"><strong>Representation provenance gap：</strong>frozen manifest／receipt 未獨立記錄 run-level M1 representation。表內 raw ML point estimator 與程式可能採用的 compatibility serialization 不能互相代稱；在新增明確欄位並重跑前，本頁不宣稱此選擇已由 receipt 綁定。</div>
+        <div class="table-wrap" tabindex="0" aria-label="Frozen science method settings"><table>
+          <thead><tr><th>Stage</th><th>Setting</th><th>Frozen value</th><th>判斷理由與失敗行為</th></tr></thead>
+          <tbody><tr><td><strong>Read filter</strong></td><td><code>excluded_flag_masks</code></td><td><code>[4,256,1024,2048]</code></td><td>排除 unmapped、secondary、duplicate、supplementary；任何保留 read 必須通過同一 frozen mask。</td></tr><tr><td><strong>Read filter</strong></td><td><code>MAPQ / query length</code></td><td><code>{&quot;minimum_mapq&quot;:20,&quot;minimum_query_length&quot;:1000}</code></td><td>先做 mapping 品質與長讀長基本門檻，再進入 MM/ML 與 site projection。</td></tr><tr><td><strong>Read filter</strong></td><td><code>MM / ML / duplicate</code></td><td><code>{&quot;require_mm&quot;:true,&quot;require_ml&quot;:true,&quot;duplicate_policy&quot;:&quot;FAIL_CLOSED&quot;}</code></td><td>缺甲基化 tag 或非等價 duplicate 不補值，直接 fail closed。</td></tr><tr><td><strong>Methylation</strong></td><td><code>MM/ML decode</code></td><td><code>{&quot;accepted_mm_group&quot;:&quot;C+m?&quot;,&quot;orientation&quot;:&quot;AS_SEQUENCED&quot;,&quot;ml_interval&quot;:&quot;[N/256,(N+1)/256)&quot;,&quot;mn_mismatch_policy&quot;:&quot;FAIL_CLOSED&quot;,&quot;parse_once_per_read&quot;:true}</code></td><td>C++ 每 read 只解析一次；MN 不一致不得猜測座標或機率。</td></tr><tr><td><strong>M1</strong></td><td><code>minimum evidence</code></td><td><code>{&quot;joined_alt_reads&quot;:6,&quot;after_distance_peel&quot;:6,&quot;group_size&quot;:3,&quot;groups_max&quot;:6,&quot;common_cpg&quot;:3}</code></td><td>不足時保留 INSUFFICIENT/INCOMPLETE 狀態；不強行分群。</td></tr><tr><td><strong>M1</strong></td><td><code>null / stability</code></td><td><code>{&quot;null_mode&quot;:&quot;COLUMN&quot;,&quot;replicates&quot;:40,&quot;valid_min&quot;:32,&quot;between_within_ratio&quot;:1.3,&quot;modal_fraction&quot;:0.7,&quot;modal_ari&quot;:0.8}</code></td><td>observed 必須嚴格大於 frozen percentile，且 assignment modal fraction/ARI 同時過門檻。</td></tr><tr><td><strong>M1</strong></td><td><code>deterministic RNG / axes</code></td><td><code>{&quot;rng&quot;:&quot;PCG64&quot;,&quot;seed&quot;:&quot;BLAKE2B8_BIG_ENDIAN(sample|chrom|pos1|offset)_MOD_2^32&quot;,&quot;axis_order&quot;:[&quot;HP_EXACT&quot;,&quot;HP_FAMILY&quot;,&quot;STRAND&quot;,&quot;START&quot;,&quot;END&quot;,&quot;LENGTH&quot;,&quot;MAPQ&quot;,&quot;CPG_CALLED&quot;],&quot;axis_evaluation&quot;:&quot;ONLY_AFTER_STABLE_GATE&quot;}</code></td><td>seed 綁 sample|chrom|pos|offset；axis 僅在 stable gate 後評估，避免母體漂移。</td></tr><tr><td><strong>M2 eligibility</strong></td><td><code>power / precedence</code></td><td><code>{&quot;permutations&quot;:499,&quot;minimum_group_size&quot;:5,&quot;maximum_groups&quot;:10,&quot;minimum_power&quot;:0.8,&quot;reason_precedence&quot;:[&quot;M1_NOT_FLAGGED&quot;,&quot;GROUP_COUNT_EXCEEDS_PLANNING_MODEL_MAXIMUM&quot;,&quot;AXIS_INDETERMINATE&quot;,&quot;HP_AXIS_CONFOUND&quot;,&quot;TECHNICAL_AXIS_CONFOUND&quot;,&quot;NOT_PHASE_ANCHORED_ROBUST&quot;,&quot;ALL_MEASURED_AXES_DETERMINATE_NO_ALIGNED_CONFOUND&quot;]}</code></td><td>每個 stable site 依 precedence 恰落一個互斥 bin；四 bin 必須守恆。</td></tr><tr><td><strong>Co-occurrence A</strong></td><td><code>exact test / FDR</code></td><td><code>{&quot;window_bp&quot;:5000,&quot;test&quot;:&quot;FIXED_MARGIN_K_BY_2_EXACT&quot;,&quot;state_space_ceiling&quot;:250000,&quot;fallback&quot;:&quot;NONE_FAIL_CLOSED_NOT_IDENTIFIABLE&quot;,&quot;fdr_primary&quot;:&quot;BY&quot;,&quot;q_maximum&quot;:0.05,&quot;cramers_v_minimum&quot;:0.3,&quot;delta_alt_fraction_minimum&quot;:0.5}</code></td><td>K×2 fixed-margin exact；超過 state ceiling 沒有近似 fallback，維持 NOT_IDENTIFIABLE。</td></tr><tr><td><strong>Co-occurrence B</strong></td><td><code>callability</code></td><td><code>{&quot;allele_calls&quot;:[&quot;R&quot;,&quot;A&quot;,&quot;O&quot;,&quot;X&quot;],&quot;o_x_collapse&quot;:false,&quot;minimum_called_depth&quot;:10,&quot;multiplicity&quot;:&quot;BONFERRONI_THREE_RELATION_MODELS&quot;,&quot;claim&quot;:&quot;COMPATIBILITY_ONLY&quot;}</code></td><td>R/A/O/X 分開；O 與 X 不得併為 REF，endpoint B 只提供 compatibility 證據。</td></tr><tr><td><strong>Joint signature</strong></td><td><code>marker set</code></td><td><code>{&quot;maximum_markers&quot;:3,&quot;minimum_spacing_bp&quot;:20,&quot;same_complete_read_set_required&quot;:true,&quot;spacing_implies_statistical_independence&quot;:false}</code></td><td>最多 3 markers、至少 20 bp，且要求同一 complete read set；spacing 不代表統計獨立。</td></tr><tr><td><strong>Topology</strong></td><td><code>model / solver / abstention</code></td><td><code>{&quot;primary_model&quot;:&quot;EVO_M0_RECURRENCE_ALLOWED&quot;,&quot;strict_infinite_sites&quot;:&quot;EVO_M1_SENSITIVITY_ONLY_AFTER_ALLELE_SPECIFIC_CN_LOH_GATE&quot;,&quot;loss_supported_dollo&quot;:&quot;UNRESOLVED_NOT_IMPLEMENTED&quot;,&quot;solver_order&quot;:[&quot;ACTIVE_BIT_COMPRESSION&quot;,&quot;DUPLICATE_MANDATORY_SINGLETON_DOMINANCE_CLOSURE&quot;,&quot;ANALYTIC_SINGLE_TERMINAL&quot;,&quot;SMALL_Q_DP_OBJECTIVE_ONLY&quot;,&quot;BITSET_OBLIGATION_BNB_COMPLETE_FAMILY&quot;,&quot;DIRECT_PINNED_HIGHS_IF_REQUIRED&quot;,&quot;PARENT_MAPPING&quot;],&quot;incomplete_family_winner_allowed&quot;:false}</code></td><td>先 exact reductions/DP/B&amp;B，再 parent mapping；family 不完整、cap/deadline 均不得發布 winner。</td></tr></tbody>
+        </table></div>
+      </section>
+
+      <section id="m1">
+        <div class="kicker">04 · M1</div>
+        <h2>狀態守恆通過；stable membership parity 仍被阻擋</h2>
+        <div class="two-col">
+          <div class="panel"><h3>現行 C++ frozen census</h3><div class="bar-row"><div class="bar-label"><span>evaluable</span><strong>78,629</strong></div><div class="track" aria-hidden="true"><span class="blue" style="width:98.6723%"></span></div><small>98.67% of 79,687</small></div><div class="bar-row"><div class="bar-label"><span>insufficient ALT reads</span><strong>1,044</strong></div><div class="track" aria-hidden="true"><span class="amber" style="width:1.3101%"></span></div><small>1.31% of 79,687</small></div><div class="bar-row"><div class="bar-label"><span>incomplete distance</span><strong>14</strong></div><div class="track" aria-hidden="true"><span class="red" style="width:0.2000%"></span></div><small>0.02% of 79,687</small></div></div>
+          <div class="panel"><h3>舊 Python context</h3>
+            <p><strong>12,838</strong> stable-null multigroup rows。</p>
+            <p>78,629 evaluable；1,044 insufficient；14 incomplete。</p>
+            <div class="callout"><strong>不可誤讀：</strong>舊 12,838 是 legacy candidate alias，不是 strict-confirmed co-occurrence 或 subclone；79,687 個 strict_confirm_status 全為 NOT_RUN。</div>
+          </div>
+        </div>
+        <div class="callout"><strong>逐站差異：</strong>true→true 11,658、true→false 1,180、false→true 1,193、false→false 65,656。在解釋 RNG、distance peel、tie-break 或 representation 差異並通過 real golden 之前，不得將 C++ stable decisions 宣稱為 Python parity。</div>
+      </section>
+
+      <section id="cooccurrence">
+        <div class="kicker">05 · sSNV co-occurrence</div>
+        <h2>Pair rows ≠ positive discoveries；舊流程無 formal comparable authority，不能宣稱 parity</h2>
+        <div class="cards">
+          <article class="card"><span class="label">Candidate pair rows</span><span class="value">134,278</span><p>序列化 records，並非陽性發現數</p></article>
+          <article class="card"><span class="label">Eligible exact-family</span><span class="value">2</span><p>唯一進入 global FDR family 的 rows</p></article>
+          <article class="card"><span class="label">Exact BY discoveries</span><span class="value">1</span><p>q ≤ 0.05 且 effect gate（V ≥ 0.30、ΔAF ≥ 0.50）；BY discoveries 是 BH discoveries 的子集（可相等）</p></article>
+          <article class="card"><span class="label">Formal pair BY-confirmed</span><span class="value">1</span><p>BY + conditional + callability 全通過</p></article>
+        </div>
+        <div class="table-wrap" tabindex="0" aria-label="Serialized co-occurrence census"><table>
+          <thead><tr><th>C++ serialized census</th><th>Count</th><th>守恆／解讀</th></tr></thead>
+          <tbody>
+            <tr><td>M2-eligible focal sites</td><td class="num">5</td><td>screen 通過的 focal sites，不是 pair discoveries</td></tr>
+            <tr><td>Exact-identifiable pairs</td><td class="num">2,442</td><td>≤ pair rows</td></tr>
+            <tr><td>Family bins</td><td class="num">134,276 / 0 / 0 / 2</td><td>ineligible / endpoint-A not-testable / exact not-identifiable / exact-family；總和 = pair rows</td></tr>
+            <tr><td>Global BH discoveries</td><td class="num">1</td><td>q ≤ 0.05 且使用相同 effect gate；formal ≤ BY ≤ BH ≤ eligible exact-family</td></tr>
+            <tr><td>Co-occurrence site rows</td><td class="num">79,687</td><td>joint PASS + not-testable 完整分割</td></tr>
+            <tr><td>Joint-signature PASS / not-testable</td><td class="num">0 / 79,687</td><td>PASS = topology units (0)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout"><strong>Authority boundary：</strong>以上數字由 C++ audit 對 validator 已驗證的序列化 pair/site artifacts 做 census，w24 = w40；audit 不重算 p/q。Python 不讀 scientific artifact data rows（M1/co-occurrence/topology 等）；允許讀 artifact catalog/semantic digest metadata rows 與 summary/receipts，且不重算科學結果。</div>
+        <div class="callout"><strong>歷史邊界：</strong>C++ audit receipt 僅支持「舊正式流程在發布前失敗，沒有 formal comparable authority」；因此不能宣稱舊新數值 parity 或 speedup。</div>
+      </section>
+
+      <section id="topology">
+        <div class="kicker">06 · Regional topology</div>
+        <h2>完整與未完成分開；未完成 unit 不得發布 winner</h2>
+        <div class="two-col">
+          <div class="panel"><h3>現行 LongLineage</h3><div class="bar-row"><div class="bar-label"><span>fully complete regions</span><strong>0</strong></div><div class="track" aria-hidden="true"><span class="green" style="width:0.0000%"></span></div><small>0.00% of 1</small></div><div class="bar-row"><div class="bar-label"><span>incomplete regions</span><strong>0</strong></div><div class="track" aria-hidden="true"><span class="amber" style="width:0.0000%"></span></div><small>0.00% of 1</small></div>
+            <p><strong>0</strong> incomplete units with winner（必須為 0）。</p>
+          </div>
+          <div class="panel"><h3>舊 region-tree context</h3><div class="callout"><strong>數值比較停用：</strong>C++ audit receipt 只授權 NOT_COMPARABLE 邊界，未攜帶可顯示的舊 regional census；HTML 不以硬編數字補值。</div></div>
+        </div>
+        <p class="lead">舊 regional 方法、CN/LOH gating、membership 與 completion semantics 被 audit receipt 判為 NOT_COMPARABLE；本頁不產生差值或改善率。</p>
+      </section>
+
+      <section id="comparison">
+        <div class="kicker">07 · Comparison taxonomy</div>
+        <h2>EXACT、SEMANTIC、CONTEXT、NOT_COMPARABLE 四層不能混用</h2>
+        <div class="table-wrap" tabindex="0" aria-label="Historical comparison taxonomy"><table>
+          <thead><tr><th>Class</th><th>Topic</th><th>Earlier evidence</th><th>LongLineage</th><th>Allowed conclusion</th></tr></thead>
+          <tbody><tr><td><span class="badge exact">EXACT</span></td><td><strong>HCC1395 site-key set</strong></td><td>79,687 keys；digest ac569c424fd9…10062468</td><td>79,687 keys；missing/extra/duplicate = 0/0/0</td><td>EXACT</td></tr><tr><td><span class="badge semantic">SEMANTIC</span></td><td><strong>M1 per-key status / stable membership</strong></td><td>stable 12,838</td><td>stable 12,851</td><td>COMPARABLE_DIFFERENT：不能以 aggregate 淨差取代 per-key churn；transition={&quot;false_to_false&quot;: 65656, &quot;false_to_true&quot;: 1193, &quot;jaccard&quot;: {&quot;intersection&quot;: 11658, &quot;union&quot;: 14031}, &quot;symmetric_difference&quot;: 2373, &quot;true_to_false&quot;: 1180, &quot;true_to_true&quot;: 11658}</td></tr><tr><td><span class="badge not-comparable">NOT_COMPARABLE</span></td><td><strong>正式 sSNV co-occurrence</strong></td><td>沒有 durable historical formal result</td><td>134,278 validated pair rows；1 formal BY-confirmed</td><td>NOT_COMPARABLE_NO_FORMAL_OLD_RESULT</td></tr><tr><td><span class="badge not-comparable">NOT_COMPARABLE</span></td><td><strong>regional tree / LongLineage topology</strong></td><td>0 regions / 0 units</td><td>0 regions / 0 primary HP units</td><td>NOT_COMPARABLE_METHOD_AND_GATE_CHANGED</td></tr><tr><td><span class="badge not-comparable">NOT_COMPARABLE</span></td><td><strong>historical runtime / v5 runtime</strong></td><td>stage、scope、cache condition 不同</td><td>w24/w40 producer 與 validator 各自量測</td><td>NOT_COMPARABLE_PROGRAM_SCOPE_THREAD_OUTPUT_CHANGED</td></tr></tbody>
+        </table></div>
+      </section>
+
+      <section id="timing">
+        <div class="kicker">08 · Timing and bottlenecks</div>
+        <h2>w24 與 w40 分開量測；producer、validator、report 不混加</h2>
+        <p class="lead">每個 stage 都由 execution evidence 綁定 stdout 與 GNU time log。歷史 runtime 的 stage、scope、cache condition 不同，C++ audit 明示 NOT_COMPARABLE，不計算虛假的 speedup。</p>
+        <div class="cards">
+          <article class="card"><span class="label">w24 science wall</span><span class="value">57:28.28</span><p>producer run receipt</p></article>
+          <article class="card"><span class="label">CPU user + sys</span><span class="value">10:16:28.36</span><p>30 peak threads</p></article>
+          <article class="card"><span class="label">Peak memory</span><span class="value">15.86 GiB</span><p>OOM events = 0</p></article>
+          <article class="card"><span class="label">Logical records</span><span class="value">269,159,991</span><p>46.56 GiB logical bytes</p></article>
+        </div>
+        <div class="table-wrap" tabindex="0" aria-label="Execution timing stages"><table>
+          <thead><tr><th>Stage</th><th>Status</th><th>Time</th><th>Interpretation boundary</th></tr></thead>
+          <tbody><tr><td><strong>w24 C++ producer science</strong></td><td><span class="badge measured-receipt">MEASURED_RECEIPT</span></td><td><code>57:28.28</code></td><td>run receipt 的 science total；不含外層 input SHA preflight 差額。</td></tr><tr><td><strong>w24 producer outer /usr/bin/time</strong></td><td><span class="badge measured-log">MEASURED_LOG</span></td><td><code>1:26:10.00</code></td><td>exit=0；max RSS=15.86 GiB。</td></tr><tr><td><strong>w24 independent validator + freeze</strong></td><td><span class="badge measured-log">MEASURED_LOG</span></td><td><code>1:18:54.00</code></td><td>exit=0；max RSS=16.86 GiB。</td></tr><tr><td><strong>w40 C++ producer science</strong></td><td><span class="badge measured-receipt">MEASURED_RECEIPT</span></td><td><code>51:39.80</code></td><td>run receipt 的 science total；不含外層 input SHA preflight 差額。</td></tr><tr><td><strong>w40 producer outer /usr/bin/time</strong></td><td><span class="badge measured-log">MEASURED_LOG</span></td><td><code>1:26:40.00</code></td><td>exit=0；max RSS=20.00 GiB。</td></tr><tr><td><strong>w40 independent validator + freeze</strong></td><td><span class="badge measured-log">MEASURED_LOG</span></td><td><code>1:19:56.00</code></td><td>exit=0；max RSS=16.86 GiB。</td></tr><tr><td><strong>HTML receipt replay + render</strong></td><td><span class="badge presentation-only">PRESENTATION_ONLY</span></td><td><code>RECORDED_IN_OUTPUT_JSON</code></td><td>Python 只 hash/驗證/呈現；不讀 BAM/VCF/sidecar，也不重算 science。</td></tr></tbody>
+        </table></div>
+        <div style="margin-top:1.4rem"><article class="bottleneck"><span class="rank">01</span><div><h3>Producer outer wall</h3><strong>w24 1:26:10.00 / w40 1:26:40.00</strong><p>含輸入 identity/full SHA 與 C++ science；只做同輪實測比較。</p></div></article><article class="bottleneck"><span class="rank">02</span><div><h3>Independent validator wall</h3><strong>w24 1:18:54.00 / w40 1:19:56.00</strong><p>獨立 physical/schema/conservation replay 與 atomic freeze。</p></div></article><article class="bottleneck"><span class="rank">03</span><div><h3>Producer I/O</h3><strong>w24 read 6.31 GiB / w40 read 28.95 GiB</strong><p>raw BAM 位於 NFS4；這是 receipt counter，不單獨推論因果占比。</p></div></article><article class="bottleneck"><span class="rank">04</span><div><h3>Peak RSS</h3><strong>w24 15.86 GiB / w40 20.00 GiB</strong><p>GNU time process peak；不與 validator peak 相加。</p></div></article></div>
+      </section>
+
+      <section id="artifacts">
+        <div class="kicker">09 · Frozen artifacts</div>
+        <h2>每個輸出都有 physical 與 semantic digest</h2>
+        <p class="lead">本 builder 在產生 HTML 前重算所有 receipt-declared artifact 與 index physical SHA；semantic SHA 則跨 catalog、semantic_digests.tsv、producer receipt 與 final run receipt 逐列一致。</p>
+        <div class="table-wrap" tabindex="0" aria-label="Frozen output artifact inventory"><table>
+          <thead><tr><th>Artifact</th><th>Path</th><th>Schema</th><th>Logical rows</th><th>w24 / w40 physical</th><th>Semantic SHA</th></tr></thead>
+          <tbody><tr><td><strong>site_reads</strong><small>TSV_BGZF</small></td><td><code>site_reads.tsv.bgz</code></td><td><code>longlineage.site_reads@1.0.0</code></td><td class="num">7,578,727</td><td><small>w24 591.96 MiB</small><code>34e3ba96d781…e04926db</code><small>w40 591.96 MiB</small><code>ab3bcb9f79cd…62de4bd7</code></td><td><code>06be3e0415da…3f8e4fc7</code></td></tr><tr><td><strong>methyl_calls</strong><small>TSV_BGZF</small></td><td><code>methyl_calls.tsv.bgz</code></td><td><code>longlineage.methyl_calls@1.0.0</code></td><td class="num">261,130,339</td><td><small>w24 4.24 GiB</small><code>c201705bb48f…55bf32ea</code><small>w40 4.24 GiB</small><code>b53e72ff0eab…7baad6a3</code></td><td><code>9f17c32f5713…cf702a0e</code></td></tr><tr><td><strong>bernoulli_upper</strong><small>LLM_BGZF</small></td><td><code>bernoulli_upper.llm.bgz</code></td><td><code>longlineage.bernoulli_upper@1.0.0</code></td><td class="num">78,643</td><td><small>w24 410.14 MiB</small><code>dd2f3be5c5b1…0fcbf1b7</code><small>w40 410.14 MiB</small><code>dd2f3be5c5b1…0fcbf1b7</code></td><td><code>9d57e356b20a…50d5e0d2</code></td></tr><tr><td><strong>m1_sites</strong><small>TSV_BGZF</small></td><td><code>m1_sites.tsv.bgz</code></td><td><code>longlineage.m1_sites@1.0.0</code></td><td class="num">79,687</td><td><small>w24 15.76 MiB</small><code>c4a5be513178…84f5f883</code><small>w40 15.76 MiB</small><code>69aa6c2e5796…dae936df</code></td><td><code>31763c81c88e…bb44dd90</code></td></tr><tr><td><strong>m1_assignments</strong><small>JSONL_BGZF</small></td><td><code>m1_assignments.jsonl.bgz</code></td><td><code>longlineage.m1_assignment@1.0.0</code></td><td class="num">78,629</td><td><small>w24 111.97 MiB</small><code>71adf887eaa8…d4adeca0</code><small>w40 111.97 MiB</small><code>71adf887eaa8…d4adeca0</code></td><td><code>e4a065d133b4…6829b6ba</code></td></tr><tr><td><strong>cooccurrence_pairs</strong><small>TSV_BGZF</small></td><td><code>cooccurrence_pairs.tsv.bgz</code></td><td><code>longlineage.cooccurrence_pairs@1.0.1</code></td><td class="num">134,278</td><td><small>w24 13.59 MiB</small><code>5c73503e68f5…9df71cdd</code><small>w40 13.59 MiB</small><code>67a6f11ee22e…6b27280f</code></td><td><code>d396292cf884…b0437aee</code></td></tr><tr><td><strong>cooccurrence_sites</strong><small>TSV_BGZF</small></td><td><code>cooccurrence_sites.tsv.bgz</code></td><td><code>longlineage.cooccurrence_sites@1.0.0</code></td><td class="num">79,687</td><td><small>w24 1.17 MiB</small><code>4a40e7f6cb22…83cd1890</code><small>w40 1.17 MiB</small><code>86f6daa4adac…98da992c</code></td><td><code>7e19001b0fc1…18e63665</code></td></tr><tr><td><strong>topology_units</strong><small>JSONL_BGZF</small></td><td><code>topology_units.jsonl.bgz</code></td><td><code>longlineage.topology_unit@2.0.0</code></td><td class="num">0</td><td><small>w24 28.00 B</small><code>d07990637825…ac743d48</code><small>w40 28.00 B</small><code>d07990637825…ac743d48</code></td><td><code>d1bce93f6e54…fd4b02c5</code></td></tr></tbody>
+        </table></div>
+        <h3 style="margin-top:2rem">歷史 authority（只作明示層級的比較）</h3>
+        <ul class="source-list"><li><strong>cxx_determinism_historical_receipt</strong><code>EXTERNAL_BINDING</code><span>15.81 KiB · f8bd82eba053…f38f0493</span></li><li><strong>dataset_gate_input_authority</strong><code>EXTERNAL_BINDING</code><span>2.78 KiB · b74988abfa01…7c59d39a</span></li><li><strong>production_input_authority</strong><code>EXTERNAL_BINDING</code><span>6.92 KiB · bf0630019d97…e0f30557</span></li><li><strong>executable_build_receipt</strong><code>EXTERNAL_BINDING</code><span>1.56 KiB · 24c239f3b562…f620913c</span></li></ul>
+      </section>
+
+      <section id="checks">
+        <div class="kicker">10 · Independent replay</div>
+        <h2>Validator 判斷細節</h2>
+        <p class="lead">每列顯示 expected、observed 與 evidence SHA。這些不是前端自行判斷的科學結論。</p>
+        <details><summary><span class="badge pass">PASS</span> W24__ROOT_LAYOUT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>065b110b97d4ba09adb4bffc192712561a44148eacfbe3a7a24d76ad4ee84de1</code></p><p><strong>Evidence</strong> <code>8582f919121d874d53b6923e0404aa81e6fce6d9afc76db199bbd49842998627</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__CATALOG_CONTRACT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>2c885ed28f84ae57fd8f82a5b44df1758bbf0a72dfed4776741489c7c91f2626</code></p><p><strong>Evidence</strong> <code>1300f0a12c79b465a55f39f156942c400fdc2a164ec85fb83c7d3aa623809351</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__FORGED_RECEIPT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>b06decd6cdac4490a10a8540fba1f36ba2506b32e1e7da805f9d41984cb607d2</code></p><p><strong>Evidence</strong> <code>13e1574ecc4287fbe45e187d03764d9fbea401138cd3751a4d402cb3ad75f742</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__VALIDATOR_ENVIRONMENT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>78f2e0cfcad166c6555b09e0cfa981f9019a43e9df277401d6f2f92578f7451e</code></p><p><strong>Evidence</strong> <code>29115a2eac0cbf5f62f83c01e35b9afde8ff921087364661c1f61c9f924087b0</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__PRODUCER_RECEIPT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>e0e3ff4f259943a3a12d522844e10e60d626972127a40827d23c2f5a99e56bd7</code></p><p><strong>Evidence</strong> <code>50b5ae794222ee16856884ed5c8ba0426362555197433ea814e61312f186f04f</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__ARTIFACT_MEMBERSHIP</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>c5b75c08a1359d90e094959afa7796863c0f418ed11ed7e899ffab72a0a41ed5</code></p><p><strong>Evidence</strong> <code>2e77d0dd6466bf24d210108f599ecc69322f22f261e697e1ff8de9c1e9729890</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__FILE_CENSUS</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>88f5cb9b6856bde642940e6048c80835c7ed8fa2233d9624327e678593220a6d</code></p><p><strong>Evidence</strong> <code>715e3a24598bde65c9bb52d766e61d66c9a96c3f10758882b9c82c56d63a3893</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__ARTIFACT_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>70be2af8209735eb8b5bf80e3c766efdf36b20ce55b8e8130a311c97bf2d7ceb</code></p><p><strong>Evidence</strong> <code>f2e0880a95f2fa1c584b64d83a1784a8ce2d3b7c0b27351c306088c35c0e89a9</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__SCIENTIFIC_CONSERVATION</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>e6bcdfa49b64d4448303e5375622976ec4373d0973141fc0b393bf69270fc9c3</code></p><p><strong>Evidence</strong> <code>90509adab129990d3f2eafa873c1215255d364be9128f4af4795d3fabe6d0e17</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__ARTIFACT_CATALOG_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>a8c896ff23ccdaee1902ff8a0149adb4a8604705d76a4a970201c226d1e0ae89</code></p><p><strong>Evidence</strong> <code>9878bfa864f9d332217ea15a403167b059adf7e7d358601a1aa319f5c2e0795c</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__DATA_LINEAGE_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>dbc428cc4b8dab27116e0777f127184506b93fbc297e6b4537b60cbfaa0380a5</code></p><p><strong>Evidence</strong> <code>f59a5b6433efa067999d73de4804e6409638f563c2a89ae489ecfa2aad37057e</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__SEMANTIC_DIGEST</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>2538d31388787e06c8b1f3385e478d2975832a7f0aa357f93f9e49bc456a61e7</code></p><p><strong>Evidence</strong> <code>25b0213527cd7fe3c88445bbc58200f0c9480fb8042442440f7a8ea5bcd2b929</code></p></div></details><details><summary><span class="badge pass">PASS</span> W24__CHECKSUM_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>2b9dedd13f1229ed588f3684f6c41c173b2d0296246e547ba63976c0b556fcb3</code></p><p><strong>Evidence</strong> <code>555a40cd07466f22703c5488156390ba55f06b4bdb39dd05feef906df91e970e</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__ROOT_LAYOUT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>065b110b97d4ba09adb4bffc192712561a44148eacfbe3a7a24d76ad4ee84de1</code></p><p><strong>Evidence</strong> <code>8582f919121d874d53b6923e0404aa81e6fce6d9afc76db199bbd49842998627</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__CATALOG_CONTRACT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>2c885ed28f84ae57fd8f82a5b44df1758bbf0a72dfed4776741489c7c91f2626</code></p><p><strong>Evidence</strong> <code>1300f0a12c79b465a55f39f156942c400fdc2a164ec85fb83c7d3aa623809351</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__FORGED_RECEIPT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>b06decd6cdac4490a10a8540fba1f36ba2506b32e1e7da805f9d41984cb607d2</code></p><p><strong>Evidence</strong> <code>13e1574ecc4287fbe45e187d03764d9fbea401138cd3751a4d402cb3ad75f742</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__VALIDATOR_ENVIRONMENT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>78f2e0cfcad166c6555b09e0cfa981f9019a43e9df277401d6f2f92578f7451e</code></p><p><strong>Evidence</strong> <code>29115a2eac0cbf5f62f83c01e35b9afde8ff921087364661c1f61c9f924087b0</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__PRODUCER_RECEIPT</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>e0e3ff4f259943a3a12d522844e10e60d626972127a40827d23c2f5a99e56bd7</code></p><p><strong>Evidence</strong> <code>50b5ae794222ee16856884ed5c8ba0426362555197433ea814e61312f186f04f</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__ARTIFACT_MEMBERSHIP</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>c5b75c08a1359d90e094959afa7796863c0f418ed11ed7e899ffab72a0a41ed5</code></p><p><strong>Evidence</strong> <code>2e77d0dd6466bf24d210108f599ecc69322f22f261e697e1ff8de9c1e9729890</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__FILE_CENSUS</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>88f5cb9b6856bde642940e6048c80835c7ed8fa2233d9624327e678593220a6d</code></p><p><strong>Evidence</strong> <code>715e3a24598bde65c9bb52d766e61d66c9a96c3f10758882b9c82c56d63a3893</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__ARTIFACT_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>70be2af8209735eb8b5bf80e3c766efdf36b20ce55b8e8130a311c97bf2d7ceb</code></p><p><strong>Evidence</strong> <code>f2e0880a95f2fa1c584b64d83a1784a8ce2d3b7c0b27351c306088c35c0e89a9</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__SCIENTIFIC_CONSERVATION</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>e6bcdfa49b64d4448303e5375622976ec4373d0973141fc0b393bf69270fc9c3</code></p><p><strong>Evidence</strong> <code>90509adab129990d3f2eafa873c1215255d364be9128f4af4795d3fabe6d0e17</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__ARTIFACT_CATALOG_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>a8c896ff23ccdaee1902ff8a0149adb4a8604705d76a4a970201c226d1e0ae89</code></p><p><strong>Evidence</strong> <code>9878bfa864f9d332217ea15a403167b059adf7e7d358601a1aa319f5c2e0795c</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__DATA_LINEAGE_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>dbc428cc4b8dab27116e0777f127184506b93fbc297e6b4537b60cbfaa0380a5</code></p><p><strong>Evidence</strong> <code>f59a5b6433efa067999d73de4804e6409638f563c2a89ae489ecfa2aad37057e</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__SEMANTIC_DIGEST</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>2538d31388787e06c8b1f3385e478d2975832a7f0aa357f93f9e49bc456a61e7</code></p><p><strong>Evidence</strong> <code>25b0213527cd7fe3c88445bbc58200f0c9480fb8042442440f7a8ea5bcd2b929</code></p></div></details><details><summary><span class="badge pass">PASS</span> W40__CHECKSUM_REPLAY</summary><div class="detail-body"><p><strong>Payload digest</strong> <code>2b9dedd13f1229ed588f3684f6c41c173b2d0296246e547ba63976c0b556fcb3</code></p><p><strong>Evidence</strong> <code>555a40cd07466f22703c5488156390ba55f06b4bdb39dd05feef906df91e970e</code></p></div></details>
+      </section>
+
+      <section id="limits">
+        <div class="kicker">11 · Claim boundary</div>
+        <h2>可以說什麼；不能說什麼</h2>
+        <ul class="limits"><li>HCC1395 是 1/7 dataset gate；production_claim_allowed=false，不能外推七資料集 production。</li><li>w24/w40 只證明同一 HCC1395 frozen input 下八項 science artifact 的 semantic determinism。</li><li>M1 舊新是 COMPARABLE_DIFFERENT，屬 legacy Python decision-parity release blocker：stable aggregate 僅淨差不代表 site membership 相同，必須保留 transition/churn。</li><li>舊 co-occurrence 正式流程在發布前失敗，沒有 formal durable/comparable authority；舊 read×read distance pair 與新 sSNV pair 定義不同，不可做 parity、ratio 或 speedup。</li><li>舊 regional tree 與新 topology 的方法、CN/LOH gating、membership 及 completion semantics 不同。</li><li>queue_wait_seconds 是多 worker aggregate thread-seconds，已包含在 producer 執行內；不得當 wall time 相加或排名。</li><li>共現 counters 是 C++ audit 對已驗證序列化 artifact 的 census；它不重算 p-value 或 q-value，獨立科學重算仍由 validator 負責。</li><li>Python 不讀 scientific artifact data rows（M1/co-occurrence/topology 等）或 BAM/VCF/sidecar；允許讀 artifact catalog/semantic digest metadata rows 與 summary/receipts，並只用於 hash、驗證與呈現，不重算 M1/M2/co-occurrence/topology。</li><li>raw BAM 不是持久化 tagged BAM；HP/PS 來自 frozen sidecar 的 EXACT_PROJECTION_NO_FALLBACK。</li><li>Frozen manifest/receipt 沒有獨立的 run-level M1 representation 欄位；本報告不把 raw-point 或 historical round6/round4 的選擇冒充為 receipt-bound fact。這是 legacy parity 根因分析前必須修補的 provenance gap。</li></ul>
+      </section>
+
+      <footer>
+        HCC1395_ONLY_NON_PRODUCTION_DATASET_GATE · w24 + w40 independently frozen ·
+        validation receipt c63398198994…7bc32203 ·
+        audit receipt f8bd82eba053…f38f0493 ·
+        offline standalone HTML · Python presentation-only
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

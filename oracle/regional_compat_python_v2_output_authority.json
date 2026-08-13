@@ -1,0 +1,71 @@
+{
+  "schema_name": "longlineage.regional_compat_python_v2_output_authority",
+  "schema_version": "1.0.0",
+  "profile_id": "PYTHON_V2_DESCRIPTIVE_REGIONAL_7_DATASET",
+  "source_run_id": "20260713_layered_reconstruction_v3_raw_all_lps_pass_v5",
+  "constraints": {
+    "dataset_count": 7,
+    "dataset_order_exact": true,
+    "region_unit_pattern_fields_only": true,
+    "copy_number_loh_fields_compared": false,
+    "private_source_paths_stored": false
+  },
+  "datasets": [
+    {
+      "dataset_id": "HCC1395",
+      "dataset_order": 0,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "b208aa0bf4e697ea5d5877ff6fd0b12b2bf152c108db92b0e75ec45ea44eada6",
+      "region_view_basename": "layered_region_view_HCC1395.json",
+      "region_view_sha256": "9e28d98087d73cf4ebbe2185ab8cb4159bbc382799291c8c4025adc55f34c9d8"
+    },
+    {
+      "dataset_id": "HCC1395_DORADO",
+      "dataset_order": 1,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "5727bce4e0ef060186b1c60a26776199309a4803af5e1e8b8b72a29a6b8b047a",
+      "region_view_basename": "layered_region_view_HCC1395_DORADO.json",
+      "region_view_sha256": "0a4e9e2eb357d047f874faf28a25ccb39c91ee37283c617187a3699801b8b1b2"
+    },
+    {
+      "dataset_id": "COLO829",
+      "dataset_order": 2,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "fb4a0a7033c0bd281294b058a7a4dd18f4253b6ec2d06fc568461c94e1add029",
+      "region_view_basename": "layered_region_view_COLO829.json",
+      "region_view_sha256": "438950cf287e18802065bd67ce12e0ea5b6fc3b77eaac96e9fbd71543b54cd32"
+    },
+    {
+      "dataset_id": "H1437",
+      "dataset_order": 3,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "5ddbb14bbc467f1908c9024840bbd95bbec4d6bcd1a3fbeb9f75e561802a4c70",
+      "region_view_basename": "layered_region_view_H1437.json",
+      "region_view_sha256": "d6be2187ad209512b75d992d3e645a68391bee8150a7847f804637f1cc8d927e"
+    },
+    {
+      "dataset_id": "H2009",
+      "dataset_order": 4,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "a1e9f1995ff51e569cf6314d07045e31841ba6202aa2650625c8452279baa2b8",
+      "region_view_basename": "layered_region_view_H2009.json",
+      "region_view_sha256": "77fdad8d4466a9fdd5c3e07f06ecbe6460e7dc169e6c4c9d8389b53360d54629"
+    },
+    {
+      "dataset_id": "HCC1937",
+      "dataset_order": 5,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "a117536a867c5754ac3a5a0afd4259c6d4260e2654c44280781d78086e456378",
+      "region_view_basename": "layered_region_view_HCC1937.json",
+      "region_view_sha256": "e238c6f28b55901f43b244d686a97c1be71132cd725c4dae9544d2bbdf0dc149"
+    },
+    {
+      "dataset_id": "HCC1954",
+      "dataset_order": 6,
+      "output_manifest_basename": "output_manifest.json",
+      "output_manifest_sha256": "d5f5756346ee9bd340024680cc5d66804d34e3daea844748a7e32db68325a440",
+      "region_view_basename": "layered_region_view_HCC1954.json",
+      "region_view_sha256": "e5a42c012c1ea36c1bfb2b77fe9ff2b025007d8ecbbf2b1ffbf3c6fcfbac0e28"
+    }
+  ]
+}
