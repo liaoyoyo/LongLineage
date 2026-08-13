@@ -1,0 +1,125 @@
+{
+  "schema_name": "longlineage.public_safety_receipt",
+  "schema_version": "1.0.0",
+  "candidate_commit": "b9aaa12a11fa00606bd174dabd0f172a5d112359",
+  "audit_date": "2026-08-13",
+  "sbom_created_at": "2026-08-13T02:49:30Z",
+  "task_type": "E_PUBLIC_SAFETY_REMEDIATION",
+  "scope": "PRIVATE_FIRST_NO_PUBLICATION_NO_HISTORY_REWRITE",
+  "gate_status": "FAIL_CLOSED",
+  "visibility_incident": {
+    "initial_observed_visibility": "PUBLIC",
+    "containment_final_visibility": "PRIVATE",
+    "exact_timestamp_captured": false,
+    "timestamp_precision": "DATE_ONLY",
+    "subsequent_public_state_observed": true,
+    "second_containment": {
+      "github_updated_at_before": "2026-08-13T02:50:30Z",
+      "github_updated_at_after": "2026-08-13T03:23:45Z",
+      "verified_visibility_after": "PRIVATE"
+    },
+    "public_tag_observed": false,
+    "public_release_observed": false,
+    "interpretation": "Visibility was observed as PUBLIC twice and contained again; this receipt does not assert that exposure never occurred or that no clone/download happened."
+  },
+  "history_hygiene": {
+    "base_ref": "origin/main",
+    "merge_base": "5daf50f04cbe233abfade816ce9e0903f6b38954",
+    "head_ref": "b9aaa12a11fa00606bd174dabd0f172a5d112359",
+    "status": "FAIL",
+    "finding_count": 7,
+    "findings": [
+      {
+        "kind": "ABSOLUTE_PRIVATE_PATH",
+        "path": "docs/lineage/FORMAT_CHAIN.md",
+        "blob": "958da6904533eb1d6e21f5abdcb804d7d9d4d922"
+      },
+      {
+        "kind": "REAL_COORDINATE_SHAPED_PAYLOAD",
+        "path": "docs/lineage/KNOWN_ISSUES.md",
+        "blob": "997f489ea5330ac1366f6245876fb46afc6c9e92"
+      },
+      {
+        "kind": "ABSOLUTE_PRIVATE_PATH",
+        "path": "docs/lineage/PIPELINE_ARCHITECTURE.md",
+        "blob": "9523ba84f30491db64af24a974e6091da98d8dce"
+      },
+      {
+        "kind": "REAL_COORDINATE_SHAPED_PAYLOAD",
+        "path": "docs/lineage/STEP_PLAN.md",
+        "blob": "3e861fccd8d152f55d12ea53b4a9e25aed718d42"
+      },
+      {
+        "kind": "ABSOLUTE_PRIVATE_PATH",
+        "path": "docs/lineage/baseline/cohort_baseline.json",
+        "blob": "131fa8779e07c349c0e5535efa29f91f0a3b8dca"
+      },
+      {
+        "kind": "REAL_COORDINATE_SHAPED_PAYLOAD",
+        "path": "docs/lineage/reference_python/ll_bam_tag.py",
+        "blob": "dad22b7b16586cad51b93cf557ee38f8a3539f9e"
+      },
+      {
+        "kind": "ABSOLUTE_PRIVATE_PATH",
+        "path": "scripts/run_sample.sh",
+        "blob": "6bb645f6e4482cb4f44d434131a20fd00cd143a1"
+      }
+    ]
+  },
+  "source_replay": {
+    "manifest_schema_version": "1.2.0",
+    "declared_origin_commit": "0ee2fa1b31fcf6af670efd301251b5b3a24c1a99",
+    "mapping_rows": 21,
+    "declared_commit_matches": 5,
+    "other_commit_matches": 12,
+    "unresolved_rows": 4,
+    "target_digest_matches": 21,
+    "target_digest_mismatches": 0,
+    "missing_unique_hashes": [
+      {
+        "source_basename": "analyze_methyl_ssnv_cooccurrence.py",
+        "sha256": "3d7650983fce68abc122748d167e56b9a53bc6ef9775b9b1beb19793e25a769c"
+      },
+      {
+        "source_basename": "layered_tree_reconstruction.py",
+        "sha256": "70d28fa4dfe3e69a0ea610e346457a894e7e024ffdb437895343fc66516639d0"
+      },
+      {
+        "source_basename": "build_region_view.py",
+        "sha256": "cd39bb7799f6b62190f9dca2a3afad321d0b384e254ab3fb4a102e594d02d872"
+      }
+    ]
+  },
+  "license_review": {
+    "repository_status": "PENDING_PUBLIC_RELEASE_AUDIT",
+    "row_dispositions_pending": 21,
+    "row_dispositions_approved": 0,
+    "third_party_notice_status": "INVENTORY_ONLY_NOT_APPROVAL",
+    "sbom_status": "NOASSERTION_PENDING_REVIEW"
+  },
+  "foundation_evidence": {
+    "baseline_test_commit": "b9aaa12a11fa00606bd174dabd0f172a5d112359",
+    "gcc_debug_ctest": "47/47_PASS",
+    "foundation_check": "PASS_WITH_DECLARED_RELEASE_BLOCKERS",
+    "strict_fixture_only_blockers": 12,
+    "production_run_expected_exit": 6,
+    "production_run_expected_status": "KERNEL_BLOCKED"
+  },
+  "safety_layer_validation": {
+    "validated_at": "2026-08-13T03:16:02Z",
+    "worktree_commit": "b9aaa12a11fa00606bd174dabd0f172a5d112359",
+    "uncommitted_safety_layer": true,
+    "cmake_configure_exit": 0,
+    "build_exit": 0,
+    "ctest_passed": 49,
+    "ctest_total": 49,
+    "ctest_failed": 0,
+    "sbom_contract_test_exit": 0,
+    "public_gate_expected_exit": 1,
+    "public_gate_regression_test_exit": 0,
+    "clang_format_14_exit": 0,
+    "git_diff_check_exit": 0
+  },
+  "blocked_phases": ["P3", "P4", "P5", "P7", "P8"],
+  "required_verdict": "KEEP_PRIVATE_NO_TAG_NO_RELEASE"
+}
