@@ -53,12 +53,12 @@
     {"role": "dependency_lock", "path": "containers/versions.lock.tsv", "sha256": "c5c73105f844bf31d45e2d57fe8fcfb7db8fbafd4b52c307d72693fbe1cb0115"}
   ],
   "expected_outputs": [
-    {"role": "public_preview_boundary", "path": "docs/release/PUBLIC_PREVIEW.md", "sha256": "ce46841d999c8d160f1fbf8c780f68b08d607f04ef096548c4af321f245a34d1"},
+    {"role": "public_preview_boundary", "path": "docs/release/PUBLIC_PREVIEW.md", "sha256": "d5b8cca946e57e24aa501f18c7fe8286befc548cc90b80635eebfd93dc1f553f"},
     {"role": "public_safety_receipt", "path": "docs/release/PUBLIC_SAFETY_RECEIPT.json", "sha256": "a3503439be822a70677c2e3e3403ddeecf4ffb6fe3324fa835c07ac42c8e809a"},
-    {"role": "public_security_policy", "path": "SECURITY.md", "sha256": "7d406ff696b98189169bf5c361f1d62d2b2979af31ff2f3a28fbc582ccb73e10"},
+    {"role": "public_security_policy", "path": "SECURITY.md", "sha256": "f84a2fa6028f8f58ccfec90a338df267d4fe195ebb969ff836ed8b224f66f4e1"},
     {"role": "third_party_notice", "path": "THIRD_PARTY_NOTICES.md", "sha256": "7e338cdc5ab47289bbe77c73d4249c60a62f177aac7414213e62eda6d2bf9407"},
     {"role": "deterministic_sbom", "path": "SBOM.spdx.json", "sha256": "facb20f6f882d4a237dbe7179c001e3fcfcaa2e46f43cfd2df12c61999c7badf"},
-    {"role": "fail_closed_validator", "path": "scripts/ci/check_public_preview_gate.sh", "sha256": "cecded27342c72480a220f03366b9670d08667c952b05ed6ace18a95b7b7cb95"}
+    {"role": "fail_closed_validator", "path": "scripts/ci/check_public_preview_gate.sh", "sha256": "67951f082e3a497f3472f8a680ef026b8a43b779b732928e3f1515cbbb3bb601"}
   ],
   "step_verify": [
     {

@@ -24,11 +24,13 @@ in protected run roots and are referenced by sanitized role/digest in documentat
 Before any visibility change, tag or release, run:
 
 ```bash
-scripts/ci/check_public_preview_gate.sh origin/main HEAD
+scripts/ci/check_public_preview_gate.sh HEAD
 ```
 
 A non-zero result is the expected safe state while source-origin, license, dependency
-or history findings remain. A passing foundation build does not override this gate.
+or history findings remain. The command reads its immutable history-audit base from
+the safety receipt; it never trusts a moving branch name. A passing foundation build
+does not override this gate.
 The current disposition is `KEEP_PRIVATE_NO_TAG_NO_RELEASE`; see
 `LongLineage/docs/release/PUBLIC_SAFETY_RECEIPT.json`.
 

@@ -16,11 +16,15 @@ Status: verified · PARTIAL — history-safe private draft publication scope clo
   `NOASSERTION`及annotation，不把inventory冒充license audit PASS。
 - [驗證] `LongLineage/scripts/testing/test_sbom_spdx.sh` exit 0；33 packages
   （root + 11 locked dependencies + 21 source mappings）可重生且byte-identical。
-- [驗證] `LongLineage/scripts/ci/check_public_preview_gate.sh origin/main HEAD`
+- [驗證] `LongLineage/scripts/ci/check_public_preview_gate.sh HEAD`
   預期exit 1，固定辨識5類blocker：repository license review、4 unresolved source
   rows、21 unapproved mappings、11 dependency license `NOASSERTION`及7 history
   findings。`LongLineage/scripts/testing/test_public_preview_gate.sh`把此安全失敗
   驗為PASS，避免誤認成工具故障。
+- [驗證事件] hosted CI顯示moving `origin/main`已前進且不再是candidate ancestor，
+  造成history checker exit 2。Gate已改從`PUBLIC_SAFETY_RECEIPT.json`讀取immutable
+  audit base `5daf50f04cbe233abfade816ce9e0903f6b38954`；在更新後的remote-main狀態仍
+  精確重播7 findings，CTest regression PASS。
 - [驗證] safety layer configure/build exit 0，新增tests 2/2 PASS，最後完整
   CTest 49/49 PASS；clang-format 14與`git diff --check`均exit 0。47/47仍只代表
   frozen `b9aaa12` baseline，49/49則代表本輪stacked safety layer，不混為同一receipt。
