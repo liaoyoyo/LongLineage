@@ -209,14 +209,20 @@ CheckResult validate_production_manifest(const json_t* manifest) {
         std::string(json_string_value(schema_name)) != "longlineage.production_manifest") {
         return invalid("schema_name is not longlineage.production_manifest");
     }
-    if (!json_is_string(schema_version) || std::string(json_string_value(schema_version)) != "1.0.0") {
+    if (!json_is_string(schema_version) || (std::string(json_string_value(schema_version)) != "1.0.0" &&
+                                            std::string(json_string_value(schema_version)) != "1.1.0")) {
         return invalid("unsupported production manifest schema_version");
     }
     const auto* authority_profile = json_object_get(manifest, "authority_profile");
     if (!json_is_string(authority_profile) ||
         (std::string(json_string_value(authority_profile)) != "PRODUCTION_7_DATASET" &&
+         std::string(json_string_value(authority_profile)) != "HCC1395_DATASET_GATE" &&
          std::string(json_string_value(authority_profile)) != "SYNTHETIC")) {
         return invalid("unknown authority_profile");
+    }
+    const std::string profile = json_string_value(authority_profile);
+    if (profile == "HCC1395_DATASET_GATE" && std::string(json_string_value(schema_version)) != "1.1.0") {
+        return invalid("HCC1395_DATASET_GATE requires manifest schema_version 1.1.0");
     }
     const auto* run_id_value = json_object_get(manifest, "run_id");
     const auto* output_root_value = json_object_get(manifest, "output_root");
@@ -248,13 +254,18 @@ CheckResult validate_production_manifest(const json_t* manifest) {
         "reference_fai",
     };
 
+    std::set<std::string> observed_dataset_ids;
     for (std::size_t dataset_index = 0; dataset_index < json_array_size(datasets); ++dataset_index) {
         const auto* dataset = json_array_get(datasets, dataset_index);
         if (!is_object_with_only_keys(dataset, dataset_keys, dataset_keys, reason)) {
             return invalid("dataset[" + std::to_string(dataset_index) + "]: " + reason);
         }
-        if (!is_nonempty_string(json_object_get(dataset, "dataset_id")) ||
-            !json_is_integer(json_object_get(dataset, "dataset_order"))) {
+        const auto* dataset_id_value = json_object_get(dataset, "dataset_id");
+        const auto* dataset_order_value = json_object_get(dataset, "dataset_order");
+        if (!is_nonempty_string(dataset_id_value) || !json_is_integer(dataset_order_value) ||
+            json_integer_value(dataset_order_value) < 0 ||
+            static_cast<std::size_t>(json_integer_value(dataset_order_value)) != dataset_index ||
+            !observed_dataset_ids.insert(json_string_value(dataset_id_value)).second) {
             return invalid("dataset id/order has the wrong type");
         }
         const auto* files = json_object_get(dataset, "files");
@@ -319,15 +330,20 @@ CheckResult validate_production_manifest(const json_t* manifest) {
         return invalid("runtime block/buffer/thread bounds are invalid");
     }
 
-    const std::set<std::string> binding_keys = {
+    std::set<std::string> binding_keys = {
         "science_parameters_sha256",        "schema_catalog_sha256",
         "status_reason_registry_sha256",    "type_registry_sha256",
         "transform_registry_sha256",        "authority_manifest_sha256",
         "source_to_target_manifest_sha256", "production_input_authority_sha256",
         "schema_id_registry_sha256",        "release_attestation_sha256",
     };
+    std::set<std::string> required_binding_keys = binding_keys;
+    if (profile == "HCC1395_DATASET_GATE") {
+        binding_keys.insert("dataset_gate_input_authority_sha256");
+        required_binding_keys.insert("dataset_gate_input_authority_sha256");
+    }
     const auto* bindings = json_object_get(manifest, "contract_bindings");
-    if (!is_object_with_only_keys(bindings, binding_keys, binding_keys, reason)) {
+    if (!is_object_with_only_keys(bindings, binding_keys, required_binding_keys, reason)) {
         return invalid("contract_bindings: " + reason);
     }
     for (const auto& key : binding_keys) {

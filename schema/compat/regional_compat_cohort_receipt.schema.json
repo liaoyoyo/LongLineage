@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_cohort_receipt-1.0.0.json",
+  "title": "LongLineage seven-dataset regional compatibility cohort receipt",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "profile_id",
+    "state",
+    "dataset_count",
+    "source_authority_profile",
+    "source_authority_sha256",
+    "python_authority_sha256",
+    "source_set_sha256",
+    "chart_payload_sha256",
+    "all_sources_validated_frozen",
+    "all_crosswalk_receipts_exact",
+    "crosswalk_receipts_independently_frozen",
+    "crosswalk_evidence_scope",
+    "claim_ceiling",
+    "samples",
+    "cohort_totals"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_cohort_receipt"},
+    "schema_version": {"const": "1.0.0"},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL_7_DATASET"},
+    "state": {"const": "VALIDATED_FROZEN_BUNDLES_WITH_EXACT_CROSSWALK_RECEIPTS_AGGREGATED"},
+    "dataset_count": {"const": 7},
+    "source_authority_profile": {"const": "PRODUCTION_7_DATASET"},
+    "source_authority_sha256": {"$ref": "#/$defs/sha256"},
+    "python_authority_sha256": {"$ref": "#/$defs/sha256"},
+    "source_set_sha256": {"$ref": "#/$defs/sha256"},
+    "chart_payload_sha256": {"$ref": "#/$defs/sha256"},
+    "all_sources_validated_frozen": {"const": true},
+    "all_crosswalk_receipts_exact": {"const": true},
+    "crosswalk_receipts_independently_frozen": {"const": false},
+    "crosswalk_evidence_scope": {
+      "const": "CPLUSPLUS_RECEIPT_BOUND_TO_FROZEN_BUNDLE_AND_FROZEN_PYTHON_CORPUS_AUTHORITY"
+    },
+    "claim_ceiling": {"$ref": "#/$defs/claim_ceiling"},
+    "samples": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "HCC1395"}, "dataset_order": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "HCC1395_DORADO"}, "dataset_order": {"const": 1}}}]},
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "COLO829"}, "dataset_order": {"const": 2}}}]},
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "H1437"}, "dataset_order": {"const": 3}}}]},
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "H2009"}, "dataset_order": {"const": 4}}}]},
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "HCC1937"}, "dataset_order": {"const": 5}}}]},
+        {"allOf": [{"$ref": "#/$defs/sample"}, {"properties": {"dataset_id": {"const": "HCC1954"}, "dataset_order": {"const": 6}}}]}
+      ],
+      "items": false
+    },
+    "cohort_totals": {
+      "type": "object",
+      "required": ["row_counts", "class_census", "sequential_timing", "maximum_peak_rss"],
+      "properties": {
+        "row_counts": {"$ref": "#/$defs/row_counts"},
+        "class_census": {"$ref": "#/$defs/class_census"},
+        "sequential_timing": {"$ref": "#/$defs/timing"},
+        "maximum_peak_rss": {"$ref": "#/$defs/peak_rss"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "absolute_path": {"type": "string", "pattern": "^/", "minLength": 2},
+    "row_counts": {
+      "type": "object",
+      "required": ["regions", "units", "patterns"],
+      "properties": {
+        "regions": {"type": "integer", "minimum": 0},
+        "units": {"type": "integer", "minimum": 0},
+        "patterns": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "unit_classes": {
+      "type": "object",
+      "required": ["ambiguous_order", "ambiguous_structure", "capped", "determined", "recurrence_required", "underdetermined"],
+      "properties": {
+        "ambiguous_order": {"type": "integer", "minimum": 0},
+        "ambiguous_structure": {"type": "integer", "minimum": 0},
+        "capped": {"type": "integer", "minimum": 0},
+        "determined": {"type": "integer", "minimum": 0},
+        "recurrence_required": {"type": "integer", "minimum": 0},
+        "underdetermined": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "region_determinacy": {
+      "type": "object",
+      "required": ["all_determined", "has_ambiguous", "has_capped", "has_recurrence", "no_primary_lineage"],
+      "properties": {
+        "all_determined": {"type": "integer", "minimum": 0},
+        "has_ambiguous": {"type": "integer", "minimum": 0},
+        "has_capped": {"type": "integer", "minimum": 0},
+        "has_recurrence": {"type": "integer", "minimum": 0},
+        "no_primary_lineage": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "class_census": {
+      "type": "object",
+      "required": ["encoding", "unit_classes", "primary_classes", "region_determinacy"],
+      "properties": {
+        "encoding": {"const": "CLOSED_CATEGORIES_ZERO_FILLED_FROM_SPARSE_VALIDATED_SOURCE"},
+        "unit_classes": {"$ref": "#/$defs/unit_classes"},
+        "primary_classes": {"$ref": "#/$defs/unit_classes"},
+        "region_determinacy": {"$ref": "#/$defs/region_determinacy"}
+      },
+      "additionalProperties": false
+    },
+    "timing": {
+      "type": "object",
+      "required": ["total_wall_seconds", "input_sha256_seconds", "science_wall_seconds", "worker_open_seconds", "summed_input_seconds", "summed_solver_seconds"],
+      "properties": {
+        "total_wall_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "input_sha256_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "science_wall_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "worker_open_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "summed_input_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "summed_solver_seconds": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "peak_rss": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["available", "bytes", "source", "reason"],
+          "properties": {
+            "available": {"const": false},
+            "bytes": {"type": "null"},
+            "source": {"type": "null"},
+            "reason": {"const": "NOT_PRESENT_IN_VALIDATED_REGIONAL_BUNDLE_CONTRACT"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["available", "bytes", "source", "reason"],
+          "properties": {
+            "available": {"const": true},
+            "bytes": {"type": "integer", "minimum": 1},
+            "source": {"type": "string", "minLength": 1},
+            "reason": {"type": "null"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "source_bindings": {
+      "type": "object",
+      "required": [
+        "frozen_bundle", "crosswalk_receipt", "source_authority_profile", "source_authority_sha256",
+        "source_manifest_path", "source_manifest_run_id", "source_manifest_sha256", "validator_executable_sha256",
+        "summary_sha256", "producer_receipt_sha256", "validation_receipt_sha256", "frozen_marker_sha256",
+        "crosswalk_receipt_sha256", "checksum_manifest_sha256", "regions_tsv_sha256", "units_tsv_sha256",
+        "patterns_tsv_sha256", "python_output_manifest_sha256", "python_region_view_sha256",
+        "python_authority_sha256"
+      ],
+      "properties": {
+        "frozen_bundle": {"$ref": "#/$defs/absolute_path"},
+        "crosswalk_receipt": {"$ref": "#/$defs/absolute_path"},
+        "source_authority_profile": {"const": "PRODUCTION_7_DATASET"},
+        "source_authority_sha256": {"$ref": "#/$defs/sha256"},
+        "source_manifest_path": {"$ref": "#/$defs/absolute_path"},
+        "source_manifest_run_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "validator_executable_sha256": {"$ref": "#/$defs/sha256"},
+        "summary_sha256": {"$ref": "#/$defs/sha256"},
+        "producer_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "validation_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "frozen_marker_sha256": {"$ref": "#/$defs/sha256"},
+        "crosswalk_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "checksum_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "regions_tsv_sha256": {"$ref": "#/$defs/sha256"},
+        "units_tsv_sha256": {"$ref": "#/$defs/sha256"},
+        "patterns_tsv_sha256": {"$ref": "#/$defs/sha256"},
+        "python_output_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "python_region_view_sha256": {"$ref": "#/$defs/sha256"},
+        "python_authority_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "crosswalk": {
+      "type": "object",
+      "required": ["receipt_reports_all_exact", "receipt_independently_frozen", "regions_mismatches", "units_mismatches", "patterns_mismatches"],
+      "properties": {
+        "receipt_reports_all_exact": {"const": true},
+        "receipt_independently_frozen": {"const": false},
+        "regions_mismatches": {"const": 0},
+        "units_mismatches": {"const": 0},
+        "patterns_mismatches": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "claim_ceiling": {
+      "type": "object",
+      "required": ["descriptive_python_compatibility_only", "formal_m2_topology", "production_release", "clone_ancestor_time_order", "crosswalk_mismatch_tolerance"],
+      "properties": {
+        "descriptive_python_compatibility_only": {"const": true},
+        "formal_m2_topology": {"const": false},
+        "production_release": {"const": false},
+        "clone_ancestor_time_order": {"const": false},
+        "crosswalk_mismatch_tolerance": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "sample": {
+      "type": "object",
+      "required": ["dataset_id", "dataset_order", "run_id", "workers", "row_counts", "class_census", "timing", "peak_rss", "source_bindings", "crosswalk"],
+      "properties": {
+        "dataset_id": {"type": "string"},
+        "dataset_order": {"type": "integer", "minimum": 0, "maximum": 6},
+        "run_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,159}$"},
+        "workers": {"const": 24},
+        "row_counts": {"$ref": "#/$defs/row_counts"},
+        "class_census": {"$ref": "#/$defs/class_census"},
+        "timing": {"$ref": "#/$defs/timing"},
+        "peak_rss": {"$ref": "#/$defs/peak_rss"},
+        "source_bindings": {"$ref": "#/$defs/source_bindings"},
+        "crosswalk": {"$ref": "#/$defs/crosswalk"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

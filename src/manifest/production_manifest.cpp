@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-only
 #include "longlineage/manifest/production_manifest.hpp"
 
+#include <fcntl.h>
 #include <jansson.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <cerrno>
 #include <fstream>
 #include <limits>
 #include <map>
@@ -22,6 +26,29 @@ namespace longlineage {
 namespace {
 
 using JsonPointer = std::unique_ptr<json_t, decltype(&json_decref)>;
+
+class FileDescriptor final {
+   public:
+    explicit FileDescriptor(int value) : value_(value) {}
+    ~FileDescriptor() {
+        if (value_ >= 0) {
+            ::close(value_);
+        }
+    }
+    FileDescriptor(const FileDescriptor&) = delete;
+    FileDescriptor& operator=(const FileDescriptor&) = delete;
+    [[nodiscard]] int get() const noexcept { return value_; }
+
+   private:
+    int value_;
+};
+
+[[nodiscard]] bool same_file_identity(const struct stat& left, const struct stat& right) noexcept {
+    return left.st_dev == right.st_dev && left.st_ino == right.st_ino && left.st_mode == right.st_mode &&
+           left.st_size == right.st_size && left.st_mtim.tv_sec == right.st_mtim.tv_sec &&
+           left.st_mtim.tv_nsec == right.st_mtim.tv_nsec && left.st_ctim.tv_sec == right.st_ctim.tv_sec &&
+           left.st_ctim.tv_nsec == right.st_ctim.tv_nsec;
+}
 
 constexpr std::array<FileRole, 8> kRequiredRoles = {
     FileRole::kRawBam,
@@ -324,16 +351,17 @@ constexpr std::array<FileRole, 8> kRequiredRoles = {
 [[nodiscard]] ParseResult<ContractBindings> parse_contract_bindings(const json_t* node) {
     constexpr std::string_view kPath = "$.contract_bindings";
     std::string detail;
-    if (!has_only_keys(node,
-                       {"science_parameters_sha256", "schema_catalog_sha256", "status_reason_registry_sha256",
-                        "type_registry_sha256", "transform_registry_sha256", "authority_manifest_sha256",
-                        "source_to_target_manifest_sha256", "production_input_authority_sha256",
-                        "schema_id_registry_sha256", "release_attestation_sha256"},
-                       {"science_parameters_sha256", "schema_catalog_sha256", "status_reason_registry_sha256",
-                        "type_registry_sha256", "transform_registry_sha256", "authority_manifest_sha256",
-                        "source_to_target_manifest_sha256", "production_input_authority_sha256",
-                        "schema_id_registry_sha256", "release_attestation_sha256"},
-                       kPath, detail)) {
+    if (!has_only_keys(
+            node,
+            {"science_parameters_sha256", "schema_catalog_sha256", "status_reason_registry_sha256",
+             "type_registry_sha256", "transform_registry_sha256", "authority_manifest_sha256",
+             "source_to_target_manifest_sha256", "production_input_authority_sha256",
+             "dataset_gate_input_authority_sha256", "schema_id_registry_sha256", "release_attestation_sha256"},
+            {"science_parameters_sha256", "schema_catalog_sha256", "status_reason_registry_sha256",
+             "type_registry_sha256", "transform_registry_sha256", "authority_manifest_sha256",
+             "source_to_target_manifest_sha256", "production_input_authority_sha256", "schema_id_registry_sha256",
+             "release_attestation_sha256"},
+            kPath, detail)) {
         return ParseResult<ContractBindings>::failure(ParseReason::kMalformedValue, std::move(detail));
     }
     ContractBindings bindings;
@@ -351,7 +379,12 @@ constexpr std::array<FileRole, 8> kRequiredRoles = {
         !read_string(node, "release_attestation_sha256", kPath, bindings.release_attestation_sha256, detail)) {
         return ParseResult<ContractBindings>::failure(ParseReason::kMalformedValue, std::move(detail));
     }
-    const std::array<std::pair<std::string_view, const std::string*>, 10> values = {{
+    const json_t* dataset_gate_authority = json_object_get(node, "dataset_gate_input_authority_sha256");
+    if (dataset_gate_authority != nullptr && !read_string(node, "dataset_gate_input_authority_sha256", kPath,
+                                                          bindings.dataset_gate_input_authority_sha256, detail)) {
+        return ParseResult<ContractBindings>::failure(ParseReason::kMalformedValue, std::move(detail));
+    }
+    const std::array<std::pair<std::string_view, const std::string*>, 11> values = {{
         {"science_parameters_sha256", &bindings.science_parameters_sha256},
         {"schema_catalog_sha256", &bindings.schema_catalog_sha256},
         {"status_reason_registry_sha256", &bindings.status_reason_registry_sha256},
@@ -360,10 +393,14 @@ constexpr std::array<FileRole, 8> kRequiredRoles = {
         {"authority_manifest_sha256", &bindings.authority_manifest_sha256},
         {"source_to_target_manifest_sha256", &bindings.source_to_target_manifest_sha256},
         {"production_input_authority_sha256", &bindings.production_input_authority_sha256},
+        {"dataset_gate_input_authority_sha256", &bindings.dataset_gate_input_authority_sha256},
         {"schema_id_registry_sha256", &bindings.schema_id_registry_sha256},
         {"release_attestation_sha256", &bindings.release_attestation_sha256},
     }};
     for (const auto& [name, value] : values) {
+        if (name == "dataset_gate_input_authority_sha256" && value->empty()) {
+            continue;
+        }
         if (!is_lower_sha256(*value)) {
             return ParseResult<ContractBindings>::failure(
                 ParseReason::kMalformedValue,
@@ -379,6 +416,8 @@ std::string_view to_string(AuthorityProfile profile) noexcept {
     switch (profile) {
         case AuthorityProfile::kProductionSevenDataset:
             return "PRODUCTION_7_DATASET";
+        case AuthorityProfile::kHcc1395DatasetGate:
+            return "HCC1395_DATASET_GATE";
         case AuthorityProfile::kSynthetic:
             return "SYNTHETIC";
     }
@@ -389,11 +428,15 @@ ParseResult<AuthorityProfile> parse_authority_profile(std::string_view value) {
     if (value == "PRODUCTION_7_DATASET") {
         return ParseResult<AuthorityProfile>::success(AuthorityProfile::kProductionSevenDataset);
     }
+    if (value == "HCC1395_DATASET_GATE") {
+        return ParseResult<AuthorityProfile>::success(AuthorityProfile::kHcc1395DatasetGate);
+    }
     if (value == "SYNTHETIC") {
         return ParseResult<AuthorityProfile>::success(AuthorityProfile::kSynthetic);
     }
-    return ParseResult<AuthorityProfile>::failure(ParseReason::kUnsupportedValue,
-                                                  "authority_profile must be PRODUCTION_7_DATASET or SYNTHETIC");
+    return ParseResult<AuthorityProfile>::failure(
+        ParseReason::kUnsupportedValue,
+        "authority_profile must be PRODUCTION_7_DATASET, HCC1395_DATASET_GATE or SYNTHETIC");
 }
 
 std::string_view to_string(FileRole role) noexcept {
@@ -470,10 +513,11 @@ ParseResult<ProductionManifest> parse_production_manifest_json(std::string_view 
         return ParseResult<ProductionManifest>::failure(parsed_profile.reason, std::move(parsed_profile.detail));
     }
     manifest.authority_profile = *parsed_profile.value;
-    if (manifest.schema_name != "longlineage.production_manifest" || manifest.schema_version != "1.0.0") {
+    if (manifest.schema_name != "longlineage.production_manifest" ||
+        (manifest.schema_version != "1.0.0" && manifest.schema_version != "1.1.0")) {
         return ParseResult<ProductionManifest>::failure(
             ParseReason::kUnsupportedValue,
-            "Production manifest must declare longlineage.production_manifest schema version 1.0.0");
+            "Production manifest must declare longlineage.production_manifest schema version 1.0.0 or 1.1.0");
     }
     if (!is_safe_id(manifest.run_id, 128)) {
         return ParseResult<ProductionManifest>::failure(ParseReason::kMalformedValue,
@@ -522,50 +566,134 @@ ParseResult<ProductionManifest> parse_production_manifest_json(std::string_view 
         return ParseResult<ProductionManifest>::failure(contract_bindings.reason, std::move(contract_bindings.detail));
     }
     manifest.contract_bindings = std::move(*contract_bindings.value);
+    if (manifest.authority_profile == AuthorityProfile::kHcc1395DatasetGate) {
+        if (manifest.schema_version != "1.1.0") {
+            return ParseResult<ProductionManifest>::failure(
+                ParseReason::kUnsupportedValue,
+                "HCC1395_DATASET_GATE requires production manifest schema version 1.1.0");
+        }
+        if (manifest.contract_bindings.dataset_gate_input_authority_sha256.empty()) {
+            return ParseResult<ProductionManifest>::failure(
+                ParseReason::kMissingRequiredField,
+                "$.contract_bindings.dataset_gate_input_authority_sha256 is required for HCC1395_DATASET_GATE");
+        }
+    } else if (!manifest.contract_bindings.dataset_gate_input_authority_sha256.empty()) {
+        return ParseResult<ProductionManifest>::failure(
+            ParseReason::kUnsupportedValue,
+            "$.contract_bindings.dataset_gate_input_authority_sha256 is forbidden outside HCC1395_DATASET_GATE");
+    }
     return ParseResult<ProductionManifest>::success(std::move(manifest));
 }
 
 ParseResult<ProductionManifest> load_production_manifest(const std::filesystem::path& path) {
-    std::ifstream input(path, std::ios::binary);
-    if (!input) {
-        return ParseResult<ProductionManifest>::failure(ParseReason::kIoError,
-                                                        "Cannot open production manifest: " + path.string());
+    auto snapshot = load_production_manifest_snapshot(path);
+    if (!snapshot.ok() || !snapshot.value.has_value()) {
+        return ParseResult<ProductionManifest>::failure(snapshot.reason, std::move(snapshot.detail));
     }
-    std::ostringstream buffer;
-    buffer << input.rdbuf();
-    if (input.bad()) {
-        return ParseResult<ProductionManifest>::failure(ParseReason::kIoError,
-                                                        "Cannot read production manifest: " + path.string());
+    return ParseResult<ProductionManifest>::success(std::move(snapshot.value->manifest));
+}
+
+ParseResult<ProductionManifestSnapshot> load_production_manifest_snapshot(const std::filesystem::path& path) {
+    FileDescriptor descriptor(::open(path.c_str(), O_RDONLY | O_CLOEXEC | O_NOFOLLOW));
+    if (descriptor.get() < 0) {
+        return ParseResult<ProductionManifestSnapshot>::failure(ParseReason::kIoError,
+                                                                "Cannot open production manifest: " + path.string());
     }
-    return parse_production_manifest_json(buffer.str());
+    struct stat before {};
+    constexpr std::uint64_t kMaximumManifestBytes = 16U * 1024U * 1024U;
+    if (::fstat(descriptor.get(), &before) != 0 || !S_ISREG(before.st_mode) || before.st_size < 0 ||
+        static_cast<std::uint64_t>(before.st_size) > kMaximumManifestBytes) {
+        return ParseResult<ProductionManifestSnapshot>::failure(
+            ParseReason::kIoError, "Production manifest is not a bounded regular file: " + path.string());
+    }
+    std::string bytes(static_cast<std::size_t>(before.st_size), '\0');
+    std::size_t offset = 0;
+    while (offset < bytes.size()) {
+        const ssize_t count = ::read(descriptor.get(), bytes.data() + offset, bytes.size() - offset);
+        if (count < 0 && errno == EINTR) {
+            continue;
+        }
+        if (count <= 0) {
+            return ParseResult<ProductionManifestSnapshot>::failure(
+                ParseReason::kIoError, "Short read while capturing production manifest: " + path.string());
+        }
+        offset += static_cast<std::size_t>(count);
+    }
+    char trailing = '\0';
+    ssize_t trailing_count = 0;
+    do {
+        trailing_count = ::read(descriptor.get(), &trailing, 1U);
+    } while (trailing_count < 0 && errno == EINTR);
+    struct stat after {};
+    struct stat path_after {};
+    if (trailing_count != 0 || ::fstat(descriptor.get(), &after) != 0 || ::stat(path.c_str(), &path_after) != 0 ||
+        !same_file_identity(before, after) || !same_file_identity(after, path_after)) {
+        return ParseResult<ProductionManifestSnapshot>::failure(
+            ParseReason::kIoError, "Production manifest identity changed during immutable snapshot: " + path.string());
+    }
+    auto parsed = parse_production_manifest_json(bytes);
+    if (!parsed.ok() || !parsed.value.has_value()) {
+        return ParseResult<ProductionManifestSnapshot>::failure(parsed.reason, std::move(parsed.detail));
+    }
+    auto digest = sha256_hex(bytes);
+    if (!digest.ok() || !digest.value.has_value()) {
+        return ParseResult<ProductionManifestSnapshot>::failure(digest.reason, std::move(digest.detail));
+    }
+    return ParseResult<ProductionManifestSnapshot>::success(
+        ProductionManifestSnapshot{std::move(*parsed.value), std::move(*digest.value)});
 }
 
 ParseResult<FileLockCheck> verify_locked_file(const LockedFile& locked_file) {
     std::error_code error;
-    if (!std::filesystem::is_regular_file(locked_file.path, error) || error) {
-        return ParseResult<FileLockCheck>::failure(
-            ParseReason::kIoError, "Locked input is not a readable regular file: " + locked_file.path.string());
-    }
-    const std::uintmax_t size = std::filesystem::file_size(locked_file.path, error);
-    if (error) {
+    const std::filesystem::path canonical = std::filesystem::canonical(locked_file.path, error);
+    if (error || canonical.empty()) {
         return ParseResult<FileLockCheck>::failure(ParseReason::kIoError,
-                                                   "Cannot stat locked input: " + locked_file.path.string());
+                                                   "Cannot canonicalize locked input: " + locked_file.path.string());
     }
+    FileDescriptor descriptor(::open(canonical.c_str(), O_RDONLY | O_CLOEXEC | O_NOFOLLOW));
+    if (descriptor.get() < 0) {
+        return ParseResult<FileLockCheck>::failure(ParseReason::kIoError,
+                                                   "Cannot open canonical locked input: " + canonical.string());
+    }
+    struct stat before {};
+    if (::fstat(descriptor.get(), &before) != 0 || !S_ISREG(before.st_mode) || before.st_size < 0) {
+        return ParseResult<FileLockCheck>::failure(ParseReason::kIoError,
+                                                   "Cannot fstat locked regular input: " + canonical.string());
+    }
+    const auto size = static_cast<std::uint64_t>(before.st_size);
     if (size != locked_file.size_bytes) {
         return ParseResult<FileLockCheck>::failure(
             ParseReason::kIoError, "Locked input size mismatch for " + locked_file.path.string() + ": expected " +
                                        std::to_string(locked_file.size_bytes) + ", observed " + std::to_string(size));
     }
-    auto digest = sha256_file(locked_file.path);
+    const std::filesystem::path descriptor_path =
+        std::filesystem::path("/proc/self/fd") / std::to_string(descriptor.get());
+    auto digest = sha256_file(descriptor_path);
     if (!digest.ok()) {
         return ParseResult<FileLockCheck>::failure(digest.reason, std::move(digest.detail));
+    }
+    struct stat after {};
+    struct stat path_after {};
+    if (::fstat(descriptor.get(), &after) != 0 || ::stat(canonical.c_str(), &path_after) != 0 ||
+        !same_file_identity(before, after) || !same_file_identity(after, path_after)) {
+        return ParseResult<FileLockCheck>::failure(
+            ParseReason::kIoError, "Locked input identity changed during SHA-256 freeze: " + canonical.string());
     }
     if (*digest.value != locked_file.sha256) {
         return ParseResult<FileLockCheck>::failure(ParseReason::kIoError,
                                                    "Locked input SHA-256 mismatch for " + locked_file.path.string());
     }
-    return ParseResult<FileLockCheck>::success(
-        FileLockCheck{static_cast<std::uint64_t>(size), std::move(*digest.value)});
+    return ParseResult<FileLockCheck>::success(FileLockCheck{
+        size,
+        std::move(*digest.value),
+        canonical,
+        static_cast<std::uint64_t>(after.st_dev),
+        static_cast<std::uint64_t>(after.st_ino),
+        static_cast<std::int64_t>(after.st_mtim.tv_sec),
+        static_cast<std::int64_t>(after.st_mtim.tv_nsec),
+        static_cast<std::int64_t>(after.st_ctim.tv_sec),
+        static_cast<std::int64_t>(after.st_ctim.tv_nsec),
+    });
 }
 
 }  // namespace longlineage

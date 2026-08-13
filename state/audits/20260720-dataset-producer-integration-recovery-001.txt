@@ -1,0 +1,15 @@
+LONG_LINEAGE_IMMUTABLE_EVIDENCE_RECEIPT_V1
+receipt_id=20260720-dataset-producer-integration-recovery-001
+recovered_at=2026-07-20T15:53:02+08:00
+recovered_by=codex:root
+historical_task_id=20260720-dataset-producer-integration
+historical_evidence_id=dataset-producer-independent-e2e-replay
+historical_evidence_path=tests/integration/test_dataset_producer.cpp
+historical_evidence_sha256=5b1cbf2052197836f99c72239426cd6d80d23b1000703311e2b6b5ef1697e5bc
+historical_recorded_at=2026-07-20T09:30:03+08:00
+historical_command=ctest --test-dir build-hcc1395-final-v2 -R '^dataset_producer_integration$' --output-on-failure
+historical_exit_code=0
+historical_output_excerpt=Independent parent replay passed 1/1 in 0.33 s with four BGZF compression threads. The synthetic reference contained lowercase legal IUPAC m/r inside the producer fetch context and asserted exact-CG methyl_call_rows=2. Both one-worker and two-worker runs passed independent validator ARTIFACT_REPLAY, SCIENTIFIC_CONSERVATION, catalog, lineage, semantic-digest and checksum checks; sites=2, site_reads=4, science_artifacts=9, closeout_artifacts=12, production semantic SHA-256 cd3be3a2d84d66090326e1b7851f1dbb60e2c836c542c66eebe25b7e7b10d991.
+recovery_reason=The archived task bound a mutable integration-test source file as evidence. A successor M2 summary-conservation hotfix added a new assertion to that test, so the source SHA changed without invalidating the historical replay.
+scope_guard=This receipt preserves only the already-recorded historical command, exit code, output excerpt and source SHA. It does not claim that the successor M2 summary-conservation hotfix was present in the historical replay.
+successor_evidence=state/audits/20260720-m2-summary-conservation-hotfix-001.txt

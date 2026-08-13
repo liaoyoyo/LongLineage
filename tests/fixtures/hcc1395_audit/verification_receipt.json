@@ -1,0 +1,174 @@
+{
+  "schema_name": "longlineage.hcc1395_audit_child_verification_receipt",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-determinism-audit",
+  "verified_at": "2026-07-20T17:27:35+08:00",
+  "scope": "SYNTHETIC_ONLY",
+  "production_claim_allowed": false,
+  "repository_commit": "71f16b42819fb1dd22b4fce9fdec666190d3a666",
+  "toolchain": {
+    "gxx": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "clang_format": "Ubuntu clang-format version 14.0.0-1ubuntu1.1",
+    "htslib": "1.18",
+    "jansson": "2.13.1",
+    "openssl": "3.0.2",
+    "jsonschema": "3.2.0"
+  },
+  "source_snapshot": [
+    {
+      "path": "include/longlineage/audit/hcc1395_determinism.hpp",
+      "sha256": "ae5226b63b822973e85b2a46ed31d16ef4fb5af993ea23c231989d79ca47b036"
+    },
+    {
+      "path": "src/audit/hcc1395_determinism.cpp",
+      "sha256": "089c6236a7bb21f66ae256ab5b8c86d104056905c6789c9d2dc62c5e83b278c2"
+    },
+    {
+      "path": "apps/audit_main.cpp",
+      "sha256": "66f4cf1fb55fcf63eeacdd93c96e72ba8846d6792abb7d352e900fc03819d427"
+    },
+    {
+      "path": "schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "sha256": "e7233dd3da79a4a677e499d27da58d1e044f0a2cacaa894e7a62c3a2b61d15ed"
+    },
+    {
+      "path": "tests/unit/test_hcc1395_audit.cpp",
+      "sha256": "42a6e06fe3436ceeb6c9a8448e75225bd882fef65a140a3352657d0cda097082"
+    },
+    {
+      "path": "tests/fixtures/hcc1395_audit/cases.json",
+      "sha256": "165f72342184d4090eda573631e3c0894be2ecf08c222445052a996a102ae7fa"
+    }
+  ],
+  "formal_historical_authority": {
+    "path": "<RESTRICTED_RUN_ROOT>/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v10_source_locked_thread_pinned_recovered_full/all_ssnv_site_results.tsv.gz",
+    "physical_sha256": "a8871af3a8c3955bf31aec5eeef0c93aca0683f52cf6d6f1e06fbbb713324f74",
+    "selected_dataset": "HCC1395",
+    "expected_selected_rows": 79687,
+    "expected_ordered_key_sha256": "ac569c424fd9e1dddf69a8933b6e97cf7570dc9683bb81865853bc5110062468",
+    "expected_sorted_set_sha256": "003a5fe2bb2228495e337f1ca098c9fd6b696b01bb4cb13edde8d39f3c946a69",
+    "consumed_in_this_verification": false
+  },
+  "validations": [
+    {
+      "check_id": "DIRECT_CPP17_BUILD_AND_SYNTHETIC_TEST",
+      "command": "HEAD_COMMIT=$(git rev-parse HEAD); /usr/bin/g++ -std=c++17 -Wall -Wextra -Wpedantic -Werror -Iinclude -DLONGLINEAGE_GIT_COMMIT=\\\"$HEAD_COMMIT\\\" $(pkg-config --cflags htslib jansson openssl) src/audit/hcc1395_determinism.cpp tests/unit/test_hcc1395_audit.cpp $(pkg-config --libs htslib jansson openssl) -lz -o /tmp/test_hcc1395_audit_final; /usr/bin/time -f 'exit_status=%x elapsed_seconds=%e max_rss_kb=%M' /tmp/test_hcc1395_audit_final",
+      "exit_code": 0,
+      "binary_sha256": "e72bf0292760c349341c1b84d3be7022618d4fff4fdb1b9ffc1519903807ba73",
+      "observed_output": "PASS hcc1395_audit synthetic_cases=18 positive=1 negative=17",
+      "elapsed_seconds": 0.45,
+      "max_rss_kb": 14800
+    },
+    {
+      "check_id": "CLI_END_TO_END_SYNTHETIC",
+      "build_command": "/usr/bin/g++ -std=c++17 -Wall -Wextra -Wpedantic -Werror -Iinclude -DLONGLINEAGE_GIT_COMMIT=\\\"71f16b42819fb1dd22b4fce9fdec666190d3a666\\\" $(pkg-config --cflags htslib jansson openssl) src/audit/hcc1395_determinism.cpp apps/audit_main.cpp $(pkg-config --libs htslib jansson openssl) -lz -o /tmp/longlineage-audit-hcc1395",
+      "run_command": "/tmp/longlineage-audit-hcc1395 hcc1395-determinism --w24-root /tmp/longlineage-hcc-audit-eMsBd7/synthetic-w24 --w24-manifest /tmp/longlineage-hcc-audit-eMsBd7/manifests/synthetic-w24.json --w40-root /tmp/longlineage-hcc-audit-eMsBd7/synthetic-w40 --w40-manifest /tmp/longlineage-hcc-audit-eMsBd7/manifests/synthetic-w40.json --historical-m1-tsv-gz /tmp/longlineage-hcc-audit-eMsBd7/historical_m1.tsv.gz --historical-m1-sha256 9f8d16936ed3a91271d572aa8a2989bccc5ef669cf858e518cee01867e89f2f3 --output /tmp/longlineage-hcc-audit-eMsBd7/audit_cli_receipt.json",
+      "exit_code": 0,
+      "observed_output": "PASS HCC1395_DETERMINISM_AUDIT",
+      "binary_sha256": "2cf899cea262eb7c970811a0c14ebc1b67c093bb7d1a8a58d8ecb2decc9bd36d",
+      "receipt_sha256": "0c70d7e23c9d6bf9caae65d068b7408360d4a540ca5ddf4c0c8df3bb0f9cf845",
+      "receipt_overall_status": "PASS",
+      "receipt_production_claim_allowed": false
+    },
+    {
+      "check_id": "ADDRESS_AND_UNDEFINED_BEHAVIOR_SANITIZERS",
+      "command": "HEAD_COMMIT=$(git rev-parse HEAD); /usr/bin/g++ -std=c++17 -Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -Iinclude -DLONGLINEAGE_GIT_COMMIT=\\\"$HEAD_COMMIT\\\" $(pkg-config --cflags htslib jansson openssl) src/audit/hcc1395_determinism.cpp tests/unit/test_hcc1395_audit.cpp $(pkg-config --libs htslib jansson openssl) -lz -o /tmp/test_hcc1395_audit_asan; ASAN_OPTIONS=detect_leaks=0 /usr/bin/time -f 'exit_status=%x elapsed_seconds=%e max_rss_kb=%M' /tmp/test_hcc1395_audit_asan",
+      "exit_code": 0,
+      "binary_sha256": "0d4bd1e5837ba0424af5fa8b23a8a9056fed6f1797ed6a70e35e887ef6afc105",
+      "observed_output": "PASS hcc1395_audit synthetic_cases=18 positive=1 negative=17",
+      "elapsed_seconds": 1.09,
+      "max_rss_kb": 177988,
+      "address_sanitizer_errors": 0,
+      "undefined_behavior_sanitizer_errors": 0,
+      "leak_sanitizer_enabled": false
+    },
+    {
+      "check_id": "SYNTHETIC_CASE_MATRIX",
+      "cases_path": "tests/fixtures/hcc1395_audit/cases.json",
+      "cases_sha256": "165f72342184d4090eda573631e3c0894be2ecf08c222445052a996a102ae7fa",
+      "positive_cases": 1,
+      "negative_cases": 17,
+      "result": "PASS",
+      "note": "Each negative case rebuilds checksums and receipt chains so the intended closed-contract violation is the failing condition."
+    },
+    {
+      "check_id": "RECEIPT_SCHEMA_POSITIVE",
+      "command": "/usr/bin/jsonschema -i /tmp/longlineage-hcc-audit-eMsBd7/audit_cli_receipt.json schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "check_id": "RECEIPT_SCHEMA_REJECTS_UNKNOWN_FIELD",
+      "command": "jq '.unexpected_top_level=true' /tmp/longlineage-hcc-audit-eMsBd7/audit_cli_receipt.json | /usr/bin/jsonschema -i /dev/stdin schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "expected_exit_code": 1,
+      "observed_exit_code": 1,
+      "observed_output": "Additional properties are not allowed ('unexpected_top_level' was unexpected)",
+      "result": "PASS"
+    },
+    {
+      "check_id": "RECEIPT_SCHEMA_REJECTS_FALSE_SEMANTIC_PARITY",
+      "command": "jq '.determinism.artifacts[0].semantic_equal=false' /tmp/longlineage-hcc-audit-eMsBd7/audit_cli_receipt.json | /usr/bin/jsonschema -i /dev/stdin schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "expected_exit_code": 1,
+      "observed_exit_code": 1,
+      "observed_output": "False: True was expected",
+      "result": "PASS"
+    },
+    {
+      "check_id": "CHILD_CPP_FORMAT",
+      "command": "/tmp/clang-format-14-root/usr/bin/clang-format-14 --dry-run --Werror include/longlineage/audit/hcc1395_determinism.hpp src/audit/hcc1395_determinism.cpp apps/audit_main.cpp tests/unit/test_hcc1395_audit.cpp",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "check_id": "PRODUCER_KERNEL_LINKAGE_SCAN",
+      "command": "rg -n '#include \\\"longlineage/(m1|m2|cooccurrence|solver|pipeline)|dataset_producer|site_science|statistics|solver' include/longlineage/audit/hcc1395_determinism.hpp src/audit/hcc1395_determinism.cpp apps/audit_main.cpp tests/unit/test_hcc1395_audit.cpp",
+      "expected_exit_code": 1,
+      "observed_exit_code": 1,
+      "matches": 0,
+      "result": "PASS"
+    }
+  ],
+  "synthetic_receipt_claims": {
+    "overall_status": "PASS",
+    "w24_w40_manifest_comparison": "PASS",
+    "science_artifacts_semantic_equal": "8/8",
+    "summary_projection": "PASS",
+    "m2_mutually_exclusive_conservation": "PASS",
+    "historical_site_keys": "EXACT",
+    "historical_m1": "COMPARABLE_DIFFERENT",
+    "historical_m2": "NOT_COMPARABLE_METHOD_CHANGED",
+    "historical_cooccurrence": "NOT_COMPARABLE_NO_FORMAL_OLD_RESULT",
+    "historical_regional_topology": "NOT_COMPARABLE_METHOD_AND_GATE_CHANGED",
+    "historical_runtime": "NOT_COMPARABLE_PROGRAM_SCOPE_THREAD_OUTPUT_CHANGED"
+  },
+  "deviations": [
+    {
+      "deviation_id": "FORMAL_RUN_NOT_EXECUTED",
+      "impact": "The child verification proves executable behavior only on generated fixtures; it does not establish HCC1395 production parity or scientific counts.",
+      "resolution_owner": "parent task",
+      "required_resolution": "Run the integrated executable against two independent validator-frozen HCC1395 roots and the SHA-bound historical authority."
+    },
+    {
+      "deviation_id": "PARENT_BUILD_WIRING_OUT_OF_SCOPE",
+      "impact": "The new source is not yet reachable from the repository CMake/CTest graph.",
+      "resolution_owner": "parent task",
+      "required_resolution": "Wire the audit executable, unit test, schema registry/catalog and release gates in parent-owned files."
+    },
+    {
+      "deviation_id": "JSONSCHEMA_DIALECT_TOOL_LIMITATION",
+      "impact": "System jsonschema 3.2.0 reports a Draft 7 fallback although the receipt schema declares Draft 2020-12.",
+      "resolution_owner": "parent task",
+      "required_resolution": "Use the repository-pinned schema validator during integration/release validation."
+    },
+    {
+      "deviation_id": "REPOSITORY_WIDE_FORMAT_GATE_PREEXISTING_FAILURE",
+      "impact": "The child-scoped four-file formatting check passes, but the repository-wide gate fails on tracked out-of-scope files.",
+      "resolution_owner": "parent or repository maintainer",
+      "observations": [
+        "scripts/ci/check_format.sh exits 1 when clang-format-14 is absent from PATH.",
+        "With the extracted clang-format-14 added to PATH, the gate exits 1 with pre-existing violations in files such as apps/cli_support.cpp, apps/longlineage_main.cpp and tests/unit/test_typed_io.cpp.",
+        "No out-of-scope file was changed by this child task."
+      ]
+    }
+  ]
+}

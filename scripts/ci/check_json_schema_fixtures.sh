@@ -54,10 +54,14 @@ validate schema/core/contract_registry_bindings.schema.json \
     tests/fixtures/contracts/contract_registry_bindings.valid.json
 reject schema/core/contract_registry_bindings.schema.json \
     tests/fixtures/contracts/contract_registry_bindings.invalid_digest.json
+validate schema/records/group_allele_counts-1.0.1.embedded.schema.json \
+    tests/fixtures/contracts/group_allele_counts.valid.json
+validate schema/records/group_allele_counts-1.0.1.embedded.schema.json \
+    tests/fixtures/contracts/group_allele_counts.empty.valid.json
+reject schema/records/group_allele_counts-1.0.1.embedded.schema.json \
+    tests/fixtures/contracts/group_allele_counts.invalid_row.json
 validate schema/records/group_allele_counts.embedded.schema.json \
     tests/fixtures/contracts/group_allele_counts.valid.json
-reject schema/records/group_allele_counts.embedded.schema.json \
-    tests/fixtures/contracts/group_allele_counts.invalid_row.json
 validate schema/records/compatible_relation_models.embedded.schema.json \
     tests/fixtures/contracts/compatible_relation_models.valid.json
 reject schema/records/compatible_relation_models.embedded.schema.json \
@@ -71,11 +75,43 @@ validate schema/core/query_response.schema.json \
 reject schema/core/query_response.schema.json \
     tests/fixtures/contracts/query_response.invalid_partial_count.json
 validate schema/records/topology_unit.schema.json \
-    tests/fixtures/contracts/topology_unit.valid_abstain.json
+    tests/fixtures/contracts/topology_unit.v2.valid_complete_tie.json
 validate schema/records/topology_unit.schema.json \
-    tests/fixtures/contracts/topology_unit.valid_unique_winner.json
+    tests/fixtures/contracts/topology_unit.v2.valid_family_incomplete.json
+validate schema/records/topology_unit.schema.json \
+    tests/fixtures/contracts/topology_unit.v2.valid_abstain.json
 reject schema/records/topology_unit.schema.json \
-    tests/fixtures/contracts/topology_unit.invalid_tied_winner.json
+    tests/fixtures/contracts/topology_unit.v2.invalid_incomplete_published_rank.json
+reject schema/records/topology_unit.schema.json \
+    tests/fixtures/contracts/topology_unit.v2.invalid_abundance_parent_mapping.json
+reject schema/records/topology_unit.schema.json \
+    tests/fixtures/contracts/topology_unit.v2.invalid_unary_missing_evidence.json
+validate schema/compat/catalog.schema.json schema/compat/catalog.json
+reject schema/compat/catalog.schema.json \
+    tests/fixtures/regional_compat/catalog.invalid_unknown_field.json
+validate schema/compat/regional_compat_input_paths.schema.json \
+    tests/fixtures/regional_compat/input_paths.valid.json
+
+set +e
+"$validator" -i <(jq '.datasets[0].files[0].path = "/synthetic/truth/raw.bam"' \
+    "$repo_root/tests/fixtures/regional_compat/input_paths.valid.json") \
+    "$repo_root/schema/compat/regional_compat_input_paths.schema.json" >/dev/null 2>&1
+invalid_input_paths_exit=$?
+set -e
+if [[ $invalid_input_paths_exit -eq 0 ]]; then
+    echo "REGIONAL INPUT PATH MAP NEGATIVE FAIL: truth-bearing path accepted" >&2
+    exit 1
+fi
+echo "REGIONAL INPUT PATH MAP NEGATIVE PASS: truth-bearing path rejected exit=$invalid_input_paths_exit"
+
+while IFS=$'\t' read -r schema_path locked_sha256; do
+    actual_sha256=$(sha256sum "$repo_root/$schema_path" | awk '{print $1}')
+    if [[ $actual_sha256 != "$locked_sha256" ]]; then
+        echo "COMPAT SCHEMA CATALOG FAIL: $schema_path expected=$locked_sha256 actual=$actual_sha256" >&2
+        exit 1
+    fi
+    echo "COMPAT SCHEMA CATALOG LOCK PASS: $schema_path sha256=$actual_sha256"
+done < <(jq -r '.schemas[] | [.path, .sha256] | @tsv' "$repo_root/schema/compat/catalog.json")
 
 if ! jq -e '
     (.start0 | type) == "number" and

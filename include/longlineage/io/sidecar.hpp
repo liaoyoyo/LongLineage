@@ -2,7 +2,9 @@
 #pragma once
 
 #include <cstdint>
+#include <filesystem>
 #include <map>
+#include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -120,8 +122,31 @@ class SidecarLookup {
 [[nodiscard]] ParseResult<SidecarRecord> parse_sidecar_row(std::string_view line);
 [[nodiscard]] SidecarFullIdentity sidecar_identity_from_alignment(const FullAlignmentIdentity& identity);
 
+// One worker owns one persistent sidecar stream and its explicitly named Tabix
+// index. Instances are move-only and must not be shared between worker threads.
+class IndexedSidecarReader final {
+   public:
+    [[nodiscard]] static ParseResult<std::unique_ptr<IndexedSidecarReader>> open(
+        const std::filesystem::path& sidecar_path, const std::filesystem::path& explicit_index_path);
+
+    ~IndexedSidecarReader();
+    IndexedSidecarReader(IndexedSidecarReader&&) noexcept;
+    IndexedSidecarReader& operator=(IndexedSidecarReader&&) noexcept;
+    IndexedSidecarReader(const IndexedSidecarReader&) = delete;
+    IndexedSidecarReader& operator=(const IndexedSidecarReader&) = delete;
+
+    [[nodiscard]] ParseResult<SidecarLookup> fetch(const ContigId& contig, Interval0 interval);
+    [[nodiscard]] std::uint64_t fetch_invocations() const noexcept;
+
+   private:
+    struct Impl;
+    explicit IndexedSidecarReader(std::unique_ptr<Impl> impl);
+    std::unique_ptr<Impl> impl_;
+};
+
 // Opens an explicit Tabix index and returns all eligible records overlapping
 // the half-open query interval. Empty overlap is OK_EMPTY, never ERROR.
+// Prefer IndexedSidecarReader for repeated production queries.
 [[nodiscard]] ParseResult<SidecarLookup> fetch_sidecar_lookup(const std::string& sidecar_path,
                                                               const std::string& index_path, const ContigId& contig,
                                                               Interval0 interval);

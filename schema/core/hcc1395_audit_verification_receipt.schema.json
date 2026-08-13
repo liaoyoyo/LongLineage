@@ -1,0 +1,997 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/hcc1395_audit_verification_receipt-2.0.0.json",
+  "title": "LongLineage HCC1395 audit implementation verification receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_name",
+    "schema_version",
+    "receipt_id",
+    "status",
+    "scope",
+    "subject",
+    "schema_binding",
+    "supersedes",
+    "supersession_reason",
+    "toolchain",
+    "source_snapshot",
+    "case_matrix",
+    "binaries",
+    "validations",
+    "claim_boundary",
+    "deviations",
+    "captured_at",
+    "captured_by_agent_id"
+  ],
+  "properties": {
+    "schema_name": {
+      "const": "longlineage.hcc1395_audit_child_verification_receipt"
+    },
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "completeness",
+        "production_claim_allowed",
+        "real_hcc1395_data_consumed"
+      ],
+      "properties": {
+        "kind": {
+          "const": "SYNTHETIC_IMPLEMENTATION_VERIFICATION"
+        },
+        "completeness": {
+          "const": "FULL_FOR_DECLARED_SCOPE"
+        },
+        "production_claim_allowed": {
+          "const": false
+        },
+        "real_hcc1395_data_consumed": {
+          "const": false
+        }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "verified_source_commit",
+        "git_tree_object",
+        "canonical_tree_sha256",
+        "dirty_before",
+        "dirty_after"
+      ],
+      "properties": {
+        "repository": {
+          "const": "LongLineage"
+        },
+        "verified_source_commit": {
+          "$ref": "#/$defs/gitCommit"
+        },
+        "git_tree_object": {
+          "$ref": "#/$defs/gitObject"
+        },
+        "canonical_tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dirty_before": {
+          "const": false
+        },
+        "dirty_after": {
+          "const": false
+        }
+      }
+    },
+    "schema_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "dialect"
+      ],
+      "properties": {
+        "path": {
+          "const": "schema/core/hcc1395_audit_verification_receipt.schema.json"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dialect": {
+          "const": "https://json-schema.org/draft/2020-12/schema"
+        }
+      }
+    },
+    "supersedes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": false,
+      "prefixItems": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256",
+            "subject_commit",
+            "schema_version"
+          ],
+          "properties": {
+            "path": {
+              "const": "tests/fixtures/hcc1395_audit/verification_receipt.json"
+            },
+            "sha256": {
+              "const": "74a1d5d931ff5b9cea27444088e04126dbaab42dc8649d75e4eaf08713fc7937"
+            },
+            "subject_commit": {
+              "const": "71f16b42819fb1dd22b4fce9fdec666190d3a666"
+            },
+            "schema_version": {
+              "const": "1.0.0"
+            }
+          }
+        }
+      ]
+    },
+    "supersession_reason": {
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 1024
+    },
+    "toolchain": {
+      "$ref": "#/$defs/toolchain"
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_sha256",
+        "files"
+      ],
+      "properties": {
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 14,
+          "maxItems": 14,
+          "items": false,
+          "uniqueItems": true,
+          "prefixItems": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "CMakeLists.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "tests/CMakeLists.txt"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "include/longlineage/audit/hcc1395_determinism.hpp"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "apps/audit_main.cpp"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "src/audit/hcc1395_determinism.cpp"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "tests/unit/test_hcc1395_audit.cpp"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "tests/fixtures/hcc1395_audit/cases.json"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "schema/core/hcc1395_determinism_historical_receipt-1.0.0.schema.json"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "schema/core/hcc1395_determinism_historical_receipt.schema.json"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "schema/core/hcc1395_audit_verification_receipt.schema.json"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "schema/presentation/hcc1395_execution_evidence.schema.json"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "presentation/build_hcc1395_validated_report.py"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "docs/adr/20260720_HCC1395稽核Receipt_v2共現守恆遷移_01.md"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/sourceFile"
+                },
+                {
+                  "properties": {
+                    "path": {
+                      "const": "docs/development/implementation-notes.md"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "case_matrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_path",
+        "manifest_sha256",
+        "manifest_schema_version",
+        "total",
+        "positive",
+        "negative",
+        "unique_case_ids",
+        "execution_binding",
+        "binding_negative_cases",
+        "executed",
+        "passed",
+        "failed",
+        "executed_order_exact",
+        "direct_test_stdout"
+      ],
+      "properties": {
+        "manifest_path": {
+          "const": "tests/fixtures/hcc1395_audit/cases.json"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "manifest_schema_version": {
+          "const": "1.1.0"
+        },
+        "total": {
+          "const": 43
+        },
+        "positive": {
+          "const": 2
+        },
+        "negative": {
+          "const": 41
+        },
+        "unique_case_ids": {
+          "const": true
+        },
+        "execution_binding": {
+          "const": "DIRECT_CASE_ID_RECONCILIATION"
+        },
+        "binding_negative_cases": {
+          "const": 2
+        },
+        "executed": {
+          "const": 43
+        },
+        "passed": {
+          "const": 43
+        },
+        "failed": {
+          "const": 0
+        },
+        "executed_order_exact": {
+          "const": true
+        },
+        "direct_test_stdout": {
+          "$ref": "#/$defs/digestBinding"
+        }
+      }
+    },
+    "binaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "debug_test",
+        "release_test",
+        "release_audit",
+        "asan_ubsan_test"
+      ],
+      "properties": {
+        "debug_test": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/binaryBinding"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "DEBUG_TEST_HCC1395_AUDIT"
+                }
+              }
+            }
+          ]
+        },
+        "release_test": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/binaryBinding"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "RELEASE_TEST_HCC1395_AUDIT"
+                }
+              }
+            }
+          ]
+        },
+        "release_audit": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/binaryBinding"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "RELEASE_LONGLINEAGE_AUDIT"
+                }
+              }
+            }
+          ]
+        },
+        "asan_ubsan_test": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/binaryBinding"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "ASAN_UBSAN_TEST_HCC1395_AUDIT"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "validations": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": false,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "SCOPED_CPP_FORMAT"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "DEBUG_CONFIGURE_BUILD"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "DEBUG_FULL_CTEST"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "RELEASE_CONFIGURE_BUILD"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "FOCUSED_MANIFEST_BOUND_CPP"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "RELEASE_FULL_CTEST"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "ASAN_UBSAN_CONFIGURE_BUILD"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "ASAN_UBSAN_FULL_CTEST"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "PYTHON_REPORT_SELF_TEST"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "DRAFT202012_MIGRATION_MATRIX"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "PRODUCER_KERNEL_LINKAGE_SCAN"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/validation"
+            },
+            {
+              "properties": {
+                "check_id": {
+                  "const": "PATCH_PRIVACY_SCAN"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "synthetic_implementation_verified",
+        "formal_hcc1395_run_verified",
+        "production_claim_allowed"
+      ],
+      "properties": {
+        "synthetic_implementation_verified": {
+          "const": true
+        },
+        "formal_hcc1395_run_verified": {
+          "const": false
+        },
+        "production_claim_allowed": {
+          "const": false
+        }
+      }
+    },
+    "deviations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/deviation"
+      }
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "captured_by_agent_id": {
+      "const": "codex:root"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "gitObject": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40,64}$"
+    },
+    "digestBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sourceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^(?!/)(?!.*\\.\\.)(?!.*\\\\).+$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "binaryBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "bytes",
+        "sha256",
+        "embedded_commit"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "embedded_commit": {
+          "$ref": "#/$defs/gitCommit"
+        }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cmake",
+        "cxx",
+        "clang_format",
+        "htslib",
+        "jansson",
+        "openssl",
+        "zlib",
+        "python",
+        "jsonschema"
+      ],
+      "properties": {
+        "cmake": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "cxx": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "clang_format": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "htslib": {
+          "const": "1.18"
+        },
+        "jansson": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+        },
+        "openssl": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+        },
+        "zlib": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+        },
+        "python": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "executable_role",
+            "executable_sha256",
+            "version"
+          ],
+          "properties": {
+            "executable_role": {
+              "const": "PINNED_JSONSCHEMA_VENV_PYTHON"
+            },
+            "executable_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            }
+          }
+        },
+        "jsonschema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "validator_class",
+            "resolved_packages",
+            "wheel_set_sha256"
+          ],
+          "properties": {
+            "version": {
+              "const": "4.23.0"
+            },
+            "validator_class": {
+              "const": "Draft202012Validator"
+            },
+            "resolved_packages": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]+==[A-Za-z0-9_.+-]+$"
+              }
+            },
+            "wheel_set_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "check_id",
+        "status",
+        "argv_role_tokens",
+        "working_directory_role",
+        "exit_code",
+        "stdout",
+        "stderr",
+        "started_at",
+        "completed_at",
+        "summary"
+      ],
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$"
+        },
+        "status": {
+          "const": "PASS"
+        },
+        "argv_role_tokens": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[^\\r\\n]+$"
+          }
+        },
+        "working_directory_role": {
+          "enum": [
+            "CLEAN_DETACHED_SOURCE_A",
+            "EXTERNAL_EVIDENCE_ROOT"
+          ]
+        },
+        "exit_code": {
+          "const": 0
+        },
+        "stdout": {
+          "$ref": "#/$defs/digestBinding"
+        },
+        "stderr": {
+          "$ref": "#/$defs/digestBinding"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 1024
+        }
+      }
+    },
+    "deviation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deviation_id",
+        "impact",
+        "mitigation",
+        "claim_effect"
+      ],
+      "properties": {
+        "deviation_id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,63}$"
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1024
+        },
+        "mitigation": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1024
+        },
+        "claim_effect": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1024
+        }
+      }
+    }
+  }
+}

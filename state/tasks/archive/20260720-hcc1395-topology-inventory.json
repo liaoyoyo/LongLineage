@@ -1,0 +1,221 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-topology-inventory",
+  "owner_agent_id": "codex:root/longlineage_run_readiness",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-topology-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-topology-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/decisions/ADR-0006-topology-unit-v2.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/records/topology_unit.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/id_registry.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/catalog.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/contract_registry_bindings.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "contracts/v1/status_reason_codes.tsv",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/ci/check_json_schema_fixtures.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/contract_registry_bindings.valid.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/topology_types.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/obligation_bnb.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/terminal_subset_dp.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/parent_mapping.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/solver/topology_router.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/obligation_bnb.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/terminal_subset_dp.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/parent_mapping.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/solver/topology_router.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_runtime_solver.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/topology_unit.v2.valid_complete_tie.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/topology_unit.v2.valid_family_incomplete.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/topology_unit.v2.valid_abstain.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/topology_unit.v2.invalid_incomplete_published_rank.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/topology_unit.v2.invalid_abundance_parent_mapping.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/topology_unit.v2.invalid_unary_missing_evidence.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T14:41:04+08:00",
+  "heartbeat_at": "2026-07-20T03:26:42+08:00",
+  "task_type": "B",
+  "goals": ["LL-G3", "LL-G4"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Implement topology_unit v2 contracts and an exact bounded structural kernel: objective/family/ranking/edge separation, dynamic obligation antichain, complete-family B&B for m<=12, objective-only terminal subset DP, multiprecision parent mapping and q<=4 differential routing."
+  },
+  "assumptions": [
+    "Evo-M0 recurrence-allowed remains primary.",
+    "Incomplete families, caps and deadlines publish no winner."
+  ],
+  "inputs": [
+    {
+      "role": "historical_authority",
+      "path": "oracle/authority_manifest.json",
+      "sha256": "3e70f440b83a13e11fdd6e56f61a18375916a60e41f7747713dd365b498e5b16"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "topology_v2_decision",
+      "path": "docs/decisions/ADR-0006-topology-unit-v2.md",
+      "sha256": "6237af615c7b88efed54a30e50866eea51aa46405b443bdd9281a3506af4c230"
+    },
+    {
+      "role": "topology_v2_schema",
+      "path": "schema/records/topology_unit.schema.json",
+      "sha256": "02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03"
+    },
+    {
+      "role": "exact_obligation_bnb",
+      "path": "src/solver/obligation_bnb.cpp",
+      "sha256": "3a0c6c9cf9653860ac53481adc56938c9d6d7849db604a726bd7939395673d2c"
+    },
+    {
+      "role": "bounded_differential_tests",
+      "path": "tests/unit/test_runtime_solver.cpp",
+      "sha256": "1abb7b1358c3ffe0d6cb21c73d86b6466e40d03b23a31a885f9cbb53f03bc48b"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Separate topology objective, explicit family, abundance ranking and parent-edge endpoint in schema v2.",
+      "verify": "Three valid v2 fixtures pass and targeted incomplete-rank, abundance-parent-mapping and missing-unary-evidence fixtures are rejected."
+    },
+    {
+      "step": "Implement dynamic obligation-antichain B&B for the bounded recurrence-allowed hypercube.",
+      "verify": "Warnings-as-errors build exits 0; complete searches retain equality ties, family caps clear partial families and node caps withhold both objective and family."
+    },
+    {
+      "step": "Implement objective-only terminal subset DP and exact fixed-node parent factorization.",
+      "verify": "DP agrees with B&B on bounded cases and boost multiprecision reproduces an exact parent-mapping count larger than uint64."
+    },
+    {
+      "step": "Require differential routing against the exhaustive q<=4 oracle.",
+      "verify": "Curated q1-q5 goldens plus 72 systematic q<=3 cases pass oracle/B&B/DP comparisons; m>12 abstains."
+    },
+    {
+      "step": "Close schema, status and catalog hash locks without promoting scientific authority.",
+      "verify": "Fixture, status-code and task-state checks exit 0; topology schema/catalog locks are synchronized and no provenance or phase authority is modified."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "topology-v2-schema-fixtures",
+      "evidence_path": "schema/records/topology_unit.schema.json",
+      "evidence_kind": "AUDIT",
+      "command": "scripts/ci/check_json_schema_fixtures.sh",
+      "exit_code": 0,
+      "output_excerpt": "Three topology v2 positive fixtures PASS; three targeted negative fixtures reject; JSON SCHEMA FIXTURES RESULT: PASS.",
+      "evidence_sha256": "02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03",
+      "recorded_at": "2026-07-20T03:26:42+08:00"
+    },
+    {
+      "evidence_id": "topology-exact-kernel-ctest",
+      "evidence_path": "oracle/frozen_vectors/p5_topology_first_stage_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "cmake --build build-cpp-output-validation --target test_runtime_solver --parallel 8 && ctest --test-dir build-cpp-output-validation --output-on-failure -R '^(runtime_solver|determinism_contract|topology_no_incomplete_winner)$'",
+      "exit_code": 0,
+      "output_excerpt": "Warnings-as-errors build PASS; runtime_solver, determinism_contract and topology_no_incomplete_winner all PASS in 0.13 seconds.",
+      "evidence_sha256": "bfd37a36a4f3612c0250ae13ca0345dd6a0da58d84950dc9c54913ef5e0ef2b4",
+      "recorded_at": "2026-07-20T03:26:42+08:00"
+    },
+    {
+      "evidence_id": "topology-status-registry",
+      "evidence_path": "oracle/frozen_vectors/p5_topology_first_stage_receipt.txt",
+      "evidence_kind": "AUDIT",
+      "command": "./build-cpp-output-validation/bin/longlineage-governance check-status-codes --repo <REPO_ROOT>",
+      "exit_code": 0,
+      "output_excerpt": "status/reason registry passed 116 closed-vocabulary rows",
+      "evidence_sha256": "bfd37a36a4f3612c0250ae13ca0345dd6a0da58d84950dc9c54913ef5e0ef2b4",
+      "recorded_at": "2026-07-20T03:26:42+08:00"
+    }
+  ],
+  "deviations": [
+    "clang-format was unavailable in the environment (command exit 127); warnings-as-errors compilation and git diff --check passed, and no unapproved formatter installation was attempted.",
+    "Repository-wide check-all still reports EXTERNAL_ROOT_CLOSURE for the root-owned src/io/alignment.cpp source-mapping digest. Root explicitly retained that final provenance update; topology schema/catalog locks themselves were synchronized.",
+    "This task verifies only bounded synthetic P5 implementation evidence. It does not update provenance, oracle authority, phase authority or production readiness.",
+    "Governance recovery on 2026-07-20 replaced the topology-exact-kernel-ctest evidence binding to the mutable tests/unit/test_runtime_solver.cpp with oracle/frozen_vectors/p5_topology_first_stage_receipt.txt. The receipt was reconstructed after successor task 20260720-hcc1395-topology-evidence-adapter began expanding that test, preserves historical source SHA-256 1abb7b1358c3ffe0d6cb21c73d86b6466e40d03b23a31a885f9cbb53f03bc48b and does not claim successor adapter evidence.",
+    "The same governance recovery also rebound topology-status-registry from mutable contracts/v1/status_reason_codes.tsv to the immutable P5 first-stage receipt. The receipt preserves the original 116-row command, exit code, output excerpt and historical registry SHA-256 7c3a36d5bf392f00a40742c619ae355c33a411869d13e2c41460e5c959e091c9; later P6 registry expansion is not retroactive P5 evidence.",
+    "The repository publication repair later replaced private absolute-path strings in the receipt with portable tokens. Both evidence rows now bind that sanitized projection; topology counts and verdict fields were not changed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T03:59:00+08:00"
+}

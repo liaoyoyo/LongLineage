@@ -1,0 +1,129 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-topology-membership-contract",
+  "owner_agent_id": "codex:root/topology_membership_contract",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "include/longlineage/pipeline/topology_membership.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/pipeline/topology_membership.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_topology_membership.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/active/20260720-topology-membership-contract.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-topology-membership-contract.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p5_topology_membership_receipt.txt",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [
+    "20260720-hcc1395-topology-evidence-adapter"
+  ],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T12:50:00+08:00",
+  "heartbeat_at": "2026-07-20T05:27:11+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G3",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Version and verify the complete fail-closed P5 topology-unit membership/read-pattern adapter contract; production artifact/schema/serializer changes and full-data execution remain owned by the parent task."
+  },
+  "assumptions": [
+    "Only M2-eligible candidates with joint_signature PASS instantiate topology units; rejected candidates are census funnel outcomes, not solver abstentions.",
+    "The complete unit read set is exactly the unique block projections touching at least one unit locus; RG-only duplicate occurrences never change multiplicity.",
+    "No authoritative allele-specific CN/LOH evidence is available to this adapter, so it neither partitions reads by HP/PS nor promotes strict infinite-sites or Dollo endpoints."
+  ],
+  "inputs": [
+    {
+      "role": "block_science_contract",
+      "path": "include/longlineage/pipeline/block_science.hpp",
+      "sha256": "99dbefe51745d6172fc0003054f5d61f93977a9f44bc6d0f8170bd18c6c68ab2"
+    },
+    {
+      "role": "topology_evidence_contract",
+      "path": "include/longlineage/solver/evidence_builder.hpp",
+      "sha256": "957d960f97e0537bac436beb4ff6a55bb7f80b05560ab5ea6e32e89677d6fade"
+    },
+    {
+      "role": "topology_v2_decision",
+      "path": "docs/decisions/ADR-0006-topology-unit-v2.md",
+      "sha256": "6237af615c7b88efed54a30e50866eea51aa46405b443bdd9281a3506af4c230"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "membership_contract",
+      "path": "include/longlineage/pipeline/topology_membership.hpp",
+      "sha256": "d83525a462027e23c22e24e7b609cef634ed9db327b63d12297b69f57c426e96"
+    },
+    {
+      "role": "membership_adapter",
+      "path": "src/pipeline/topology_membership.cpp",
+      "sha256": "9b6c5d5e851399abc3980b0207e069003dd85d4fd95684c029c05265e7e48a72"
+    },
+    {
+      "role": "contract_tests",
+      "path": "tests/unit/test_topology_membership.cpp",
+      "sha256": "914bd464d361e235c953cfe9ad47d8045d627a297c0f6e2029e4e5c9d155b28b"
+    },
+    {
+      "role": "immutable_receipt",
+      "path": "oracle/frozen_vectors/p5_topology_membership_receipt.txt",
+      "sha256": "6b8236141d0ddf87086ae9722b91cbd82733503d32e8fff7d758c5dfb077a429"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Build a versioned deterministic topology membership plan from candidate identities and joint-signature gates.",
+      "verify": "Positive, sorting, locale/input-order invariance and duplicate/conflict negative tests exit 0 with one frozen plan SHA-256."
+    },
+    {
+      "step": "Adapt one instantiated membership and BlockScienceEvidence into canonical unique-read ReadPatternObservation values.",
+      "verify": "BQ, missing-call, marker-universe, R/A/O/X, partial-subcube and multiplicity=1 tests exit 0 with exact evidence/input SHA-256."
+    },
+    {
+      "step": "Compile and replay the component under strict warnings, AddressSanitizer and UndefinedBehaviorSanitizer.",
+      "verify": "Every compile and execution exits 0; the immutable receipt records exact commands, counts and output digests."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "p5-topology-membership-immutable-replay",
+      "evidence_path": "oracle/frozen_vectors/p5_topology_membership_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "strict GCC release compile and C/C.UTF-8 replay; combined ASan/UBSan compile and replay; P4/P5 24-read complete-readset cross-check; governance check-state",
+      "exit_code": 0,
+      "output_excerpt": "PASS plan=c50acf9d... membership=a9d11aa0... input=6263e0f0... evidence=ee619a7b...; P4/P5 readset=f9a34ec0... exact; ASan/UBSan errors=0; governance PASS.",
+      "evidence_sha256": "6b8236141d0ddf87086ae9722b91cbd82733503d32e8fff7d758c5dfb077a429",
+      "recorded_at": "2026-07-20T05:26:21+08:00"
+    }
+  ],
+  "deviations": [
+    "CMakeLists.txt and tests/CMakeLists.txt were outside this child write set. Verification used exact direct C++17 compilation; parent integration must register the source and test target.",
+    "Review of the active P4 joint-signature implementation established that the upstream M1-core complete-readset and the P5 all-projection complete-R/A diagnostic have different domains. The adapter binds both but deliberately does not perform a false equality check.",
+    "LeakSanitizer was disabled for the sandbox replay; AddressSanitizer and UndefinedBehaviorSanitizer remained active and reported zero errors."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T05:27:11+08:00"
+}

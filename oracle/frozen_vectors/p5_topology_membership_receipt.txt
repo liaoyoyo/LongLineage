@@ -1,0 +1,147 @@
+LONGLINEAGE P5 TOPOLOGY MEMBERSHIP CONTRACT RECEIPT
+receipt_schema=longlineage.p5_topology_membership_receipt.v1
+task_id=20260720-topology-membership-contract
+recorded_at=2026-07-20T05:25:00+08:00
+task_type=B_COMPREHENSIVE_COMPONENT_VALIDATION
+status=VERIFIED_COMPONENT_READY_FOR_PARENT_INTEGRATION
+
+SCOPE AND CLAIM CEILING
+This receipt freezes the versioned topology-site candidate funnel, deterministic
+topology-unit membership plan, and BlockScienceEvidence-to-ReadPatternObservation
+adapter. It is synthetic/component evidence. It does not claim an HCC1395 run,
+P5 phase verification, a seven-dataset production release, CN/LOH authority,
+cellular ancestry, a unique tree, or biological clone identity.
+
+SOURCE SNAPSHOT
+include/longlineage/pipeline/topology_membership.hpp
+sha256=d83525a462027e23c22e24e7b609cef634ed9db327b63d12297b69f57c426e96
+src/pipeline/topology_membership.cpp
+sha256=9b6c5d5e851399abc3980b0207e069003dd85d4fd95684c029c05265e7e48a72
+tests/unit/test_topology_membership.cpp
+sha256=914bd464d361e235c953cfe9ad47d8045d627a297c0f6e2029e4e5c9d155b28b
+
+DEPENDENCY SNAPSHOT
+include/longlineage/pipeline/block_science.hpp
+sha256=99dbefe51745d6172fc0003054f5d61f93977a9f44bc6d0f8170bd18c6c68ab2
+include/longlineage/solver/evidence_builder.hpp
+sha256=957d960f97e0537bac436beb4ff6a55bb7f80b05560ab5ea6e32e89677d6fade
+src/solver/evidence_builder.cpp
+sha256=c4fc31999365b3f3fd6e401640c1b5ddad47dcfaf7112b8621f705802e1ca3d3
+src/common/digest.cpp
+sha256=eeeffcd645064b981234fe8924ad6dc4e39cbd01cabb9bc8e7f9bf1f307967b5
+
+BUILD ENVIRONMENT
+compiler=g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+kernel=Linux 5.15.0-173-generic x86_64
+openssl=3.0.2
+fast_math=false
+fp_contract=off
+
+RELEASE WARNINGS-AS-ERRORS REPLAY
+command=g++ -std=c++17 -O2 -DNDEBUG -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off -Iinclude tests/unit/test_topology_membership.cpp src/pipeline/topology_membership.cpp src/solver/evidence_builder.cpp src/common/digest.cpp -lcrypto -o /tmp/longlineage-test-topology-membership-release
+compile_exit_code=0
+binary_sha256=543a1520e441153fe18c3f73a52eb81ea95510b925df6cb45357eef7973b6554
+command=LC_ALL=C /tmp/longlineage-test-topology-membership-release
+run_exit_code=0
+output=PASS test_topology_membership plan_sha256=c50acf9d57888de3dce03c5c25b9cdd3d7263dddc775b99095f5aab3702a2a5f membership_sha256=a9d11aa0de706e362dcbc7ec2a91ed19c547f74548c80505eaaa7d582f8192f3 projection_readset_sha256=a91c56c2732669a505ba2d0c700f092fed1da27c8bd8a25717fd63cc10c9ce02 input_sha256=6263e0f0a5b910be06a2d9fa76b49eea304703407c69394d47ebe3c22c956ae7 evidence_sha256=ee619a7baba2a71cf6d9d4b819aacbcab13f710d90ae90cca78bc37b6c2e5a54 candidates=1 units=1 touching_reads=3 multiplicity_sum=3
+command=LC_ALL=C.UTF-8 /tmp/longlineage-test-topology-membership-release
+run_exit_code=0
+output=PASS test_topology_membership plan_sha256=c50acf9d57888de3dce03c5c25b9cdd3d7263dddc775b99095f5aab3702a2a5f membership_sha256=a9d11aa0de706e362dcbc7ec2a91ed19c547f74548c80505eaaa7d582f8192f3 projection_readset_sha256=a91c56c2732669a505ba2d0c700f092fed1da27c8bd8a25717fd63cc10c9ce02 input_sha256=6263e0f0a5b910be06a2d9fa76b49eea304703407c69394d47ebe3c22c956ae7 evidence_sha256=ee619a7baba2a71cf6d9d4b819aacbcab13f710d90ae90cca78bc37b6c2e5a54 candidates=1 units=1 touching_reads=3 multiplicity_sum=3
+locale_output_match=true
+
+ASAN AND UBSAN REPLAY
+command=g++ -std=c++17 -O1 -g -D_GLIBCXX_ASSERTIONS -Wall -Wextra -Wpedantic -Werror -fno-fast-math -ffp-contract=off -fsanitize=address,undefined -fno-omit-frame-pointer -Iinclude tests/unit/test_topology_membership.cpp src/pipeline/topology_membership.cpp src/solver/evidence_builder.cpp src/common/digest.cpp -lcrypto -o /tmp/longlineage-test-topology-membership-asan-ubsan
+compile_exit_code=0
+binary_sha256=bcf55656db063ecedc36dce65e05d65b377cb75be6f2829618902c456a62b514
+command=ASAN_OPTIONS=detect_leaks=0:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 LC_ALL=C.UTF-8 /tmp/longlineage-test-topology-membership-asan-ubsan
+run_exit_code=0
+output=PASS test_topology_membership plan_sha256=c50acf9d57888de3dce03c5c25b9cdd3d7263dddc775b99095f5aab3702a2a5f membership_sha256=a9d11aa0de706e362dcbc7ec2a91ed19c547f74548c80505eaaa7d582f8192f3 projection_readset_sha256=a91c56c2732669a505ba2d0c700f092fed1da27c8bd8a25717fd63cc10c9ce02 input_sha256=6263e0f0a5b910be06a2d9fa76b49eea304703407c69394d47ebe3c22c956ae7 evidence_sha256=ee619a7baba2a71cf6d9d4b819aacbcab13f710d90ae90cca78bc37b6c2e5a54 candidates=1 units=1 touching_reads=3 multiplicity_sum=3
+asan_errors=0
+ubsan_errors=0
+leak_sanitizer_disabled_for_sandbox=true
+
+FROZEN CROSS-PHASE BYTE VECTOR
+input=24 unique lowercase 64-hex opaque read IDs representing integers 0..23
+encoding=ASCII header longlineage.topology_joint_complete_readset<TAB>1.0.0<LF>; ASCII reads=N<LF>; each byte-sorted ID as ASCII_decimal_byte_length:raw_ID_bytes|<LF>
+p4_independent_digest=f9a34ec03d93a5c1dcce24160fe5eb9d121090f43e286505f8ad72af170c2672
+p5_independent_digest=f9a34ec03d93a5c1dcce24160fe5eb9d121090f43e286505f8ad72af170c2672
+exact_match=true
+
+FROZEN POSITIVE VECTOR
+plan_sha256=c50acf9d57888de3dce03c5c25b9cdd3d7263dddc775b99095f5aab3702a2a5f
+membership_sha256=a9d11aa0de706e362dcbc7ec2a91ed19c547f74548c80505eaaa7d582f8192f3
+complete_ra_projection_readset_sha256=a91c56c2732669a505ba2d0c700f092fed1da27c8bd8a25717fd63cc10c9ce02
+input_sha256=6263e0f0a5b910be06a2d9fa76b49eea304703407c69394d47ebe3c22c956ae7
+evidence_sha256=ee619a7baba2a71cf6d9d4b819aacbcab13f710d90ae90cca78bc37b6c2e5a54
+candidates=1
+instantiated_units=1
+unit_order=0
+touching_unique_projections=3
+ignored_non_touching_projections=1
+rg_only_duplicate_occurrences_ignored=3
+observation_multiplicity_sum=3
+raw_code_counts_R_A_O_X=3,3,1,2
+
+DOMAIN SEPARATION
+membership.joint_complete_readset_sha256 binds the P4 M1-core reads that are
+R/A complete at every selected partner. The P5 adapter receives no M1 core
+assignment and therefore does not claim to recompute or validate that digest.
+complete_ra_projection_readset_sha256 instead describes every touching unique
+projection that is R/A complete at every membership locus. The two domains may
+legitimately differ. The adapter evidence digest binds both domains without
+equating them.
+
+MEMBERSHIP AND ADAPTER INVARIANTS
+- Every cooccurrence site may enter the candidate funnel, including an M1-
+  unstable or M2-ineligible site.
+- Joint PASS alone carries one to three selected partners in P4 ranking order
+  plus a lowercase P4 complete-core-readset SHA. FAIL/NOT_EVALUATED require
+  partners and digest to be absent.
+- Funnel precedence is M2 ineligible, then joint FAIL/NOT_EVALUATED. Only
+  M2-eligible + joint PASS creates a unit.
+- Zero instantiated units is a valid OK_EMPTY plan with conserved funnel
+  counts and a plan digest. No synthetic solver-abstain unit is inserted.
+- Units sort by dataset_order, canonical chr1..chr22, focal_site_order and
+  site_order-canonical loci before dense zero-based unit_order assignment.
+- Partners are in the focal inclusive +/-5000 bp window, pairwise separated
+  by at least 20 bp, unique, same-dataset and same-contig.
+- The adapter includes each unique read projection touching at least one locus,
+  preserves R/A/O/X and partial subcubes, sets multiplicity to one, and orders
+  output by opaque read ID.
+- R/A requires BQ >=20 and BQ !=255. O/X is emitted with null BQ. An input X
+  carrying BQ is malformed; O may carry measured BQ upstream but is explicitly
+  marginalized to null for topology likelihood.
+- RG occurrence counts never weight topology observations.
+- HP/PS is not a topology membership partition and is not read by the adapter.
+- CN/LOH is not asserted by membership. Absent authority remains
+  NOT_EVALUATED/UNRESOLVED in the P5 serializer.
+
+NEGATIVE AND INVARIANCE COVERAGE
+- unsupported schema version and noncanonical contig
+- zero/four selected partners
+- focal distance 5001 rejected; distance 5000 accepted
+- partner spacing 19 rejected; spacing 20 accepted
+- cross-dataset and cross-contig partner
+- duplicate partner, duplicate/conflicting focal and conflicting locus binding
+- PASS missing partners or SHA
+- FAIL/NOT_EVALUATED carrying forbidden selection evidence
+- missing marker, projected call, R/A BQ, BQ<20 and BQ=255
+- X carrying BQ
+- duplicate opaque read ID or duplicate read projection
+- P4/P5 complete-readset canonical byte differential
+- all-rejected zero-unit funnel conservation
+- candidate/read/marker completion order, locale and HP/PS invariance
+- O-to-null-BQ, retained X/O partial subcube and solver evidence-builder READY
+- multiplicity=1 and R/A/O/X/read-count conservation
+
+GOVERNANCE
+command=./build-final-verify/bin/longlineage-governance check-state --repo .
+exit_code=0
+output={"command":"check-state","status":"PASS","message":"project state, P0-P8 ledger and 9 active AI task record(s), owner leases and non-overlapping write sets are internally consistent"}
+
+INTEGRATION BOUNDARY
+CMakeLists.txt and tests/CMakeLists.txt were outside this child write set and
+were not modified. The parent producer integration must compile
+src/pipeline/topology_membership.cpp, register test_topology_membership.cpp, and
+use solver::TopologyRecordIdentity{membership.focal.dataset_order,
+membership.focal.dataset_id, membership.unit_order, membership.unit_id}.

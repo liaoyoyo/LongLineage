@@ -1,0 +1,98 @@
+{
+  "schema_name": "longlineage.topology_unit",
+  "schema_version": "2.0.0",
+  "dataset_order": 0,
+  "dataset_id": "synthetic",
+  "unit_order": 0,
+  "unit_id": "synthetic-complete-tie",
+  "active_bits": [0, 1],
+  "input_patterns": [
+    {"kind": "FULL_STATE", "pattern": "10", "multiplicity": 1},
+    {"kind": "PARTIAL_SUBCUBE", "pattern": "X1", "multiplicity": 1}
+  ],
+  "input_evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "observed_states": ["10"],
+  "solver_route": "SMALL_Q_ORACLE_DIFFERENTIAL_BNB",
+  "objective_state": "OBJECTIVE_CERTIFIED",
+  "objective_h": 1,
+  "objective_bounds": {"lower_bound": 1, "upper_bound": 1, "gap": 0},
+  "objective_evidence_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "objective_reason": "NONE",
+  "family_state": "FAMILY_COMPLETE",
+  "family_representation": "EXPLICIT_MINIMUM_VERTEX_SETS_V1",
+  "family_evidence_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "family_reason": "NONE",
+  "candidate_family_digest": "3333333333333333333333333333333333333333333333333333333333333333",
+  "candidate_count": 2,
+  "tree_count": "2",
+  "candidates": [
+    {
+      "vertex_set": ["00", "01", "10"],
+      "vertex_set_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "legal_parent_choices": [
+        {"vertex": "01", "parents": ["00"]},
+        {"vertex": "10", "parents": ["00"]}
+      ],
+      "legal_parent_count": "2",
+      "tree_count": "1"
+    },
+    {
+      "vertex_set": ["00", "10", "11"],
+      "vertex_set_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "legal_parent_choices": [
+        {"vertex": "10", "parents": ["00"]},
+        {"vertex": "11", "parents": ["10"]}
+      ],
+      "legal_parent_count": "2",
+      "tree_count": "1"
+    }
+  ],
+  "ranking_state": "RANKING_COMPLETE",
+  "ranking_endpoint_id": "BQ_AWARE_READ_PATTERN_MIXTURE_V1",
+  "ranking_mode": "EXHAUSTIVE",
+  "ranking_evidence_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+  "ranking_certificate": {
+    "mode": "EXHAUSTIVE",
+    "evaluated_vertex_set_count": 2,
+    "excluded_by_interval_count": 0,
+    "certificate_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  "published_rank": {
+    "endpoint_id": "BQ_AWARE_READ_PATTERN_MIXTURE_V1",
+    "best_score": -12.5,
+    "best_vertex_set_tie_class": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    ]
+  },
+  "ranking_reason": "NONE",
+  "edge_endpoint": {
+    "status": "EDGE_NOT_RUN",
+    "endpoint_id": null,
+    "evidence_sha256": null,
+    "candidate_results": [],
+    "reason": "NOT_REQUESTED"
+  },
+  "evolution_models": {
+    "evo_m0": {
+      "role": "PRIMARY",
+      "model": "RECURRENCE_ALLOWED",
+      "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    "evo_m1": {
+      "role": "SENSITIVITY_ONLY",
+      "model": "STRICT_INFINITE_SITES",
+      "cn_loh_gate": "NOT_EVALUATED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    },
+    "evo_m2": {
+      "role": "UNRESOLVED",
+      "model": "LOSS_SUPPORTED_DOLLO",
+      "state": "UNRESOLVED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    }
+  },
+  "multi_mutation_edge_equivalence": []
+}

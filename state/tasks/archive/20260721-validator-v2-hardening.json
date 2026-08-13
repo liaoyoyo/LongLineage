@@ -1,0 +1,98 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260721-validator-v2-hardening",
+  "owner_agent_id": "codex:root/validator-v2-hardening",
+  "parent_task_id": "20260721-python-compatible-regional-all-datasets",
+  "allowed_paths": [
+    {"path": "state/tasks/active/20260721-validator-v2-hardening.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260721-validator-v2-hardening.json", "kind": "FILE"},
+    {"path": "include/longlineage/validation/regional_compat_validator.hpp", "kind": "FILE"},
+    {"path": "src/validation/regional_compat_validator.cpp", "kind": "FILE"},
+    {"path": "tests/integration/test_regional_compat_validator.cpp", "kind": "FILE"},
+    {"path": "schema/compat", "kind": "DIRECTORY_TREE"}
+  ],
+  "depends_on": ["20260721-python-compatible-regional-topology"],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-21T16:00:00+08:00",
+  "heartbeat_at": "2026-07-21T14:03:38+08:00",
+  "task_type": "E",
+  "goals": ["LL-G2", "LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Harden the independent regional compatibility validator and closed schemas for dataset-bound v2 bundles, including same-byte source-manifest replay and stable provenance, while retaining read-only validation compatibility for the frozen v1 HCC1395 bundle."
+  },
+  "assumptions": [
+    "The validator remains independent from producer grouping and topology kernels.",
+    "New seven-dataset executions use schema 2.0.0 and bind dataset identity, authority, all eight verified inputs, frozen parameters, timing and claim ceiling.",
+    "A v2 freeze is forbidden until the external production manifest is independently replayed as a closed contract and its identity plus SHA-256 remain stable through validation.",
+    "The existing schema 1.0.0 HCC1395 bundle remains a legacy read-only validation contract and cannot be relabeled as a new seven-dataset run."
+  ],
+  "inputs": [
+    {"role": "decision", "path": "docs/decisions/ADR-0008-python-compatible-regional-all-datasets.md", "sha256": "48e1c9c888a2f207aed5731940f423ae277249e5d009b8f86970ed773535dc80"},
+    {"role": "legacy_contract", "path": "docs/decisions/ADR-0007-python-compatible-regional-topology.md", "sha256": "b62b203eaa6248cb1c1313de06437fe6ce0cdb5d7c06450c051cd1d0bf45a57a"}
+  ],
+  "expected_outputs": [
+    {"role": "validator", "path": "src/validation/regional_compat_validator.cpp", "sha256": "eca52f096baeb208f8cf3dbd83fabd019d19a3793f961b466d3cc87427f08ba6"},
+    {"role": "validator_header", "path": "include/longlineage/validation/regional_compat_validator.hpp", "sha256": "c5089d9383ff486a57dcb2573cf10d3b9774b8b7464ec485794a6afcbfdf18f4"},
+    {"role": "validator_tests", "path": "tests/integration/test_regional_compat_validator.cpp", "sha256": "7d041a8f438ede86f4abfdd2fee933b46643ca51f9eba009d1a2259b2010f95f"},
+    {"role": "closed_summary_schema", "path": "schema/compat/regional_compat_summary.schema.json", "sha256": "8b7ecd2980c5b11960bae6ed2004594a7ba498cfd7797dd8da2456ca63029772"},
+    {"role": "closed_producer_schema", "path": "schema/compat/regional_compat_producer_receipt.schema.json", "sha256": "beaef61a849b3d40dd5042a4090b3469cffd2f573f7ed81e717991e9ee3b35de"},
+    {"role": "closed_validation_schema", "path": "schema/compat/regional_compat_validation_receipt.schema.json", "sha256": "2e4f69ceb5c7d32b3fd9cedb628fd3cd1a79398f70e5c85bee777ba757950c8a"}
+  ],
+  "step_verify": [
+    {"step": "Add v2 closed-contract negative fixtures before accepting producer output.", "verify": "Missing dataset, parameters, timing, inputs, duplicate role, unknown field and dataset mismatch fixtures all fail without writing FROZEN."},
+    {"step": "Implement typed v2 summary/receipt/validation bindings.", "verify": "A valid v2 fixture passes and its validation receipt plus FROZEN marker bind dataset ID/order and producer semantic SHA."},
+    {"step": "Retain legacy v1 validation behavior.", "verify": "The existing valid v1 fixture and frozen HCC bundle remain readable, while v1 cannot assert v2 dataset authority."},
+    {"step": "Independently replay and lock the v2 production source manifest before freeze.", "verify": "The validator emits ordered SOURCE_MANIFEST and SOURCE_MANIFEST_STABLE checks; exact production-7 and HCC1395-gate positive fixtures pass, while missing/extra/digest/run/order/role/path/contract/runtime/output/symlink negatives fail without FROZEN."}
+  ],
+  "evidence": [
+    {
+      "evidence_id": "20260721-validator-v2-targeted-ctest",
+      "evidence_path": "tests/integration/test_regional_compat_validator.cpp",
+      "evidence_kind": "TEST_LOG",
+      "command": "/tmp/longlineage-cmake-3.31/cmake/data/bin/cmake --build <BUILD_ROOT> --target longlineage_regional_validator test_regional_compat_validator -j8 && <BUILD_ROOT>/bin/test_regional_compat_validator",
+      "exit_code": 0,
+      "output_excerpt": "[100%] Built target test_regional_compat_validator; regional compat validator integration PASS. The fixture set includes production manifest 1.0, HCC dataset-gate manifest 1.1 with 11 bindings, ordered 18-check receipt, and fail-closed manifest negatives.",
+      "evidence_sha256": "7d041a8f438ede86f4abfdd2fee933b46643ca51f9eba009d1a2259b2010f95f",
+      "recorded_at": "2026-07-21T14:22:30+08:00"
+    },
+    {
+      "evidence_id": "20260721-validator-v2-format",
+      "evidence_path": "src/validation/regional_compat_validator.cpp",
+      "evidence_kind": "RECEIPT",
+      "command": "/tmp/clang-format-14-root/usr/lib/llvm-14/bin/clang-format --dry-run --Werror include/longlineage/validation/regional_compat_validator.hpp src/validation/regional_compat_validator.cpp tests/integration/test_regional_compat_validator.cpp",
+      "exit_code": 0,
+      "output_excerpt": "Pinned clang-format 14 dry-run emitted no errors; git diff --check and 120-column audit also emitted no errors.",
+      "evidence_sha256": "eca52f096baeb208f8cf3dbd83fabd019d19a3793f961b466d3cc87427f08ba6",
+      "recorded_at": "2026-07-21T14:22:30+08:00"
+    },
+    {
+      "evidence_id": "20260721-validator-v2-schema-syntax",
+      "evidence_path": "schema/compat/regional_compat_validation_receipt.schema.json",
+      "evidence_kind": "RECEIPT",
+      "command": "for file in schema/compat/*.json; do jq -e . \"$file\" >/dev/null || exit 1; done",
+      "exit_code": 0,
+      "output_excerpt": "All compatibility schema documents parsed as JSON; the v2 validation receipt contract requires exactly 18 ordered checks including SOURCE_MANIFEST and SOURCE_MANIFEST_STABLE.",
+      "evidence_sha256": "2e4f69ceb5c7d32b3fd9cedb628fd3cd1a79398f70e5c85bee777ba757950c8a",
+      "recorded_at": "2026-07-21T14:03:38+08:00"
+    },
+    {
+      "evidence_id": "20260721-validator-v2-governance",
+      "evidence_path": "include/longlineage/validation/regional_compat_validator.hpp",
+      "evidence_kind": "RECEIPT",
+      "command": "<BUILD_ROOT>/bin/longlineage-governance check-state --repo .",
+      "exit_code": 0,
+      "output_excerpt": "Project state, P0-P8 ledger and seven active task records had internally consistent non-overlapping write sets before task release.",
+      "evidence_sha256": "c5089d9383ff486a57dcb2573cf10d3b9774b8b7464ec485794a6afcbfdf18f4",
+      "recorded_at": "2026-07-21T12:56:00+08:00"
+    }
+  ],
+  "deviations": [
+    "The system PATH lacks clang-format-14; the already extracted Ubuntu 14.0.0 binary under /tmp/clang-format-14-root was used for the required targeted format and dry-run checks.",
+    "The system jsonschema CLI is the known Draft-2020-12-incompatible version and was not used. JSON syntax was checked with jq, while the independent C++ validator tests replayed every required closed v2 field and negative case. The child-local schema-fixture run reached only the expected compat-catalog digest mismatch after this schema changed; the parent task owns that catalog update and repository-wide pinned Draft-2020-12 rerun."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-21T14:22:30+08:00"
+}

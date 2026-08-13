@@ -1,0 +1,217 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-p6-full-validator-dataset-gate",
+  "owner_agent_id": "codex:root/profiling_html_chain",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-p6-full-validator-dataset-gate.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-p6-full-validator-dataset-gate.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-validator-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p6_validator_first_stage_receipt.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "oracle/frozen_vectors/p6_full_validator_dataset_gate_receipt.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/CMakeLists.txt",
+      "kind": "FILE"
+    },
+    {
+      "path": "apps/validate_main.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/validation/artifact_validator.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/validation/artifact_validator.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/artifact/run_root.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/artifact/run_root.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_run_root.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_validator_fault.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_validator_dataset_gate.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/validation_receipt.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/producer_receipt.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/run_receipt.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/contract_registry_bindings.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/artifact_record.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/records/cooccurrence_pairs.record.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/id_registry.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/catalog.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "contracts/v1/status_reason_codes.tsv",
+      "kind": "FILE"
+    },
+    {
+      "path": "governance/gate_registry.tsv",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/ci/check_source_boundaries.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "scripts/ci/check_json_schema_fixtures.sh",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/contract_registry_bindings.valid.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/contracts/contract_registry_bindings.invalid_digest.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T15:40:00+08:00",
+  "heartbeat_at": "2026-07-20T05:27:37+08:00",
+  "task_type": "B",
+  "goals": ["LL-G1", "LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Complete P6 independent replay for the closed catalog, including LLM_BGZF and scientific conservation/decision checks, then publish only the VALIDATED_FROZEN_DATASET_GATE profile through a same-device atomic run-root transaction. Seven-dataset production deployment, producer pipeline implementation, M1/M2/solver changes, provenance and oracle authority are out of scope."
+  },
+  "assumptions": [
+    "The validator remains independently linked and must not link longlineage_core or include producer science/solver kernels.",
+    "The dataset gate is a bounded readiness profile: production_claim_allowed remains false even after successful validation and atomic freeze.",
+    "General query, evaluate and legacy-export entrypoints remain restricted to seven-dataset VALIDATED_FROZEN runs; a VALIDATED_FROZEN_DATASET_GATE run is readable only by a separate validated-only report/HTML gate and never masquerades as a production query root.",
+    "The producer receipt contract must expose producer_hostname, producer_kernel_release and per-input-role mount identity; mount metadata describes the environment and never substitutes for manifest/input SHA authority.",
+    "Schema catalog and id-registry edits, if required, are limited to synchronizing receipt schema digests; artifact membership and scientific producer contracts remain unchanged.",
+    "An indexed artifact may have zero logical rows; the canonical index file still exists and its zero-row physical bytes, semantic digest and empty reconstructed group set must match exactly, so an empty topology population never requires a fabricated abstain unit.",
+    "Any conservation or exact-test detail not derivable from frozen contracts and producer artifacts fails closed with a stable check identifier."
+  ],
+  "inputs": [
+    {
+      "role": "readiness_gate",
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json",
+      "sha256": "eb6dfe8c444f80f00de766dc82bfef780529d8d8204a67162a620b5bb4ca0c40"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "full_independent_validator",
+      "path": "src/validation/artifact_validator.cpp",
+      "sha256": "900f85678a3d11ae568089cef15b65bb4f851e758e9c2ac9168bc43e2a722a88"
+    },
+    {
+      "role": "dataset_gate_transaction",
+      "path": "src/artifact/run_root.cpp",
+      "sha256": "bc33d3e95904d31b0e76fb2420f5ee1fc82b4345afbce58805eabd06b2d82926"
+    },
+    {
+      "role": "complete_validator_fault_matrix",
+      "path": "tests/integration/test_validator_dataset_gate.cpp",
+      "sha256": "0a79242f584f102376510894f3292e44c1d0c66f1eb4caa647b8a6e86910175b"
+    },
+    {
+      "role": "dataset_gate_run_receipt_contract",
+      "path": "schema/core/run_receipt.schema.json",
+      "sha256": "01bf2d2ac750fa41cbd787887609d9ad9ee676415f73b7672f1df5ccc5fb51ed"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Register the exact child lease and confirm non-overlap before implementation.",
+      "verify": "longlineage-governance check-state exits 0 and reports internally consistent non-overlapping active write sets."
+    },
+    {
+      "step": "Replay every producer artifact and closeout artifact independently from the frozen catalog.",
+      "verify": "Synthetic complete positive fixture passes decompression, schema/header, physical/semantic SHA, row/key/order/index and closed membership checks for BGZF TSV/JSONL, plain TSV/JSON and LLM_BGZF; missing, extra, truncated, modified, reordered, duplicate and forged variants exit nonzero."
+    },
+    {
+      "step": "Replay scientific conservation and selected statistical decisions without producer-kernel linkage.",
+      "verify": "Fault tests prove rejection of site/read/methyl/M1/cooccurrence/topology count drift, invalid 16-cell R/A/O/X partitions, global BH/BY drift, exact-test decision drift, incomplete topology v2 ranks and truth_fields_seen greater than zero."
+    },
+    {
+      "step": "Publish the dataset-gate run root through the atomic state machine.",
+      "verify": "RUNNING to READY_FOR_VALIDATION to VALIDATED to atomic rename to FINAL_UNPUBLISHED to VALIDATED_FROZEN_DATASET_GATE is replayed; wrong digest and crash-after-rename cases remain query-invisible; final receipt has production_claim_allowed=false."
+    },
+    {
+      "step": "Run the complete bounded P6 verification suite and inspect the built binary boundary.",
+      "verify": "Warnings-as-errors build, targeted and full CTest, schema/status/gate/source checks, link.txt/ldd and governance check-state exit 0; the executable contains no longlineage_core."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "p6-full-validator-dataset-gate",
+      "evidence_path": "oracle/frozen_vectors/p6_full_validator_dataset_gate_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "/usr/bin/cmake --build build-final-verify --target longlineage_validator test_validator_dataset_gate -j4; ctest --test-dir build-final-verify -R '^(validator_fault|validator_dataset_gate|run_root_transaction)$' --output-on-failure; bash scripts/ci/check_json_schema_fixtures.sh; bash scripts/ci/check_source_boundaries.sh; build-final-verify/bin/longlineage-governance check-{catalog,status-codes,state}",
+      "exit_code": 0,
+      "output_excerpt": "Warnings-as-errors build passed; targeted P6 tests passed 3/3 in 6.36 s; schema, catalog, 118-code vocabulary, active lease and independent validator link boundaries passed. Synthetic DATASET_GATE only; production_claim_allowed=false.",
+      "evidence_sha256": "a006de665ac3d3ddfcf7884192f6bfa770376861ff7735f1f7089ce9d5291e71",
+      "recorded_at": "2026-07-20T05:27:37+08:00"
+    }
+  ],
+  "deviations": [
+    "The frozen catalog required four producer-owned run receipt draft fields and validator-owned final receipt fields; the receipt schemas and fail-closed checks were synchronized rather than allowing the producer to forge a final PASS.",
+    "The formal global exact family was narrowed to M2-screened ELIGIBLE_M2_EXACT_FAMILY rows. Descriptive exact p-values may exist for ineligible rows but never enter BH/BY or conditional confirmation.",
+    "An indexed zero-row topology artifact is canonical when its empty index bytes, zero row count, semantic digest and empty group replay agree; no synthetic abstain topology unit is fabricated.",
+    "The repository-wide full CTest run passed 35/36. The sole failure was the unrelated governance_agent_task_unknown_field_negative harness copying the parent active task without its newly added untracked audit evidence path; the parent owner accepted P6 science/boundary completion and will rerun full CTest after integration.",
+    "The repository publication repair later replaced private absolute-path strings in the receipt with portable tokens. The evidence SHA now binds that sanitized projection; validator counters and verdict fields were not changed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T05:27:37+08:00"
+}

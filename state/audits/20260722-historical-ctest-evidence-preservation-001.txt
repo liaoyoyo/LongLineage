@@ -1,0 +1,15 @@
+schema_name=longlineage.historical_ctest_evidence_preservation
+schema_version=1.0.0
+receipt_id=20260722-historical-ctest-evidence-preservation-001
+scope=HISTORICAL_COMMAND_RESULT_REDIRECT_NOT_CURRENT_SOURCE_VALIDATION
+original_evidence_path=tests/CMakeLists.txt
+original_evidence_sha256=e1c1af60f5f6d0f92cc6b3171aa7b2db5369d03d711b0d3d6061b89964d8cd47
+original_registered_test_count=46
+regional_topology_command=ctest --test-dir build-regional-compat-v2 --output-on-failure --parallel 8
+regional_topology_result=100_percent_pass_0_failed_out_of_46
+seven_dataset_prelaunch_command=ctest --test-dir <BUILD_ROOT> --output-on-failure -j2
+seven_dataset_prelaunch_result=100_percent_pass_0_failed_out_of_46_real_seconds_74.92
+preservation_reason=tests/CMakeLists.txt later added independent hygiene regression coverage; this receipt preserves the two historical command claims without rebinding them to changed source bytes
+current_source_claim_allowed=false
+captured_at=2026-07-22T21:39:08+08:00
+captured_by=codex:root

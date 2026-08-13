@@ -1,0 +1,103 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-report-builder",
+  "owner_agent_id": "codex:hcc1395-report-implementation",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-report-builder.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-report-builder.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "presentation/build_hcc1395_validated_report.py",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/presentation/hcc1395_execution_evidence.schema.json",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-21T12:00:00+08:00",
+  "heartbeat_at": "2026-07-20T17:17:05+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Upgrade the presentation-only HCC1395 builder so it fail-closes on two explicit independently frozen w24/w40 dataset-gate runs plus a C++ determinism/historical receipt and immutable execution evidence. Python may validate bindings and render JSON/HTML but may not read BAM/VCF/sidecar or recompute scientific results."
+  },
+  "assumptions": [
+    "The final w24/w40 run roots and C++ audit receipt will be supplied explicitly after both freezes.",
+    "The builder must reject one-run input, non-frozen state, truth leakage, schema downgrade, receipt drift and semantic mismatch.",
+    "CMake, tests/CMakeLists.txt, final report files and repository ledgers remain owned by the parent task.",
+    "Synthetic self-test fixtures contain no real loci or read identifiers."
+  ],
+  "inputs": [
+    {
+      "role": "repository_governance",
+      "path": "AGENTS.md",
+      "sha256": "afa4ce0e7a703aff1dd2b5fe13b1455158b5da93062d5c74804a966dc4c0a2dd"
+    },
+    {
+      "role": "input_authority",
+      "path": "oracle/hcc1395_dataset_gate_input_authority.json",
+      "sha256": "b74988abfa014ece749098e823c2c6d34e8b239a6681c34d2e8d5f617c59d39a"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "validated_report_builder",
+      "path": "presentation/build_hcc1395_validated_report.py",
+      "sha256": "21a47e946125cdac281485639d2145c5b67cb73a42ebf70c6800f044417c5bc4"
+    },
+    {
+      "role": "execution_evidence_schema",
+      "path": "schema/presentation/hcc1395_execution_evidence.schema.json",
+      "sha256": "c147b952f3c375d71852b3a9cc156950c82432f9fe17928a29ed1a40ca8f2fc4"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Require and independently rehash two explicit frozen run roots, execution evidence and C++ audit receipt.",
+      "verify": "Missing w40, bad worker count, unexpected manifest difference, non-frozen receipt, digest drift and path escape each exit non-zero."
+    },
+    {
+      "step": "Render determinism, provenance, timing, historical boundaries and limitations without scientific recomputation.",
+      "verify": "Positive synthetic fixture emits report schema 1.1.0 with 8/8 semantic parity and an output build receipt; Python source imports no BAM/VCF science library."
+    },
+    {
+      "step": "Add closed positive and negative self-tests.",
+      "verify": "Self-test exit 0 reports every registered positive/negative case PASS and leaves no PASS artifact after a negative case."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "20260720-hcc1395-report-builder-tracked-receipt-001",
+      "evidence_path": "tests/fixtures/hcc1395_report/verification_receipt.json",
+      "evidence_kind": "TRACKED_VERIFICATION_RECEIPT",
+      "command": "sha256sum tests/fixtures/hcc1395_report/verification_receipt.json",
+      "exit_code": 0,
+      "output_excerpt": "Original synthetic scope PASS and explicitly superseded by the parent provenance and hygiene hardening before any formal report.",
+      "evidence_sha256": "1ca53c35302b206c6f2ee16f3b21a8e910b4f405b332a73c1a92ab1c36a90bb4",
+      "recorded_at": "2026-07-20T19:31:17+08:00"
+    }
+  ],
+  "deviations": [
+    "Formal HCC1395 w24/w40 roots were still being produced by the parent task, so this child task verified the complete closed chain with synthetic roots only. Formal data validation and browser QA remain parent-owned and must not be inferred from this synthetic evidence.",
+    "The independent C++ audit schema intentionally omits historical regional census values that are not bound by its CLI inputs. The report therefore renders an explicit NOT_COMPARABLE boundary instead of hard-coding 8,222/20,119/10,904."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T17:17:05+08:00"
+}

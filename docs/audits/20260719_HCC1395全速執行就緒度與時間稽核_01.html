@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-Hant" data-partial="true" data-report-id="20260719-hcc1395-fullspeed-readiness-timing-001">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>HCC1395 全速執行就緒度與時間稽核 · LongLineage</title>
+  <style>
+    :root {
+      --paper:#f3f0e8; --surface:#fffdf8; --ink:#17202a; --muted:#5f6b76;
+      --navy:#17324d; --navy2:#244b6f; --line:#d8d2c5; --red:#b42318;
+      --red-bg:#fef3f2; --amber:#b54708; --amber-bg:#fffaeb; --green:#027a48;
+      --green-bg:#ecfdf3; --blue:#175cd3; --blue-bg:#eff8ff;
+      --shadow:0 12px 32px rgba(23,50,77,.10);
+    }
+    * { box-sizing:border-box; }
+    html { max-width:100%; scroll-behavior:smooth; overflow-x:clip; }
+    body {
+      margin:0; color:var(--ink); background:var(--paper);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height:1.62; overflow-x:clip;
+    }
+    a { color:inherit; }
+    code, pre { font-family:"SFMono-Regular", Consolas, monospace; }
+    .partial-ribbon {
+      background:var(--red); color:white; text-align:center; padding:.5rem 1rem;
+      font-weight:800; letter-spacing:.06em; font-size:.78rem;
+    }
+    .layout { width:100%; max-width:1480px; margin:0 auto; display:grid; grid-template-columns:250px 1fr; }
+    aside {
+      position:sticky; top:0; height:100vh; padding:2rem 1.3rem; border-right:1px solid var(--line);
+      background:#ebe6dc;
+    }
+    .brand { font-weight:900; color:var(--navy); letter-spacing:.03em; }
+    .brand small { display:block; color:var(--muted); font-weight:650; letter-spacing:0; }
+    nav { min-width:0; max-width:100%; margin-top:2rem; display:grid; gap:.35rem; }
+    nav a { text-decoration:none; padding:.52rem .65rem; border-left:3px solid transparent; color:#44515d; }
+    nav a:hover, nav a:focus-visible { color:var(--navy); border-color:var(--red); background:rgba(255,255,255,.55); }
+    aside .scope-note { margin-top:2rem; font-size:.82rem; color:var(--muted); }
+    main { min-width:0; padding:2.2rem clamp(1.2rem,4vw,4.5rem) 5rem; }
+    .hero {
+      background:var(--navy); color:white; padding:clamp(2rem,5vw,4.5rem);
+      border-top:8px solid var(--red); box-shadow:var(--shadow);
+    }
+    .eyebrow { text-transform:uppercase; letter-spacing:.13em; font-weight:800; font-size:.78rem; color:#b9d4eb; }
+    h1 { max-width:980px; margin:.55rem 0 1rem; font-size:clamp(2.1rem,5vw,4.6rem); line-height:1.02; letter-spacing:-.045em; }
+    .hero-lead { max-width:850px; font-size:clamp(1.02rem,2vw,1.25rem); color:#e8f0f7; }
+    .verdict-line { display:flex; flex-wrap:wrap; gap:.65rem; align-items:center; margin-top:1.6rem; }
+    .verdict { background:white; color:var(--red); font-weight:950; font-size:1.45rem; padding:.42rem .8rem; }
+    .hero-meta { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin-top:2.2rem; background:#55738e; }
+    .hero-meta div { background:var(--navy2); padding:1rem; }
+    .hero-meta span { display:block; color:#b9d4eb; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; }
+    .hero-meta strong { font-size:1.05rem; }
+    section { min-width:0; max-width:100%; scroll-margin-top:1rem; padding:4.2rem 0 0; }
+    .section-kicker { color:var(--red); font-weight:900; letter-spacing:.12em; text-transform:uppercase; font-size:.75rem; }
+    h2 { margin:.25rem 0 .8rem; color:var(--navy); font-size:clamp(1.6rem,3vw,2.6rem); letter-spacing:-.025em; line-height:1.14; }
+    h3 { margin:.3rem 0 .35rem; line-height:1.25; }
+    .section-lead { max-width:900px; color:var(--muted); font-size:1.03rem; }
+    .answer-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:1rem; margin-top:1.4rem; }
+    .answer-primary { background:var(--red-bg); border-left:6px solid var(--red); padding:1.4rem; }
+    .answer-primary strong { display:block; color:var(--red); font-size:1.45rem; }
+    .answer-secondary { background:var(--surface); border:1px solid var(--line); padding:1.4rem; }
+    .note { padding:1rem 1.15rem; border:1px solid #e6b8b4; background:#fff8f7; margin-top:1rem; }
+    .measure-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.35rem; }
+    .measurement { background:var(--surface); border:1px solid var(--line); border-top:4px solid var(--navy); padding:1.15rem; }
+    .measurement .measure-value { color:var(--navy); font-size:1.65rem; font-weight:900; margin:.25rem 0; }
+    .measurement small, td small { display:block; color:var(--muted); margin-top:.45rem; }
+    .badge { display:inline-block; padding:.18rem .45rem; border-radius:3px; font-size:.68rem; font-weight:850; letter-spacing:.035em; overflow-wrap:anywhere; }
+    .badge.ok { color:var(--green); background:var(--green-bg); }
+    .badge.bad { color:var(--red); background:var(--red-bg); }
+    .badge.warn { color:var(--amber); background:var(--amber-bg); }
+    .badge.neutral { color:var(--blue); background:var(--blue-bg); }
+    .table-wrap { width:100%; min-width:0; max-width:100%; overflow-x:auto; contain:inline-size; margin-top:1.3rem; border:1px solid var(--line); background:var(--surface); }
+    table { width:100%; border-collapse:collapse; min-width:820px; }
+    th { text-align:left; background:#e8edf1; color:var(--navy); font-size:.74rem; letter-spacing:.05em; text-transform:uppercase; }
+    th, td { padding:.82rem .9rem; border-bottom:1px solid var(--line); vertical-align:top; }
+    tbody tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:#fbf8f1; }
+    .stage-num { font-weight:900; color:#8b98a3; width:3rem; }
+    .path { display:block; white-space:normal; overflow-wrap:anywhere; color:#415266; font-size:.76rem; background:#f0ede6; padding:.35rem .45rem; margin-top:.2rem; }
+    .history { margin-top:1.5rem; display:grid; gap:.8rem; }
+    .history-row { display:grid; grid-template-columns:230px 1fr 210px; gap:1rem; align-items:center; background:var(--surface); border:1px solid var(--line); padding:1rem; }
+    .history-row p { grid-column:1/-1; margin:0; color:var(--muted); font-size:.88rem; }
+    .history-label span, .history-value span { display:block; color:var(--muted); font-size:.78rem; }
+    .history-track { height:14px; background:#e6e1d7; overflow:hidden; }
+    .history-bar { height:100%; background:var(--navy2); min-width:4px; }
+    .history-bar.bad { background:var(--red); }
+    .history-bar.warn { background:var(--amber); }
+    .history-value { text-align:right; }
+    .bottleneck-list { display:grid; gap:.7rem; margin-top:1.4rem; }
+    .bottleneck { display:grid; grid-template-columns:54px 1fr; gap:1rem; background:var(--surface); border:1px solid var(--line); padding:1.15rem; }
+    .rank { color:#a7afb7; font-size:1.5rem; font-weight:950; }
+    .bottleneck p { margin:.3rem 0; }
+    .unblock { color:#3c4d5c; }
+    .profile { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid var(--line); margin-top:1.3rem; background:var(--surface); }
+    .profile div { padding:1rem; border-right:1px solid var(--line); }
+    .profile div:last-child { border:0; }
+    .profile span { color:var(--muted); display:block; font-size:.75rem; text-transform:uppercase; }
+    .profile strong { color:var(--navy); font-size:1.2rem; }
+    details { background:var(--surface); border:1px solid var(--line); margin:.65rem 0; }
+    summary { cursor:pointer; padding:.9rem 1rem; font-weight:800; color:var(--navy); }
+    .detail-body { padding:0 1rem 1rem; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#162535; color:#f4f7fa; padding:1rem; overflow:auto; }
+    .sources { padding-left:1.3rem; }
+    .sources li { margin:.8rem 0; }
+    .footer { margin-top:4rem; padding-top:1.5rem; border-top:1px solid var(--line); color:var(--muted); font-size:.83rem; }
+    @media (max-width:980px) {
+      .layout { display:block; }
+      aside { position:static; height:auto; border-right:0; border-bottom:1px solid var(--line); padding:1rem; }
+      nav { display:flex; overflow-x:auto; margin-top:.8rem; }
+      nav a { white-space:nowrap; border-left:0; border-bottom:3px solid transparent; }
+      aside .scope-note { display:none; }
+      .measure-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .history-row { grid-template-columns:1fr; }
+      .history-row p { grid-column:auto; }
+      .history-value { text-align:left; }
+      .profile { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:620px) {
+      main { padding:1rem 1rem 3rem; }
+      .hero { padding:1.5rem; }
+      h1 { font-size:2.35rem; }
+      nav { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); overflow:visible; }
+      nav a { white-space:normal; text-align:center; padding:.45rem .25rem; }
+      .hero-meta, .answer-grid, .measure-grid { grid-template-columns:1fr; }
+      .profile { grid-template-columns:1fr; }
+      .profile div { border-right:0; border-bottom:1px solid var(--line); }
+      .bottleneck { grid-template-columns:40px 1fr; }
+    }
+    @media print {
+      body { background:white; font-size:10pt; }
+      .partial-ribbon { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+      .layout { display:block; max-width:none; }
+      aside { display:none; }
+      main { padding:0; }
+      .hero { box-shadow:none; break-after:avoid; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+      section { padding-top:1.6rem; break-inside:auto; }
+      .measurement, .bottleneck, .history-row, table { break-inside:avoid; }
+      details { break-inside:avoid; }
+      details > * { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="partial-ribbon">PARTIAL / READINESS AUDIT — 非 production run、非 P8 release evidence</div>
+  <div class="layout">
+    <aside>
+      <div class="brand">LongLineage<small>HCC1395 full-speed audit</small></div>
+      <nav aria-label="報告章節">
+        <a href="#answer">時間答案</a>
+        <a href="#measured">本輪實測</a>
+        <a href="#pipeline">全流程狀態</a>
+        <a href="#history">歷史脈絡</a>
+        <a href="#inputs">輸入</a>
+        <a href="#bottlenecks">瓶頸</a>
+        <a href="#profile">全速設定</a>
+        <a href="#commands">命令證據</a>
+        <a href="#sources">來源</a>
+      </nav>
+      <p class="scope-note">Task B · HCC1395 chr1–22 sample-complete；對 7-dataset production corpus 為 partial。</p>
+    </aside>
+    <main>
+      <header class="hero">
+        <div class="eyebrow">Evidence → Gate → Timing · 2026-07-19T23:56:16+08:00</div>
+        <h1>HCC1395 全速執行就緒度與時間稽核</h1>
+        <p class="hero-lead">LongLineage production engine、M1、M2/co-occurrence、完整 topology、independent validator、chart-ready bundle 與 HTML builder 尚未完成；同時 &lt;BIG8_INPUT&gt; 未掛載，raw BAM、BAI、reference FASTA/FAI 當下不可讀。</p>
+        <div class="verdict-line">
+          <span class="verdict">NO-GO</span>
+          <span class="badge neutral">影響 HIGH</span>
+          <span class="badge neutral">信心 HIGH</span>
+          <span class="badge neutral">科學輸出 0</span>
+        </div>
+        <div class="hero-meta">
+          <div><span>Scope</span><strong>HCC1395 · chr1–22 · 79,687 sites</strong></div>
+          <div><span>Host</span><strong>48 CPUs · 約 495 GiB available</strong></div>
+          <div><span>Storage</span><strong>big7 714.8 GiB free · big8 ABSENT</strong></div>
+        </div>
+      </header>
+
+      <section id="answer">
+        <div class="section-kicker">01 · Direct answer</div>
+        <h2>現在的完整時間不是「很久」，而是「沒有可成功的路徑」</h2>
+        <div class="answer-grid">
+          <div class="answer-primary">
+            <strong>Production total：不可量測</strong>
+            不可量測：不存在可成功的 production execution path。
+          </div>
+          <div class="answer-secondary">
+            <strong>Production HTML：不可量測</strong>
+            <p>不可量測：C++ chart-ready bundle、Python builder與QA chain尚未實作。</p>
+          </div>
+        </div>
+        <div class="note"><strong>不能相加：</strong>下方歷史時間來自不同程式、資料集範圍、成功狀態與演算法。舊 InterSubMod C++ extraction單一步驟為1:57:41.98；不是新流程總時間、不是下限，也不可與其他歷史列相加。</div>
+      </section>
+
+      <section id="measured">
+        <div class="section-kicker">02 · Current measurements</div>
+        <h2>本輪真正量到的只有 foundation 與 fail-closed 邊界</h2>
+        <p class="section-lead">這些數字驗證 repository 能建置、測試與正確拒絕未就緒 production；它們不含 HCC1395 BAM 科學運算。</p>
+        <div class="measure-grid"><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_FOUNDATION</span></div><h3>C++ incremental build</h3><p class="measure-value">0.23 秒</p><p>PASS</p><small>Already-configured warm incremental build; not a clean build and not scientific runtime.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_FOUNDATION</span></div><h3>C++ foundation CTest</h3><p class="measure-value">28.22 秒</p><p>33/33 PASS</p><small>Synthetic/foundation tests only; does not process HCC1395.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_FOUNDATION</span></div><h3>CLI fail-closed gate suite</h3><p class="measure-value">0.34 秒</p><p>Harness PASS; production run correctly rejected with exit 6</p><small>Negative gate verification only; zero scientific work.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_GATE</span></div><h3>Strict release gate</h3><p class="measure-value">未列入時間主張</p><p>BLOCKED</p><small>Foundation checks pass, strict release remains blocked by declared/missing execution evidence.</small></article><article class="measurement"><div><span class="badge neutral">CURRENT_MEASURED_FOUNDATION</span></div><h3>Repository full foundation gate</h3><p class="measure-value">44.58 秒</p><p>FOUNDATION_PASS; 33/33 PASS; no-network PASS</p><small>Repository foundation and boundary validation; release-phase blockers remain governed.</small></article><article class="measurement"><div><span class="badge ok">PRESENTATION_ONLY_MEASURED</span></div><h3>本稽核 HTML render</h3><p class="measure-value">0.06–0.07 秒</p><p>PASS; standalone audit HTML emitted</p><small>Audit JSON to standalone HTML only; not production P8 and does not read scientific artifacts.</small></article></div>
+      </section>
+
+      <section id="pipeline">
+        <div class="section-kicker">03 · Stage-by-stage</div>
+        <h2>P0–P8 實際可執行度與時間缺口</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Stage / implementation</th><th>Status</th><th>Timing</th><th>Current bottleneck</th></tr></thead>
+            <tbody><tr><td class="stage-num">00</td><td><strong>Input mount / authority / lock</strong><small>Authority contracts exist; real 8-role manifest absent.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>&lt;BIG8_INPUT&gt; missing; production profile also requires exact seven datasets.</td></tr><tr><td class="stage-num">01</td><td><strong>Preflight</strong><small>C++ typed preflight exists.</small></td><td><span class="badge warn">PARTIAL_IMPLEMENTATION</span></td><td>NOT_MEASURED_REAL_DATA</td><td>Complete file SHA-256 and indexed probes are serial; HCC1395-only production profile is illegal.</td></tr><tr><td class="stage-num">02</td><td><strong>HTS read / latest-tag join / multi-marker projection</strong><small>Synthetic indexed BAM block reader only.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>Persistent VCF/sidecar/FASTA handles and one-pass CIGAR multi-marker projection are missing.</td></tr><tr><td class="stage-num">03</td><td><strong>M1</strong><small>No production C++ M1 kernel.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>PCG64/RNG/logical digest and HP-family mapping vectors are not frozen.</td></tr><tr><td class="stage-num">04</td><td><strong>M2 / co-occurrence</strong><small>No production C++ M2/co-occurrence kernel.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>Formal full authority and O/X callability precedence vectors are absent.</td></tr><tr><td class="stage-num">05</td><td><strong>Topology objective / family / ranking</strong><small>q&lt;=4 exhaustive oracle only; q&gt;4 abstains.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>Bitset B&amp;B, direct HiGHS parity, complete family and outward-rounded ranking certificates are missing.</td></tr><tr><td class="stage-num">06</td><td><strong>Artifact write / index / physical hash</strong><small>BGZF writer component exists; catalog plans 16 artifacts + 8 indexes.</small></td><td><span class="badge warn">COMPONENT_ONLY</span></td><td>SYNTHETIC_ONLY</td><td>No production producer, global physical-memory proof or full performance collector.</td></tr><tr><td class="stage-num">07</td><td><strong>Independent validator / atomic freeze</strong><small>CLI is an independent target but is a fail-closed stub.</small></td><td><span class="badge bad">BLOCKED</span></td><td>UNKNOWN</td><td>Validator always exits 7 and writes no validation receipt.</td></tr><tr><td class="stage-num">08</td><td><strong>C++ chart-ready report bundle</strong><small>No artifact, schema or executable exists.</small></td><td><span class="badge bad">ABSENT</span></td><td>UNKNOWN</td><td>Python must not recompute science; C++ must first emit governed chart-ready arrays.</td></tr><tr><td class="stage-num">09</td><td><strong>Python HTML render / browser QA</strong><small>Only this audit-specific renderer is added; production presentation remains absent.</small></td><td><span class="badge bad">ABSENT_PRODUCTION_CHAIN</span></td><td>UNKNOWN</td><td>No P8 builder, pinned presentation environment, accessibility or offline QA receipt.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="history">
+        <div class="section-kicker">04 · Non-comparable context</div>
+        <h2>歷史時間只回答容量脈絡，不回答新 C++ 總時間</h2>
+        <p class="section-lead">長條以歷史最長 wall time 正規化；0.4% 是顯示下限。每列獨立，禁止相加或外推。</p>
+        <div class="history"><div class="history-row"><div class="history-label"><strong>舊 InterSubMod C++ read/CpG/Bernoulli extraction</strong><span>HCC1395 chr1-22, 79,687 sites, 6 threads</span></div><div class="history-track" aria-hidden="true"><div class="history-bar neutral" style="width:16.4%"></div></div><div class="history-value"><strong>1:57:41.98</strong><span>NON_COMPARABLE_CONTEXT</span></div><p>PASS; 79,687 reads files + 79,687 Bernoulli files + 79,687 methylation files；Different program, output model and thread model; it is not a LongLineage timing.</p></div><div class="history-row"><div class="history-label"><strong>舊 Python M1 screen</strong><span>Combined first six datasets, 447,449 sites, 40 workers</span></div><div class="history-track" aria-hidden="true"><div class="history-bar neutral" style="width:100.0%"></div></div><div class="history-value"><strong>11:57:49</strong><span>NON_COMPARABLE_CONTEXT</span></div><p>EXECUTION_PASS；HCC1395 time cannot be separated; Python scientific execution is forbidden for new production.</p></div><div class="history-row"><div class="history-label"><strong>舊 Python M2/co-occurrence attempt 6</strong><span>102,842 selected M1 rows, 40 workers, 999 permutations</span></div><div class="history-track" aria-hidden="true"><div class="history-bar bad" style="width:32.7%"></div></div><div class="history-value"><strong>3:54:51</strong><span>FAILED_NON_COMPARABLE_CONTEXT</span></div><p>FAILED before publication; no formal result or receipt；Failure time is not completion time and cannot predict the C++ kernel.</p></div><div class="history-row"><div class="history-label"><strong>舊 layered reconstruction + verification</strong><span>Seven datasets, chr1-22, four samples in parallel</span></div><div class="history-track" aria-hidden="true"><div class="history-bar neutral" style="width:29.3%"></div></div><div class="history-value"><strong>約 3:30:16</strong><span>NON_COMPARABLE_CONTEXT</span></div><p>7/7 verification PASS；Earlier Python-led method and seven-dataset scope; not current P5 production topology.</p></div><div class="history-row"><div class="history-label"><strong>C++ BGZF row-payload writer</strong><span>Synthetic mixed-cache component</span></div><div class="history-track" aria-hidden="true"><div class="history-bar warn" style="width:0.4%"></div></div><div class="history-value"><strong>0.8296 秒 / 500,000 synthetic rows</strong><span>COMPONENT_MEASURED</span></div><p>7.93% median wall reduction；production_claim_allowed=false; cannot be extrapolated to HCC1395 or HTML.</p></div></div>
+      </section>
+
+      <section id="inputs">
+        <div class="section-kicker">05 · Input readiness</div>
+        <h2>四項核心輸入被 mount 阻擋</h2>
+        <p class="section-lead">VCF/sidecar authority 在 big7 可核對；292.06 GB raw BAM、BAI 與 reference 位於目前未掛載的 big8。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Recorded size</th><th>Current state</th><th>Path</th></tr></thead>
+            <tbody><tr><td><strong>raw_bam</strong></td><td>292.06 GB</td><td><span class="badge bad">ABSENT_MOUNT_BLOCKER</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam</code></td></tr><tr><td><strong>raw_bam_index</strong></td><td>119.74 MB</td><td><span class="badge bad">ABSENT_MOUNT_BLOCKER</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/data/HCC1395/ONT_5khz_simplex_5mCG_5hmCG/HCC1395.bam.bai</code></td></tr><tr><td><strong>reference_fasta</strong></td><td>3.14 GB</td><td><span class="badge bad">ABSENT_MOUNT_BLOCKER</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/ref/GRCh38_no_alt_analysis_set.fasta</code></td></tr><tr><td><strong>reference_fai</strong></td><td>7.8 KB</td><td><span class="badge bad">ABSENT_MOUNT_BLOCKER</span></td><td><code class="path">&lt;BIG8_INPUT&gt;/ref/GRCh38_no_alt_analysis_set.fasta.fai</code></td></tr><tr><td><strong>latest_hp_ps_sidecar</strong></td><td>1.43 GB</td><td><span class="badge ok">PRESENT_SIZE_AUTHORITY_MATCH</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz</code></td></tr><tr><td><strong>latest_hp_ps_sidecar_index</strong></td><td>910.5 KB</td><td><span class="badge ok">PRESENT_SHA256_AUTHORITY_MATCH</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.read_tags.tsv.gz.tbi</code></td></tr><tr><td><strong>pass_biallelic_ssnv_vcf</strong></td><td>3.73 MB</td><td><span class="badge ok">PRESENT_SHA256_AUTHORITY_MATCH</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz</code></td></tr><tr><td><strong>pass_biallelic_ssnv_vcf_index</strong></td><td>344.1 KB</td><td><span class="badge ok">PRESENT_SHA256_AUTHORITY_MATCH</span></td><td><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260711_longphase_s_raw_all_production_sidecars_v2/samples/HCC1395/HCC1395.longphase_s.recalibrated.pass.vcf.gz.csi</code></td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="bottlenecks">
+        <div class="section-kicker">06 · Bottleneck ranking</div>
+        <h2>先解鎖正確性與可執行性，再談 CPU 加速</h2>
+        <div class="bottleneck-list"><article class="bottleneck"><span class="rank">01</span><div><div><span class="badge bad">BLOCKER</span></div><h3>流程本身尚未存在</h3><p>The current producer always returns KernelBlocked even after preflight; M1, M2, full topology, validator and report bundle are not release-enabled.</p><p class="unblock"><strong>解鎖：</strong>Complete and independently verify P2 through P6 before any full-data timing.</p></div></article><article class="bottleneck"><span class="rank">02</span><div><div><span class="badge bad">BLOCKER</span></div><h3>資料 mount 缺失</h3><p>&lt;BIG8_INPUT&gt; is an empty local directory in this session, not the frozen NFS mount.</p><p class="unblock"><strong>解鎖：</strong>Restore the exact mount and re-verify BAM/BAI/FASTA/FAI identities before preflight.</p></div></article><article class="bottleneck"><span class="rank">03</span><div><div><span class="badge bad">BLOCKER</span></div><h3>HCC1395-only 與 production authority 衝突</h3><p>The production CLI accepts only the exact seven-dataset profile; a one-dataset run is rejected.</p><p class="unblock"><strong>解鎖：</strong>Add a governed BOUNDED_REAL_DATA benchmark profile that stays PARTIAL and cannot be promoted to production evidence.</p></div></article><article class="bottleneck"><span class="rank">04</span><div><div><span class="badge neutral">HIGH</span></div><h3>序列 I/O 與 full hashing</h3><p>Preflight recomputes complete SHA-256 per locked file and scans indexed records; with a 292.06 GB BAM this can dominate before science starts.</p><p class="unblock"><strong>解鎖：</strong>Measure per-stage I/O with C++ /proc/self/io and getrusage; never skip identity checks for speed.</p></div></article><article class="bottleneck"><span class="rank">05</span><div><div><span class="badge neutral">HIGH</span></div><h3>舊輸出的小檔案爆量</h3><p>The legacy HCC1395 extractor produced at least 239,061 site-level files across three artifact families.</p><p class="unblock"><strong>解鎖：</strong>Use streamed BGZF native artifacts and indexes; do not recreate per-site directory trees.</p></div></article><article class="bottleneck"><span class="rank">06</span><div><div><span class="badge neutral">HIGH</span></div><h3>記憶體與 transient storage 尚無物理上限證據</h3><p>Current P2 accounting covers logical retained payload only; HTSlib buffers, allocator overhead, thread stacks and transient files are not bounded.</p><p class="unblock"><strong>解鎖：</strong>Implement a process-wide permit budget, RSS sampler and transient-space/inode preflight.</p></div></article></div>
+      </section>
+
+      <section id="profile">
+        <div class="section-kicker">07 · Planned full-speed profile</div>
+        <h2>解鎖後的單樣本 profiling 設定</h2>
+        <p class="section-lead"><span class="badge neutral">PLANNED_NOT_EXECUTED</span> 這是 proposed PARTIAL benchmark profile，不可取代 exact seven-dataset production authority。</p>
+        <div class="profile">
+          <div><span>Compute</span><strong>40 workers</strong></div>
+          <div><span>Writers</span><strong>4 threads</strong></div>
+          <div><span>Coordinator</span><strong>2 slots</strong></div>
+          <div><span>Total ceiling</span><strong>46 / 48</strong></div>
+        </div>
+        <div class="note"><strong>Staging</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260719_longlineage_hcc1395_fullspeed_profile_v1/.staging/20260719_HCC1395_autosomes_w40_fullspeed_v1</code><strong>Final</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260719_longlineage_hcc1395_fullspeed_profile_v1/20260719_HCC1395_autosomes_w40_fullspeed_v1</code><strong>Storage policy</strong> 200 GiB proposed first-run reservation; fail closed below 100 GiB free（ESTIMATED_ACCEPTANCE_POLICY_NOT_MEASURED）</div>
+      </section>
+
+      <section id="commands">
+        <div class="section-kicker">08 · Reproducible evidence</div>
+        <h2>本輪輸入、命令、輸出與實際片段</h2>
+        <details><summary>Incremental build · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt; source and build-cpp-output-validation</code></p><pre><code>/usr/bin/cmake --build &lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation -j4</code></pre><p><strong>Output</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation/bin/</code></p><pre><code>[100%] Built target test_block_pipeline</code></pre></div></details><details><summary>Foundation validation · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation</code></p><pre><code>ctest --test-dir &lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation --output-on-failure</code></pre><p><strong>Output</strong> <code class="path">terminal CTest receipt</code></p><pre><code>100% tests passed, 0 tests failed out of 33; Total Test time (real) = 28.20 sec</code></pre></div></details><details><summary>Production fail-closed verification · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">synthetic generated manifests bound to repository contracts</code></p><pre><code>&lt;LONG_LINEAGE_REPO&gt;/scripts/testing/test_cli_gates.sh &lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation/bin/longlineage &lt;LONG_LINEAGE_REPO&gt;</code></pre><p><strong>Output</strong> <code class="path">/tmp/longlineage-cli-gates.* scratch, removed by harness</code></p><pre><code>verified_kernel_gate: PASS exit=6; release attestation is NOT_READY</code></pre></div></details><details><summary>Strict release gate · exit 1</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt; repository and build</code></p><pre><code>&lt;LONG_LINEAGE_REPO&gt;/scripts/ci/check_release_gate.sh &lt;LONG_LINEAGE_REPO&gt;/build-cpp-output-validation</code></pre><p><strong>Output</strong> <code class="path">terminal gate report</code></p><pre><code>RELEASE GATE BLOCKED: P0-P8 are not all VERIFIED with evidence</code></pre></div></details><details><summary>Full repository foundation gate after report changes · exit 0</summary><div class="detail-body"><p><strong>Input</strong> <code class="path">&lt;LONG_LINEAGE_REPO&gt; repository and build-cpp-output-validation</code></p><pre><code>scripts/ci/check_all.sh build-cpp-output-validation</code></pre><p><strong>Output</strong> <code class="path">terminal foundation and boundary report</code></p><pre><code>BOUNDARY RESULT: PASS validator_link=independent python_science=absent; 33/33 PASS; NO-NETWORK RESULT: PASS; CHECK ALL RESULT: FOUNDATION_PASS</code></pre></div></details>
+      </section>
+
+      <section id="sources">
+        <div class="section-kicker">09 · Provenance</div>
+        <h2>可追溯來源</h2>
+        <ul class="sources"><li><strong>LongLineage current focus</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/docs/CURRENT_FOCUS.md</code></li><li><strong>Machine phase ledger</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/state/phase_ledger.json</code></li><li><strong>Release attestation</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/state/release_attestation.json</code></li><li><strong>Production CLI fail-closed source</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/apps/longlineage_main.cpp</code></li><li><strong>Validator fail-closed source</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/apps/validate_main.cpp</code></li><li><strong>Production input authority</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/oracle/production_input_authority.json</code></li><li><strong>Performance and output policy</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/docs/development/PERFORMANCE_AND_OUTPUT_POLICY.md</code></li><li><strong>Historical HCC1395 extraction receipt</strong><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/all_ssnv_intersubmod_batch.v2_verification_fix.json</code></li><li><strong>Historical six-dataset M1 run manifest</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/observation_workspaces/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/all_ssnv_focal_alt_multigroup_v9_first_six_thread_pinned_source_locked/run_manifest.json</code></li><li><strong>Historical M2 attempt-6 incident</strong><code class="path">&lt;INTERSUBMOD_REPO&gt;/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/results/cooccurrence_execution_incident.v3_attempt6_summary_totality.json</code></li><li><strong>Historical layered reconstruction launch receipt</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/launch_receipt.json</code></li><li><strong>Historical layered reconstruction verification summary</strong><code class="path">&lt;BIG7_OUTPUT&gt;/synthesis/research_rounds/20260713_layered_reconstruction_v3_raw_all_lps_pass_v5/verification_summary.json</code></li><li><strong>C++ writer component benchmark</strong><code class="path">&lt;LONG_LINEAGE_REPO&gt;/state/benchmarks/20260719-bgzf-row-payload-local.json</code></li></ul>
+      </section>
+
+      <footer class="footer">
+        <strong>20260719-hcc1395-fullspeed-readiness-timing-001</strong> · schema 1.0.0<br>
+        不可把 synthetic/component、舊 Python pipeline、失敗 run 或跨資料集時間外推成 LongLineage HCC1395 production 總時間；不可把本 HTML 稱為 P8 report。<br>
+        本頁由 Python presentation-only renderer 產生；所有科學與時間欄位皆來自凍結 audit JSON，renderer 不讀 BAM/VCF、不聚合 scientific tables。
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

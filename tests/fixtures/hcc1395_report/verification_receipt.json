@@ -1,0 +1,25 @@
+{
+  "schema_name": "longlineage.hcc1395_report_builder_verification_receipt",
+  "schema_version": "1.0.0",
+  "status": "PASS_WITH_PARENT_SUPERSESSION",
+  "task_id": "20260720-hcc1395-report-builder",
+  "original_commit": "088bb8866be88f2ed4e89014b217de575fdcd705",
+  "original_scope": {
+    "positive_fixture": "PASS",
+    "negative_cases_passed": 31,
+    "negative_cases_total": 31,
+    "determinism_artifacts": 8,
+    "production_claim_allowed": false
+  },
+  "original_output_bindings": {
+    "builder_sha256": "21a47e946125cdac281485639d2145c5b67cb73a42ebf70c6800f044417c5bc4",
+    "execution_schema_sha256": "c147b952f3c375d71852b3a9cc156950c82432f9fe17928a29ed1a40ca8f2fc4"
+  },
+  "supersession": {
+    "parent_task_id": "20260720-hcc1395-scientific-parity",
+    "reason": "A later parent audit found single-commit provenance ambiguity and tracked-report private-path passthrough.",
+    "original_result_is_formal_hcc1395_evidence": false,
+    "replacement_required_before_formal_report": true
+  },
+  "recorded_at": "2026-07-20T19:31:17+08:00"
+}

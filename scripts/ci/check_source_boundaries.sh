@@ -49,9 +49,48 @@ if grep -RniE \
 fi
 
 while IFS= read -r -d '' presentation_file; do
-    if grep -Ein \
-        '(^|[^A-Za-z])(pysam|cyvcf2|htslib|samtools|bcftools)([^A-Za-z]|$)' \
-        "$presentation_file" >/dev/null; then
+    if ! python3 - "$presentation_file" <<'PY'
+import ast
+import sys
+
+path = sys.argv[1]
+tree = ast.parse(open(path, encoding="utf-8").read(), filename=path)
+forbidden_modules = {"pysam", "cyvcf2", "htslib", "vcf"}
+forbidden_commands = {"samtools", "bcftools"}
+
+for node in ast.walk(tree):
+    if isinstance(node, ast.Import):
+        modules = {alias.name.split(".", 1)[0] for alias in node.names}
+        if modules & forbidden_modules:
+            raise SystemExit(1)
+    if isinstance(node, ast.ImportFrom):
+        module = (node.module or "").split(".", 1)[0]
+        if module in forbidden_modules:
+            raise SystemExit(1)
+    if not isinstance(node, ast.Call):
+        continue
+    function = node.func
+    is_process_call = (
+        isinstance(function, ast.Name) and function.id in {"system", "popen"}
+    ) or (
+        isinstance(function, ast.Attribute)
+        and function.attr in {"run", "call", "check_call", "check_output", "Popen", "system", "popen"}
+    )
+    if not is_process_call:
+        continue
+    for argument in node.args:
+        if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
+            first = argument.value.strip().split(maxsplit=1)[0].rsplit("/", 1)[-1]
+            if first in forbidden_commands:
+                raise SystemExit(1)
+        if isinstance(argument, (ast.List, ast.Tuple)) and argument.elts:
+            first_node = argument.elts[0]
+            if isinstance(first_node, ast.Constant) and isinstance(first_node.value, str):
+                first = first_node.value.rsplit("/", 1)[-1]
+                if first in forbidden_commands:
+                    raise SystemExit(1)
+PY
+    then
         fail "presentation code imports or invokes a genomics/science reader: $presentation_file"
     fi
 done < <(find presentation -type f -name '*.py' -print0 2>/dev/null || true)

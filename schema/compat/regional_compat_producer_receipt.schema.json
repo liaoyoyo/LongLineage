@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://longlineage.local/schema/compat/regional_compat_producer_receipt-2.0.0.json",
+  "title": "LongLineage dataset-bound regional compatibility producer receipt",
+  "type": "object",
+  "required": [
+    "schema_name",
+    "schema_version",
+    "run_id",
+    "profile_id",
+    "dataset_id",
+    "dataset_order",
+    "source_authority_profile",
+    "source_authority_sha256",
+    "summary_sha256",
+    "semantic_sha256",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_name": {"const": "longlineage.regional_compat_producer_receipt"},
+    "schema_version": {"const": "2.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "profile_id": {"const": "PYTHON_V2_DESCRIPTIVE_REGIONAL"},
+    "dataset_id": {
+      "enum": ["HCC1395", "HCC1395_DORADO", "COLO829", "H1437", "H2009", "HCC1937", "HCC1954"]
+    },
+    "dataset_order": {"type": "integer", "minimum": 0, "maximum": 6},
+    "source_authority_profile": {"enum": ["PRODUCTION_7_DATASET", "HCC1395_DATASET_GATE"]},
+    "source_authority_sha256": {"$ref": "#/$defs/sha256"},
+    "summary_sha256": {"$ref": "#/$defs/sha256"},
+    "semantic_sha256": {"$ref": "#/$defs/sha256"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {"$ref": "#/$defs/summary"},
+        {"$ref": "#/$defs/regions"},
+        {"$ref": "#/$defs/units"},
+        {"$ref": "#/$defs/patterns"}
+      ],
+      "items": false
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "source_authority_profile": {"const": "HCC1395_DATASET_GATE"},
+        "dataset_id": {"const": "HCC1395"},
+        "dataset_order": {"const": 0}
+      }
+    },
+    {
+      "properties": {"source_authority_profile": {"const": "PRODUCTION_7_DATASET"}},
+      "oneOf": [
+        {"properties": {"dataset_id": {"const": "HCC1395"}, "dataset_order": {"const": 0}}},
+        {"properties": {"dataset_id": {"const": "HCC1395_DORADO"}, "dataset_order": {"const": 1}}},
+        {"properties": {"dataset_id": {"const": "COLO829"}, "dataset_order": {"const": 2}}},
+        {"properties": {"dataset_id": {"const": "H1437"}, "dataset_order": {"const": 3}}},
+        {"properties": {"dataset_id": {"const": "H2009"}, "dataset_order": {"const": 4}}},
+        {"properties": {"dataset_id": {"const": "HCC1937"}, "dataset_order": {"const": 5}}},
+        {"properties": {"dataset_id": {"const": "HCC1954"}, "dataset_order": {"const": 6}}}
+      ]
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256", "rows"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "rows": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "summary": {"allOf": [{"$ref": "#/$defs/artifact"}, {"properties": {"path": {"const": "summary.json"}, "rows": {"const": 1}}}]},
+    "regions": {"allOf": [{"$ref": "#/$defs/artifact"}, {"properties": {"path": {"const": "regions.tsv"}}}]},
+    "units": {"allOf": [{"$ref": "#/$defs/artifact"}, {"properties": {"path": {"const": "units.tsv"}}}]},
+    "patterns": {"allOf": [{"$ref": "#/$defs/artifact"}, {"properties": {"path": {"const": "patterns.tsv"}}}]}
+  },
+  "additionalProperties": false
+}

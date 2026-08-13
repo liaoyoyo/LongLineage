@@ -1946,8 +1946,8 @@ CheckResult check_contract_registry_bindings(const std::filesystem::path& root, 
         return fail(error);
     }
     if (string_field(binding.get(), "$id") !=
-        "https://longlineage.local/schema/contract_registry_bindings-1.0.0.json") {
-        return fail("contract registry binding schema has the wrong stable ID");
+        "https://longlineage.local/schema/contract_registry_bindings-1.0.1.json") {
+        return fail("contract registry binding schema has the wrong current ID");
     }
     const auto* properties = json_object_get(binding.get(), "properties");
     const auto* catalog_const = json_object_get(json_object_get(properties, "catalog"), "const");

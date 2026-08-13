@@ -1,0 +1,102 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-dataset-producer-integration",
+  "owner_agent_id": "codex:root/producer_closeout_integration",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-dataset-producer-integration.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-dataset-producer-integration.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_dataset_producer.cpp",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T12:00:00+08:00",
+  "heartbeat_at": "2026-07-20T06:17:12+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G3",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Add one synthetic end-to-end integration test for indexed FASTA, VCF, BAM and latest-sidecar input through site loading, block planning, dataset scientific production and producer closeout, including deterministic semantic comparison across one and two workers. CMake registration, production code, schemas and real data are excluded."
+  },
+  "assumptions": [
+    "The fixture uses synthetic contig/read/site names and positions only; no real sample coordinate or restricted path is embedded.",
+    "The producer owns nine scientific artifacts and producer closeout records but must never forge validation_receipt.json or run_receipt.json.",
+    "The independent validator remains a separately linked executable boundary, so this core-linked integration test validates the complete staging closeout and leaves validator CLI replay to the parent integration command.",
+    "Physical compressed bytes may differ between worker counts; equality is required for canonical logical rows and catalog semantic SHA-256 values."
+  ],
+  "inputs": [
+    {
+      "role": "dataset_producer_contract",
+      "path": "include/longlineage/pipeline/dataset_producer.hpp",
+      "sha256": "2b76f5272e31bc4e7f693be79aa3b3ff607469e88bcfb7418fe1418b5d4153c3"
+    },
+    {
+      "role": "dataset_closeout_contract",
+      "path": "include/longlineage/artifact/dataset_closeout.hpp",
+      "sha256": "bf43245372cd5adc9663fd0775e6141c88792c4bd635f3f94eadbe87493e19e5"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "synthetic_end_to_end_test",
+      "path": "tests/integration/test_dataset_producer.cpp",
+      "sha256": "5b1cbf2052197836f99c72239426cd6d80d23b1000703311e2b6b5ef1697e5bc"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Generate a self-contained synthetic indexed FASTA, indexed VCF, coordinate-sorted indexed BAM and latest HP/PS sidecar inside a temporary directory.",
+      "verify": "The typed production readers load the generated site/read/tag inputs without bypassing HTSlib indexes or input contracts."
+    },
+    {
+      "step": "Run load_variant_sites, deterministic planning, scientific production and producer closeout with one and two workers.",
+      "verify": "Both runs report FULL completeness, identical site census/logical rows/semantic artifact digests and exactly nine scientific catalog members."
+    },
+    {
+      "step": "Check producer-validator authority separation.",
+      "verify": "Producer closeout emits producer_receipt.json, artifact_catalog.jsonl, data_lineage.jsonl and semantic_digests.tsv, while validation_receipt.json and run_receipt.json are absent."
+    },
+    {
+      "step": "Compile and replay the integration executable under strict Release warnings.",
+      "verify": "Compilation and execution exit 0; the exact executable and source SHA-256 are reported to the parent for independent replay."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "dataset-producer-independent-e2e-replay",
+      "evidence_path": "state/audits/20260720-dataset-producer-integration-recovery-001.txt",
+      "evidence_kind": "AUDIT",
+      "command": "ctest --test-dir build-hcc1395-final-v2 -R '^dataset_producer_integration$' --output-on-failure",
+      "exit_code": 0,
+      "output_excerpt": "Independent parent replay passed 1/1 in 0.33 s with four BGZF compression threads. The synthetic reference now contains lowercase legal IUPAC m/r inside the producer fetch context and asserts exact-CG methyl_call_rows=2. Both one-worker and two-worker runs passed independent validator ARTIFACT_REPLAY, SCIENTIFIC_CONSERVATION, catalog, lineage, semantic-digest and checksum checks; sites=2, site_reads=4, science_artifacts=9, closeout_artifacts=12, production semantic SHA-256 cd3be3a2d84d66090326e1b7851f1dbb60e2c836c542c66eebe25b7e7b10d991.",
+      "evidence_sha256": "9c80dfb221ccc3d0b0c60bf4752af1b1c47a231f8df53c796ab6407afe9b8d55",
+      "recorded_at": "2026-07-20T09:30:03+08:00"
+    }
+  ],
+  "deviations": [
+    "The first real producer replay exposed that the producer did not create staging_root/indexes; the parent owner fixed producer staging initialization, and the test removed its temporary directory workaround before the passing replay.",
+    "The next independent validator replay exposed unstable final BGZF past-end virtual offsets recorded before flush. The parent owner fixed indexed TSV, JSONL and LLM final-group flush/tell handling; both validator replays then passed INDEX_REPLAY.",
+    "CMake target registration remained outside this child write set and was completed and independently replayed by the parent task owner.",
+    "A production-shaped HCC1395 probe exposed that per-row bgzf_tell is not stable while HTSlib multi-threaded compression queues writes. The parent changed indexed writers to flush only at multi-threaded site-group boundaries, changed this integration replay to four compression threads, and refreshed this archived evidence only after producer-to-independent-validator replay passed.",
+    "The first formal HCC1395 dataset-gate exposed legal GRCh38 M/R IUPAC symbols that the reference reader over-rejected. The parent extended this integration fixture with lowercase m/r inside the producer fetch context and an exact-CG methyl-row assertion, then refreshed the evidence digest only after both one/two-worker producer outputs passed the independent validator with the original semantic SHA-256.",
+    "Governance recovery on 2026-07-20 replaced the mutable tests/integration/test_dataset_producer.cpp evidence pointer with state/audits/20260720-dataset-producer-integration-recovery-001.txt. The immutable receipt preserves the historical command, exit code, output excerpt and original source SHA-256; it does not retroactively claim the successor M2 summary-conservation assertion."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T09:30:03+08:00"
+}

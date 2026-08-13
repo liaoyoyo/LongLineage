@@ -1,0 +1,154 @@
+LONGLINEAGE P5 TOPOLOGY EVIDENCE ADAPTER RECEIPT
+receipt_schema=longlineage.synthetic_verification_receipt.v1
+task_id=20260720-hcc1395-topology-evidence-adapter
+parent_task_id=20260720-hcc1395-scientific-parity
+completed_at=2026-07-20T04:26:36+08:00
+task_type=B
+scope=synthetic_and_frozen_small_oracles_only
+
+AUTHORITY BOUNDARY
+This immutable receipt covers the bounded C++ evidence adapter, BQ-aware
+vertex-set ranker, post-rank parent-edge endpoint, unresolved unary projection
+and topology_unit v2 serializer. No real HCC1395 BAM, VCF, truth BED or
+production run was opened. This receipt does not promote phase authority,
+production readiness, provenance, validator authority, release status or any
+scientific conclusion from a full sample.
+
+FROZEN CONTRACT INPUTS
+topology_router_path=include/longlineage/solver/topology_router.hpp
+topology_router_sha256=559399502bd717a897ecc9d2b21799bf1c85c30c856efd5445cad96db2d7050a
+topology_schema_path=schema/records/topology_unit.schema.json
+topology_schema_version=2.0.0
+topology_schema_sha256=02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03
+historical_python_contract_path=external://InterSubMod/research/20260716_read_linked_hypercube_exact_likelihood_validation/scripts/build_m2_patterns_and_rank.py
+historical_python_contract_sha256=b28d494563bea70cbfea7b13853d99c0b3aeafed7ed4f0c0a6fff3b92c84f0a9
+
+ADAPTER API AND SOURCE SNAPSHOTS
+api_path=include/longlineage/solver/evidence_builder.hpp
+api_sha256=957d960f97e0537bac436beb4ff6a55bb7f80b05560ab5ea6e32e89677d6fade
+api_path=include/longlineage/solver/vertex_set_ranker.hpp
+api_sha256=f7a2f378c3e62a0a3f97eed3b7281b81992249c7f62a8bb2ed6b289cc439c661
+api_path=include/longlineage/solver/topology_record.hpp
+api_sha256=6c0387b7f617331b21a56ac614a742e6014d291d6b429b5ed7bb9427b36e1683
+source_path=src/solver/evidence_builder.cpp
+source_sha256=c4fc31999365b3f3fd6e401640c1b5ddad47dcfaf7112b8621f705802e1ca3d3
+source_path=src/solver/vertex_set_ranker.cpp
+source_sha256=8018abd3d08cd8fdc0717326ff231a5b2dc7de0432a767cb532b66f97cb727ff
+source_path=src/solver/topology_record.cpp
+source_sha256=c6ed85fad614197017711e58922dc1c835d549d10563126f6464ebd7068e661c
+test_path=tests/unit/test_runtime_solver.cpp
+test_sha256=273ab0171772fe532c526eb0136f9034a388f774fb4091f1f23314b55adc76df
+
+FROZEN METHOD CONTRACT
+1. Raw evidence codes are R, A, O and X only. R/A require a usable BQ.
+   O is a measured non-REF/non-ALT base and X is unavailable; both are
+   marginalized to X for structural and likelihood projections.
+2. The conditional biallelic emission uses e=10^(-BQ/10), clamps e to
+   [1e-6,0.25], and emits match=(1-e)/(1-2e/3) and
+   flip=(e/3)/(1-2e/3).
+3. Structural patterns are consolidated R/A/X groups at the configured
+   minimum multiplicity. Active loci come only from retained structural ALT
+   calls. All informative BQ groups, including groups below that structural
+   threshold, remain in abundance scoring.
+4. Each distinct complete-family vertex set is evaluated exactly once.
+   Parent choices and edge scores are absent from the ranking API.
+5. Mixture weights are optimized on the simplex by deterministic pairwise
+   exact line search. max(gradient)-N is the concave global log-likelihood gap
+   certificate. Any non-finite or uncertified candidate suppresses rank.
+6. The complete published tie class conservatively retains every candidate
+   whose certified upper bound is within the frozen tie tolerance of the best
+   lower bound.
+7. Family cap and family deadline publish zero candidates and no rank.
+   Objective abstention and numerical-certificate failure also publish no rank.
+8. Parent edges are evaluated only after a top-ranked fixed node set exists.
+   Exact parent tie counts use arbitrary-precision decimal integers. A mapping
+   is published only when every child has one best parent.
+9. A no-read unary hidden chain is projection-only: a candidate-bound
+   multi-mutation edge, exact factorial order count and
+   UNRESOLVED_NO_READ_EVIDENCE state. It cannot change objective, family or
+   abundance rank.
+10. Evo-M0 recurrence-allowed remains primary. Strict infinite-sites is
+    NOT_EVALUATED sensitivity-only, and loss-supported Dollo remains unresolved.
+
+VERIFICATION 1: WARNINGS-AS-ERRORS BUILD
+command=/usr/bin/cmake --build build-cpp-output-validation --target test_runtime_solver --parallel 8
+exit_code=0
+output_excerpt=[100%] Built target test_runtime_solver
+compiler=c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+cmake=/usr/bin/cmake 3.22.1
+resolved_htslib=1.18
+resolved_jansson=2.13.1
+resolved_openssl=3.0.2
+compiler_policy=-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wformat=2 -Wundef -Werror -fno-fast-math -ffp-contract=off
+measured_build_wall_seconds=11.00
+measured_build_max_rss_kib=335656
+
+VERIFICATION 2: TARGETED CTEST
+command=ctest --test-dir build-cpp-output-validation --output-on-failure -R '^(runtime_solver|determinism_contract|topology_no_incomplete_winner)$'
+exit_code=0
+output_excerpt=3/3 tests passed; runtime_solver 7.97 s, determinism_contract 8.28 s, topology_no_incomplete_winner 7.94 s
+measured_ctest_wall_seconds=24.21
+measured_ctest_max_rss_kib=16772
+
+VERIFICATION 3: DIRECT SMALL-ORACLE TEST
+command=./build-cpp-output-validation/bin/test_runtime_solver
+exit_code=0
+output_excerpt=PASS test_runtime_solver: queue,pool,bgzf,state,small-q oracle,exact B&B,subset DP,parent mapping,router differential,BQ ranking,topology v2 adapter
+oracle_detail=each three-component candidate compared with an independent 2000-step dense simplex grid
+oracle_acceptance=certified optimum is not below the grid maximum and differs by less than 5e-5
+tie_detail=bit-symmetric AX/XA evidence retains both indistinguishable optimal vertex sets
+
+VERIFICATION 4: LOCALE, INPUT AND ENUMERATION DETERMINISM
+command=run test_runtime_solver under C locale and LC_ALL=en_US.utf8; compare all five output SHA-256 values
+exit_code=0
+output_excerpt=all hashes identical across locale; observation reversal, split-group regrouping, structural-family reversal and unary-projection reversal also pass in-test
+complete_record_sha256=76c5ed58c657800ba460a7b52b6b42c8831acc1eca1f2c3824c2ebe4e4793015
+unary_record_sha256=33ae291cabdca875d1094ffbe6720e04a67fde19cb09000dbd06d740ba09d19d
+numerical_abstain_record_sha256=1e90860c8f121cc0223689433c4b48975cbd02f01dfdf40eda2bb4591090a35c
+family_cap_record_sha256=a122359b40db2f63b9f28a5d03180da2278aed5929e926fdc93b34caa584b8d0
+family_deadline_record_sha256=0a181451472526ec2cc1dd573ffac5ccddd3dc75e11e262b6ea167704bb136bb
+
+VERIFICATION 5: TOPOLOGY_UNIT V2 SERIALIZATION
+command=for each of five generated records, run /usr/bin/jsonschema -i RECORD schema/records/topology_unit.schema.json
+exit_code=0
+output_excerpt=complete, unary, numerical-abstain, family-cap and family-deadline records all validate against schema 2.0.0
+serialization_detail=input patterns and bit strings preserve active-bit order; arrays and JSON keys are canonicalized
+ranking_boundary=ranking objects contain no parent mapping; edge mappings occur only in edge_endpoint
+
+VERIFICATION 6: SANITIZERS
+initial_command=cmake -S . -B /tmp/longlineage-p5-adapter-asan ...
+initial_exit_code=1
+initial_output_excerpt=/usr/local/bin/cmake 3.14.4 is below the declared CMake 3.22 minimum; no build or science test ran
+corrected_command=/usr/bin/cmake -S . -B /tmp/longlineage-p5-adapter-asan-322 -DCMAKE_BUILD_TYPE=Debug -DLONGLINEAGE_SANITIZERS=address,undefined -DLONGLINEAGE_WARNINGS_AS_ERRORS=ON && /usr/bin/cmake --build /tmp/longlineage-p5-adapter-asan-322 --target test_runtime_solver --parallel 8 && ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 /tmp/longlineage-p5-adapter-asan-322/bin/test_runtime_solver
+corrected_exit_code=0
+corrected_output_excerpt=PASS test_runtime_solver with AddressSanitizer, LeakSanitizer and UndefinedBehaviorSanitizer enabled
+
+NEGATIVE FAIL-CLOSED MATRIX
+case=R_or_A_without_BQ result=MALFORMED_EVIDENCE
+case=O_or_X_with_BQ result=MALFORMED_EVIDENCE
+case=all_O_or_X result=NO_INFORMATIVE_READ
+case=REF_only result=NO_STRUCTURAL_ALTERNATE
+case=active_dimension_13 result=ACTIVE_DIMENSION_UNSUPPORTED
+case=family_size_cap result=zero_candidates_and_no_rank
+case=family_deadline result=zero_candidates_and_no_rank
+case=one_iteration_numerical_budget result=ranking_abstain_and_no_tie_class
+case=missing_legal_parent_edge_score result=edge_abstain_and_no_partial_results
+case=equal_diamond_parent_scores result=exact_tie_count_2_and_null_mapping
+case=single_mutation_as_unary_projection result=rejected
+
+VERIFICATION 7: GOVERNANCE AND TEXT QA
+command=git diff --check -- bounded write-set
+exit_code=0
+output_excerpt=no whitespace errors
+command=./build-cpp-output-validation/bin/longlineage-governance check-state --repo <REPO_ROOT>
+exit_code=0
+output_excerpt=project state, P0-P8 ledger, active task leases and non-overlapping write sets are internally consistent
+
+DEVIATIONS AND NON-CLAIMS
+clang-format and cppcheck were unavailable, so no unapproved installation was
+attempted. The project warnings-as-errors compiler policy, git diff --check,
+schema validation and sanitizer replay passed. The first sanitizer configure
+used the PATH-preferred obsolete CMake 3.14.4 and failed before compilation;
+the declared /usr/bin/cmake 3.22.1 dependency was then used successfully.
+No CMake source, app, validator, provenance, schema, catalog or production
+authority file was changed by the adapter implementation.

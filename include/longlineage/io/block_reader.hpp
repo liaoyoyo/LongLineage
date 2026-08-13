@@ -16,6 +16,9 @@
 
 namespace longlineage {
 
+inline constexpr std::uint64_t kMaximumRetainedRecordsPerBlock = 250000;
+inline constexpr std::size_t kMaximumBlockReadLogicalBytes = 512ULL * 1024ULL * 1024ULL;
+
 struct FocalSiteCost {
     std::uint32_t dataset_order;
     std::string dataset_id;
@@ -59,6 +62,13 @@ struct BlockReadPolicy {
     bool require_mm_ml = true;
 };
 
+struct BlockReadResourceLimits {
+    // Raw indexed hits are streamed and counted but are not retained. Bound
+    // the decoded evidence that survives the frozen read filters instead.
+    std::uint64_t maximum_filter_eligible_records = kMaximumRetainedRecordsPerBlock;
+    std::size_t maximum_decoded_logical_bytes = kMaximumBlockReadLogicalBytes;
+};
+
 struct BlockReadCounters {
     std::uint64_t iterator_records = 0;
     std::uint64_t excluded_flag = 0;
@@ -99,7 +109,8 @@ class IndexedBamBlockReader final {
     IndexedBamBlockReader& operator=(const IndexedBamBlockReader&) = delete;
 
     [[nodiscard]] ParseResult<BlockReadBatch> read_block(const AlignmentBlock& block,
-                                                         const BlockReadPolicy& policy = {});
+                                                         const BlockReadPolicy& policy = {},
+                                                         const BlockReadResourceLimits& limits = {});
     [[nodiscard]] std::uint64_t fetch_invocations() const noexcept;
 
    private:

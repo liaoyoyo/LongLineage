@@ -1,0 +1,70 @@
+{
+  "schema_name": "longlineage.topology_unit",
+  "schema_version": "2.0.0",
+  "dataset_order": 0,
+  "dataset_id": "synthetic",
+  "unit_order": 3,
+  "unit_id": "invalid-incomplete-published-rank",
+  "active_bits": [0, 1, 2, 3],
+  "input_patterns": [
+    {"kind": "FULL_STATE", "pattern": "1111", "multiplicity": 1}
+  ],
+  "input_evidence_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "observed_states": ["1111"],
+  "solver_route": "BITSET_OBLIGATION_BNB",
+  "objective_state": "OBJECTIVE_CERTIFIED",
+  "objective_h": 3,
+  "objective_bounds": {"lower_bound": 3, "upper_bound": 3, "gap": 0},
+  "objective_evidence_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+  "objective_reason": "NONE",
+  "family_state": "FAMILY_INCOMPLETE_CAP",
+  "family_representation": null,
+  "family_evidence_sha256": null,
+  "family_reason": "MAX_FAMILY_SIZE_REACHED",
+  "candidate_family_digest": null,
+  "candidate_count": 0,
+  "tree_count": "0",
+  "candidates": [],
+  "ranking_state": "RANKING_NOT_RUN_FAMILY_INCOMPLETE",
+  "ranking_endpoint_id": null,
+  "ranking_mode": null,
+  "ranking_evidence_sha256": null,
+  "ranking_certificate": null,
+  "published_rank": {
+    "endpoint_id": "BQ_AWARE_READ_PATTERN_MIXTURE_V1",
+    "best_score": -1.0,
+    "best_vertex_set_tie_class": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ]
+  },
+  "ranking_reason": "FAMILY_NOT_COMPLETE",
+  "edge_endpoint": {
+    "status": "EDGE_NOT_RUN",
+    "endpoint_id": null,
+    "evidence_sha256": null,
+    "candidate_results": [],
+    "reason": "NOT_REQUESTED"
+  },
+  "evolution_models": {
+    "evo_m0": {
+      "role": "PRIMARY",
+      "model": "RECURRENCE_ALLOWED",
+      "evidence_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    "evo_m1": {
+      "role": "SENSITIVITY_ONLY",
+      "model": "STRICT_INFINITE_SITES",
+      "cn_loh_gate": "NOT_EVALUATED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    },
+    "evo_m2": {
+      "role": "UNRESOLVED",
+      "model": "LOSS_SUPPORTED_DOLLO",
+      "state": "UNRESOLVED",
+      "evidence_sha256": null,
+      "affects_primary": false
+    }
+  },
+  "multi_mutation_edge_equivalence": []
+}

@@ -1,0 +1,156 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-determinism-audit",
+  "owner_agent_id": "codex:hcc1395-audit-implementation",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-determinism-audit.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-determinism-audit.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/audit",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "src/audit",
+      "kind": "DIRECTORY_TREE"
+    },
+    {
+      "path": "apps/audit_main.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_hcc1395_audit.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/fixtures/hcc1395_audit",
+      "kind": "DIRECTORY_TREE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-21T12:00:00+08:00",
+  "heartbeat_at": "2026-07-20T17:27:35+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G2",
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Implement an independent C++ audit executable and closed receipt for two VALIDATED_FROZEN_DATASET_GATE HCC1395 runs, including w24/w40 semantic determinism, M2 mutually-exclusive conservation, bounded historical site-key/M1 transitions and explicit NOT_COMPARABLE boundaries. Do not read BAM or recompute producer science."
+  },
+  "assumptions": [
+    "The formal w24 and w40 run roots will be supplied explicitly after both independent validator freezes succeed.",
+    "The audit executable may replay frozen artifacts and metadata but must not link producer statistical, M1/M2 or topology solver kernels.",
+    "Python remains presentation-only and will consume the C++ receipt without recomputing science.",
+    "CMake and tests/CMakeLists.txt integration remains owned by the parent task and is outside this child write set."
+  ],
+  "inputs": [
+    {
+      "role": "repository_governance",
+      "path": "AGENTS.md",
+      "sha256": "afa4ce0e7a703aff1dd2b5fe13b1455158b5da93062d5c74804a966dc4c0a2dd"
+    },
+    {
+      "role": "hcc1395_input_authority",
+      "path": "oracle/hcc1395_dataset_gate_input_authority.json",
+      "sha256": "b74988abfa014ece749098e823c2c6d34e8b239a6681c34d2e8d5f617c59d39a"
+    },
+    {
+      "role": "production_input_authority",
+      "path": "oracle/production_input_authority.json",
+      "sha256": "bf0630019d9750d65b9848417a3428c1e152868b788643e96a2e4fdee0f30557"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "audit_executable_source",
+      "path": "apps/audit_main.cpp",
+      "sha256": "66f4cf1fb55fcf63eeacdd93c96e72ba8846d6792abb7d352e900fc03819d427"
+    },
+    {
+      "role": "audit_contract",
+      "path": "include/longlineage/audit/hcc1395_determinism.hpp",
+      "sha256": "ae5226b63b822973e85b2a46ed31d16ef4fb5af993ea23c231989d79ca47b036"
+    },
+    {
+      "role": "audit_implementation",
+      "path": "src/audit/hcc1395_determinism.cpp",
+      "sha256": "089c6236a7bb21f66ae256ab5b8c86d104056905c6789c9d2dc62c5e83b278c2"
+    },
+    {
+      "role": "audit_receipt_schema",
+      "path": "schema/core/hcc1395_determinism_historical_receipt.schema.json",
+      "sha256": "e7233dd3da79a4a677e499d27da58d1e044f0a2cacaa894e7a62c3a2b61d15ed"
+    },
+    {
+      "role": "negative_and_positive_tests",
+      "path": "tests/unit/test_hcc1395_audit.cpp",
+      "sha256": "42a6e06fe3436ceeb6c9a8448e75225bd882fef65a140a3352657d0cda097082"
+    },
+    {
+      "role": "synthetic_case_catalog",
+      "path": "tests/fixtures/hcc1395_audit/cases.json",
+      "sha256": "165f72342184d4090eda573631e3c0894be2ecf08c222445052a996a102ae7fa"
+    },
+    {
+      "role": "child_verification_receipt",
+      "path": "tests/fixtures/hcc1395_audit/verification_receipt.json",
+      "sha256": "74a1d5d931ff5b9cea27444088e04126dbaab42dc8649d75e4eaf08713fc7937"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Implement closed frozen-run metadata and artifact replay without producer-kernel linkage.",
+      "verify": "Synthetic positive fixture emits PASS; failed/non-frozen/truth-bearing/symlink/path-escape inputs exit non-zero."
+    },
+    {
+      "step": "Compare the eight fixed science artifacts and summary projection.",
+      "verify": "Schema/version/logical rows/semantic SHA match 8/8; summary projection matches; physical-layout differences remain diagnostic only."
+    },
+    {
+      "step": "Replay mutually-exclusive M2 conservation and bounded historical site-key/M1 transitions.",
+      "verify": "M2 four-bin sum equals m1_stable_assignments; overlap/duplicate/missing/extra fixtures fail; incompatible metrics are emitted as NOT_COMPARABLE."
+    },
+    {
+      "step": "Produce a closed schema and tests suitable for parent CMake integration.",
+      "verify": "Direct C++17 build and the complete child test binary exit 0; source scan shows no producer science/solver linkage."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "hcc1395-audit-synthetic-closed-contract-verification",
+      "evidence_path": "tests/fixtures/hcc1395_audit/verification_receipt.json",
+      "evidence_kind": "RECEIPT",
+      "command": "strict direct C++17 compile; 18-case positive/negative replay; CLI end-to-end; ASan/UBSan replay; closed JSON schema positive/negative checks; child-scoped clang-format; producer-kernel linkage scan",
+      "exit_code": 0,
+      "output_excerpt": "PASS hcc1395_audit synthetic_cases=18 positive=1 negative=17; PASS HCC1395_DETERMINISM_AUDIT; semantic artifacts 8/8 equal; M2 conservation PASS.",
+      "evidence_sha256": "74a1d5d931ff5b9cea27444088e04126dbaab42dc8649d75e4eaf08713fc7937",
+      "recorded_at": "2026-07-20T17:27:35+08:00"
+    }
+  ],
+  "deviations": [
+    "Formal HCC1395 w24/w40 roots were not available to this child task. Synthetic verification cannot establish production parity, production scientific counts or production runtime; the parent must execute the integrated audit after both independent validator freezes.",
+    "CMakeLists.txt, tests/CMakeLists.txt, schema registry/catalog and release-gate integration were outside this child write set and remain parent-owned.",
+    "System jsonschema 3.2.0 falls back to Draft 7 although the receipt declares Draft 2020-12; integration/release must use the repository-pinned validator.",
+    "The four child C++ files pass clang-format-14 directly. The repository-wide formatting gate remains red on tracked out-of-scope files; no out-of-scope file was changed.",
+    "The repository publication repair later replaced private absolute-path strings in this fixture with portable tokens. The evidence SHA now binds that sanitized projection; scientific counters and verdict fields were not changed, and the original pre-sanitization SHA remains historical context only."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T17:27:35+08:00"
+}

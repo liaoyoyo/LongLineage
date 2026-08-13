@@ -1,0 +1,81 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-w40-determinism-manifest-prep",
+  "owner_agent_id": "codex:root/w40_determinism_prep",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-w40-determinism-manifest-prep.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-w40-determinism-manifest-prep.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/audits/20260720-w40-determinism-manifest-prep-001.txt",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T19:30:17+08:00",
+  "heartbeat_at": "2026-07-20T15:30:17+08:00",
+  "task_type": "B",
+  "goals": [
+    "LL-G1",
+    "LL-G4"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Prepare, but do not execute, the HCC1395 40-worker schema-1.0.1 determinism manifest by changing only the run identity, staging output root and compute worker count from the frozen 24-worker manifest."
+  },
+  "assumptions": [
+    "The 24-worker v4 schema-1.0.1 manifest is the sole derivation source.",
+    "All input paths, sizes, SHA-256 values, runtime settings other than compute_workers, and contract bindings must remain byte-for-byte identical.",
+    "This task must not start a producer or validator and does not itself provide determinism evidence."
+  ],
+  "inputs": [
+    {
+      "role": "w24_source_manifest",
+      "path": "external://restricted-run-root/synthesis/observation_workspaces/20260720_longlineage_hcc1395_fullscience_dataset_gate_v1/manifests/20260720_HCC1395_autosomes_w24_fullscience_v4_schema101.production_manifest.json",
+      "sha256": "efe0d769144b9bba1a1263ea01a4fad1ed84bedc45fe5427d51037531516a767"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "w40_production_manifest",
+      "path": "external://restricted-run-root/synthesis/observation_workspaces/20260720_longlineage_hcc1395_fullscience_dataset_gate_v1/manifests/20260720_HCC1395_autosomes_w40_fullscience_v4_schema101.production_manifest.json",
+      "sha256": "4300a4ac608757160085f78d7398b73e0a5df7b4b266a87931d8ac180977a375"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Derive the w40 manifest from the frozen w24 manifest without running scientific executables.",
+      "verify": "The source, target staging root and target final root are checked absent before creation."
+    },
+    {
+      "step": "Validate the derived manifest and exact change whitelist.",
+      "verify": "Draft 2020-12 schema validation exits 0; normalized diff contains only run_id, output_root and runtime.compute_workers; all input and contract binding digests are identical."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "20260720-w40-determinism-manifest-prep-001",
+      "evidence_path": "state/audits/20260720-w40-determinism-manifest-prep-001.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "/usr/bin/jsonschema -i <w40-manifest> schema/core/production_manifest.schema.json && jq frozen-field-and-change-whitelist assertions",
+      "exit_code": 0,
+      "output_excerpt": "JSON_SCHEMA_EXIT=0; FROZEN_FIELDS_ASSERT=PASS; CHANGED_PATHS=[[\"run_id\"],[\"output_root\"],[\"runtime\",\"compute_workers\"]]; both w40 staging and final roots ABSENT",
+      "evidence_sha256": "9380562edc11c6bbe1fd30a7c76f510a7d35495bff0add0d65d860822c26eb50",
+      "recorded_at": "2026-07-20T15:34:18+08:00"
+    }
+  ],
+  "deviations": [
+    "The repository publication repair later replaced private absolute-path strings in the audit receipt and task inputs with portable external URIs. The evidence SHA now binds that sanitized projection; manifest assertions and verdict fields were not changed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T15:34:58+08:00"
+}

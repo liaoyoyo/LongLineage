@@ -219,8 +219,8 @@
       "artifact_id": "cooccurrence_pairs",
       "relative_path": "cooccurrence_pairs.tsv.bgz",
       "format": "TSV_BGZF",
-      "record_schema": "schema/records/cooccurrence_pairs.record.json",
-      "record_schema_sha256": "fb48f6795042ff40982115291ffa4784e83f7ce69e2f7bc2edb8e2c8367ef69a",
+      "record_schema": "schema/records/cooccurrence_pairs-1.0.1.record.json",
+      "record_schema_sha256": "e816741b0dad9c78edba17f1f844ef659230a80eccb85577126bd7a63154203f",
       "primary_key": [
         "dataset_order",
         "focal_site_order",
@@ -262,7 +262,7 @@
       "relative_path": "topology_units.jsonl.bgz",
       "format": "JSONL_BGZF",
       "record_schema": "schema/records/topology_unit.schema.json",
-      "record_schema_sha256": "76f9489761ba7b4f7b6441ef36d09ad2eeb0c66635b678480bb3f998ea95bd6e",
+      "record_schema_sha256": "02899ab2599731156ae6b61e66e211928682ebf5c67c81359e2de462bbfb4d03",
       "primary_key": [
         "dataset_order",
         "unit_order"
@@ -282,7 +282,7 @@
       "relative_path": "summary.json",
       "format": "JSON",
       "record_schema": "schema/core/summary.schema.json",
-      "record_schema_sha256": "b5e4f86519874092887a172dbaebb17bcde13b907558406ff6a4919c1c93b1d8",
+      "record_schema_sha256": "0771de78bd5fa1e649c0a7fef3f2c596add27275ad23de1a4062c14258cb5c09",
       "primary_key": [
         "run_id"
       ],
@@ -298,7 +298,7 @@
       "relative_path": "run_receipt.json",
       "format": "JSON",
       "record_schema": "schema/core/run_receipt.schema.json",
-      "record_schema_sha256": "e94ef084f1118a7ab4d0e20917c6feb1d88a6ea17cb013dacfffe45ed4c8d8ed",
+      "record_schema_sha256": "01bf2d2ac750fa41cbd787887609d9ad9ee676415f73b7672f1df5ccc5fb51ed",
       "primary_key": [
         "run_id"
       ],
@@ -314,7 +314,7 @@
       "relative_path": "receipts/producer_receipt.json",
       "format": "JSON",
       "record_schema": "schema/core/producer_receipt.schema.json",
-      "record_schema_sha256": "2110096ca908a86696edfe30a6cf3c751125e32a56ce52883c506dcb98d1d903",
+      "record_schema_sha256": "aafe637d2fe9e5a2f8346aa26ae7ecc32e9b5681aaf6d0a7495dc914ed4250fd",
       "primary_key": ["run_id"],
       "sort_key": [],
       "index": null,
@@ -384,7 +384,7 @@
       "relative_path": "validation_receipt.json",
       "format": "JSON",
       "record_schema": "schema/core/validation_receipt.schema.json",
-      "record_schema_sha256": "372ac1bcf43659e5c7fa31ff69dff645c111f296650c6051320c246e2489fbe6",
+      "record_schema_sha256": "a9d2917cabb46f0aaa0897571e29229558c4d36dda0a985f1da14059d67c101c",
       "primary_key": ["run_id"],
       "sort_key": [],
       "index": null,

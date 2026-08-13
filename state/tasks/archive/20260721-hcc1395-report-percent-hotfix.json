@@ -1,0 +1,156 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260721-hcc1395-report-percent-hotfix",
+  "owner_agent_id": "codex:root",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260721-hcc1395-report-percent-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260721-hcc1395-report-percent-hotfix.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-scientific-parity.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "presentation/build_hcc1395_validated_report.py",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/CURRENT_FOCUS.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/development/implementation-notes.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "docs/data/HCC1395_PERFORMANCE_EDGE_OBSERVATION.md",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/phase_ledger.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-21T23:59:00+08:00",
+  "heartbeat_at": "2026-07-21T04:47:52+08:00",
+  "task_type": "E",
+  "goals": [
+    "LL-G4",
+    "LL-G5"
+  ],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "Correct the HCC1395 presentation-only percentage label and run-local phase scope, regenerate the bound HTML/JSON without changing C++ science artifacts, and replay browser, schema, privacy and source-binding QA."
+  },
+  "assumptions": [
+    "The underlying C++ counts and conservation are correct; this hotfix changes presentation metadata and displayed percentage only.",
+    "The old report hashes remain historical evidence and must not be cited as the corrected final report.",
+    "Important claim IDs and a registered closed-shape report schema remain separate P8 blockers and are not silently declared complete by this hotfix."
+  ],
+  "inputs": [
+    {
+      "role": "corrected_report_builder_source",
+      "path": "presentation/build_hcc1395_validated_report.py",
+      "sha256": "64fb4e24f39c6327503f017f01ff92e803b74f072e8c3326487dfacb61a90aa3"
+    },
+    {
+      "role": "historical_implementation_verification_receipt",
+      "path": "tests/fixtures/hcc1395_audit/verification_receipt_v2.json",
+      "sha256": "39cdd5d6a90c09c5fcb6233b5ba02d22cd2aac165a4e895d52d06c4a0c98b882"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "corrected_report_html",
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "sha256": "9cd86244b388f9d4b58ef844517c6cb73f55543fd4b106417b3ecccc389d5fda"
+    },
+    {
+      "role": "corrected_report_json",
+      "path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Separate the actual displayed percentage from the minimum CSS bar width and add a regression.",
+      "verify": "Builder self-test exits 0; the 14/79,687 fixture renders a 0.2000% visual width and 0.02% text."
+    },
+    {
+      "step": "Rename producer closeout phase metadata with an explicit run-local scope.",
+      "verify": "Corrected report JSON contains producer_run_local_phase_status.scope=RUN_LOCAL_DATASET_GATE_CLOSEOUT_NOT_PROJECT_PHASE_LEDGER and omits phase_status_at_producer_closeout."
+    },
+    {
+      "step": "Regenerate HTML/JSON from the same two validated frozen runs and independently bound evidence.",
+      "verify": "All C++ artifact rows, semantic SHA values, counts and production_claim_allowed=false remain unchanged; only presentation output hashes change."
+    },
+    {
+      "step": "Replay schema, source hashes, static browser, keyboard, print, offline and privacy QA.",
+      "verify": "Every check exits 0; the corrected HTML hash is identical across report, QA and performance observation bindings."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "20260721-hcc1395-corrected-report-html",
+      "evidence_path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.html",
+      "exit_code": 0,
+      "output_excerpt": "Corrected percentage text is 0.02% while the minimum visual width remains 0.2000%; static and keyboard QA bind the same HTML SHA.",
+      "evidence_sha256": "9cd86244b388f9d4b58ef844517c6cb73f55543fd4b106417b3ecccc389d5fda",
+      "recorded_at": "2026-07-21T04:36:00+08:00"
+    },
+    {
+      "evidence_id": "20260721-hcc1395-corrected-report-json",
+      "evidence_path": "docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/reports/20260720_HCC1395完整科學運算與parity報告_01.json",
+      "exit_code": 0,
+      "output_excerpt": "Run-local phase scope is explicit; counts, science artifact digests and production_claim_allowed=false remain unchanged.",
+      "evidence_sha256": "7e0b650b14c3a4fe6ed4dace4c9ef2cb5e56b8257a559cbf6d7d8ecc5fa562eb",
+      "recorded_at": "2026-07-21T04:40:07+08:00"
+    },
+    {
+      "evidence_id": "20260721-hcc1395-performance-observation-query-guide",
+      "evidence_path": "docs/data/HCC1395_PERFORMANCE_EDGE_OBSERVATION.md",
+      "evidence_kind": "REPORT",
+      "command": "sha256sum docs/data/HCC1395_PERFORMANCE_EDGE_OBSERVATION.md",
+      "exit_code": 0,
+      "output_excerpt": "The repo guide identifies restricted v3 as authority and records its 32/32 invariant, 41/41 source-binding and production-claim-negative validation boundary.",
+      "evidence_sha256": "2000e53c5ca1f84402a71e9bb64588c7957e204689b18ac50bc68c352155e3a4",
+      "recorded_at": "2026-07-21T04:50:13+08:00"
+    }
+  ],
+  "deviations": [
+    "The old report HTML and JSON hashes remain in Git history and restricted v1 observations as superseded presentation evidence; they are not cited as corrected outputs.",
+    "The first v3 evidence assembly raced with creation of its execution-evidence envelope. It was archived as superseded_race_ed516; the final v3b report was regenerated from the immutable a3e41c9 source checkout and independently rebound to execution_evidence_v3b plus fresh static and keyboard QA.",
+    "Performance observation v2 exposed a circular guide-to-observation hash dependency. Final restricted v3 binds the guide in one direction while an unbound checksums_v3.sha256 receipt records the observation hash; schema, 32 invariants and 41 source bindings pass.",
+    "The first v3 validator invocation used the unqualified system Python and exited 1 while importing the absent jsonschema module, before reading the record or creating the negative fixture. The failed log is retained; replay with the documented pinned module path exited 0 and passed 32/32 checks.",
+    "Important claim IDs, an independent registered report schema and tagged PDF accessibility remain explicit P8 blockers outside this focused percentage/phase-scope hotfix.",
+    "The repository publication repair later sanitized private path strings in the historical v1 fixture and propagated its physical digest through the closed v2 fixture. This task now binds that sanitized v2 projection; report percentages and scientific verdict fields were not changed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-21T04:50:13+08:00"
+}

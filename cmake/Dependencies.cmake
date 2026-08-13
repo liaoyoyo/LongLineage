@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 find_package(PkgConfig REQUIRED)
+find_package(Boost 1.74 REQUIRED)
 find_package(OpenSSL 3.0 REQUIRED COMPONENTS Crypto)
 find_package(Threads REQUIRED)
+find_package(ZLIB REQUIRED)
 
 pkg_check_modules(HTSLIB REQUIRED IMPORTED_TARGET htslib)
 pkg_check_modules(JANSSON REQUIRED IMPORTED_TARGET jansson)
@@ -24,7 +26,9 @@ if(JANSSON_VERSION VERSION_LESS "2.13")
 endif()
 
 message(STATUS "LongLineage dependency lock:")
+message(STATUS "  Boost: ${Boost_VERSION_STRING}")
 message(STATUS "  HTSlib: ${HTSLIB_VERSION} (production pin: ${LONGLINEAGE_PINNED_HTSLIB_VERSION})")
 message(STATUS "  Jansson: ${JANSSON_VERSION}")
 message(STATUS "  OpenSSL: ${OPENSSL_VERSION}")
 message(STATUS "  Threads: ${CMAKE_THREAD_LIBS_INIT}")
+message(STATUS "  ZLIB: ${ZLIB_VERSION_STRING}")

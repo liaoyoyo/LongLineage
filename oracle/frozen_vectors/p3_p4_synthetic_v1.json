@@ -1,0 +1,271 @@
+{
+  "schema_name": "longlineage.synthetic_science_parity_vectors",
+  "schema_version": "1.0.0",
+  "scope": "SYNTHETIC_ONLY_NOT_PRODUCTION_AUTHORITY",
+  "generator": {
+    "python": "3.9",
+    "numpy": "1.23.5",
+    "scipy": "1.13.1",
+    "sources": [
+      {
+        "path": "InterSubMod/research/20260715_single_fp_alt_multicluster_subclone_validation/scripts/focal_alt_cluster_lib.py",
+        "sha256": "ed5f3c99461248248b20a9f49597ab5de7340a1e2055d77a1d83dbcc2799b72a"
+      },
+      {
+        "path": "InterSubMod/research/20260715_all_ssnv_focal_alt_multigroup_cooccurrence_validation/scripts/m2_screen_gate.py",
+        "sha256": "f3d932388bf8ddc90f8fa1a136f6203dfe8d9f5aa9979ae32e9d936c2a413b79"
+      },
+      {
+        "path": "InterSubMod/scripts/ssnv_cooccurrence_lib.py",
+        "sha256": "3d41023b03f1f047312011f8513b685bf7ffe25f5d0795d253bc9013b9ec88ff"
+      },
+      {
+        "path": "InterSubMod/src/core/MethylationParser.cpp",
+        "sha256": "45b51176cd28bda77adf82de1a80a0f618eba5d2cf518da97e0c651cadee1d01"
+      }
+    ]
+  },
+  "m1_point_estimator": [
+    {"ml_raw": 0, "point": 0.0, "p2_interval_lower": 0.0, "p2_interval_upper": 0.00390625},
+    {
+      "ml_raw": 1,
+      "point": 0.003921568859368563,
+      "p2_interval_lower": 0.00390625,
+      "p2_interval_upper": 0.0078125
+    },
+    {
+      "ml_raw": 254,
+      "point": 0.9960784316062927,
+      "p2_interval_lower": 0.9921875,
+      "p2_interval_upper": 0.99609375
+    },
+    {"ml_raw": 255, "point": 1.0, "p2_interval_lower": 0.99609375, "p2_interval_upper": 1.0}
+  ],
+  "stable_seeds": [
+    {"sample": "SYNTH_A", "contig": "synchr1", "position1": 1, "offset": 0, "seed": 468396400},
+    {"sample": "SYNTH_A", "contig": "synchr1", "position1": 101, "offset": 7, "seed": 1539182675},
+    {
+      "sample": "SYNTH_B",
+      "contig": "synchrX",
+      "position1": 4294967295,
+      "offset": 99,
+      "seed": 3740913208
+    }
+  ],
+  "pcg64": [
+    {
+      "seed": 0,
+      "raw_u64": [
+        "11749869230777074271",
+        "4976686463289251617",
+        "755828109848996024",
+        "304881062738325533",
+        "15002187965291974971",
+        "16837368535893154894"
+      ],
+      "permutation_10": [4, 6, 2, 7, 3, 5, 9, 0, 8, 1]
+    },
+    {
+      "seed": 1,
+      "raw_u64": [
+        "9441442522235856127",
+        "17532960557476522086",
+        "2659275481604167885",
+        "17499493567006797778",
+        "5752274989370667689",
+        "7808994663829368904"
+      ],
+      "permutation_10": [8, 4, 7, 0, 1, 2, 5, 9, 6, 3]
+    },
+    {
+      "seed": 42,
+      "raw_u64": [
+        "14276969152011380360",
+        "8095878257575067585",
+        "15838336090824644132",
+        "12864169557245331597",
+        "1737265434024182251",
+        "17997055833233904524"
+      ],
+      "permutation_10": [5, 6, 0, 7, 3, 2, 4, 9, 1, 8]
+    },
+    {
+      "seed": 4294967295,
+      "raw_u64": [
+        "4647538520743280031",
+        "4041050679407036418",
+        "5299467714154781845",
+        "11418189674231792917",
+        "17247932440015301090",
+        "5459621595263477427"
+      ],
+      "permutation_10": [0, 1, 4, 8, 3, 7, 5, 6, 2, 9]
+    },
+    {
+      "seed": 4294968204,
+      "raw_u64": [
+        "5385856284984229627",
+        "2746591945026180641",
+        "3565521993855652213",
+        "6689874886204664202",
+        "1311736773661645383",
+        "11262419850863964098"
+      ],
+      "permutation_10": [6, 0, 8, 3, 7, 4, 5, 2, 9, 1]
+    }
+  ],
+  "bernoulli": {
+    "methylation": [
+      [0.0, 0.0, 0.1, 0.2],
+      [0.1, 0.0, 0.2, 0.1],
+      [0.2, 0.1, 0.0, 0.1],
+      [0.8, 0.9, 1.0, 0.8],
+      [1.0, 0.8, 0.9, 1.0],
+      [0.9, 1.0, 0.8, 0.9]
+    ],
+    "distance": [
+      [0.0, 0.11942028985507247, 0.151044776119403, 0.8456250000000002, 0.8749295774647887, 0.8805797101449275],
+      [0.11942028985507247, 0.0, 0.17460317460317462, 0.8094915254237287, 0.8489552238805973, 0.8690909090909092],
+      [0.151044776119403, 0.17460317460317462, 0.0, 0.8567741935483872, 0.8489552238805973, 0.8253968253968256],
+      [0.8456250000000002, 0.8094915254237287, 0.8567741935483872, 0.0, 0.17935483870967733, 0.19050847457627088],
+      [0.8749295774647887, 0.8489552238805973, 0.8489552238805973, 0.17935483870967733, 0.0, 0.1510447761194029],
+      [0.8805797101449275, 0.8690909090909092, 0.8253968253968256, 0.19050847457627088, 0.1510447761194029, 0.0]
+    ]
+  },
+  "average_linkage": [
+    {
+      "case": "first_condensed_then_chain",
+      "distance": [[0, 1, 1, 5], [1, 0, 2, 5], [1, 2, 0, 5], [5, 5, 5, 0]],
+      "linkage": [[0, 1, 1.0, 2], [2, 4, 1.5, 3], [3, 5, 5.0, 4]]
+    },
+    {
+      "case": "all_equal_chain",
+      "distance": [[0, 1, 1, 1], [1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0]],
+      "linkage": [[0, 1, 1.0, 2], [2, 4, 1.0, 3], [3, 5, 1.0, 4]]
+    }
+  ],
+  "peel": {
+    "distance": [
+      [0, -1, -1, 1, 1, 1],
+      [-1, 0, -1, 1, 1, 1],
+      [-1, -1, 0, 1, 1, 1],
+      [1, 1, 1, 0, 1, 1],
+      [1, 1, 1, 1, 0, 1],
+      [1, 1, 1, 1, 1, 0]
+    ],
+    "retained": [1, 2, 3, 4, 5]
+  },
+  "percentile": [
+    {"values": [1, 2, 3, 4], "q": 90.0, "expected": 3.7},
+    {"values": [1, 2, 3, 4], "q": 95.0, "expected": 3.8499999999999996}
+  ],
+  "split_decisions": [
+    {
+      "case": "below_sep",
+      "observed": 1.299999999,
+      "valid_null_count": 32,
+      "q": 95.0,
+      "passed": false,
+      "failure": "BELOW_SEPARATION_MINIMUM_OR_UNDEFINED"
+    },
+    {
+      "case": "valid31",
+      "observed": 2.0,
+      "valid_null_count": 31,
+      "q": 95.0,
+      "passed": false,
+      "failure": "INSUFFICIENT_VALID_NULL"
+    },
+    {
+      "case": "equal_threshold_strict_fail",
+      "observed": 1.3945,
+      "valid_null_count": 32,
+      "q": 95.0,
+      "threshold": 1.3945,
+      "exceedance": 2,
+      "passed": false,
+      "failure": "NOT_ABOVE_NULL_THRESHOLD"
+    },
+    {
+      "case": "above_threshold_pass",
+      "observed": 2.0,
+      "valid_null_count": 32,
+      "q": 95.0,
+      "threshold": 1.3945,
+      "exceedance": 0,
+      "empirical_p": 0.030303030303030304,
+      "passed": true,
+      "failure": null
+    }
+  ],
+  "m2_power": [
+    {"groups": 2, "hp_exact": [152, 0.7988214979954466, 0.8019034567361341], "hp_family": [133, 0.7979085505735128, 0.8013043469103786], "strand": [88, 0.7990557458799732, 0.8035274844561178], "continuous": [51, 0.7982881905796989, 0.8063491658404542]},
+    {"groups": 3, "hp_exact": [97, 0.798388437295064, 0.8035389701988105], "hp_family": [84, 0.7973627084555523, 0.8031073307610544], "strand": [108, 0.799795318453399, 0.8036938981998232], "continuous": [63, 0.7979990552602195, 0.8050643732142936]},
+    {"groups": 4, "hp_exact": [75, 0.7959020314212291, 0.8028347735201476], "hp_family": [65, 0.798388437295064, 0.8060763267947653], "strand": [122, 0.7994954935516471, 0.8030869225467449], "continuous": [72, 0.7999713426990164, 0.8064236536246748]},
+    {"groups": 5, "hp_exact": [63, 0.7960672080838921, 0.804520062892849], "hp_family": [54, 0.7949747482678255, 0.8045242326604138], "strand": [133, 0.7979085505735128, 0.8013043469103786], "continuous": [79, 0.7987113713115089, 0.8048076812715746]},
+    {"groups": 6, "hp_exact": [55, 0.7945388880939601, 0.8044246241070353], "hp_family": [59, 0.7979859766229036, 0.8068456215449433], "strand": [143, 0.7982897677868471, 0.8015132654813635], "continuous": [85, 0.7970203793981916, 0.8028573420205751]},
+    {"groups": 7, "hp_exact": [49, 0.7897858644165457, 0.8011339954952192], "hp_family": [63, 0.7960672080838921, 0.804520062892849], "strand": [152, 0.7988214979954466, 0.8019034567361341], "continuous": [91, 0.7989439708174026, 0.8044960824080682]},
+    {"groups": 8, "hp_exact": [53, 0.7993839400777265, 0.8098221120456234], "hp_family": [67, 0.797174561218878, 0.8052070982739319], "strand": [160, 0.7986579256886269, 0.8016288899525574], "continuous": [96, 0.7977552428884276, 0.8031304876840686]},
+    {"groups": 9, "hp_exact": [55, 0.7897149339716623, 0.8000466234036177], "hp_family": [70, 0.7924753714820565, 0.8003095811772778], "strand": [167, 0.7973627084555523, 0.8002510188019264], "continuous": [101, 0.7984881619651449, 0.8036746671051047]},
+    {"groups": 10, "hp_exact": [58, 0.7925760436625023, 0.8024098932220677], "hp_family": [74, 0.7974013532951671, 0.8048167521511481], "strand": [174, 0.7975146651586588, 0.8003160477629554], "continuous": [105, 0.7955106532896746, 0.8006028874745893]}
+  ],
+  "m2_precedence": [
+    {"case": "m1_not_flagged", "input": [false, 2, false, false, false, false, false], "reason": "M1_NOT_FLAGGED"},
+    {"case": "k11", "input": [true, 11, true, true, true, false, false], "reason": "GROUP_COUNT_EXCEEDS_PLANNING_MODEL_MAXIMUM"},
+    {"case": "axis_first", "input": [true, 2, true, true, true, false, false], "reason": "AXIS_INDETERMINATE"},
+    {"case": "hp_first", "input": [true, 2, false, true, true, false, false], "reason": "HP_AXIS_CONFOUND"},
+    {"case": "technical", "input": [true, 2, false, false, true, false, false], "reason": "TECHNICAL_AXIS_CONFOUND"},
+    {"case": "not_robust", "input": [true, 2, false, false, false, true, false], "reason": "NOT_PHASE_ANCHORED_ROBUST"},
+    {"case": "pass", "input": [true, 2, false, false, false, true, true], "reason": "ALL_MEASURED_AXES_DETERMINATE_NO_ALIGNED_CONFOUND"}
+  ],
+  "endpoint_a": [
+    {
+      "table": [[1, 9], [11, 3]],
+      "ceiling": 250000,
+      "status": "EXACT_ENUMERATED",
+      "state_space_size": 11,
+      "p_value": 0.0027594561852200936,
+      "observed_table_probability": 0.001346076187912241
+    },
+    {
+      "table": [[2, 1], [1, 2], [2, 2]],
+      "ceiling": 250000,
+      "status": "EXACT_ENUMERATED",
+      "state_space_size": 14,
+      "p_value": 1.0,
+      "observed_table_probability": 0.21428571428571422
+    },
+    {
+      "table": [[2, 2], [2, 2], [2, 2]],
+      "ceiling": 3,
+      "status": "NOT_IDENTIFIABLE_STATE_SPACE_LIMIT",
+      "state_space_lower_bound": 4
+    },
+    {
+      "table": [[0, 0], [3, 0]],
+      "ceiling": 250000,
+      "status": "NOT_IDENTIFIABLE_DEGENERATE_TABLE"
+    }
+  ],
+  "fdr": {
+    "p_values": [0.01, null, 0.04, 0.03, null, 0.002],
+    "bh": [0.02, null, 0.04, 0.04, null, 0.008],
+    "by": [0.04166666666666667, null, 0.08333333333333334, 0.08333333333333334, null, 0.01666666666666667]
+  },
+  "callability_precedence": [
+    {"noncallable": 0, "testable": false, "q": null, "v": null, "status": "PASS_ALL_CORE_READS_CALLABLE"},
+    {"noncallable": 1, "testable": false, "q": 0.001, "v": 0.9, "status": "NOT_IDENTIFIABLE_DIFFERENTIAL_CALLABILITY"},
+    {"noncallable": 1, "testable": true, "q": null, "v": 0.1, "status": "NOT_IDENTIFIABLE_MISSING_CALLABILITY_STATISTIC"},
+    {"noncallable": 1, "testable": true, "q": 0.05, "v": 0.1, "status": "FAIL_DIFFERENTIAL_CALLABILITY_SIGNAL"},
+    {"noncallable": 1, "testable": true, "q": 0.9, "v": 0.3, "status": "FAIL_DIFFERENTIAL_CALLABILITY_SIGNAL"},
+    {"noncallable": 1, "testable": true, "q": 0.0500001, "v": 0.2999999, "status": "PASS_NO_STRONG_DIFFERENTIAL_CALLABILITY_DETECTED"}
+  ],
+  "joint_16_cells": {
+    "focal_partner_sequence": [
+      "RR", "RA", "RO", "RX", "AR", "AA", "AO", "AX",
+      "OR", "OA", "OO", "OX", "XR", "XA", "XO", "XX", "AA", "OX"
+    ],
+    "expected_row_major": [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1],
+    "expected_total": 18
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260720-hcc1395-validator-inventory",
+  "owner_agent_id": "codex:root/profiling_html_chain",
+  "parent_task_id": "20260720-hcc1395-scientific-parity",
+  "allowed_paths": [
+    {
+      "path": "state/tasks/active/20260720-hcc1395-validator-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "state/tasks/archive/20260720-hcc1395-validator-inventory.json",
+      "kind": "FILE"
+    },
+    {
+      "path": "apps/validate_main.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/validation/artifact_validator.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/validation/artifact_validator.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "include/longlineage/artifact/run_root.hpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "src/artifact/run_root.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/unit/test_run_root.cpp",
+      "kind": "FILE"
+    },
+    {
+      "path": "tests/integration/test_validator_fault.cpp",
+      "kind": "FILE"
+    }
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-07-20T14:41:04+08:00",
+  "heartbeat_at": "2026-07-20T03:34:40+08:00",
+  "task_type": "B",
+  "goals": ["LL-G1", "LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "FULL",
+    "description": "P6 phase-one implementation: an independently linked fail-closed artifact validator, executable-level fault injection, and a filesystem-backed run-root transaction with exclusive staging, same-device atomic freeze, parent fsync and crash-after-rename recovery. Dataset-gate, HTML, runtime collection and scientific kernels are out of scope."
+  },
+  "assumptions": [
+    "The current catalog, schema registry, producer receipt, checksum, index and semantic-digest contracts are read-only authorities for this subtask.",
+    "Any contract detail that cannot be proven from the current schema fails closed and is reported rather than patched through catalog or registry files.",
+    "Passing this bounded P6 implementation does not make the pipeline production ready."
+  ],
+  "inputs": [
+    {
+      "role": "readiness_gate",
+      "path": "docs/audits/20260720_HCC1395完整執行與全資料推進閘門稽核_01.json",
+      "sha256": "eb6dfe8c444f80f00de766dc82bfef780529d8d8204a67162a620b5bb4ca0c40"
+    }
+  ],
+  "expected_outputs": [
+    {
+      "role": "independent_validator_interface",
+      "path": "include/longlineage/validation/artifact_validator.hpp",
+      "sha256": "56085754f0c511a1acc9116e844d4891bea020daf08027a13354217e47b31c34"
+    },
+    {
+      "role": "independent_validator_implementation",
+      "path": "src/validation/artifact_validator.cpp",
+      "sha256": "88d2436ff08337a87ebd5d3c27ec063098030099044fdb4c44ed63bc85c7cf7c"
+    },
+    {
+      "role": "run_root_transaction_interface",
+      "path": "include/longlineage/artifact/run_root.hpp",
+      "sha256": "a098b3e8d131cfb781ab670873a66609f2dc38c086651eadd7c459bf24ce3ad0"
+    },
+    {
+      "role": "run_root_transaction_implementation",
+      "path": "src/artifact/run_root.cpp",
+      "sha256": "4c46db008c2669454aae3e0fe321a721613a89200c811d53747771875bbeccb9"
+    },
+    {
+      "role": "validator_fault_injection_test",
+      "path": "tests/integration/test_validator_fault.cpp",
+      "sha256": "54ec9a238a0f9961341ab42b7439188109d3411d5443cbb5156d26568c1c0997"
+    },
+    {
+      "role": "run_root_transaction_test",
+      "path": "tests/unit/test_run_root.cpp",
+      "sha256": "d8b77fbfe34ebd04867ea824408296263dec4811e992d6a44562de08740c6f6f"
+    }
+  ],
+  "step_verify": [
+    {
+      "step": "Lock the exact write set and check all active task leases before implementation.",
+      "verify": "longlineage-governance check-state exits 0 and reports non-overlapping write sets."
+    },
+    {
+      "step": "Implement the independent validator library and CLI without producer-kernel linkage.",
+      "verify": "The executable-level validator fault table catches missing, extra, truncated, hash, order, duplicate-key, forged-receipt, truth-field and incomplete-topology-winner cases; link inspection contains no longlineage_core."
+    },
+    {
+      "step": "Implement RunRootTransaction publication and recovery.",
+      "verify": "Unit tests cover exclusive staging, same-device rejection, atomic directory rename, parent fsync, final-root invisibility without run_receipt and crash-after-rename recovery."
+    },
+    {
+      "step": "Replay bounded P6 verification.",
+      "verify": "Debug build, targeted CTest, full CTest, source-boundary and governance checks exit 0; unresolved contract gaps remain fail-closed and are reported."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "p6-phase-one-targeted-ctest",
+      "evidence_path": "oracle/frozen_vectors/p6_validator_first_stage_receipt.txt",
+      "evidence_kind": "TEST_LOG",
+      "command": "ctest --test-dir build-p6-validator -R '^(validator_fault|run_root_transaction)$' --output-on-failure",
+      "exit_code": 0,
+      "output_excerpt": "100% tests passed, 0 tests failed out of 2; validator executable fault table covers one positive control and nine fail-closed fault cases.",
+      "evidence_sha256": "fb5b29bef5999cd550d2ba7928fc54917290c3fc46f3acaa651075732bd63d64",
+      "recorded_at": "2026-07-20T03:34:40+08:00"
+    },
+    {
+      "evidence_id": "p6-validator-source-boundary",
+      "evidence_path": "scripts/ci/check_source_boundaries.sh",
+      "evidence_kind": "AUDIT",
+      "command": "bash scripts/ci/check_source_boundaries.sh",
+      "exit_code": 0,
+      "output_excerpt": "BOUNDARY RESULT: PASS validator_link=independent python_science=absent; validator link.txt contains no liblonglineage_core.",
+      "evidence_sha256": "0a7b46fbf63dea91773fefaaa3d91697cbe5d9e900cb10ecbd5bf1ee6eba8e0d",
+      "recorded_at": "2026-07-20T03:34:40+08:00"
+    }
+  ],
+  "deviations": [
+    "The synthetic valid BGZF fixture originally used pre-flush writer offsets for the final logical row. It was corrected to reopen the finalized BGZF and record reader-observable virtual offsets, matching the index replay contract.",
+    "governance/gate_registry.tsv already registered VALIDATOR_FAULT_INJECTION as ctest -R validator_fault and scripts/ci/check_source_boundaries.sh already enforced compiled validator link and source boundaries, so neither authority file required modification.",
+    "CMakeLists.txt and tests/CMakeLists.txt were released from this task write set after the validator and both P6 tests built and passed, allowing parent integration to proceed.",
+    "Phase one deliberately does not implement LLM_BGZF semantic replay; encountering that format returns LLM_REPLAY_UNIMPLEMENTED and cannot produce a production-ready validation claim.",
+    "On 2026-07-20 the successor full-validator task intentionally extended tests/integration/test_validator_fault.cpp. The phase-one evidence was therefore rebound to oracle/frozen_vectors/p6_validator_first_stage_receipt.txt, which records the original command, exit code, output excerpt and then-current source SHA without claiming full P6 or production readiness.",
+    "The publication repair replaced the presentation-boundary grep with an AST import/process-invocation scan so defensive forbidden-module literals no longer create false positives. The current evidence SHA binds that stricter scanner; the independent-validator boundary verdict remains unchanged and was replayed after the edit."
+  ],
+  "blockers": [],
+  "updated_at": "2026-07-20T03:34:40+08:00"
+}

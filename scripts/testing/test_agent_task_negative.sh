@@ -11,6 +11,20 @@ fi
 governance="$1"
 repo_root="$(cd "$2" && pwd)"
 
+copy_repo_evidence() {
+    local scratch="$1"
+    local evidence_path="$2"
+    if [[ -z "$evidence_path" || "$evidence_path" == /* ||
+          "$evidence_path" == "." || "$evidence_path" == ./* ||
+          "$evidence_path" == ../* || "$evidence_path" == */../* ||
+          "$evidence_path" == */.. ]]; then
+        echo "ERROR: unsafe repository evidence path in baseline task: $evidence_path" >&2
+        return 1
+    fi
+    mkdir -p "$scratch/$(dirname "$evidence_path")"
+    cp -- "$repo_root/$evidence_path" "$scratch/$evidence_path" || return 1
+}
+
 make_scratch_repo() {
     local scratch
     scratch="$(mktemp -d "${TMPDIR:-/tmp}/longlineage-task-negative.XXXXXX")"
@@ -44,8 +58,7 @@ make_scratch_repo() {
         [[ -e "$task_path" ]] || continue
         cp "$task_path" "$scratch/state/tasks/archive/$(basename "$task_path")"
         while IFS= read -r evidence_path; do
-            mkdir -p "$scratch/$(dirname "$evidence_path")"
-            cp "$repo_root/$evidence_path" "$scratch/$evidence_path"
+            copy_repo_evidence "$scratch" "$evidence_path" || return 1
         done < <(jq -r '.evidence[]? | .evidence_path // empty' "$task_path")
     done
     while IFS= read -r evidence_path; do
@@ -78,8 +91,11 @@ make_scratch_repo() {
             .blockers = if (.blockers | length) == 0
                         then ["SCRATCH_BASELINE_BLOCKER"]
                         else .blockers
-                        end
+            end
         ' "$task_path" >"$scratch/state/tasks/active/$(basename "$task_path")"
+        while IFS= read -r evidence_path; do
+            copy_repo_evidence "$scratch" "$evidence_path" || return 1
+        done < <(jq -r '.evidence[]? | .evidence_path // empty' "$task_path")
     done
     echo "$scratch"
 }

@@ -2,6 +2,7 @@
   "schema_name": "longlineage.science_parameters",
   "schema_version": "1.0.0",
   "claim_ceiling": "long-read sSNV co-occurrence and lineage-compatible mutation-state families",
+  "m1_runtime_representation": "HISTORICAL_OBSERVED_ROUND6_NULL_ROUND4",
   "production_input": {
     "truth_fields_allowed": 0,
     "raw_bam_authority": ["SEQ", "CIGAR", "QUAL", "MM", "ML", "MN", "SAM_CORE", "TYPED_AUX"],
@@ -10,6 +11,9 @@
     "latest_hp_raw_vocabulary": [".", "1", "2", "3", "4", "1-1", "2-1", "1-2", "2-2"],
     "latest_hp_canonical_vocabulary": ["0", "1", "2", "3", "4", "1-1", "2-1", "1-2", "2-2"],
     "missing_hp_normalization": "DOT_TO_0_EXPLICIT",
+    "hp_family_registry": "contracts/v1/hp_family.tsv",
+    "hp_family_registry_version": "1.0.0",
+    "hp_family_unknown_policy": "UNTAGGED",
     "variant_universe": "FROZEN_PASS_BIALLELIC_SSNV"
   },
   "read_filter": {
@@ -25,6 +29,9 @@
     "accepted_mm_group": "C+m?",
     "orientation": "AS_SEQUENCED",
     "ml_interval": "[N/256,(N+1)/256)",
+    "m1_matrix_point_estimator": "ML_RAW_DIV_255_FROZEN_M1_V1",
+    "m1_matrix_point_type": "IEEE754_BINARY32_BEFORE_MATRIX_SERIALIZATION",
+    "m1_matrix_point_estimator_scope": "M1_MATRIX_ONLY_DO_NOT_SUBSTITUTE_PROBABILITY_LOWER",
     "mn_mismatch_policy": "FAIL_CLOSED",
     "parse_once_per_read": true
   },
@@ -44,9 +51,13 @@
     "fine_percentile": 90.0,
     "coarse_seed_runs": 10,
     "rng": "PCG64",
+    "rng_compatibility": "NUMPY_1.23.5_SEED_SEQUENCE_AND_GENERATOR_PERMUTATION_V1",
     "site_seed_derivation": "BLAKE2B8_BIG_ENDIAN(sample|chrom|pos1|offset)_MOD_2^32",
     "coarse_seed_sequence": "base_seed + seed_order * 101",
     "fine_seed": "base_seed",
+    "linkage": "SCIPY_1.13.1_AVERAGE_NN_CHAIN_STABLE_DISTANCE_SORT_AND_RELABEL_V1",
+    "percentile": "NUMPY_LINEAR_DEFAULT_V1",
+    "threshold_comparison": "OBSERVED_STRICTLY_GREATER_THAN_NULL_PERCENTILE",
     "modal_fraction_minimum": 0.7,
     "modal_assignment_ari_minimum": 0.8,
     "stable_minimum_non_germline_groups": 2,
@@ -78,6 +89,7 @@
       "minimum_per_group": 3,
       "minimum_per_allele": 3,
       "test": "FIXED_MARGIN_K_BY_2_EXACT",
+      "probability_ordering_tie_tolerance": 1e-12,
       "state_space_ceiling": 250000,
       "fallback": "NONE_FAIL_CLOSED_NOT_IDENTIFIABLE",
       "global_fdr_primary": "BY",
@@ -106,7 +118,14 @@
       "familywise_confidence": 0.95,
       "relation_family_size": 3,
       "multiplicity": "BONFERRONI_THREE_RELATION_MODELS",
-      "callability_precedence_contract_status": "P4_BLOCKED_FROZEN_VECTOR_REQUIRED",
+      "callability_precedence_contract_status": "FROZEN_SYNTHETIC_VECTOR_V1_PARTIAL_NOT_PHASE_VERIFIED",
+      "callability_precedence": [
+        "PASS_ALL_CORE_READS_CALLABLE",
+        "NOT_IDENTIFIABLE_DIFFERENTIAL_CALLABILITY",
+        "NOT_IDENTIFIABLE_MISSING_CALLABILITY_STATISTIC",
+        "FAIL_IF_BY_Q_LE_0_05_OR_CRAMERS_V_GE_0_30",
+        "PASS_NO_STRONG_DIFFERENTIAL_CALLABILITY_DETECTED"
+      ],
       "claim": "COMPATIBILITY_ONLY"
     },
     "joint_signature": {

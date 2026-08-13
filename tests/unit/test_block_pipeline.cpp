@@ -327,6 +327,7 @@ void test_block_plan_boundaries() {
 void test_indexed_block_reader(const SyntheticBamFixture& fixture) {
     const AlignmentBlock block = full_contig_block(fixture);
     std::vector<std::unique_ptr<IndexedBamBlockReader>> readers;
+    std::size_t normal_logical_bytes = 0;
     for (std::size_t index = 0; index < 4; ++index) {
         auto opened = IndexedBamBlockReader::open(fixture.bam, fixture.bai);
         CHECK(opened.ok());
@@ -344,6 +345,11 @@ void test_indexed_block_reader(const SyntheticBamFixture& fixture) {
         CHECK(batch.value->counters.retained_records == 10);
         CHECK(batch.value->reads.size() == 10);
         CHECK(batch.value->logical_retained_bytes() > 10000);
+        CHECK(batch.value->counters.iterator_records > block.estimated_alignments);
+        if (normal_logical_bytes == 0) {
+            normal_logical_bytes = batch.value->logical_retained_bytes();
+        }
+        CHECK(batch.value->logical_retained_bytes() == normal_logical_bytes);
         CHECK(readers[reader_index]->fetch_invocations() == 1);
 
         CHECK(batch.value->reads.size() == fixture.expected_reads.size());
@@ -375,7 +381,38 @@ void test_indexed_block_reader(const SyntheticBamFixture& fixture) {
     CHECK(!(*policy_reader.value)->read_block(block, longlineage::BlockReadPolicy{21, 1000, true}).ok());
     CHECK(!(*policy_reader.value)->read_block(block, longlineage::BlockReadPolicy{20, 1001, true}).ok());
     CHECK(!(*policy_reader.value)->read_block(block, longlineage::BlockReadPolicy{20, 1000, false}).ok());
+    longlineage::BlockReadResourceLimits oversized_limits;
+    oversized_limits.maximum_decoded_logical_bytes = longlineage::kMaximumBlockReadLogicalBytes + 1;
+    CHECK(!(*policy_reader.value)->read_block(block, {}, oversized_limits).ok());
     CHECK((*policy_reader.value)->fetch_invocations() == 0);
+
+    auto exact_limit_reader = IndexedBamBlockReader::open(fixture.bam, fixture.bai);
+    CHECK(exact_limit_reader.ok());
+    longlineage::BlockReadResourceLimits exact_limits;
+    exact_limits.maximum_filter_eligible_records = 10;
+    exact_limits.maximum_decoded_logical_bytes = normal_logical_bytes;
+    const auto exact_limit = (*exact_limit_reader.value)->read_block(block, {}, exact_limits);
+    CHECK(exact_limit.ok());
+    CHECK(exact_limit.value->counters.iterator_records == 14);
+    CHECK(exact_limit.value->counters.retained_records == 10);
+
+    auto record_limit_reader = IndexedBamBlockReader::open(fixture.bam, fixture.bai);
+    CHECK(record_limit_reader.ok());
+    auto record_limits = exact_limits;
+    record_limits.maximum_filter_eligible_records = 9;
+    const auto record_overflow = (*record_limit_reader.value)->read_block(block, {}, record_limits);
+    CHECK(!record_overflow.ok());
+    CHECK(record_overflow.reason == longlineage::ParseReason::kUnsupportedValue);
+    CHECK(record_overflow.detail.find("POSTFILTER_RECORD_LIMIT") != std::string::npos);
+
+    auto byte_limit_reader = IndexedBamBlockReader::open(fixture.bam, fixture.bai);
+    CHECK(byte_limit_reader.ok());
+    auto byte_limits = exact_limits;
+    --byte_limits.maximum_decoded_logical_bytes;
+    const auto byte_overflow = (*byte_limit_reader.value)->read_block(block, {}, byte_limits);
+    CHECK(!byte_overflow.ok());
+    CHECK(byte_overflow.reason == longlineage::ParseReason::kUnsupportedValue);
+    CHECK(byte_overflow.detail.find("DECODED_LOGICAL_BYTE_LIMIT") != std::string::npos);
 
     auto filter_reader = IndexedBamBlockReader::open(fixture.filter_bam, fixture.filter_bai);
     CHECK(filter_reader.ok());
