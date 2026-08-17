@@ -159,6 +159,16 @@ std::vector<std::string> compatible_labels(const RegionTree& tree, const std::st
     return out;
 }
 
+// lg 取「層數最深」的一段。深度以 '-' 數量衡量（HP2-1-1 比 HP2-1 深）。
+// 傳進來的 path 是 lineage_path 本身，不含 '+'（'+' 是寫 lv 時才加的）。
+inline void take_group(std::string& lg, int& depth, const std::string& path) {
+    const int d = static_cast<int>(std::count(path.begin(), path.end(), '-'));
+    if (d > depth) {
+        depth = d;
+        lg = path;
+    }
+}
+
 // 由 vertex 往上走到 root 的路徑（含自身），root 在最後
 std::vector<long long> path_to_root(const RegionTree& tree, long long v) {
     std::vector<long long> chain;
@@ -453,6 +463,19 @@ int main(int argc, char** argv) {
                 std::string lc, lu, lv, lp, lo;
                 char ls = 'U';
                 bool any_lv = false;
+                // lg = 給 IGV「color by tag」用的合併觀察標籤，ln = 該歸屬有多不確定。
+                //   lg：lv 去掉 '+' 後綴；read 跨多 block 時取**層數最深**的那一段。
+                //       為什麼不照抄逗號串：多 block 的 lv 形如 "HP2+,HP2-1"，直接拿去
+                //       配色會產生一堆只出現一兩次的組合值（實測 chr21 原值 30 種）。
+                //       取最深那段 = 「這條分子最確定能到達的位置」，值收斂到 13 種，
+                //       IGV 的 color-by-tag 才可讀。
+                //   ln：相容頂點數。完整覆蓋直接命中頂點為 1；部分覆蓋走 LCA 時為
+                //       compatible_labels() 的候選數。跨多 block 取**最大值**（最保守）。
+                //       這個數字原本算完就丟（只進 receipt 的 lca_candidates_sum 總和），
+                //       導致相容 2 個節點與相容 16 個節點的 read 在 BAM 裡完全一樣。
+                std::string lg;
+                int lg_depth = -1;
+                int ln = 0;
                 for (std::size_t i = 0; i < es.size(); ++i) {
                     const Assign& e = es[i];
                     if (i != 0) {
@@ -502,6 +525,8 @@ int main(int argc, char** argv) {
                                 lo += pit->second.mutation_order;
                                 any_lv = true;
                                 ++st["lv_exact_vertex"];
+                                take_group(lg, lg_depth, pit->second.lineage_path);
+                                ln = std::max(ln, 1);
                                 if (pit->second.raw_label == "ROOT")
                                     ++st["lv_at_root"];
                                 else if (pit->second.raw_label.rfind("H_", 0) == 0)
@@ -526,6 +551,8 @@ int main(int argc, char** argv) {
                                             any_lv = true;
                                             ++st["lca_resolved"];
                                             st["lca_candidates_sum"] += cands.size();
+                                            take_group(lg, lg_depth, anc_it->second.lineage_path);
+                                            ln = std::max(ln, static_cast<int>(cands.size()));
                                             if (anc_it->second.raw_label == "ROOT")
                                                 ++st["lv_at_root"];
                                             else if (anc_it->second.raw_label.rfind("H_", 0) == 0)
@@ -549,6 +576,15 @@ int main(int argc, char** argv) {
                     bam_aux_update_str(aln, "lv", static_cast<int>(lv.size()) + 1, lv.c_str());
                     bam_aux_update_str(aln, "lo", static_cast<int>(lo.size()) + 1, lo.c_str());
                     ++st["lv_written"];
+                    if (!lg.empty()) {
+                        bam_aux_update_str(aln, "lg", static_cast<int>(lg.size()) + 1, lg.c_str());
+                        ++st["lg_written"];
+                    }
+                    if (ln > 0) {
+                        bam_aux_update_int(aln, "ln", ln);
+                        ++st["ln_written"];
+                        if (ln == 1) ++st["ln_pinned"];
+                    }
                 }
                 bam_aux_append(aln, "ls", 'A', 1, reinterpret_cast<const uint8_t*>(&ls));
                 ++st["lineage_written"];
@@ -566,6 +602,20 @@ int main(int argc, char** argv) {
         sam_close(fin);
         sam_close(fout);
         if (pool.pool != nullptr) hts_tpool_destroy(pool.pool);
+
+        // 輸出必須自帶索引 —— 沒有 .bai/.crai 的 BAM 在 IGV 與任何 region query
+        // 下都不可用，而且失敗方式是**靜默回空**（samtools view FILE chr21 印不出東西
+        // 也不報錯），比直接報錯更難查。輸入是座標排序的、我們照序寫出，所以這裡
+        // 一定建得起來；建不起來就 fail-loud，不要留一個半殘的產物。
+        // 🔴 先前這一步在 scripts/run_sample.sh 裡用 samtools index 做，但只做在
+        //    「合併成單一 BAM」那條路徑上 —— --split-by-chrom 產出的分檔全部無索引。
+        //    索引屬於「輸出的一部分」，該由產出它的程式負責，不是 shell。
+        {
+            const int nthr = threads > 1 ? threads : 1;
+            if (sam_index_build3(out_bam.c_str(), nullptr, 0, nthr) < 0)
+                throw std::runtime_error("failed to build index for: " + out_bam);
+            st["index_built"] = 1;
+        }
 
         if (!receipt_p.empty()) {
             json_t* rj = json_object();
