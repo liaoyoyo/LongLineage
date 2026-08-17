@@ -109,8 +109,13 @@
     },
     {
       "id": "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json",
-      "path": "schema/core/source_to_target_manifest.schema.json",
+      "path": "schema/core/source_to_target_manifest-1.1.0.schema.json",
       "sha256": "a08d5f11948065b4ad9fe3b2000ba7fab6a677b2f59f0ef96de4ecb62005859d"
+    },
+    {
+      "id": "https://longlineage.local/schema/source_to_target_manifest-1.2.0.json",
+      "path": "schema/core/source_to_target_manifest.schema.json",
+      "sha256": "8f8868fbf16d2df45145dcaa164fcdd09b938857765ab80b2ce751396835188f"
     },
     {
       "id": "https://longlineage.local/schema/summary-1.0.0.json",

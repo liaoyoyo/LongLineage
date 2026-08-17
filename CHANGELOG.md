@@ -6,6 +6,10 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 
 ### Added
 
+- A private-first public-preview safety foundation: row-level source replay and
+  license-review states, a deterministic SPDX 2.3 inventory, third-party
+  notices, branch-specific capability documentation and a fail-closed public
+  gate. This records blockers and does not approve publication or a release.
 - Repository governance, authority map, data-contract registry, C++ foundation and validation gates.
 - Machine-readable artifact membership, record-lineage, semantic-digest and immutable
   receipt contracts.
@@ -124,14 +128,16 @@ All notable changes follow Keep a Changelog. Versions follow Semantic Versioning
 - Production truth-isolation and validated-only presentation boundaries are release blockers.
 - Release tests use always-on checks, and synthetic scratch artifacts are
   process-isolated so parallel build configurations cannot overwrite one another.
-- Release attestation remains `NOT_READY`; P3/P4/P5 parity, production
+- Release attestation remains `NOT_READY` and directly enumerates P3/P4/P5 parity
+  blockers; the phase ledger separately keeps P7/P8 `BLOCKED`. Production
   `longlineage run`, query/export/evaluate execution and full seven-dataset
   evidence cannot be bypassed.
-- A fresh current-tree GCC Debug/Release replay passes 47/47 tests in each
-  configuration. The earlier aggregate implementation-verification receipt
-  remains an immutable 44/44 historical snapshot and is not silently rebound.
-  Both are synthetic implementation evidence and do not replace the two real
-  HCC1395 validator receipts or P7.
+- The frozen `b9aaa12` candidate GCC Debug baseline is 47/47. After adding the
+  SBOM and public-preview fail-closed regressions, the current private safety
+  stack at `f60b5f3` passes 49/49. Both are synthetic repository evidence, not
+  scientific parity receipts. The earlier aggregate implementation-verification
+  receipt remains an immutable 44/44 historical snapshot and is not silently rebound.
+  None replaces the two real HCC1395 validator receipts or P7.
 - P2 remains `IN_PROGRESS`: the HCC1395 dataset-gate path exercises the complete
   worker input bundle, one-pass projection and validator/freeze boundary, but
   the governed production entrypoint, physical process-wide memory proof and

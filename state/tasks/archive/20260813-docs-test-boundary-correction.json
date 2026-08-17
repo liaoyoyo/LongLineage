@@ -1,0 +1,68 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260813-docs-test-boundary-correction",
+  "owner_agent_id": "codex:root/ll_docs_boundary_fix",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {"path": "docs/CURRENT_FOCUS.md", "kind": "FILE"},
+    {"path": "CHANGELOG.md", "kind": "FILE"},
+    {"path": "state/tasks/active/20260813-docs-test-boundary-correction.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260813-docs-test-boundary-correction.json", "kind": "FILE"}
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-08-13T20:35:03+08:00",
+  "heartbeat_at": "2026-08-13T18:37:46+08:00",
+  "task_type": "E",
+  "goals": ["LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Bounded documentation correction separating the frozen b9aaa12 47-test candidate from the f60b5f3 private safety stack with 49 tests, while preserving P3/P4/P5/P7/P8 blockers."
+  },
+  "assumptions": [
+    "The immutable b9aaa12 candidate remains a 47/47 synthetic-test baseline.",
+    "The f60b5f3 private safety stack adds two repository-safety tests for a 49/49 current-stack total.",
+    "No phase status, scientific artifact, release tag, visibility, commit or remote state changes are authorized."
+  ],
+  "inputs": [
+    {"role": "current_focus", "path": "docs/CURRENT_FOCUS.md", "sha256": "db6eea1647db8f7f5353bd90086b83f3343f898403eca2ed04dc5b4f8bc878b1"},
+    {"role": "changelog", "path": "CHANGELOG.md", "sha256": "63445647d488b365527dc6753b0fcf3a5064065e8fd6b63d9357dc56cd5d5629"},
+    {"role": "phase_ledger", "path": "state/phase_ledger.json", "sha256": "a283548bdf49c20e97d31072add0bf1c37e8866d84c41a6ac9fe6e447eb63e92"},
+    {"role": "public_preview_receipt", "path": "docs/release/PUBLIC_SAFETY_RECEIPT.json", "sha256": "a3503439be822a70677c2e3e3403ddeecf4ffb6fe3324fa835c07ac42c8e809a"}
+  ],
+  "expected_outputs": [
+    {"role": "corrected_current_focus", "path": "docs/CURRENT_FOCUS.md", "sha256": "950c319ae1b453e7007b1d3f4d16d1be4a93426e9fe08e384a1cf4c8f512f156"},
+    {"role": "corrected_changelog", "path": "CHANGELOG.md", "sha256": "ee43e289eb5bca7f8cce55f9fd16b7ab1cd3873616e7340b6a349fdfab09a4ff"}
+  ],
+  "step_verify": [
+    {
+      "step": "Find every active-document reference to 47/47, 49/49 and release blocker provenance.",
+      "verify": "Exact rg output identifies each affected line without changing historical immutable receipts."
+    },
+    {
+      "step": "Correct only ambiguous active prose and preserve blocked phases.",
+      "verify": "git diff --check exits 0 and the phase ledger remains byte-identical."
+    },
+    {
+      "step": "Run focused governance, public-preview and documentation checks.",
+      "verify": "Relevant test wrappers return their contractually expected status and no text equates 47/47 with the f60b5f3 stack."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "docs-test-boundary-parent-replay",
+      "evidence_path": "docs/CURRENT_FOCUS.md",
+      "evidence_kind": "REPORT",
+      "command": "/usr/bin/jsonschema -i state/tasks/active/20260813-docs-test-boundary-correction.json governance/agent_task.schema.json; scripts/ci/check_json_schema_fixtures.sh; scripts/testing/test_sbom_spdx.sh; scripts/testing/test_public_preview_gate.sh scripts/ci/check_public_preview_gate.sh .; scripts/ci/check_repo_hygiene.sh; jq -r '.phases[] | select(.id==\"P3\" or .id==\"P4\" or .id==\"P5\" or .id==\"P7\" or .id==\"P8\") | [.id,.status] | @tsv' state/phase_ledger.json",
+      "exit_code": 0,
+      "output_excerpt": "Parent independent replay: task schema PASS; JSON schema fixtures PASS; SBOM PASS packages=33 dependencies=11 mappings=21 pending=21; public-preview regression PASS with inner gate expected exit 1 (4 unresolved source rows, 21 unapproved mappings, 11 dependency NOASSERTION, 7 history findings); repo hygiene PASS; P3/P4/P5/P7/P8 all BLOCKED.",
+      "evidence_sha256": "950c319ae1b453e7007b1d3f4d16d1be4a93426e9fe08e384a1cf4c8f512f156",
+      "recorded_at": "2026-08-13T19:25:18+08:00"
+    }
+  ],
+  "deviations": [],
+  "blockers": [],
+  "updated_at": "2026-08-13T19:25:18+08:00"
+}

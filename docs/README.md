@@ -14,3 +14,11 @@
 - Authority map: `LongLineage/docs/provenance/AUTHORITY_MAP.md`
 - Reviewed format/tool knowledge: `LongLineage/docs/provenance/KNOWLEDGE_SOURCES.md`
 - Release gates: `LongLineage/docs/release/RELEASE_GATES.md`
+- Public-preview boundary: `LongLineage/docs/release/PUBLIC_PREVIEW.md`
+- Machine-readable public-safety receipt:
+  `LongLineage/docs/release/PUBLIC_SAFETY_RECEIPT.json`
+- Branch/commit-specific capability matrix:
+  `LongLineage/docs/release/CAPABILITY_MATRIX.md`
+- Source/target mapping manifest:
+  `LongLineage/provenance/source_to_target_manifest.json`
+- Deterministic SPDX 2.3 inventory: `LongLineage/SBOM.spdx.json`

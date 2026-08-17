@@ -1,6 +1,6 @@
 # Current Focus
 
-Last updated: 2026-07-23
+Last updated: 2026-08-13
 
 ## Active phase
 
@@ -138,9 +138,15 @@ independent source for changing phase state.
   receipt發布間改寫path-based artifact，此race尚未以不可變FD/content-addressed
   publication消除，並持續阻止P6升級。
 - Strict release gate仍有12個`fixture_only` negative bindings（包含forged
-  validator receipt）；最新GCC Debug/Release各47/47 synthetic repository tests不能
-  取代這些可執行負例。Strict模式預期exit 1並逐項列出12個blockers；只有明示
-  `--allow-declared-blocked`時才exit 0，兩者都不代表P8完成。
+  validator receipt）。Frozen candidate `b9aaa12`的GCC Debug baseline為47/47；加入
+  SBOM與public-preview fail-closed regressions後，private safety stack `f60b5f3`為
+  49/49。兩者都是synthetic repository evidence，皆不能取代可執行負例。Strict模式
+  預期exit 1並逐項列出12個blockers；只有明示`--allow-declared-blocked`時才exit 0，
+  兩者都不代表P8完成。
+- `state/release_attestation.json`的`NOT_READY`直接列出P3/P4/P5 blockers；P7/P8的
+  `BLOCKED`狀態與細項以`state/phase_ledger.json`為權威。Public-preview發布禁令再由
+  `docs/release/PUBLIC_SAFETY_RECEIPT.json`彙整上述phase狀態、license/source/history
+  findings與`KEEP_PRIVATE_NO_TAG_NO_RELEASE` verdict；三者不得混稱為同一份blocker清單。
 - final receipts尚未保存slowest-block identity、edge taxonomy、transient peak
   bytes與I/O operation counts；cache condition仍unknown。
 - Report percentage hotfix已重生並重驗：14/79,687文字顯示0.02%，CSS最小

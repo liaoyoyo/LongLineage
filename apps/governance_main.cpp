@@ -2063,12 +2063,19 @@ CheckResult check_source_to_target_lifecycle(const std::filesystem::path& root) 
                                              "mappings"};
     if (!object_has_exact_keys(manifest.get(), root_keys, error) ||
         string_field(manifest.get(), "$schema") !=
-            "https://longlineage.local/schema/source_to_target_manifest-1.1.0.json" ||
+            "https://longlineage.local/schema/source_to_target_manifest-1.2.0.json" ||
         string_field(manifest.get(), "schema_name") != "longlineage.source_to_target_manifest" ||
-        string_field(manifest.get(), "schema_version") != "1.1.0" ||
+        string_field(manifest.get(), "schema_version") != "1.2.0" ||
         string_field(manifest.get(), "origin_repository") != "InterSubMod" ||
         !std::regex_match(string_field(manifest.get(), "origin_commit"), std::regex("^[0-9a-f]{40}$"))) {
         return fail("source-to-target manifest identity/closed-world shape is invalid: " + error);
+    }
+    const std::string origin_commit = string_field(manifest.get(), "origin_commit");
+    const std::string license_review_status = string_field(manifest.get(), "license_review_status");
+    if (std::set<std::string>{"PENDING_PUBLIC_RELEASE_AUDIT", "APPROVED_FOR_PRIVATE_USE", "APPROVED_FOR_PUBLIC_RELEASE",
+                              "REJECTED"}
+            .count(license_review_status) == 0U) {
+        return fail("source-to-target manifest license review status is invalid");
     }
     const auto* mappings = json_object_get(manifest.get(), "mappings");
     if (!json_is_array(mappings) || json_array_size(mappings) == 0U) {
@@ -2076,11 +2083,20 @@ CheckResult check_source_to_target_lifecycle(const std::filesystem::path& root) 
     }
     const auto gate_ids = load_gate_ids_unchecked(root);
     std::set<std::string> origin_ids;
+    std::size_t unresolved_sources = 0U;
+    std::size_t pending_licenses = 0U;
     for (std::size_t index = 0; index < json_array_size(mappings); ++index) {
         const auto* mapping = json_array_get(mappings, index);
         const std::set<std::string> keys = {"origin_id",
                                             "source_path",
                                             "source_sha256",
+                                            "source_commit",
+                                            "source_replay_status",
+                                            "license_disposition",
+                                            "license_evidence",
+                                            "reviewer_id",
+                                            "reviewed_at",
+                                            "review_scope",
                                             "target",
                                             "target_kind",
                                             "target_presence",
@@ -2096,6 +2112,13 @@ CheckResult check_source_to_target_lifecycle(const std::filesystem::path& root) 
         }
         const std::string origin_id = string_field(mapping, "origin_id");
         const std::string source_path = string_field(mapping, "source_path");
+        const auto* source_commit = json_object_get(mapping, "source_commit");
+        const std::string source_replay_status = string_field(mapping, "source_replay_status");
+        const std::string license_disposition = string_field(mapping, "license_disposition");
+        const std::string license_evidence = string_field(mapping, "license_evidence");
+        const std::string reviewer_id = string_field(mapping, "reviewer_id");
+        const std::string reviewed_at = string_field(mapping, "reviewed_at");
+        const std::string review_scope = string_field(mapping, "review_scope");
         const std::string target = string_field(mapping, "target");
         const std::string target_kind = string_field(mapping, "target_kind");
         const std::string target_presence = string_field(mapping, "target_presence");
@@ -2112,6 +2135,46 @@ CheckResult check_source_to_target_lifecycle(const std::filesystem::path& root) 
             (verification != "NOT_VERIFIED" && verification != "CONTRACT_VERIFIED" &&
              verification != "PARITY_VERIFIED")) {
             return fail("source-to-target mapping identity/lifecycle is malformed: " + origin_id);
+        }
+        if ((source_replay_status != "MATCHED_DECLARED_ORIGIN_COMMIT" &&
+             source_replay_status != "MATCHED_OTHER_COMMIT" && source_replay_status != "HASH_NOT_FOUND") ||
+            (license_disposition != "PENDING_PUBLIC_RELEASE_REVIEW" &&
+             license_disposition != "APPROVED_FOR_PUBLIC_RELEASE" &&
+             license_disposition != "REJECTED_FOR_PUBLIC_RELEASE") ||
+            (license_evidence != "ORIGIN_REPOSITORY_LICENSE_ONLY" && license_evidence != "PER_FILE_LICENSE_REVIEWED" &&
+             license_evidence != "NO_LICENSE_EVIDENCE") ||
+            !std::regex_match(reviewer_id, std::regex("^[a-z0-9][a-z0-9._:-]*$")) ||
+            !std::regex_match(reviewed_at, std::regex("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) ||
+            (review_scope != "PROVENANCE_REPLAY_ONLY" && review_scope != "LICENSE_AND_PROVENANCE_REVIEW")) {
+            return fail("source-to-target mapping review fields are malformed: " + origin_id);
+        }
+        if (source_replay_status == "HASH_NOT_FOUND") {
+            if (!json_is_null(source_commit)) {
+                return fail("unresolved source mapping must carry null source_commit: " + origin_id);
+            }
+            ++unresolved_sources;
+        } else {
+            if (!json_is_string(source_commit) ||
+                !std::regex_match(json_string_value(source_commit), std::regex("^[0-9a-f]{40}$"))) {
+                return fail("replayed source mapping lacks an exact source_commit: " + origin_id);
+            }
+            const std::string row_commit = json_string_value(source_commit);
+            if ((source_replay_status == "MATCHED_DECLARED_ORIGIN_COMMIT" && row_commit != origin_commit) ||
+                (source_replay_status == "MATCHED_OTHER_COMMIT" && row_commit == origin_commit)) {
+                return fail("source replay status contradicts source_commit: " + origin_id);
+            }
+        }
+        if (license_disposition == "PENDING_PUBLIC_RELEASE_REVIEW") {
+            ++pending_licenses;
+        }
+        if (license_disposition == "APPROVED_FOR_PUBLIC_RELEASE" &&
+            (source_replay_status == "HASH_NOT_FOUND" || license_evidence != "PER_FILE_LICENSE_REVIEWED" ||
+             review_scope != "LICENSE_AND_PROVENANCE_REVIEW")) {
+            return fail("public license disposition lacks source replay and per-file review: " + origin_id);
+        }
+        if (license_review_status == "APPROVED_FOR_PUBLIC_RELEASE" &&
+            license_disposition != "APPROVED_FOR_PUBLIC_RELEASE") {
+            return fail("root public license approval contradicts pending/rejected mapping: " + origin_id);
         }
         const auto target_path = root / target;
         std::error_code status_error;
@@ -2161,7 +2224,8 @@ CheckResult check_source_to_target_lifecycle(const std::filesystem::path& root) 
         }
     }
     return pass("source-to-target lifecycle and present target digests passed " + std::to_string(origin_ids.size()) +
-                " mappings");
+                " mappings; unresolved_sources=" + std::to_string(unresolved_sources) +
+                " pending_licenses=" + std::to_string(pending_licenses));
 }
 
 CheckResult check_catalog(const std::filesystem::path& root) {

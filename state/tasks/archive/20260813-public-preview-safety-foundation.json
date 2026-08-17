@@ -1,0 +1,100 @@
+{
+  "schema_name": "longlineage.agent_task",
+  "schema_version": "1.0.0",
+  "task_id": "20260813-public-preview-safety-foundation",
+  "owner_agent_id": "codex:root/longlineage_gate",
+  "parent_task_id": null,
+  "allowed_paths": [
+    {"path": "state/tasks/active/20260813-public-preview-safety-foundation.json", "kind": "FILE"},
+    {"path": "state/tasks/archive/20260813-public-preview-safety-foundation.json", "kind": "FILE"},
+    {"path": "docs/release/PUBLIC_PREVIEW.md", "kind": "FILE"},
+    {"path": "docs/release/PUBLIC_SAFETY_RECEIPT.json", "kind": "FILE"},
+    {"path": "docs/release/CAPABILITY_MATRIX.md", "kind": "FILE"},
+    {"path": "docs/provenance/AUTHORITY_MAP.md", "kind": "FILE"},
+    {"path": "README.md", "kind": "FILE"},
+    {"path": "SECURITY.md", "kind": "FILE"},
+    {"path": "docs/README.md", "kind": "FILE"},
+    {"path": "docs/development/implementation-notes.md", "kind": "FILE"},
+    {"path": "THIRD_PARTY_NOTICES.md", "kind": "FILE"},
+    {"path": "SBOM.spdx.json", "kind": "FILE"},
+    {"path": "provenance/source_to_target_manifest.json", "kind": "FILE"},
+    {"path": "schema/core/source_to_target_manifest.schema.json", "kind": "FILE"},
+    {"path": "schema/core/source_to_target_manifest-1.1.0.schema.json", "kind": "FILE"},
+    {"path": "schema/id_registry.json", "kind": "FILE"},
+    {"path": "apps/governance_main.cpp", "kind": "FILE"},
+    {"path": "scripts/release/generate_sbom_spdx.sh", "kind": "FILE"},
+    {"path": "scripts/ci/check_public_preview_gate.sh", "kind": "FILE"},
+    {"path": "scripts/ci/check_all.sh", "kind": "FILE"},
+    {"path": "scripts/testing/test_public_preview_gate.sh", "kind": "FILE"},
+    {"path": "scripts/testing/test_sbom_spdx.sh", "kind": "FILE"},
+    {"path": "tests/CMakeLists.txt", "kind": "FILE"},
+    {"path": "tests/fixtures/contracts/source_to_target_manifest.invalid_planned_digest.json", "kind": "FILE"},
+    {"path": "CHANGELOG.md", "kind": "FILE"}
+  ],
+  "depends_on": [],
+  "lease_state": "RELEASED",
+  "lease_expires_at": "2026-08-13T16:00:00+08:00",
+  "heartbeat_at": "2026-08-13T11:20:08+08:00",
+  "task_type": "E",
+  "goals": ["LL-G4", "LL-G5"],
+  "status": "VERIFIED",
+  "scope": {
+    "completeness": "PARTIAL",
+    "description": "Private-first public-preview safety foundation only: provenance replay states, license/SBOM notices, fail-closed validator, capability documentation and tests. No science, publication, tag, release or history mutation."
+  },
+  "assumptions": [
+    "b9aaa12 is a frozen research-preview candidate but is not safe to publish directly.",
+    "A provenance replay is not a legal license approval; unresolved rows remain pending.",
+    "Existing P3/P4/P5/P7/P8 blockers and production run exit 6 remain unchanged."
+  ],
+  "inputs": [
+    {"role": "candidate_commit", "path": "provenance/source_to_target_manifest.json", "sha256": "c8b8814ce9196303224b5e0afa5200358cecc961abd66118e028e85a1c1e014d"},
+    {"role": "phase_authority", "path": "state/phase_ledger.json", "sha256": "a283548bdf49c20e97d31072add0bf1c37e8866d84c41a6ac9fe6e447eb63e92"},
+    {"role": "dependency_lock", "path": "containers/versions.lock.tsv", "sha256": "c5c73105f844bf31d45e2d57fe8fcfb7db8fbafd4b52c307d72693fbe1cb0115"}
+  ],
+  "expected_outputs": [
+    {"role": "public_preview_boundary", "path": "docs/release/PUBLIC_PREVIEW.md", "sha256": "d5b8cca946e57e24aa501f18c7fe8286befc548cc90b80635eebfd93dc1f553f"},
+    {"role": "public_safety_receipt", "path": "docs/release/PUBLIC_SAFETY_RECEIPT.json", "sha256": "a3503439be822a70677c2e3e3403ddeecf4ffb6fe3324fa835c07ac42c8e809a"},
+    {"role": "public_security_policy", "path": "SECURITY.md", "sha256": "f84a2fa6028f8f58ccfec90a338df267d4fe195ebb969ff836ed8b224f66f4e1"},
+    {"role": "third_party_notice", "path": "THIRD_PARTY_NOTICES.md", "sha256": "7e338cdc5ab47289bbe77c73d4249c60a62f177aac7414213e62eda6d2bf9407"},
+    {"role": "deterministic_sbom", "path": "SBOM.spdx.json", "sha256": "facb20f6f882d4a237dbe7179c001e3fcfcaa2e46f43cfd2df12c61999c7badf"},
+    {"role": "fail_closed_validator", "path": "scripts/ci/check_public_preview_gate.sh", "sha256": "67951f082e3a497f3472f8a680ef026b8a43b779b732928e3f1515cbbb3bb601"}
+  ],
+  "step_verify": [
+    {
+      "step": "Version the source mapping contract and record row-level replay/license-review state without promotion.",
+      "verify": "21 target digests remain replayable; 5 declared-commit matches, 12 other-commit matches and 4 unresolved rows are machine-readable."
+    },
+    {
+      "step": "Generate deterministic SPDX JSON and source-backed notices.",
+      "verify": "Generator --check and SBOM contract test exit 0; unresolved license annotations equal manifest pending rows."
+    },
+    {
+      "step": "Add the public-preview safety validator and fail-closed regression.",
+      "verify": "Current candidate validator exits non-zero for provenance, history and license blockers while its regression test exits 0."
+    },
+    {
+      "step": "Document preview and capability boundaries.",
+      "verify": "Documentation states NOT_READY, non-production, blocked phases, run exit 6 and branch-specific feature limits."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "public-preview-safety-foundation-20260813",
+      "evidence_path": "docs/release/PUBLIC_SAFETY_RECEIPT.json",
+      "evidence_kind": "RECEIPT",
+      "command": "scripts/ci/check_all.sh /tmp/longlineage-b9aaa12-audit.KfKuTI",
+      "exit_code": 0,
+      "output_excerpt": "HYGIENE/BOUNDARY/SPDX/DEPENDENCY/SCHEMA/CATALOG PASS; CTest 49/49 PASS; NO-NETWORK PASS; FOUNDATION_PASS. Public-preview gate regression confirms expected gate exit 1 with five blocker classes.",
+      "evidence_sha256": "a3503439be822a70677c2e3e3403ddeecf4ffb6fe3324fa835c07ac42c8e809a",
+      "recorded_at": "2026-08-13T11:20:08+08:00"
+    }
+  ],
+  "deviations": [
+    "One initial shell replay contained accidental +set/+scripts prefixes and was discarded before a clean replay.",
+    "The first CTest gate replay exposed an implicit history-checker working-directory dependency; the gate now changes explicitly to repository root and the regression passes from the build directory.",
+    "One full-suite replay observed a stale governance binary because clang-format completed after the suite started; the target was rebuilt and both the focused readiness test and subsequent full suites passed."
+  ],
+  "blockers": [],
+  "updated_at": "2026-08-13T11:20:08+08:00"
+}
